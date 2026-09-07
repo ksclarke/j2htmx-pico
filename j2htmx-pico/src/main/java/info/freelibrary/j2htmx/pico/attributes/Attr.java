@@ -161,6 +161,16 @@ public abstract class Attr {
     public static final String HX_WS = "hx-ws";
     public static final String HX_VALIDATE = "hx-validate";
 
+    // pico.css & aria
+    public static final String DATA_THEME = "data-theme";
+    public static final String DATA_TOOLTIP = "data-tooltip";
+    public static final String DATA_PLACEMENT = "data-placement";
+    public static final String ARIA_BUSY = "aria-busy";
+    public static final String ARIA_INVALID = "aria-invalid";
+    public static final String ROLE_BUTTON = "button";
+    public static final String ROLE_GROUP = "group";
+    public static final String ROLE_SEARCH = "search";
+
     public static ShortForm shortFormFromAttrsString(String attrs) {
         if (!attrs.contains(".") && !attrs.contains(("#"))) {
             throw new IllegalArgumentException("String must contain either id (#) or class (.)");

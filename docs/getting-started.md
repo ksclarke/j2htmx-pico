@@ -38,7 +38,7 @@ public class Main {
         String renderedHtml = body(
             h1("Welcome to j2html"),
             p("Typesafe HTML in Java is great!"),
-            a("Check it out").withHref("https://j2html.com")
+            a("Check it out").withHref("https://projects.freelibrary.info/j2htmx-pico")
         ).render();
         
         System.out.println(renderedHtml);
@@ -142,5 +142,133 @@ This also works with HTMX tags:
 hxPartial("#update-1", p("New data"))
 ```
 
+## Pico.css Support
+
+`j2htmx-pico` includes built-in support for **Pico.css v2**, providing semantic CSS, responsive layouts, color theming, and accessibility attributes without requiring JavaScript or custom CSS writing.
+
+### Linking the Stylesheet
+
+You can load Pico.css from the official CDN using `picoCss()` or embed the bundled minified stylesheet directly into your HTML with `picoInlineCss()`:
+
+```java
+// Default Pico v2 stylesheet via CDN
+picoCss();
+// Output: <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+
+// Specific version and color palette (e.g. amber, azure, zinc)
+picoCss("2.0.6", "amber");
+// Output: <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.amber.min.css">
+
+// Using Color enum
+picoCss(Pico.Color.AZURE);
+
+// Bundled inline stylesheet for offline or standalone HTML
+picoInlineCss();
+// Output: <style>...minified pico css...</style>
+```
+
+### Layout Helpers
+
+Pico.css emphasizes semantic layout tags:
+
+* `container(DomContent...)` – creates `<main class="container">`
+* `containerFluid(DomContent...)` – creates full-width `<main class="container-fluid">`
+* `grid(DomContent...)` – creates responsive `<div class="grid">` columns
+
+```java
+container(
+    h1("Dashboard"),
+    grid(
+        card(h3("Card 1"), p("First column")),
+        card(h3("Card 2"), p("Second column"))
+    )
+)
+```
+
+### Semantic Components
+
+Pico provides helpers for UI components:
+
+```java
+// Dropdown menu (<details class="dropdown">)
+Pico.dropdown("Actions",
+    a("Edit Profile").withHref("/profile/edit"),
+    a("Log Out").withHref("/logout")
+);
+
+// Semantic card (<article>)
+Pico.card(
+    header(h2("Card Header")),
+    p("Card content goes here..."),
+    footer(button("Submit"))
+);
+
+// Modal Dialog (<dialog id="...">)
+Pico.modal("confirm-dialog",
+    article(
+        header(h3("Confirm Action")),
+        p("Are you sure you want to proceed?"),
+        footer(
+            button("Cancel").withClass(Pico.SECONDARY),
+            button("Confirm")
+        )
+    )
+);
+```
+
+### Themes, Tooltips & Form Accessibility
+
+Leverage Pico.css data attributes and ARIA attributes via fluent methods on any tag:
+
+```java
+// Light/Dark Theme toggle on <html> or any container
+html().withDataTheme("dark");
+
+// Tooltips and tooltip placement
+button("Help").withDataTooltip("Helpful explanation").withDataPlacement("bottom");
+
+// Loading states
+button("Saving...").isAriaBusy();
+
+// Form validation states
+input().withType("text").withAriaInvalid(true); // Red invalid outline
+input().withType("text").withAriaInvalid(false); // Green valid outline
+
+// Role convenience methods
+a("Action Link").asButton();  // <a role="button">
+div().asGroup();              // <div role="group">
+form().asSearch();            // <form role="search">
+```
+
+### Combining Pico.css with HTMX
+
+Pico.css and HTMX complement each other seamlessly:
+
+```java
+html(
+    head(
+        title("Pico + HTMX App"),
+        picoCss()
+    ),
+    body(
+        container(
+            h1("User Management"),
+            grid(
+                form(
+                    input().withType("text").withName("username").withPlaceholder("Username"),
+                    button("Add User")
+                        .asButton()
+                        .withHxPost("/api/users")
+                        .withHxTarget("#user-list")
+                        .withHxIndicator("#loading")
+                ).asSearch(),
+                div().withId("loading").isAriaBusy()
+            ),
+            div().withId("user-list")
+        )
+    )
+)
+```
+
 ## More Information
-Visit the official j2html website at [j2html.com](https://j2html.com) for more examples and documentation.
+Visit the project website at [j2htmx-pico](https://projects.freelibrary.info/j2htmx-pico) for more examples and documentation.

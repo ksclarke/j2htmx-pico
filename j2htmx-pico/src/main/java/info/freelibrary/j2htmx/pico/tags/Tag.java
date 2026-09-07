@@ -221,6 +221,20 @@ public abstract class Tag<T extends Tag<T>> extends DomContent implements Instan
     public T withHxWs(String ws) { return attr(Attr.HX_WS, ws); }
     public T withHxValidate(String validate) { return attr(Attr.HX_VALIDATE, validate); }
 
+    // pico.css & aria
+    public T withDataTheme(String theme) { return attr(Attr.DATA_THEME, theme); }
+    public T withDataTooltip(String tooltip) { return attr(Attr.DATA_TOOLTIP, tooltip); }
+    public T withDataPlacement(String placement) { return attr(Attr.DATA_PLACEMENT, placement); }
+    public T isAriaBusy() { return attr(Attr.ARIA_BUSY, "true"); }
+    public T withAriaBusy(boolean busy) { return attr(Attr.ARIA_BUSY, String.valueOf(busy)); }
+    public T withAriaInvalid(boolean invalid) { return attr(Attr.ARIA_INVALID, String.valueOf(invalid)); }
+    public T withAriaInvalid(String invalid) { return attr(Attr.ARIA_INVALID, invalid); }
+    public T isAriaInvalid() { return attr(Attr.ARIA_INVALID, "true"); }
+    public T withRole(String role) { return attr(Attr.ROLE, role); }
+    public T asButton() { return attr(Attr.ROLE, Attr.ROLE_BUTTON); }
+    public T asGroup() { return attr(Attr.ROLE, Attr.ROLE_GROUP); }
+    public T asSearch() { return attr(Attr.ROLE, Attr.ROLE_SEARCH); }
+
     // ----- start of withCond$ATTR variants -----
     public T withCondAccessKey(boolean condition, String accesskey){ return condAttr(condition, Attr.ACCESSKEY, accesskey); }
 
@@ -295,4 +309,18 @@ public abstract class Tag<T extends Tag<T>> extends DomContent implements Instan
     public T withCondHxSse(boolean condition, String sse) { return condAttr(condition, Attr.HX_SSE, sse); }
     public T withCondHxWs(boolean condition, String ws) { return condAttr(condition, Attr.HX_WS, ws); }
     public T withCondHxValidate(boolean condition, String validate) { return condAttr(condition, Attr.HX_VALIDATE, validate); }
+
+    // pico.css & aria conditional variants
+    public T withCondDataTheme(boolean condition, String theme) { return condAttr(condition, Attr.DATA_THEME, theme); }
+    public T withCondDataTooltip(boolean condition, String tooltip) { return condAttr(condition, Attr.DATA_TOOLTIP, tooltip); }
+    public T withCondDataPlacement(boolean condition, String placement) { return condAttr(condition, Attr.DATA_PLACEMENT, placement); }
+    public T withCondAriaBusy(boolean condition) { return condAttr(condition, Attr.ARIA_BUSY, "true"); }
+    public T withCondAriaBusy(boolean condition, boolean busy) { return condAttr(condition, Attr.ARIA_BUSY, String.valueOf(busy)); }
+    public T withCondAriaInvalid(boolean condition) { return condAttr(condition, Attr.ARIA_INVALID, "true"); }
+    public T withCondAriaInvalid(boolean condition, boolean invalid) { return condAttr(condition, Attr.ARIA_INVALID, String.valueOf(invalid)); }
+    public T withCondAriaInvalid(boolean condition, String invalid) { return condAttr(condition, Attr.ARIA_INVALID, invalid); }
+    public T withCondRole(boolean condition, String role) { return condAttr(condition, Attr.ROLE, role); }
+    public T withCondAsButton(boolean condition) { return condAttr(condition, Attr.ROLE, Attr.ROLE_BUTTON); }
+    public T withCondAsGroup(boolean condition) { return condAttr(condition, Attr.ROLE, Attr.ROLE_GROUP); }
+    public T withCondAsSearch(boolean condition) { return condAttr(condition, Attr.ROLE, Attr.ROLE_SEARCH); }
 }

@@ -1038,4 +1038,53 @@ public class TagCreator {
     public static VideoTag video (Attr.ShortForm shortAttr, String text)            {  return Attr.addTo( new VideoTag().withText(text), shortAttr); }
     public static VideoTag video (Attr.ShortForm shortAttr, DomContent... dc)       {  return Attr.addTo( new VideoTag().with(dc), shortAttr); }
 
+    // pico.css convenience methods
+    public static LinkTag picoCss() {
+        return Pico.css();
+    }
+
+    public static LinkTag picoCss(final String version) {
+        return Pico.css(version);
+    }
+
+    public static LinkTag picoCss(final String version, final String colorScheme) {
+        return Pico.css(version, colorScheme);
+    }
+
+    public static LinkTag picoCss(final Pico.Color colorScheme) {
+        return Pico.css(colorScheme);
+    }
+
+    public static LinkTag picoCss(final String version, final Pico.Color colorScheme) {
+        return Pico.css(version, colorScheme);
+    }
+
+    public static ContainerTag<?> picoInlineCss() {
+        return Pico.inlineCss();
+    }
+
+    public static MainTag container(final DomContent... content) {
+        return Pico.container(content);
+    }
+
+    public static MainTag container(final String text) {
+        return Pico.container(text);
+    }
+
+    public static MainTag containerFluid(final DomContent... content) {
+        return Pico.containerFluid(content);
+    }
+
+    public static MainTag containerFluid(final String text) {
+        return Pico.containerFluid(text);
+    }
+
+    public static DivTag grid(final DomContent... content) {
+        return Pico.grid(content);
+    }
+
+    public static DivTag grid(final String text) {
+        return Pico.grid(text);
+    }
+
 }

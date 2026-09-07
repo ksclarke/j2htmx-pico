@@ -362,4 +362,18 @@ public class TagCreatorTest {
         );
     }
 
+    @Test
+    public void testPicoDelegates() {
+        assertEquals("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css\">", picoCss().render());
+        assertEquals("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css\">", picoCss("2.0.6").render());
+        assertEquals("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.amber.min.css\">", picoCss("2.0.6", "amber").render());
+        assertEquals("<main class=\"container\"><h1>Hello</h1></main>", container(h1("Hello")).render());
+        assertEquals("<main class=\"container\">Hello</main>", container("Hello").render());
+        assertEquals("<main class=\"container-fluid\"><p>Fluid</p></main>", containerFluid(p("Fluid")).render());
+        assertEquals("<main class=\"container-fluid\">Fluid</main>", containerFluid("Fluid").render());
+        assertEquals("<div class=\"grid\"><span>1</span><span>2</span></div>", grid(span("1"), span("2")).render());
+        assertEquals("<div class=\"grid\">Grid text</div>", grid("Grid text").render());
+        assertThat(picoInlineCss().render(), org.hamcrest.Matchers.containsString("Pico CSS"));
+    }
+
 }
