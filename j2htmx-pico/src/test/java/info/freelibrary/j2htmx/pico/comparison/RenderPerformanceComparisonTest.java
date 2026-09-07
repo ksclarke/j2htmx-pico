@@ -16,13 +16,4 @@ public class RenderPerformanceComparisonTest {
         TestJ2html.macros();
         TestJ2html.multiplicationTable();
     }
-
-    @Test
-    public void velocityPerformance() throws Exception {
-        TestVelocity.helloWorld();
-        TestVelocity.fiveHundredEmployees();
-        TestVelocity.macros();
-        TestVelocity.multiplicationTable();
-    }
-
 }

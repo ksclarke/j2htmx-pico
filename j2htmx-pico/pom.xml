@@ -31,11 +31,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.velocity</groupId>
-            <artifactId>velocity</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <packaging>jar</packaging>
