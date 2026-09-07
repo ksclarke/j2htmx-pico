@@ -1,7 +1,5 @@
 package info.freelibrary.j2htmx.pico;
 
-import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
-import com.carrotsearch.junitbenchmarks.Clock;
 import info.freelibrary.j2htmx.pico.utils.EscapeUtil;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.junit.jupiter.api.MethodOrderer;
@@ -9,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 @TestMethodOrder(MethodOrderer.MethodName.class)
-@BenchmarkOptions(callgc = false, benchmarkRounds = 10000, warmupRounds = 200, concurrency = 2, clock = Clock.NANO_TIME)
 public class PerformanceTest {
 
     private String shortTestString = "<body>\n"
