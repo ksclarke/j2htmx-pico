@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>j2htmx-pico-parent</artifactId>
+    <version>${revision}</version>
+    <packaging>pom</packaging>
+
+    <name>j2htmx-pico-parent</name>
+    <description>Java to HTML builder with a fluent API</description>
+    <url>https://projects.freelibrary.info/j2htmx-pico</url>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git@github.com:freelibrary/j2htmx-pico.git</connection>
+        <developerConnection>scm:git:git@github.com:freelibrary/j2htmx-pico.git</developerConnection>
+        <url>https://github.com/freelibrary/j2htmx-pico.git</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Kevin S. Clarke</name>
+            <email>my.j2htmx-pico@kevinclarke.info</email>
+        </developer>
+    </developers>
+
+    <issueManagement>
+        <system>GitHub Issue Tracker</system>
+        <url>https://github.com/freelibrary/j2htmx-pico/issues</url>
+    </issueManagement>
+
+    <modules>
+        <module>j2htmx-pico-codegen</module>
+        <module>j2htmx-pico</module>
+        <module>j2htmx-pico-mathml</module>
+    </modules>
+
+    <properties>
+        <!-- Application dependencies -->
+        <commons-lang3.version>3.20.0</commons-lang3.version>
+        <jsoup.version>1.16.1</jsoup.version>
+        <javapoet.version>0.19.0</javapoet.version>
+        <slf4j-simple.version>1.7.26</slf4j-simple.version>
+
+        <!-- Testing dependencies -->
+        <junit-benchmarks.version>0.7.2</junit-benchmarks.version>
+        <junit.jupiter.version>5.10.2</junit.jupiter.version>
+        <mockito.version>5.23.0</mockito.version>
+        <hamcrest-library.version>1.3</hamcrest-library.version>
+
+        <!-- Performance testing dependencies -->
+        <apache-velocity.version>1.7</apache-velocity.version>
+
+        <!-- Plugin versions -->
+        <maven.bundle.version>5.1.6</maven.bundle.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Application dependencies -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jsoup</groupId>
+                <artifactId>jsoup</artifactId>
+                <version>${jsoup.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.palantir.javapoet</groupId>
+                <artifactId>javapoet</artifactId>
+                <version>${javapoet.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-simple</artifactId>
+                <version>${slf4j-simple.version}</version>
+            </dependency>
+
+            <!-- Test dependencies -->
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${junit.jupiter.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-library</artifactId>
+                <version>${hamcrest-library.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.carrotsearch</groupId>
+                <artifactId>junit-benchmarks</artifactId>
+                <version>${junit-benchmarks.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- Performance test dependencies -->
+            <dependency>
+                <groupId>org.apache.velocity</groupId>
+                <artifactId>velocity</artifactId>
+                <version>${apache-velocity.version}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>maven-bundle-plugin</artifactId>
+                    <version>${maven.bundle.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>net.revelc.code.formatter</groupId>
+                    <artifactId>formatter-maven-plugin</artifactId>
+                    <configuration>
+                        <skipFormatting>true</skipFormatting>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <parent>
+        <artifactId>freelib-parent</artifactId>
+        <groupId>info.freelibrary</groupId>
+        <version>14.0.8</version>
+    </parent>
+
+</project>
