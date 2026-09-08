@@ -1,7 +1,21 @@
 package info.freelibrary.j2htmx.pico.tags;
 
+/**
+ * Utility for joining strings and {@link DomContent} objects with a delimiter.
+ */
 public class DomContentJoiner {
 
+    private DomContentJoiner() {
+    }
+
+    /**
+     * Joins strings and {@link DomContent} elements separated by a delimiter.
+     *
+     * @param delimiter The character sequence to insert between elements
+     * @param fixPeriodAndCommaSpacing Whether to clean up spaces before periods and commas
+     * @param stringOrDomObjects The objects to join (can be String or DomContent)
+     * @return An UnescapedText instance containing the joined content
+     */
     public static UnescapedText join(CharSequence delimiter, boolean fixPeriodAndCommaSpacing, Object... stringOrDomObjects) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < stringOrDomObjects.length; i++) {

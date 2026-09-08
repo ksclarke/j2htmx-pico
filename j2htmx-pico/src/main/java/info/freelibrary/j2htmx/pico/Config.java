@@ -9,6 +9,9 @@ import info.freelibrary.j2htmx.pico.utils.TextEscaper;
 
 import java.util.Collections;
 
+/**
+ * Configuration options for rendering HTML, including minification, indentation, and text escaping.
+ */
 public class Config {
 
     /**
@@ -73,50 +76,105 @@ public class Config {
         this._indenter = original._indenter;
     }
 
+    /**
+     * Gets the configured text escaper.
+     *
+     * @return The text escaper
+     */
     public TextEscaper textEscaper() {
         return _textEscaper;
     }
 
+    /**
+     * Gets the configured CSS minifier.
+     *
+     * @return The CSS minifier
+     */
     public Minifier cssMinifier() {
         return _cssMinifier;
     }
 
+    /**
+     * Gets the configured JavaScript minifier.
+     *
+     * @return The JavaScript minifier
+     */
     public Minifier jsMinifier() {
         return _jsMinifier;
     }
 
+    /**
+     * Checks whether empty tags should be self-closed.
+     *
+     * @return True if empty tags should be closed, false otherwise
+     */
     public boolean closeEmptyTags() {
         return _closeEmptyTags;
     }
 
+    /**
+     * Gets the configured indenter.
+     *
+     * @return The indenter
+     */
     public Indenter indenter() {
         return _indenter;
     }
 
+    /**
+     * Returns a copy of this configuration with the specified text escaper.
+     *
+     * @param textEscaper The text escaper
+     * @return A new Config instance
+     */
     public Config withTextEscaper(TextEscaper textEscaper){
         Config copy = new Config(this);
         copy._textEscaper = textEscaper;
         return copy;
     }
 
+    /**
+     * Returns a copy of this configuration with the specified CSS minifier.
+     *
+     * @param cssMinifier The CSS minifier
+     * @return A new Config instance
+     */
     public Config withCssMinifier(Minifier cssMinifier){
         Config copy = new Config(this);
         copy._cssMinifier = cssMinifier;
         return copy;
     }
 
+    /**
+     * Returns a copy of this configuration with the specified JavaScript minifier.
+     *
+     * @param jsMinifier The JavaScript minifier
+     * @return A new Config instance
+     */
     public Config withJsMinifier(Minifier jsMinifier){
         Config copy = new Config(this);
         copy._jsMinifier = jsMinifier;
         return copy;
     }
 
+    /**
+     * Returns a copy of this configuration with the empty tag closing setting.
+     *
+     * @param closeEmptyTags Whether empty tags should be closed
+     * @return A new Config instance
+     */
     public Config withEmptyTagsClosed(boolean closeEmptyTags){
         Config copy = new Config(this);
         copy._closeEmptyTags = closeEmptyTags;
         return copy;
     }
 
+    /**
+     * Returns a copy of this configuration with the specified indenter.
+     *
+     * @param indenter The indenter
+     * @return A new Config instance
+     */
     public Config withIndenter(Indenter indenter){
         Config copy = new Config(this);
         copy._indenter = indenter;
@@ -131,10 +189,20 @@ public class Config {
         (level, text) -> String.join("", Collections.nCopies(level, FOUR_SPACES)) + text
     );
 
+    /**
+     * Returns the default configuration.
+     *
+     * @return The default Config instance
+     */
     public static final Config defaults() {
         return DEFAULTS;
     }
 
+    /**
+     * Returns a new configuration snapshot reflecting the current global static settings.
+     *
+     * @return A Config instance with global settings
+     */
     public static final Config global() {
         return new Config(
             textEscaper,

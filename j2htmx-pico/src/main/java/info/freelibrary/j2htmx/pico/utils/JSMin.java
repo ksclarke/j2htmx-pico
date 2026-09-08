@@ -45,6 +45,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PushbackInputStream;
 
+/**
+ * JavaScript minifier based on Douglas Crockford's JSMin.
+ */
 public class JSMin {
 
     private static final int EOF = -1;

@@ -7,6 +7,9 @@ import info.freelibrary.j2htmx.pico.rendering.HtmlBuilder;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 
+/**
+ * An interface for objects that can be rendered to HTML.
+ */
 public interface Renderable {
 
     /**
@@ -16,7 +19,7 @@ public interface Renderable {
      * @param model   A model object to provide data for children to render.
      * @param <T>     The type of the Appendable which HTML is being appended to.
      * @return The Appendable to which HTML has been appended.
-     * @throws IOException
+     * @throws IOException If an I/O error occurs.
      */
     default <T extends Appendable> T render(HtmlBuilder<T> builder, Object model) throws IOException {
         // This method should be overridden by any internal classes.
@@ -32,7 +35,7 @@ public interface Renderable {
      * @param builder A builder that can compose HTML elements.
      * @param <T>     The type of the Appendable to which HTML is being appended.
      * @return The Appendable to which HTML has been appended.
-     * @throws IOException
+     * @throws IOException If an I/O error occurs.
      */
     default <T extends Appendable> T render(HtmlBuilder<T> builder) throws IOException {
         return render(builder, null);
@@ -40,7 +43,9 @@ public interface Renderable {
 
     /**
      * Create a StringBuilder and use it to render the Renderable and it's
-     * children
+     * children.
+     *
+     * @return The rendered HTML string
      */
     default String render() {
         try {
@@ -54,6 +59,7 @@ public interface Renderable {
      * Render the Renderable and it's children using the supplied writer
      *
      * @param writer the current writer
+     * @throws IOException If an I/O error occurs.
      */
     @Deprecated
     default void render(Appendable writer) throws IOException {
@@ -69,6 +75,7 @@ public interface Renderable {
      *
      * @param writer the current writer
      * @param model  a model object to provide data for children to render
+     * @throws IOException If an I/O error occurs.
      */
     @Deprecated
     default void renderModel(Appendable writer, Object model) throws IOException {

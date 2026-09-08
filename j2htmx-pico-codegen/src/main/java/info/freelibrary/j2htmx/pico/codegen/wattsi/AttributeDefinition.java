@@ -1,10 +1,29 @@
 package info.freelibrary.j2htmx.pico.codegen.wattsi;
 
+/**
+ * Definition of an HTML attribute parsed from WHATWG spec sources.
+ */
 public interface AttributeDefinition {
 
+    /**
+     * Gets the attribute name.
+     *
+     * @return The attribute name
+     */
     String name();
 
+    /**
+     * Checks if this attribute applies to the specified element definition.
+     *
+     * @param element The element definition
+     * @return True if applicable, false otherwise
+     */
     boolean appliesTo(ElementDefinition element);
 
+    /**
+     * Checks if this attribute is marked as obsolete in the spec.
+     *
+     * @return True if obsolete, false otherwise
+     */
     boolean isObsolete();
 }

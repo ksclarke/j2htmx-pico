@@ -1,7 +1,19 @@
 package info.freelibrary.j2htmx.pico.utils;
 
+/**
+ * Utility for escaping special characters in HTML strings.
+ */
 public class EscapeUtil {
 
+    private EscapeUtil() {
+    }
+
+    /**
+     * Escapes HTML special characters in the supplied string.
+     *
+     * @param s The string to escape
+     * @return The HTML-escaped string, or null if input is null
+     */
     public static String escape(String s) {
         if (s == null) {
             return null;

@@ -3,8 +3,17 @@ package info.freelibrary.j2htmx.pico.codegen.generators;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Generator that creates method definitions for empty and container tags in TagCreator.
+ */
 public final class TagCreatorCodeGenerator {
 
+    private TagCreatorCodeGenerator() {
+    }
+
+    /**
+     * Prints Java method definitions for all empty and container tags to standard output.
+     */
     public static void print() {
 
         System.out.println("// EmptyTags, generated in " + TagCreatorCodeGenerator.class);
@@ -62,7 +71,11 @@ public final class TagCreatorCodeGenerator {
         }
     }
 
-    //  This is a method that contains all ContainerTags, there is nothing below it
+    /**
+     * Returns a list of all HTML empty/void tag names.
+     *
+     * @return List of empty tag names
+     */
     public static List<String> emptyTags() {
         return Arrays.asList(
             "area",
@@ -84,6 +97,11 @@ public final class TagCreatorCodeGenerator {
         );
     }
 
+    /**
+     * Returns a list of all HTML container tag names.
+     *
+     * @return List of container tag names
+     */
     public static List<String> containerTags() {
         return Arrays.asList(
             "a",

@@ -4,10 +4,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Comprehensive registry of HTML attribute descriptions and their associated tags.
+ */
 public final class AttributesList {
+
+    private AttributesList() {
+    }
 
     //https://www.w3schools.com/tags/ref_attributes.asp
 
+    /**
+     * Retrieves all attribute names applicable to the specified lowercase HTML tag name.
+     *
+     * @param tagLowercase The lowercase tag name
+     * @return List of attribute names
+     */
     public static List<String> getCustomAttributesForHtmlTag(final String tagLowercase){
 
         final List<String> attrs = new ArrayList<>();
@@ -21,6 +33,11 @@ public final class AttributesList {
         return attrs;
     }
 
+    /**
+     * Returns the master list of HTML attribute descriptors.
+     *
+     * @return List of attribute descriptors
+     */
     public static List<AttrD> attributesDescriptive() {
         return Arrays.asList(
             new AttrD("accept", true, "input"),

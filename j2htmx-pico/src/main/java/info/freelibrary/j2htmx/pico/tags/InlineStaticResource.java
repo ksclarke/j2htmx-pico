@@ -9,8 +9,21 @@ import static info.freelibrary.j2htmx.pico.TagCreator.rawHtml;
 import static info.freelibrary.j2htmx.pico.TagCreator.script;
 import static info.freelibrary.j2htmx.pico.TagCreator.style;
 
+/**
+ * Utility for reading static resource files (CSS, JS) from the classpath or filesystem and embedding them into tags.
+ */
 public class InlineStaticResource {
 
+    private InlineStaticResource() {
+    }
+
+    /**
+     * Loads a file from classpath or filesystem and returns an inline style or script tag with the file's content.
+     *
+     * @param path The file path on the classpath or filesystem
+     * @param format The target format determining tag type and minification
+     * @return A ContainerTag representing the inline style or script element
+     */
     public static ContainerTag<? extends Tag<?>> get(String path, TargetFormat format) {
         String fileString = getFileAsString(path);
         switch (format) {
@@ -27,6 +40,12 @@ public class InlineStaticResource {
         }
     }
 
+    /**
+     * Reads a file from the classpath or filesystem as a string.
+     *
+     * @param path The path to the file
+     * @return The file contents as a string
+     */
     public static String getFileAsString(String path) {
         try {
             return streamToString(InlineStaticResource.class.getResourceAsStream(path));
@@ -44,7 +63,19 @@ public class InlineStaticResource {
         return s.hasNext() ? s.next() : "";
     }
 
-    public enum TargetFormat {CSS_MIN, CSS, JS_MIN, JS}
+    /**
+     * Supported formats for embedding inline static resources.
+     */
+    public enum TargetFormat {
+        /** Minified CSS embedded in a style element. */
+        CSS_MIN,
+        /** Unminified CSS embedded in a style element. */
+        CSS,
+        /** Minified JavaScript embedded in a script element. */
+        JS_MIN,
+        /** Unminified JavaScript embedded in a script element. */
+        JS
+    }
 
 }
 

@@ -19,6 +19,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Primary factory class providing static builder methods to construct HTML, HTMX, and Pico CSS elements.
+ */
 public class TagCreator {
 
     private TagCreator() {
@@ -136,6 +139,15 @@ public class TagCreator {
         return dom;
     }
 
+    /**
+     * Creates a DomContent object containing HTML using a mapping function on map entries.
+     *
+     * @param <I> The type of the keys
+     * @param <T> The type of the values
+     * @param map The map to iterate over
+     * @param mapper The mapping function applied to each map entry
+     * @return DomContent containing the mapped elements
+     */
     public static <I, T> DomContent each(final Map<I, T> map, final Function<Entry<I, T>, DomContent> mapper) {
         return each(map.entrySet().stream().map(mapper));
     }
@@ -198,38 +210,91 @@ public class TagCreator {
     }
 
     //Special tags
+    /**
+     * Creates a custom {@link ContainerTag} with the specified tag name.
+     *
+     * @param tagName The tag name
+     * @return A new ContainerTag
+     */
     public static ContainerTag<? extends Tag<?>> tag(String tagName) {
         return new ContainerTag<>(tagName);
     }
 
+    /**
+     * Creates a custom {@link EmptyTag} with the specified tag name.
+     *
+     * @param tagName The tag name
+     * @return A new EmptyTag
+     */
     public static EmptyTag<? extends Tag<?>> emptyTag(String tagName) {
         return new EmptyTag<>(tagName);
     }
 
+    /**
+     * Reads a file from the classpath or filesystem and returns its escaped text content.
+     *
+     * @param path The file path
+     * @return An escaped Text element
+     */
     public static Text fileAsEscapedString(String path) {
         return text(InlineStaticResource.getFileAsString(path));
     }
 
+    /**
+     * Reads a file from the classpath or filesystem and returns its raw HTML content.
+     *
+     * @param path The file path
+     * @return An UnescapedText element
+     */
     public static UnescapedText fileAsString(String path) {
         return rawHtml(InlineStaticResource.getFileAsString(path));
     }
 
+    /**
+     * Creates a {@code <style>} tag containing unminified CSS read from the specified file path.
+     *
+     * @param path The CSS file path
+     * @return A StyleTag containing the CSS content
+     */
     public static StyleTag styleWithInlineFile(String path) {
         return (StyleTag) InlineStaticResource.get(path, InlineStaticResource.TargetFormat.CSS);
     }
 
+    /**
+     * Creates a {@code <script>} tag containing unminified JavaScript read from the specified file path.
+     *
+     * @param path The JavaScript file path
+     * @return A ScriptTag containing the JavaScript content
+     */
     public static ScriptTag scriptWithInlineFile(String path) {
         return (ScriptTag) InlineStaticResource.get(path, InlineStaticResource.TargetFormat.JS);
     }
 
+    /**
+     * Creates a {@code <style>} tag containing minified CSS read from the specified file path.
+     *
+     * @param path The CSS file path
+     * @return A StyleTag containing the minified CSS content
+     */
     public static StyleTag styleWithInlineFile_min(String path) {
         return (StyleTag) InlineStaticResource.get(path, InlineStaticResource.TargetFormat.CSS_MIN);
     }
 
+    /**
+     * Creates a {@code <script>} tag containing minified JavaScript read from the specified file path.
+     *
+     * @param path The JavaScript file path
+     * @return A ScriptTag containing the minified JavaScript content
+     */
     public static ScriptTag scriptWithInlineFile_min(String path) {
         return (ScriptTag) InlineStaticResource.get(path, InlineStaticResource.TargetFormat.JS_MIN);
     }
 
+    /**
+     * Creates an HTML5 doctype declaration {@code <!DOCTYPE html>}.
+     *
+     * @return DomContent representing the doctype declaration
+     */
     public static DomContent document() {
         return rawHtml("<!DOCTYPE html>");
     }
@@ -1039,50 +1104,122 @@ public class TagCreator {
     public static VideoTag video (Attr.ShortForm shortAttr, DomContent... dc)       {  return Attr.addTo( new VideoTag().with(dc), shortAttr); }
 
     // pico.css convenience methods
+    /**
+     * Creates a {@code <link>} stylesheet pointing to the default CDN Pico CSS v2.
+     *
+     * @return A LinkTag referencing the Pico CSS stylesheet
+     */
     public static LinkTag picoCss() {
         return Pico.css();
     }
 
+    /**
+     * Creates a {@code <link>} stylesheet pointing to the CDN Pico CSS with a specified version.
+     *
+     * @param version The Pico CSS version
+     * @return A LinkTag referencing the versioned Pico CSS stylesheet
+     */
     public static LinkTag picoCss(final String version) {
         return Pico.css(version);
     }
 
+    /**
+     * Creates a {@code <link>} stylesheet pointing to the CDN Pico CSS with a specified version and color scheme name.
+     *
+     * @param version The Pico CSS version
+     * @param colorScheme The color scheme name
+     * @return A LinkTag referencing the themed Pico CSS stylesheet
+     */
     public static LinkTag picoCss(final String version, final String colorScheme) {
         return Pico.css(version, colorScheme);
     }
 
+    /**
+     * Creates a {@code <link>} stylesheet pointing to the CDN Pico CSS with a specified color scheme.
+     *
+     * @param colorScheme The color scheme palette
+     * @return A LinkTag referencing the themed Pico CSS stylesheet
+     */
     public static LinkTag picoCss(final Pico.Color colorScheme) {
         return Pico.css(colorScheme);
     }
 
+    /**
+     * Creates a {@code <link>} stylesheet pointing to the CDN Pico CSS with a specified version and color scheme.
+     *
+     * @param version The Pico CSS version
+     * @param colorScheme The color scheme palette
+     * @return A LinkTag referencing the versioned and themed Pico CSS stylesheet
+     */
     public static LinkTag picoCss(final String version, final Pico.Color colorScheme) {
         return Pico.css(version, colorScheme);
     }
 
+    /**
+     * Loads the bundled minified Pico CSS stylesheet from resources as an inline {@code <style>} element.
+     *
+     * @return A ContainerTag containing the inlined CSS
+     */
     public static ContainerTag<?> picoInlineCss() {
         return Pico.inlineCss();
     }
 
+    /**
+     * Creates a centered, responsive container {@code <main class="container">}.
+     *
+     * @param content Elements inside the container
+     * @return A MainTag with the container class
+     */
     public static MainTag container(final DomContent... content) {
         return Pico.container(content);
     }
 
+    /**
+     * Creates a centered, responsive container {@code <main class="container">} with text content.
+     *
+     * @param text Text inside the container
+     * @return A MainTag with the container class
+     */
     public static MainTag container(final String text) {
         return Pico.container(text);
     }
 
+    /**
+     * Creates a fluid, full-width container {@code <main class="container-fluid">}.
+     *
+     * @param content Elements inside the fluid container
+     * @return A MainTag with the container-fluid class
+     */
     public static MainTag containerFluid(final DomContent... content) {
         return Pico.containerFluid(content);
     }
 
+    /**
+     * Creates a fluid, full-width container {@code <main class="container-fluid">} with text content.
+     *
+     * @param text Text inside the fluid container
+     * @return A MainTag with the container-fluid class
+     */
     public static MainTag containerFluid(final String text) {
         return Pico.containerFluid(text);
     }
 
+    /**
+     * Creates a responsive grid layout {@code <div class="grid">}.
+     *
+     * @param content Elements inside the grid
+     * @return A DivTag with the grid class
+     */
     public static DivTag grid(final DomContent... content) {
         return Pico.grid(content);
     }
 
+    /**
+     * Creates a responsive grid layout {@code <div class="grid">} with text content.
+     *
+     * @param text Text inside the grid
+     * @return A DivTag with the grid class
+     */
     public static DivTag grid(final String text) {
         return Pico.grid(text);
     }

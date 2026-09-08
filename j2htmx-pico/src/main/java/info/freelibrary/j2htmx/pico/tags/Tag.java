@@ -5,23 +5,48 @@ import info.freelibrary.j2htmx.pico.attributes.Attribute;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * Base class for all HTML tags, providing fluent builder methods for global, HTMX, and Pico CSS attributes.
+ *
+ * @param <T> The concrete tag type implementing this class
+ */
 public abstract class Tag<T extends Tag<T>> extends DomContent implements Instance<T> {
     private final String tagName;
     private final ArrayList<Attribute> attributes;
 
+    /**
+     * Constructs a Tag with the specified tag name.
+     *
+     * @param tagName The HTML tag name
+     */
     protected Tag(String tagName) {
         this.tagName = tagName;
         this.attributes = new ArrayList<>();
     }
 
+    /**
+     * Gets the HTML tag name.
+     *
+     * @return The tag name
+     */
     public String getTagName() {
         return this.tagName;
     }
 
+    /**
+     * Checks if this tag has a valid tag name.
+     *
+     * @return True if tag name is non-null and non-empty, false otherwise
+     */
     protected boolean hasTagName() {
         return tagName != null && !tagName.isEmpty();
     }
 
+    /**
+     * Gets the list of attributes associated with this tag.
+     *
+     * @return The attribute list
+     */
     protected ArrayList<Attribute> getAttributes() {
         return attributes;
     }

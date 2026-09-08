@@ -16,10 +16,23 @@ import java.util.stream.Collectors;
 import static info.freelibrary.j2htmx.pico.codegen.generators.TagCreatorCodeGenerator.containerTags;
 import static info.freelibrary.j2htmx.pico.codegen.generators.TagCreatorCodeGenerator.emptyTags;
 
+/**
+ * Code generator that outputs specialized HTML tag classes extending ContainerTag or EmptyTag.
+ */
 public final class SpecializedTagClassCodeGenerator {
 
     private static final String relPath = "tags/specialized";
 
+    private SpecializedTagClassCodeGenerator() {
+    }
+
+    /**
+     * Generates or deletes specialized tag classes in the specified path.
+     *
+     * @param absPath The absolute output path
+     * @param delete Whether to delete files instead of generating them
+     * @throws IOException If an I/O error occurs
+     */
     public static void generate(final Path absPath, final boolean delete) throws IOException {
 
         //delete all files in the directory for fresh generation
@@ -91,6 +104,12 @@ public final class SpecializedTagClassCodeGenerator {
             }
         }
     }
+    /**
+     * Converts an HTML tag name into its corresponding class name.
+     *
+     * @param tageNameLowerCase The lowercase tag name
+     * @return The Java class name with "Tag" suffix
+     */
     public static String classNameFromTag(String tageNameLowerCase){
         String res = tageNameLowerCase.substring(0,1).toUpperCase()+tageNameLowerCase.substring(1);
         return res + "Tag";

@@ -69,6 +69,11 @@ public class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
         this.emptyElementAttributes = new FlatTagBuilder(config.closeEmptyTags());
     }
 
+    /**
+     * Returns the underlying Appendable receiving the HTML output.
+     *
+     * @return The Appendable output destination
+     */
     public T output() {
         return out;
     }

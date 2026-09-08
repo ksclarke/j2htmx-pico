@@ -12,10 +12,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+/**
+ * Represents an HTML element that can contain child nodes and text content.
+ *
+ * @param <T> The concrete container tag type
+ */
 public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
 
+    /** The child DOM content nodes of this container tag. */
     protected List<DomContent> children;
 
+    /**
+     * Constructs a ContainerTag with the given tag name.
+     *
+     * @param tagName The HTML tag name
+     */
     public ContainerTag(String tagName) {
         super(tagName);
         this.children = new ArrayList<>();
@@ -132,7 +143,9 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
     }
 
     /**
-     * Gets number of child nodes this tag element contains
+     * Gets number of child nodes this tag element contains.
+     *
+     * @return The number of child nodes
      */
     public int getNumChildren() {
         return children.size();

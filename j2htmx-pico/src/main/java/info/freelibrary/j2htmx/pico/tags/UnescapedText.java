@@ -6,10 +6,18 @@ import info.freelibrary.j2htmx.pico.rendering.HtmlBuilder;
 
 import java.io.IOException;
 
+/**
+ * Represents raw, unescaped text content within the DOM.
+ */
 public class UnescapedText extends DomContent {
 
     private final String text;
 
+    /**
+     * Constructs an UnescapedText element with the given raw text.
+     *
+     * @param text The unescaped text content
+     */
     public UnescapedText(String text) {
         this.text = text;
     }

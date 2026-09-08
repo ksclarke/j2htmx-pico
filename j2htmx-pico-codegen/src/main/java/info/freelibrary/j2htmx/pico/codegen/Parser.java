@@ -4,6 +4,9 @@ import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Parser for element and attribute definition files.
+ */
 public class Parser {
 
     private static final Pattern EMPTY_LINE_PATTERN = Pattern.compile("\\s*");
@@ -11,24 +14,85 @@ public class Parser {
     private static final Pattern NODE_PATTERN = Pattern.compile("(?<type>ELEMENT|EMPTY-ELEMENT|BOOLEAN|ONOFF|STRING)\\[(?<name>\\S+)\\]");
     private static final Pattern ATTRIBUTE_PATTERN = Pattern.compile("ATTRIBUTE\\[(?<element>\\S+):(?<name>\\S+)\\]");
 
+    private Parser() {
+    }
+
+    /**
+     * Listener interface to receive callbacks during model parsing.
+     */
     public interface Listener {
+        /**
+         * Called when a line comment is encountered.
+         *
+         * @param line The line number
+         * @param txt The comment text
+         */
         void lineCommented(int line, String txt);
 
+        /**
+         * Called when a container element is defined.
+         *
+         * @param line The line number
+         * @param name The element name
+         */
         void elementDefined(int line, String name);
 
+        /**
+         * Called when an empty/void element is defined.
+         *
+         * @param line The line number
+         * @param name The element name
+         */
         void emptyElementDefined(int line, String name);
 
+        /**
+         * Called when a boolean attribute is defined.
+         *
+         * @param line The line number
+         * @param name The attribute name
+         */
         void booleanDefined(int line, String name);
 
+        /**
+         * Called when an on/off boolean attribute is defined.
+         *
+         * @param line The line number
+         * @param name The attribute name
+         */
         void onOffDefined(int line, String name);
 
+        /**
+         * Called when a string attribute is defined.
+         *
+         * @param line The line number
+         * @param name The attribute name
+         */
         void stringDefined(int line, String name);
 
+        /**
+         * Called when an attribute is mapped to an element.
+         *
+         * @param line The line number
+         * @param element The element name
+         * @param name The attribute name
+         */
         void attributeDefined(int line, String element, String name);
 
+        /**
+         * Called when an invalid line is encountered.
+         *
+         * @param line The line number
+         * @param txt The line content
+         */
         void invalidLine(int line, String txt);
     }
 
+    /**
+     * Parses the specified model definition text using the given listener.
+     *
+     * @param txt The model text content
+     * @param listener The listener callback handler
+     */
     public static void parse(String txt, Listener listener) {
         String[] lines = txt.split("[\r\n]+");
 

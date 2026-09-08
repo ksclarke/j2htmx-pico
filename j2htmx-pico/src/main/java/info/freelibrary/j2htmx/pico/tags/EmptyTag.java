@@ -8,8 +8,19 @@ import info.freelibrary.j2htmx.pico.rendering.HtmlBuilder;
 
 import java.io.IOException;
 
+/**
+ * Represents a self-closing or void HTML element (such as {@code <img />}, {@code <br />}, or {@code <input />})
+ * that cannot have child nodes.
+ *
+ * @param <T> The concrete empty tag type
+ */
 public class EmptyTag<T extends EmptyTag<T>> extends Tag<T> {
 
+    /**
+     * Constructs an EmptyTag with the given tag name.
+     *
+     * @param tagName The HTML tag name
+     */
     public EmptyTag(String tagName) {
         super(tagName);
         if (tagName == null) {

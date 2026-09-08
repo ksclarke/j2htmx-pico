@@ -3,7 +3,13 @@ package info.freelibrary.j2htmx.pico.mathml;
 import info.freelibrary.j2htmx.pico.mathml.tags.*;
 import info.freelibrary.j2htmx.pico.tags.DomContent;
 
-public class MathML {
+/**
+ * Factory class providing static builder methods for creating MathML elements.
+ */
+public final class MathML {
+
+    private MathML() {
+    }
 
     public static AnnotationTag annotation(String text) {
         return new AnnotationTag().withText(text);

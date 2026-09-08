@@ -157,6 +157,11 @@ public class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> {
         return this;
     }
 
+    /**
+     * Returns the underlying Appendable receiving the formatted HTML output.
+     *
+     * @return The Appendable output destination
+     */
     @Override
     public T output() {
         return out;

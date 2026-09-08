@@ -14,13 +14,32 @@ import java.util.Map;
 import static info.freelibrary.j2htmx.pico.codegen.Model.Metadata.ON_OFF;
 import static info.freelibrary.j2htmx.pico.codegen.Model.Metadata.SELF_CLOSING;
 
+/**
+ * Java source code generator producing tag classes and attribute interfaces from model definitions.
+ */
 public class Generator {
 
+    /** Class name constant for Instance. */
     public static final ClassName INSTANCE = ClassName.get("info.freelibrary.j2htmx.pico.tags", "Instance");
+
+    /** Class name constant for Tag. */
     public static final ClassName TAG = ClassName.get("info.freelibrary.j2htmx.pico.tags", "Tag");
+
+    /** Class name constant for EmptyTag. */
     public static final ClassName EMPTY_TAG = ClassName.get("info.freelibrary.j2htmx.pico.tags", "EmptyTag");
+
+    /** Class name constant for ContainerTag. */
     public static final ClassName CONTAINER_TAG = ClassName.get("info.freelibrary.j2htmx.pico.tags", "ContainerTag");
 
+    private Generator() {
+    }
+
+    /**
+     * Standalone main method to test code generation.
+     *
+     * @param args Command-line arguments
+     * @throws IOException If an I/O error occurs
+     */
     public static void main(String... args) throws IOException {
         Path path = Paths.get("j2html-codegen", "src", "test", "resources", "html.model");
         String definitions = new String(Files.readAllBytes(path));
@@ -32,6 +51,15 @@ public class Generator {
         generate(dir, "info.freelibrary.j2htmx.pico.tags.attributes", "info.freelibrary.j2htmx.pico.tags.specialized", model);
     }
 
+    /**
+     * Generates Java source files for attributes and elements into the specified root directory.
+     *
+     * @param root The root output directory
+     * @param attributePkg Package name for attribute interfaces
+     * @param elementPkg Package name for element classes
+     * @param model The model definitions
+     * @throws IOException If an I/O error occurs
+     */
     public static void generate(Path root, String attributePkg, String elementPkg, Model model) throws IOException {
         Map<String, JavaFile> attributes = generateAttributePackage(attributePkg, model);
         for (JavaFile file : attributes.values()) {

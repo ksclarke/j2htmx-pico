@@ -11,12 +11,20 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
+/**
+ * Parses and extracts element and attribute definitions from a WHATWG HTML specification document.
+ */
 public class WattsiSource {
 
     private final Document doc;
 
     private final Set<Reference> obsolete = new HashSet<>();
 
+    /**
+     * Constructs a WattsiSource from the specified HTML specification document.
+     *
+     * @param doc The parsed WHATWG HTML spec document
+     */
     public WattsiSource(Document doc) {
         this.doc = doc;
 
@@ -58,18 +66,31 @@ public class WattsiSource {
 //        );
     }
 
+    /**
+     * Extracts all element definitions found in the document.
+     *
+     * @return List of element definitions
+     */
     public List<ElementDefinition> elementDefinitions() {
         return doc.select("dfn[element]").stream()
             .map(WattsiElement::new)
             .collect(toList());
     }
 
+    /**
+     * Extracts all attribute definitions found in the document.
+     *
+     * @return List of attribute definitions
+     */
     public List<AttributeDefinition> attributeDefinitions() {
         return doc.select("dfn[element-attr]").stream()
             .map(WattsiAttribute::new)
             .collect(toList());
     }
 
+    /**
+     * Element definition implementation backed by a JSoup element.
+     */
     public class WattsiElement implements ElementDefinition {
         private final Element dfn;
 
@@ -110,6 +131,9 @@ public class WattsiSource {
         }
     }
 
+    /**
+     * Attribute definition implementation backed by a JSoup element.
+     */
     public class WattsiAttribute implements AttributeDefinition {
         private final Element dfn;
 

@@ -8,8 +8,19 @@ import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.attribut
 import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.getCustomAttributesForHtmlTag;
 import static java.lang.System.*;
 
+/**
+ * Utility to export HTML element and attribute definitions to standard output.
+ */
 public class Export {
 
+    private Export() {
+    }
+
+    /**
+     * Main entry point to print element and attribute definitions.
+     *
+     * @param args Command-line arguments
+     */
     public static void main(String[] args){
         for (final String tag : emptyTags()) {
             out.print("EMPTY-ELEMENT[");

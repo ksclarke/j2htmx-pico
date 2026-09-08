@@ -2,6 +2,9 @@ package info.freelibrary.j2htmx.pico.attributes;
 
 import info.freelibrary.j2htmx.pico.tags.Tag;
 
+/**
+ * Attribute name constants and helpers for HTML, HTMX, and Pico CSS attributes.
+ */
 public abstract class Attr {
 
     public static final String ACCEPT = "accept";
@@ -171,6 +174,13 @@ public abstract class Attr {
     public static final String ROLE_GROUP = "group";
     public static final String ROLE_SEARCH = "search";
 
+    /**
+     * Parses a CSS-like selector shorthand string (e.g. {@code "#my-id.class1.class2"}) into a {@link ShortForm} attribute.
+     *
+     * @param attrs A selector string containing an optional ID and classes
+     * @return A ShortForm instance containing the parsed ID and classes
+     * @throws IllegalArgumentException If the string is malformed or contains multiple IDs
+     */
     public static ShortForm shortFormFromAttrsString(String attrs) {
         if (!attrs.contains(".") && !attrs.contains(("#"))) {
             throw new IllegalArgumentException("String must contain either id (#) or class (.)");
@@ -193,14 +203,32 @@ public abstract class Attr {
         return new ShortForm(id.trim(), classes.toString().trim());
     }
 
+    /**
+     * Applies this attribute helper to the specified tag if not null.
+     *
+     * @param <T> The tag type
+     * @param tag The tag to apply attributes to
+     * @param attr The attribute helper to apply
+     * @return The modified tag
+     */
     public static <T extends Tag<T>> T addTo(T tag, Attr attr) {
         if (null != attr)
             attr.addTo(tag);
         return tag;
     }
 
+    /**
+     * Applies this attribute configuration to the given tag.
+     *
+     * @param <T> The tag type
+     * @param tag The tag to modify
+     * @return The modified tag
+     */
     public abstract <T extends Tag<T>> T addTo(T tag);
 
+    /**
+     * Represents a shorthand attribute containing parsed ID and CSS class names.
+     */
     public static class ShortForm extends Attr {
         String id;
         String classes;

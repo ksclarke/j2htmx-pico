@@ -12,18 +12,25 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * Maven plugin mojo that generates tag classes and attribute interfaces from a model definition file.
+ */
 @Mojo(name = "generate-source-files", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true)
 public class J2htmlCodeGeneratorMojo extends AbstractMojo {
 
+    /** The Maven project instance. */
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     MavenProject project;
 
+    /** Path to the model definition file. */
     @Parameter(property = "modelFile", required = true)
     String modelFile;
 
+    /** Java package name for generated attribute interfaces. */
     @Parameter(property = "attributePackage", required = true)
     String attributePackage;
 
+    /** Java package name for generated tag classes. */
     @Parameter(property = "tagPackage", required = true)
     String tagPackage;
 

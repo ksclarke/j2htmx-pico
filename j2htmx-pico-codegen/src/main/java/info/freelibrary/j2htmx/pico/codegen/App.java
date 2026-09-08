@@ -7,8 +7,19 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Standalone application runner for invoking code generation.
+ */
 public final class App
 {
+    private App() {
+    }
+
+    /**
+     * Main entry point to generate attribute interfaces and specialized tag classes.
+     *
+     * @param args Command-line arguments
+     */
     public static void main( String[] args )
     {
         final Path relPath = Paths.get("../library/src/main/java/j2html/");

@@ -18,38 +18,109 @@ import java.util.Locale;
  */
 public final class Pico {
 
+    /**
+     * Standard responsive container class.
+     */
     public static final String CONTAINER = "container";
+
+    /**
+     * Fluid, full-width container class.
+     */
     public static final String CONTAINER_FLUID = "container-fluid";
+
+    /**
+     * Responsive grid layout class.
+     */
     public static final String GRID = "grid";
+
+    /**
+     * Dropdown menu details class.
+     */
     public static final String DROPDOWN = "dropdown";
+
+    /**
+     * Secondary button/element styling class.
+     */
     public static final String SECONDARY = "secondary";
+
+    /**
+     * Contrast button/element styling class.
+     */
     public static final String CONTRAST = "contrast";
+
+    /**
+     * Outline button styling class.
+     */
     public static final String OUTLINE = "outline";
 
     // Color palettes
+    /** Amber color palette. */
     public static final String AMBER = "amber";
+
+    /** Azure color palette. */
     public static final String AZURE = "azure";
+
+    /** Blue color palette. */
     public static final String BLUE = "blue";
+
+    /** Cyan color palette. */
     public static final String CYAN = "cyan";
+
+    /** Fuchsia color palette. */
     public static final String FUCHSIA = "fuchsia";
+
+    /** Green color palette. */
     public static final String GREEN = "green";
+
+    /** Grey color palette. */
     public static final String GREY = "grey";
+
+    /** Indigo color palette. */
     public static final String INDIGO = "indigo";
+
+    /** Jade color palette. */
     public static final String JADE = "jade";
+
+    /** Lime color palette. */
     public static final String LIME = "lime";
+
+    /** Orange color palette. */
     public static final String ORANGE = "orange";
+
+    /** Pink color palette. */
     public static final String PINK = "pink";
+
+    /** Pumpkin color palette. */
     public static final String PUMPKIN = "pumpkin";
+
+    /** Purple color palette. */
     public static final String PURPLE = "purple";
+
+    /** Red color palette. */
     public static final String RED = "red";
+
+    /** Sand color palette. */
     public static final String SAND = "sand";
+
+    /** Slate color palette. */
     public static final String SLATE = "slate";
+
+    /** Violet color palette. */
     public static final String VIOLET = "violet";
+
+    /** Yellow color palette. */
     public static final String YELLOW = "yellow";
+
+    /** Zinc color palette. */
     public static final String ZINC = "zinc";
 
+    /** Default major version of Pico CSS. */
     public static final String DEFAULT_VERSION = "2";
+
+    /** Prefix URL for the jsDelivr CDN hosting Pico CSS. */
     public static final String CDN_URL_PREFIX = "https://cdn.jsdelivr.net/npm/@picocss/pico@";
+
+    /** Classpath resource path to the bundled minified Pico CSS stylesheet. */
     public static final String BUNDLED_CSS_PATH = "/pico/pico.min.css";
 
     private Pico() {
@@ -69,6 +140,11 @@ public final class Pico {
             myValue = aValue;
         }
 
+        /**
+         * Gets the CSS value string of this theme.
+         *
+         * @return The theme string value
+         */
         public String getValue() {
             return myValue;
         }
@@ -110,6 +186,11 @@ public final class Pico {
             myValue = aValue;
         }
 
+        /**
+         * Gets the CSS color scheme name.
+         *
+         * @return The color scheme name
+         */
         public String getValue() {
             return myValue;
         }

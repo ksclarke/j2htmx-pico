@@ -6,10 +6,18 @@ import info.freelibrary.j2htmx.pico.rendering.HtmlBuilder;
 
 import java.io.IOException;
 
+/**
+ * Represents escaped text content within the DOM.
+ */
 public class Text extends DomContent {
 
     private final String text;
 
+    /**
+     * Constructs a Text element with the given text content.
+     *
+     * @param text The text content to be escaped when rendered
+     */
     public Text(String text) {
         this.text = text;
     }

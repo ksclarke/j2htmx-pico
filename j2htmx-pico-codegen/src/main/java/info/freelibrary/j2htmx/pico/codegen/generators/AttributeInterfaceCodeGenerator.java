@@ -12,10 +12,23 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Code generator that outputs Java attribute interfaces for HTML elements.
+ */
 public final class AttributeInterfaceCodeGenerator {
 
     private static final String relPath = "tags/attributes/";
 
+    private AttributeInterfaceCodeGenerator() {
+    }
+
+    /**
+     * Generates or deletes attribute interface source files in the specified path.
+     *
+     * @param absPath The absolute path to output files
+     * @param delete Whether to delete files instead of writing them
+     * @throws IOException If an I/O error occurs
+     */
     public static void generate(final Path absPath, final boolean delete) throws IOException {
 
         //delete all files in the directory for fresh generation
@@ -172,6 +185,12 @@ public final class AttributeInterfaceCodeGenerator {
         sb.append("}\n");
     }
 
+    /**
+     * Converts an attribute name into its corresponding interface name.
+     *
+     * @param attribute The attribute name
+     * @return The interface name with first letter capitalized
+     */
     public static String interfaceNameFromAttribute(String attribute){
         return attribute.substring(0,1).toUpperCase()+attribute.substring(1);
     }

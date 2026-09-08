@@ -15,8 +15,20 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+/**
+ * Generator that creates tag and attribute code by parsing WHATWG HTML spec sources.
+ */
 public class WattsiGenerator {
 
+    private WattsiGenerator() {
+    }
+
+    /**
+     * Main entry point to parse WHATWG spec and generate tag definitions.
+     *
+     * @param args Command-line arguments with path to WHATWG source
+     * @throws IOException If an I/O error occurs
+     */
     public static void main(String... args) throws IOException {
         Path source = Paths.get(args[0]);
         Document doc = Jsoup.parse(source.toFile(), "UTF-8", "https://html.spec.whatwg.org/");
