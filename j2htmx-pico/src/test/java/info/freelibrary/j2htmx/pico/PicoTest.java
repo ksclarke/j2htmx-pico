@@ -122,4 +122,77 @@ public class PicoTest {
         assertThat(html, containsString("hx-post=\"/api/save\""));
         assertThat(html, containsString("hx-target=\"#result\""));
     }
+
+    @Test
+    public void testReadmeExamples() {
+        // Basic Use Example
+        String basicHtml = html(
+            head(
+                title("Basic Example")
+            ),
+            body(
+                header(
+                    h1("Welcome to j2htmx-pico")
+                ),
+                main(
+                    p("Generate type-safe HTML directly in Java with minimal runtime overhead."),
+                    ul(
+                        li("Compile-time safety for element hierarchies"),
+                        li("Zero reflection or external template parsing costs"),
+                        li("Fluent tag chaining and conditional attributes")
+                    )
+                )
+            )
+        ).render();
+        assertThat(basicHtml, containsString("<h1>Welcome to j2htmx-pico</h1>"));
+
+        // HTMX Example
+        String htmxBtn = button("Load Items")
+            .withHxGet("/api/items")
+            .withHxTarget("#item-list")
+            .withHxSwap("innerHTML")
+            .withHxIndicator("#loading-spinner")
+            .render();
+        assertThat(htmxBtn, containsString("hx-get=\"/api/items\""));
+
+        String partialResponse = hxPartial(
+            div("Update successful!").withId("status-message"),
+            ul(li("Updated item 1"), li("Updated item 2")).withId("item-list")
+        ).render();
+        assertThat(partialResponse, containsString("<hx-partial"));
+
+        // Pico CSS Example
+        String page = html(
+            head(
+                title("Pico CSS Dashboard"),
+                picoCss()
+            ),
+            body(
+                container(
+                    h2("Interactive Form"),
+                    Pico.card(
+                        form(
+                            grid(
+                                input().withType("text").withName("name").withPlaceholder("Name"),
+                                input().withType("email").withName("email").withPlaceholder("Email")
+                            ),
+                            button("Submit")
+                                .asButton()
+                                .isAriaBusy()
+                                .withDataTooltip("Click to save record")
+                                .withDataPlacement("top")
+                                .withHxPost("/api/users")
+                                .withHxTarget("#result")
+                        )
+                    ),
+                    div().withId("result")
+                )
+            )
+        ).withDataTheme("dark").render();
+        assertThat(page, containsString("data-theme=\"dark\""));
+        assertThat(page, containsString("class=\"container\""));
+        assertThat(page, containsString("class=\"grid\""));
+        assertThat(page, containsString("role=\"button\""));
+        assertThat(page, containsString("aria-busy=\"true\""));
+    }
 }
