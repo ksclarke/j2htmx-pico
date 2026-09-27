@@ -21,7 +21,7 @@ public class EmptyTag<T extends EmptyTag<T>> extends Tag<T> {
      *
      * @param tagName The HTML tag name
      */
-    public EmptyTag(String tagName) {
+    public EmptyTag(final String tagName) {
         super(tagName);
         if (tagName == null) {
             throw new IllegalArgumentException("Illegal tag name: null");
@@ -32,9 +32,9 @@ public class EmptyTag<T extends EmptyTag<T>> extends Tag<T> {
     }
 
     @Override
-    public <A extends Appendable> A render(HtmlBuilder<A> builder, Object model) throws IOException {
-        TagBuilder attrs = builder.appendEmptyTag(getTagName());
-        for (Attribute attr : getAttributes()) {
+    public <A extends Appendable> A render(final HtmlBuilder<A> builder, final Object model) throws IOException {
+        final TagBuilder attrs = builder.appendEmptyTag(getTagName());
+        for (final Attribute attr : getAttributes()) {
             attr.render(attrs, model);
         }
         attrs.completeTag();
@@ -43,8 +43,8 @@ public class EmptyTag<T extends EmptyTag<T>> extends Tag<T> {
 
     @Override
     @Deprecated
-    public void renderModel(Appendable writer, Object model) throws IOException {
-        HtmlBuilder<?> builder = (writer instanceof HtmlBuilder)
+    public void renderModel(final Appendable writer, final Object model) throws IOException {
+        final HtmlBuilder<?> builder = (writer instanceof HtmlBuilder)
             ? (HtmlBuilder<?>) writer
             : FlatHtml.into(writer, Config.global());
 

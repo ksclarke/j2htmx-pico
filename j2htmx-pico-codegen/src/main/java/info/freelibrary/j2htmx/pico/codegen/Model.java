@@ -11,8 +11,8 @@ import static info.freelibrary.j2htmx.pico.codegen.Model.Node.Type.*;
  */
 public class Model implements Parser.Listener {
 
-    private Map<String, Node> elements;
-    private Map<String, Node> attributes;
+    private final Map<String, Node> elements;
+    private final Map<String, Node> attributes;
 
     /**
      * Constructs a new empty Model.
@@ -46,7 +46,7 @@ public class Model implements Parser.Listener {
      * @param name The element name
      * @return The created element node
      */
-    public Node addElement(String name) {
+    public Node addElement(final String name) {
         return add(ELEMENT, name, elements);
     }
 
@@ -56,7 +56,7 @@ public class Model implements Parser.Listener {
      * @param name The attribute name
      * @return The created attribute node
      */
-    public Node addBooleanAttribute(String name) {
+    public Node addBooleanAttribute(final String name) {
         return add(BOOLEAN, name, attributes);
     }
 
@@ -66,7 +66,7 @@ public class Model implements Parser.Listener {
      * @param name The attribute name
      * @return The created attribute node
      */
-    public Node addStringAttribute(String name) {
+    public Node addStringAttribute(final String name) {
         return add(STRING, name, attributes);
     }
 
@@ -76,7 +76,7 @@ public class Model implements Parser.Listener {
      * @param name The element name
      * @return The element node
      */
-    public Node element(String name) {
+    public Node element(final String name) {
         if (!elements.containsKey(name)) {
             throw new NodeDoesNotExist(name);
         }
@@ -89,60 +89,60 @@ public class Model implements Parser.Listener {
      * @param name The attribute name
      * @return The attribute node
      */
-    public Node attribute(String name) {
+    public Node attribute(final String name) {
         if (!attributes.containsKey(name)) {
             throw new NodeDoesNotExist(name);
         }
         return attributes.get(name);
     }
 
-    private Node add(Node.Type type, String name, Map<String, Node> nodes) {
+    private Node add(final Node.Type type, final String name, final Map<String, Node> nodes) {
         if (nodes.containsKey(name)) {
             throw new NodeAlreadyExists(name);
         }
 
-        Node node = new Node(type, name);
+        final Node node = new Node(type, name);
         nodes.put(name, node);
         return node;
     }
 
     @Override
-    public void lineCommented(int line, String txt) {
+    public void lineCommented(final int line, final String txt) {
         // Ignore.
     }
 
     @Override
-    public void elementDefined(int line, String name) {
+    public void elementDefined(final int line, final String name) {
         attempt(() -> addElement(name), line);
     }
 
     @Override
-    public void emptyElementDefined(int line, String name) {
+    public void emptyElementDefined(final int line, final String name) {
         attempt(() -> addElement(name).annotate(SELF_CLOSING), line);
     }
 
     @Override
-    public void booleanDefined(int line, String name) {
+    public void booleanDefined(final int line, final String name) {
         attempt(() -> addBooleanAttribute(name), line);
     }
 
     @Override
-    public void onOffDefined(int line, String name) {
+    public void onOffDefined(final int line, final String name) {
         attempt(() -> addBooleanAttribute(name).annotate(ON_OFF), line);
     }
 
     @Override
-    public void stringDefined(int line, String name) {
+    public void stringDefined(final int line, final String name) {
         attempt(() -> addStringAttribute(name), line);
     }
 
     @Override
-    public void attributeDefined(int line, String element, String name) {
+    public void attributeDefined(final int line, final String element, final String name) {
         attempt(() -> element(element).addChild(attribute(name)), line);
     }
 
     @Override
-    public void invalidLine(int line, String txt) {
+    public void invalidLine(final int line, final String txt) {
         throw new RuntimeException("Invalid line [" + line + "]: " + txt);
     }
 
@@ -151,7 +151,7 @@ public class Model implements Parser.Listener {
         void call() throws RuntimeException;
     }
 
-    private void attempt(Unsafe operation, int line) {
+    private void attempt(final Unsafe operation, final int line) {
         try {
             operation.call();
         } catch (RuntimeException e) {
@@ -181,7 +181,7 @@ public class Model implements Parser.Listener {
         /** Child nodes under this node. */
         public final List<Node> children;
 
-        private Node(Type type, String name) {
+        private Node(final Type type, final String name) {
             this.type = type;
             this.name = name;
             this.metadata = new ArrayList<>();
@@ -193,7 +193,7 @@ public class Model implements Parser.Listener {
          *
          * @param meta The metadata annotation to add
          */
-        public void annotate(Metadata meta) {
+        public void annotate(final Metadata meta) {
             metadata.add(meta);
         }
 
@@ -202,7 +202,7 @@ public class Model implements Parser.Listener {
          *
          * @param node The child node to add
          */
-        public void addChild(Node node) {
+        public void addChild(final Node node) {
             children.add(node);
         }
 
@@ -212,7 +212,7 @@ public class Model implements Parser.Listener {
          * @param annotation The metadata annotation to test
          * @return True if present, false otherwise
          */
-        public boolean is(Metadata annotation){
+        public boolean is(final Metadata annotation){
             return metadata.contains(annotation);
         }
     }
@@ -242,7 +242,7 @@ public class Model implements Parser.Listener {
          * @param cause The underlying cause
          * @param line The line number where error occurred
          */
-        public InvalidModel(Exception cause, int line) {
+        public InvalidModel(final Exception cause, final int line) {
             super(cause.getMessage() + ".  At line " + line, cause);
         }
     }
@@ -259,7 +259,7 @@ public class Model implements Parser.Listener {
          *
          * @param name The duplicate node name
          */
-        public NodeAlreadyExists(String name) {
+        public NodeAlreadyExists(final String name) {
             super("Node already exists: " + name);
         }
     }
@@ -276,7 +276,7 @@ public class Model implements Parser.Listener {
          *
          * @param name The missing node name
          */
-        public NodeDoesNotExist(String name) {
+        public NodeDoesNotExist(final String name) {
             super("Node does not exist: " + name);
         }
     }

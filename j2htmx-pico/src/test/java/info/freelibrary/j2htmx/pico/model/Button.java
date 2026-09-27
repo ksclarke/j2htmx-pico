@@ -6,7 +6,7 @@ import static info.freelibrary.j2htmx.pico.TagCreator.div;
 
 public class Button extends Template<PageModel> {
 
-    private ContainerTag<?> template;
+    private final ContainerTag<?> template;
 
     public Button() {
         // @formatter:off
@@ -24,7 +24,7 @@ public class Button extends Template<PageModel> {
     }
 
     @Override
-    public void renderTemplate(Appendable writer, PageModel model) throws IOException {
+    public void renderTemplate(final Appendable writer, final PageModel model) throws IOException {
         template.renderModel(writer, model.getButtonModel().getText());
     }
 }
@@ -32,7 +32,7 @@ public class Button extends Template<PageModel> {
 class ButtonText extends Template<String> {
 
     @Override
-    public void renderTemplate(Appendable writer, String model) throws IOException {
+    public void renderTemplate(final Appendable writer, final String model) throws IOException {
         writer.append(model);
     }
 }

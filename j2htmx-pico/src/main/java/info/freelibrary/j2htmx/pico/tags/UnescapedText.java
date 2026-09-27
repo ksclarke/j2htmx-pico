@@ -18,20 +18,20 @@ public class UnescapedText extends DomContent {
      *
      * @param text The unescaped text content
      */
-    public UnescapedText(String text) {
+    public UnescapedText(final String text) {
         this.text = text;
     }
 
     @Override
-    public <T extends Appendable> T render(HtmlBuilder<T> builder, Object model) throws IOException {
+    public <T extends Appendable> T render(final HtmlBuilder<T> builder, final Object model) throws IOException {
         builder.appendUnescapedText(String.valueOf(text));
         return builder.output();
     }
 
     @Override
     @Deprecated
-    public void renderModel(Appendable writer, Object model) throws IOException {
-        HtmlBuilder<?> builder = (writer instanceof HtmlBuilder)
+    public void renderModel(final Appendable writer, final Object model) throws IOException {
+        final HtmlBuilder<?> builder = (writer instanceof HtmlBuilder)
             ? (HtmlBuilder<?>) writer
             : FlatHtml.into(writer, Config.global());
 
@@ -39,7 +39,7 @@ public class UnescapedText extends DomContent {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (obj == null || !(obj instanceof UnescapedText)) {
             return false;
         }

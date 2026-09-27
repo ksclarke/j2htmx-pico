@@ -26,21 +26,21 @@ public class CodeGeneratorComplianceTests {
 
     @BeforeEach
     public void setUp() throws IOException {
-        Path source = Paths.get("src","test","resources","2022-01.wattsi");
-        Document doc = Jsoup.parse(source.toFile(), "UTF-8", "https://html.spec.whatwg.org/");
+        final Path source = Paths.get("src","test","resources","2022-01.wattsi");
+        final Document doc = Jsoup.parse(source.toFile(), "UTF-8", "https://html.spec.whatwg.org/");
         specification = new WattsiSource(doc);
     }
 
     private Set<String> generatedElements(){
-        Set<String> elements = new HashSet<>();
+        final Set<String> elements = new HashSet<>();
         elements.addAll(TagCreatorCodeGenerator.emptyTags());
         elements.addAll(TagCreatorCodeGenerator.containerTags());
         return elements;
     }
 
-    private Set<String> specifiedElements(WattsiSource source){
-        Set<String> elements = new HashSet<>();
-        for(ElementDefinition element : source.elementDefinitions()){
+    private Set<String> specifiedElements(final WattsiSource source){
+        final Set<String> elements = new HashSet<>();
+        for(final ElementDefinition element : source.elementDefinitions()){
             elements.add(element.name());
         }
         return elements;
@@ -50,9 +50,9 @@ public class CodeGeneratorComplianceTests {
     @Disabled
     // TODO restore this test once a policy has been determined for obsolete elements.
     public void all_wattsi_elements_are_defined_in_the_code_generator() {
-        Set<String> generated = generatedElements();
+        final Set<String> generated = generatedElements();
 
-        List<String> undefined = specification.elementDefinitions().stream()
+        final List<String> undefined = specification.elementDefinitions().stream()
             .filter(element -> !element.isObsolete())
             .filter(element -> !generated.contains(element.name()))
             .map(ElementDefinition::name)
@@ -65,9 +65,9 @@ public class CodeGeneratorComplianceTests {
 
     @Test
     public void only_wattsi_elements_are_defined_in_the_code_generator(){
-        Set<String> specified = specifiedElements(specification);
+        final Set<String> specified = specifiedElements(specification);
 
-        List<String> invalid = generatedElements().stream()
+        final List<String> invalid = generatedElements().stream()
             .filter(element -> !specified.contains(element))
             .collect(toList());
 

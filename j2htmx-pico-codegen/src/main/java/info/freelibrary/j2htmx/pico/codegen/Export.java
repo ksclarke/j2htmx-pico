@@ -21,7 +21,7 @@ public class Export {
      *
      * @param args Command-line arguments
      */
-    public static void main(String[] args){
+    public static void main(final String[] args){
         for (final String tag : emptyTags()) {
             out.print("EMPTY-ELEMENT[");
             out.print(tag);
@@ -37,7 +37,7 @@ public class Export {
 
         out.println();
 
-        for(AttrD attr : attributesDescriptive()){
+        for(final AttrD attr : attributesDescriptive()){
             if(attr.hasArgument){
                 out.print("STRING");
             }else{
@@ -47,7 +47,7 @@ public class Export {
             out.print(attr.attr);
             out.print("]");
             out.println();
-            for(String tag : attr.tags){
+            for(final String tag : attr.tags){
                 out.print("ATTRIBUTE[");
                 out.print(tag);
                 out.print(":");

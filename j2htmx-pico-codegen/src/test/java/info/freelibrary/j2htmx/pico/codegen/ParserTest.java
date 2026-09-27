@@ -9,8 +9,8 @@ import static org.mockito.Mockito.*;
 
 public class ParserTest {
 
-    private void verifyParsing(String txt, Consumer<Parser.Listener> checks) {
-        Parser.Listener listener = mock(Parser.Listener.class);
+    private void verifyParsing(final String txt, final Consumer<Parser.Listener> checks) {
+        final Parser.Listener listener = mock(Parser.Listener.class);
         Parser.parse(txt, listener);
         checks.accept(listener);
     }
@@ -32,7 +32,7 @@ public class ParserTest {
     @Test
     public void commented_lines_are_signaled() {
         verifyParsing("#Comment 1.\n# Comment B?", listener -> {
-            InOrder order = inOrder(listener);
+            final InOrder order = inOrder(listener);
             order.verify(listener).lineCommented(1, "#Comment 1.");
             order.verify(listener).lineCommented(2, "# Comment B?");
         });
@@ -41,7 +41,7 @@ public class ParserTest {
     @Test
     public void node_definitions_are_signaled() {
         verifyParsing("ELEMENT[a]\nEMPTY-ELEMENT[b]\nBOOLEAN[c]\nONOFF[d]\nSTRING[e]", listener -> {
-            InOrder order = inOrder(listener);
+            final InOrder order = inOrder(listener);
             order.verify(listener).elementDefined(1, "a");
             order.verify(listener).emptyElementDefined(2, "b");
             order.verify(listener).booleanDefined(3, "c");
@@ -53,7 +53,7 @@ public class ParserTest {
     @Test
     public void attribute_definitions_are_signaled() {
         verifyParsing("ATTRIBUTE[a:b]", listener -> {
-            InOrder order = inOrder(listener);
+            final InOrder order = inOrder(listener);
             order.verify(listener).attributeDefined(1, "a", "b");
         });
     }
@@ -61,7 +61,7 @@ public class ParserTest {
     @Test
     public void invalid_lines_are_signaled() {
         verifyParsing("lol, I dunno!\nIt Broke...", listener -> {
-            InOrder order = inOrder(listener);
+            final InOrder order = inOrder(listener);
             order.verify(listener).invalidLine(1, "lol, I dunno!");
             order.verify(listener).invalidLine(2, "It Broke...");
         });

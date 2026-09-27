@@ -25,11 +25,11 @@ public class WattsiSource {
      *
      * @param doc The parsed WHATWG HTML spec document
      */
-    public WattsiSource(Document doc) {
+    public WattsiSource(final Document doc) {
         this.doc = doc;
 
         // Find where obsolete elements are defined or referenced.
-        Elements obsoleteElements = doc.select("p:contains(Elements in the following list are entirely obsolete) + dl");
+        final Elements obsoleteElements = doc.select("p:contains(Elements in the following list are entirely obsolete) + dl");
 
         // Convert definitions into references to record obsolete elements.
         obsoleteElements.select("dt > dfn[element]")
@@ -46,7 +46,7 @@ public class WattsiSource {
             .forEach(obsolete::add);
 
         // Find where obsolete attributes are defined or referenced.
-        Elements obsoleteAttributes = doc.select("p:contains(The following attributes are obsolete) + dl");
+        final Elements obsoleteAttributes = doc.select("p:contains(The following attributes are obsolete) + dl");
 
         // Convert definitions into references to record obsolete attributes.
         obsoleteAttributes.select("dt > dfn[element-attr]").stream()
@@ -94,7 +94,7 @@ public class WattsiSource {
     public class WattsiElement implements ElementDefinition {
         private final Element dfn;
 
-        WattsiElement(Element dfn) {
+        WattsiElement(final Element dfn) {
             if (!"dfn".equals(dfn.tagName())) {
                 throw new IllegalArgumentException("Element cannot be defined from: " + dfn);
             }
@@ -137,7 +137,7 @@ public class WattsiSource {
     public class WattsiAttribute implements AttributeDefinition {
         private final Element dfn;
 
-        WattsiAttribute(Element dfn) {
+        WattsiAttribute(final Element dfn) {
             if (!"dfn".equals(dfn.tagName())) {
                 throw new IllegalArgumentException("Attribute cannot be defined from: " + dfn);
             }
@@ -168,7 +168,7 @@ public class WattsiSource {
         }
 
         @Override
-        public boolean appliesTo(ElementDefinition element) {
+        public boolean appliesTo(final ElementDefinition element) {
             return targets().contains(element.name());
         }
 
@@ -182,7 +182,7 @@ public class WattsiSource {
         private final String key;
         private final String text;
 
-        Reference(String key, String text) {
+        Reference(final String key, final String text) {
             this.key = key;
             this.text = text;
         }
@@ -193,10 +193,10 @@ public class WattsiSource {
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            Reference reference = (Reference) o;
+            final Reference reference = (Reference) o;
             return key.equals(reference.key);
         }
 
@@ -205,18 +205,18 @@ public class WattsiSource {
             return Objects.hash(key);
         }
 
-        public static Reference from(List<Node> nodes) {
+        public static Reference from(final List<Node> nodes) {
             if (nodes.stream().allMatch(n -> n instanceof TextNode)) {
-                String txt = nodes.stream()
+                final String txt = nodes.stream()
                     .map(n -> (TextNode) n)
                     .map(TextNode::text)
                     .collect(Collectors.joining(" "));
                 return new Reference(txt, txt);
             }
 
-            for (Node node : nodes) {
+            for (final Node node : nodes) {
                 if (node instanceof Element) {
-                    Element element = (Element) node;
+                    final Element element = (Element) node;
                     if (element.is("code") || element.is("span")) {
                         if (element.hasAttr("data-x")) {
                             return new Reference(element.attr("data-x").toLowerCase(), element.text());

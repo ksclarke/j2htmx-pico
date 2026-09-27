@@ -2,11 +2,11 @@ package info.freelibrary.j2htmx.pico.model;
 
 public class PageModel {
 
-    private String title;
-    private String text;
-    private ButtonModel buttonModel;
+    private final String title;
+    private final String text;
+    private final ButtonModel buttonModel;
 
-    public PageModel(String title, String text, ButtonModel buttonModel) {
+    public PageModel(final String title, final String text, final ButtonModel buttonModel) {
         this.title = title;
         this.text = text;
         this.buttonModel = buttonModel;

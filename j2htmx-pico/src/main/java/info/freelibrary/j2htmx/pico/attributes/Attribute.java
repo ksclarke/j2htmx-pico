@@ -10,7 +10,7 @@ import java.io.IOException;
  * Represents an HTML element attribute key-value pair or boolean attribute.
  */
 public class Attribute implements Renderable {
-    private String name;
+    private final String name;
     private String value;
 
     /**
@@ -19,7 +19,7 @@ public class Attribute implements Renderable {
      * @param name The attribute name
      * @param value The attribute value
      */
-    public Attribute(String name, String value) {
+    public Attribute(final String name, final String value) {
         this.name = name;
         this.value = value;
     }
@@ -29,14 +29,14 @@ public class Attribute implements Renderable {
      *
      * @param name The attribute name
      */
-    public Attribute(String name) {
+    public Attribute(final String name) {
         this.name = name;
         this.value = null;
     }
 
     @Override
     @Deprecated
-    public void renderModel(Appendable writer, Object model) throws IOException {
+    public void renderModel(final Appendable writer, final Object model) throws IOException {
         if (writer instanceof TagBuilder) {
             if (name != null) {
                 if (value != null) {
@@ -66,7 +66,7 @@ public class Attribute implements Renderable {
      * @param model An optional data model object
      * @throws IOException If an I/O error occurs
      */
-    public void render(TagBuilder builder, Object model) throws IOException {
+    public void render(final TagBuilder builder, final Object model) throws IOException {
         // Maintain compatibility with classes that extend Attribute, for now...
         renderModel(builder, model);
     }
@@ -85,7 +85,7 @@ public class Attribute implements Renderable {
      *
      * @param value The attribute value
      */
-    public void setValue(String value) {
+    public void setValue(final String value) {
         this.value = value;
     }
 

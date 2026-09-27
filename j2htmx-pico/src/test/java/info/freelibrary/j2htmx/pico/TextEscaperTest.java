@@ -28,7 +28,7 @@ public class TextEscaperTest {
     private static class NoOpEscaper implements TextEscaper {
 
         @Override
-        public String escape(String text) {
+        public String escape(final String text) {
             return text;
         }
 

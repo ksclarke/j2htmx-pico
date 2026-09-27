@@ -1,9 +1,9 @@
 package info.freelibrary.j2htmx.pico.model;
 
 public class ButtonModel {
-    private String text;
+    private final String text;
 
-    public ButtonModel(String text) {
+    public ButtonModel(final String text) {
         this.text = text;
     }
 

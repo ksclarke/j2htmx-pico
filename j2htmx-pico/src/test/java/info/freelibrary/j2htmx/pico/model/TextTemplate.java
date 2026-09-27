@@ -5,7 +5,7 @@ import java.io.IOException;
 public class TextTemplate extends Template<PageModel> {
 
     @Override
-    public void renderTemplate(Appendable writer, PageModel pageModel) throws IOException {
+    public void renderTemplate(final Appendable writer, final PageModel pageModel) throws IOException {
         writer.append(pageModel.getText());
     }
 }

@@ -18,9 +18,9 @@ public class TagCreatorTest {
 
     private static final String EOL = System.getProperty("line.separator"); // System independent End Of Line
 
-    List<Employee> employees = Arrays.asList(new Employee(1, "Name 1", "Title 1"), new Employee(2, "Name 2", "Title 2"), new Employee(3, "Name 3", "Title 3"));
+    final List<Employee> employees = Arrays.asList(new Employee(1, "Name 1", "Title 1"), new Employee(2, "Name 2", "Title 2"), new Employee(3, "Name 3", "Title 3"));
 
-    Map<Integer, Employee> employeeMap = new HashMap<>();
+    final Map<Integer, Employee> employeeMap = new HashMap<>();
 
     @BeforeEach
     public void setUp() {
@@ -43,8 +43,8 @@ public class TagCreatorTest {
 
     @Test
     public void testIff() throws Exception {
-        String expected = "<div><p>Test</p><a href=\"#\">Test</a></div>";
-        String actual = div(
+        final String expected = "<div><p>Test</p><a href=\"#\">Test</a></div>";
+        final String actual = div(
             p("Test"),
             iff(1 == 1, a("Test").withHref("#")),
             iff(1 == 2, a("Tast").withHref("#"))
@@ -54,8 +54,8 @@ public class TagCreatorTest {
 
     @Test
     public void testIffOptional() {
-        String expected = "<div><p>Test</p><a href=\"#1\">Test</a></div>";
-        String actual = div(
+        final String expected = "<div><p>Test</p><a href=\"#1\">Test</a></div>";
+        final String actual = div(
             p("Test"),
             iff(Optional.of(1), i -> a("Test").withHref("#" + i)),
             iff(Optional.empty(), i -> a("Tast").withHref("#2"))
@@ -65,35 +65,35 @@ public class TagCreatorTest {
 
     @Test
     public void testIffElse() throws Exception {
-        String expected = "<div><p>Tast</p></div>";
-        String actual = div(iffElse(1 == 2, p("Test"), p("Tast"))).render();
+        final String expected = "<div><p>Tast</p></div>";
+        final String actual = div(iffElse(1 == 2, p("Test"), p("Tast"))).render();
         assertThat(actual, is(expected));
     }
 
     @Test
     public void testJoin() throws Exception {
-        String expected = "This is my joined string. It has a <a href=\"#\">link in the middle</a> and <code>code at the end</code>.";
-        String actual = join("This is my joined string. It has a", a("link in the middle").withHref("#"), "and", code("code at the end"), ".").render();
+        final String expected = "This is my joined string. It has a <a href=\"#\">link in the middle</a> and <code>code at the end</code>.";
+        final String actual = join("This is my joined string. It has a", a("link in the middle").withHref("#"), "and", code("code at the end"), ".").render();
         assertThat(actual, is(expected));
     }
 
     @Test
     public void testJoinWithNulls() throws Exception {
-        String expected = "This is my joined string. It has ignored null content in the middle.";
-        String actual = join("This is my joined string.", iff(false, "this should not be displayed"), "It has ignored null content in the middle.").render();
+        final String expected = "This is my joined string. It has ignored null content in the middle.";
+        final String actual = join("This is my joined string.", iff(false, "this should not be displayed"), "It has ignored null content in the middle.").render();
         assertThat(actual, is(expected));
     }
 
     @Test
     public void testEach() throws Exception {
-        String j2htmlMap = ul().with(
+        final String j2htmlMap = ul().with(
             li("Begin list"),
             each(employees, employee -> li(
                 h2(employee.name),
                 p(employee.title)
             ))
         ).render();
-        String javaMap = ul().with(
+        final String javaMap = ul().with(
             li("Begin list"),
             rawHtml(employees.stream().map(employee -> li(
                 h2(employee.name),
@@ -140,14 +140,14 @@ public class TagCreatorTest {
 
     @Test
     public void testFilter() throws Exception {
-        String j2htmlFilter = ul().with(
+        final String j2htmlFilter = ul().with(
             li("Begin list"),
             each(filter(employees, e -> e.id % 2 == 1), employee -> li(
                 h2(employee.name),
                 p(employee.title)
             ))
         ).render();
-        String javaFilter = ul().with(
+        final String javaFilter = ul().with(
             li("Begin list"),
             rawHtml(employees.stream().filter(e -> e.id % 2 == 1).map(employee -> li(
                 h2(employee.name),

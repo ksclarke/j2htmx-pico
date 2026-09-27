@@ -10,19 +10,19 @@ public class AttributeTest {
 
     @Test
     public void testRender() throws Exception {
-        Attribute attributeWithValue = new Attribute("href", "http://example.com");
+        final Attribute attributeWithValue = new Attribute("href", "http://example.com");
         assertThat(attributeWithValue.render(), is(" href=\"http://example.com\""));
 
-        Attribute attribute = new Attribute("required", null);
+        final Attribute attribute = new Attribute("required", null);
         assertThat(attribute.render(), is(" required"));
 
-        Attribute nullAttribute = new Attribute(null, null);
+        final Attribute nullAttribute = new Attribute(null, null);
         assertThat(nullAttribute.render(), is(""));
     }
 
     @Test
     public void testSetAttribute() throws Exception {
-        ContainerTag<?> testTag = new ContainerTag<>("a");
+        final ContainerTag<?> testTag = new ContainerTag<>("a");
         testTag.attr("href", "http://example.com");
         testTag.attr("href", "http://example.org");
         assertThat(testTag.render(), is("<a href=\"http://example.org\"></a>"));

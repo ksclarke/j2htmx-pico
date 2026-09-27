@@ -29,13 +29,13 @@ public class WattsiGenerator {
      * @param args Command-line arguments with path to WHATWG source
      * @throws IOException If an I/O error occurs
      */
-    public static void main(String... args) throws IOException {
-        Path source = Paths.get(args[0]);
-        Document doc = Jsoup.parse(source.toFile(), "UTF-8", "https://html.spec.whatwg.org/");
-        WattsiSource wattsi = new WattsiSource(doc);
+    public static void main(final String... args) throws IOException {
+        final Path source = Paths.get(args[0]);
+        final Document doc = Jsoup.parse(source.toFile(), "UTF-8", "https://html.spec.whatwg.org/");
+        final WattsiSource wattsi = new WattsiSource(doc);
 
-        List<ElementDefinition> elements = wattsi.elementDefinitions();
-        List<AttributeDefinition> attributes = wattsi.attributeDefinitions();
+        final List<ElementDefinition> elements = wattsi.elementDefinitions();
+        final List<AttributeDefinition> attributes = wattsi.attributeDefinitions();
 
 //        for (ElementDefinition element : elements) {
 //            System.out.println((element.isObsolete() ? "!" : "") + element.name());
@@ -47,23 +47,23 @@ public class WattsiGenerator {
 //            System.out.println();
 //        }
 
-        for (ElementDefinition element : elements) {
-            ClassName className = ClassName.get(
+        for (final ElementDefinition element : elements) {
+            final ClassName className = ClassName.get(
                 "info.freelibrary.j2htmx.pico.",
                 capitalize(element.name()) + "Tag"
             );
 
-            TypeSpec.Builder type = TypeSpec.classBuilder(className)
+            final TypeSpec.Builder type = TypeSpec.classBuilder(className)
                 .addModifiers(Modifier.PUBLIC);
 
             if (element.isObsolete()) {
                 type.addAnnotation(Deprecated.class);
             }
 
-            for (AttributeDefinition attribute : attributes) {
+            for (final AttributeDefinition attribute : attributes) {
                 if (attribute.appliesTo(element)) {
-                    String name = methodName("with", attribute.name().split("-"));
-                    MethodSpec.Builder setter = MethodSpec.methodBuilder(name)
+                    final String name = methodName("with", attribute.name().split("-"));
+                    final MethodSpec.Builder setter = MethodSpec.methodBuilder(name)
                         .addModifiers(Modifier.PUBLIC)
                         .returns(className)
                         .addStatement("return this");
@@ -82,8 +82,8 @@ public class WattsiGenerator {
 //        System.out.println(doc.select("dfn"));
     }
 
-    private static String methodName(String prefix, String... words){
-        String[] tmp = new String[words.length + 1];
+    private static String methodName(final String prefix, final String... words){
+        final String[] tmp = new String[words.length + 1];
         tmp[0] = prefix;
         for(int i = 0; i < words.length; i++){
             tmp[i+1] = words[i];
@@ -91,8 +91,8 @@ public class WattsiGenerator {
         return methodName(tmp);
     }
 
-    private static String methodName(String... words){
-        String[] camelCase = new String[words.length];
+    private static String methodName(final String... words){
+        final String[] camelCase = new String[words.length];
         camelCase[0] = words[0];
         for(int i = 1; i < words.length; i++){
             camelCase[i] = capitalize(words[i]);
@@ -100,7 +100,7 @@ public class WattsiGenerator {
         return String.join("", camelCase);
     }
 
-    private static String capitalize(String word){
+    private static String capitalize(final String word){
         return word.substring(0,1).toUpperCase() + word.substring(1).toLowerCase();
     }
 }

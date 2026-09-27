@@ -18,17 +18,17 @@ public final class TagCreatorCodeGenerator {
 
         System.out.println("// EmptyTags, generated in " + TagCreatorCodeGenerator.class);
 
-        for (String tag : emptyTags()) {
+        for (final String tag : emptyTags()) {
             final String className = SpecializedTagClassCodeGenerator.classNameFromTag(tag);
             final String publicstaticTypeMethod = "public static "+className+" "+tag+" ";
             final String castReturn = " return ("+className+") ";
             final String construct = " new "+className+"()";
 
-            String emptyA1 = publicstaticTypeMethod + "()";
-            String emptyA2 = "{ return "+construct+"; }";
+            final String emptyA1 = publicstaticTypeMethod + "()";
+            final String emptyA2 = "{ return "+construct+"; }";
             // Attr shorthands
-            String emptyB1 = publicstaticTypeMethod + "(Attr.ShortForm shortAttr)";
-            String emptyB2 = "{ "+castReturn+" Attr.addTo("+construct+", shortAttr); }";
+            final String emptyB1 = publicstaticTypeMethod + "(Attr.ShortForm shortAttr)";
+            final String emptyB2 = "{ "+castReturn+" Attr.addTo("+construct+", shortAttr); }";
             // Print
             System.out.println(String.format("%-80s%1s", emptyA1, emptyA2));
             System.out.println(String.format("%-80s%1s", emptyB1, emptyB2));
@@ -37,29 +37,29 @@ public final class TagCreatorCodeGenerator {
 
         System.out.println("// ContainerTags, generated in " + TagCreatorCodeGenerator.class);
 
-        for (String tag : containerTags()) {
+        for (final String tag : containerTags()) {
             final String className = SpecializedTagClassCodeGenerator.classNameFromTag(tag);
             final String publicstaticTypeMethod = "public static "+className+" "+tag+" ";
             final String castReturn = " return ("+className+") ";
             final String construct = " new "+className+"()";
 
-            String containerA1 = publicstaticTypeMethod+ "()";
-            String containerA2 = "{ "+castReturn + construct + "; }";
+            final String containerA1 = publicstaticTypeMethod+ "()";
+            final String containerA2 = "{ "+castReturn + construct + "; }";
 
-            String containerB1 = publicstaticTypeMethod + "(String text)";
-            String containerB2 = "{ "+castReturn + construct + ".withText(text); }";
+            final String containerB1 = publicstaticTypeMethod + "(String text)";
+            final String containerB2 = "{ "+castReturn + construct + ".withText(text); }";
 
-            String containerC1 = publicstaticTypeMethod + "(DomContent... dc)";
-            String containerC2 = "{ "+castReturn + construct+".with(dc); }";
+            final String containerC1 = publicstaticTypeMethod + "(DomContent... dc)";
+            final String containerC2 = "{ "+castReturn + construct+".with(dc); }";
             // Attr shorthands
-            String containerD1 = publicstaticTypeMethod + "(Attr.ShortForm shortAttr)";
-            String containerD2 = "{ "+castReturn+" Attr.addTo("+construct+", shortAttr); }";
+            final String containerD1 = publicstaticTypeMethod + "(Attr.ShortForm shortAttr)";
+            final String containerD2 = "{ "+castReturn+" Attr.addTo("+construct+", shortAttr); }";
 
-            String containerE1 = publicstaticTypeMethod + "(Attr.ShortForm shortAttr, String text)";
-            String containerE2 = "{ "+castReturn+" Attr.addTo("+construct+".withText(text), shortAttr); }";
+            final String containerE1 = publicstaticTypeMethod + "(Attr.ShortForm shortAttr, String text)";
+            final String containerE2 = "{ "+castReturn+" Attr.addTo("+construct+".withText(text), shortAttr); }";
 
-            String containerF1 = publicstaticTypeMethod + "(Attr.ShortForm shortAttr, DomContent... dc)";
-            String containerF2 = "{ "+castReturn+" Attr.addTo("+construct+".with(dc), shortAttr); }";
+            final String containerF1 = publicstaticTypeMethod + "(Attr.ShortForm shortAttr, DomContent... dc)";
+            final String containerF2 = "{ "+castReturn+" Attr.addTo("+construct+".with(dc), shortAttr); }";
             // Print
             System.out.println(String.format("%-80s%1s", containerA1, containerA2));
             System.out.println(String.format("%-80s%1s", containerB1, containerB2));

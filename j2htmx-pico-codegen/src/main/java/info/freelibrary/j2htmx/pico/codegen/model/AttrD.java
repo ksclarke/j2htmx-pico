@@ -21,7 +21,7 @@ public final class AttrD {
      * @param attr The attribute name
      * @param hasArgument Whether the attribute accepts an argument
      */
-    public AttrD(final String attr, boolean hasArgument){
+    public AttrD(final String attr, final boolean hasArgument){
         this.attr = attr;
         this.hasArgument = hasArgument;
         this.tags = new String[]{};
@@ -34,7 +34,7 @@ public final class AttrD {
      * @param hasArgument Whether the attribute accepts an argument
      * @param tags The HTML tag names this attribute applies to
      */
-    public AttrD(final String attr, boolean hasArgument, final String... tags) {
+    public AttrD(final String attr, final boolean hasArgument, final String... tags) {
         this.attr = attr;
         this.hasArgument = hasArgument;
         this.tags = tags;

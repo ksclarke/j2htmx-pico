@@ -51,11 +51,11 @@ import java.io.PushbackInputStream;
 public class JSMin {
 
     private static final int EOF = -1;
-    private PushbackInputStream in;
-    private OutputStream out;
+    private final PushbackInputStream in;
+    private final OutputStream out;
     private int theA;
     private int theB;
-    private JSMin(InputStream in, OutputStream out) {
+    private JSMin(final InputStream in, final OutputStream out) {
         this.in = new PushbackInputStream(in);
         this.out = out;
     }
@@ -66,10 +66,10 @@ public class JSMin {
      * @param code the js-code you want to compress
      * @return the compressed code
      */
-    public static String compressJs(String code) {
-        InputStream inStream = new ByteArrayInputStream(code.getBytes());
-        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-        JSMin jsmin = new JSMin(inStream, outStream);
+    public static String compressJs(final String code) {
+        final InputStream inStream = new ByteArrayInputStream(code.getBytes());
+        final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        final JSMin jsmin = new JSMin(inStream, outStream);
         try {
             jsmin.jsmin();
             return outStream.toString().trim();
@@ -83,7 +83,7 @@ public class JSMin {
      * isAlphanum -- return true if the character is a letter, digit,
      * underscore, dollar sign, or non-ASCII character.
      */
-    private static boolean isAlphanum(int c) {
+    private static boolean isAlphanum(final int c) {
         return ((c >= 'a' && c <= 'z') ||
             (c >= '0' && c <= '9') ||
             (c >= 'A' && c <= 'Z') ||
@@ -99,7 +99,7 @@ public class JSMin {
      * linefeed.
      */
     private int get() throws IOException {
-        int c = in.read();
+        final int c = in.read();
 
         if (c >= ' ' || c == '\n' || c == EOF) {
             return c;
@@ -117,7 +117,7 @@ public class JSMin {
      * Get the next character without getting it.
      */
     private int peek() throws IOException {
-        int lookaheadChar = in.read();
+        final int lookaheadChar = in.read();
         in.unread(lookaheadChar);
         return lookaheadChar;
     }
@@ -169,7 +169,7 @@ public class JSMin {
      * preceded by ( or , or =.
      */
 
-    private void action(int d) throws IOException, UnterminatedRegExpLiteralException,
+    private void action(final int d) throws IOException, UnterminatedRegExpLiteralException,
         UnterminatedCommentException, UnterminatedStringLiteralException {
         switch (d) {
             case 1:

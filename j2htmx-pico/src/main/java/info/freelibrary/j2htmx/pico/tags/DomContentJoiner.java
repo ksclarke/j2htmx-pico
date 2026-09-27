@@ -16,10 +16,10 @@ public class DomContentJoiner {
      * @param stringOrDomObjects The objects to join (can be String or DomContent)
      * @return An UnescapedText instance containing the joined content
      */
-    public static UnescapedText join(CharSequence delimiter, boolean fixPeriodAndCommaSpacing, Object... stringOrDomObjects) {
-        StringBuilder sb = new StringBuilder();
+    public static UnescapedText join(final CharSequence delimiter, final boolean fixPeriodAndCommaSpacing, final Object... stringOrDomObjects) {
+        final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < stringOrDomObjects.length; i++) {
-            Object o = stringOrDomObjects[i];
+            final Object o = stringOrDomObjects[i];
             if (o instanceof String) {
                 sb.append(((String) o).trim());
             } else if (o instanceof DomContent) {

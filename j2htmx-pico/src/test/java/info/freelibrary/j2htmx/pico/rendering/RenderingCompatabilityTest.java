@@ -14,28 +14,28 @@ public class RenderingCompatabilityTest {
 
     @Test
     public void container_tags_continue_to_support_original_model_rendering_methods() throws IOException {
-        StringBuilder stringBuilder = new StringBuilder();
+        final StringBuilder stringBuilder = new StringBuilder();
         div(div()).renderModel(stringBuilder, null);
         assertThat(stringBuilder.toString(), is("<div><div></div></div>"));
     }
 
     @Test
     public void empty_tags_continue_to_support_original_model_rendering_methods() throws IOException {
-        StringBuilder stringBuilder = new StringBuilder();
+        final StringBuilder stringBuilder = new StringBuilder();
         input().withId("X").renderModel(stringBuilder, null);
         assertThat(stringBuilder.toString(), is("<input id=\"X\">"));
     }
 
     @Test
     public void text_continues_to_support_original_model_rendering_methods() throws IOException {
-        StringBuilder stringBuilder = new StringBuilder();
+        final StringBuilder stringBuilder = new StringBuilder();
         text("abc").renderModel(stringBuilder, null);
         assertThat(stringBuilder.toString(), is("abc"));
     }
 
     @Test
     public void unescaped_text_continues_to_support_original_model_rendering_methods() throws IOException {
-        StringBuilder stringBuilder = new StringBuilder();
+        final StringBuilder stringBuilder = new StringBuilder();
         rawHtml("abc").renderModel(stringBuilder, null);
         assertThat(stringBuilder.toString(), is("abc"));
     }
@@ -45,10 +45,10 @@ public class RenderingCompatabilityTest {
         // Simulate a client class which can be injected into ContainerTags as
         // regular DomContent.  Those client classes should continue to work
         // even though HtmlBuilders are the newer approach to rendering.
-        DomContent dom = div(
+        final DomContent dom = div(
             new DomContent() {
                 @Override
-                public void renderModel(Appendable writer, Object model) throws IOException {
+                public void renderModel(final Appendable writer, final Object model) throws IOException {
                     writer.append(String.valueOf(model));
                 }
             }
@@ -75,12 +75,12 @@ public class RenderingCompatabilityTest {
 
     @Test
     public void client_classes_which_implement_attribute_rendering_continue_to_work_with_Attribute_builder() throws IOException {
-        Attribute mock = new MockAttribute("XXX", "fail");
+        final Attribute mock = new MockAttribute("XXX", "fail");
 
         // Stand-alone rendering.
         assertThat(mock.render(), is(" mock=\"null\""));
 
-        StringBuilder stringBuilder = new StringBuilder();
+        final StringBuilder stringBuilder = new StringBuilder();
         mock.render(stringBuilder);
         assertThat(stringBuilder.toString(), is(" mock=\"null\""));
 
@@ -104,12 +104,12 @@ public class RenderingCompatabilityTest {
 
     private final class MockAttribute extends Attribute {
 
-        public MockAttribute(String name, String value) {
+        public MockAttribute(final String name, final String value) {
             super(name, value);
         }
 
         @Override
-        public void renderModel(Appendable writer, Object model) throws IOException {
+        public void renderModel(final Appendable writer, final Object model) throws IOException {
             writer.append(" mock=\"").append(String.valueOf(model)).append("\"");
         }
     }

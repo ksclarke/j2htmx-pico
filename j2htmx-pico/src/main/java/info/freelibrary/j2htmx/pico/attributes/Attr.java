@@ -181,7 +181,7 @@ public abstract class Attr {
      * @return A ShortForm instance containing the parsed ID and classes
      * @throws IllegalArgumentException If the string is malformed or contains multiple IDs
      */
-    public static ShortForm shortFormFromAttrsString(String attrs) {
+    public static ShortForm shortFormFromAttrsString(final String attrs) {
         if (!attrs.contains(".") && !attrs.contains(("#"))) {
             throw new IllegalArgumentException("String must contain either id (#) or class (.)");
         }
@@ -189,8 +189,8 @@ public abstract class Attr {
             throw new IllegalArgumentException("Only one id (#) allowed");
         }
         String id = "";
-        StringBuilder classes = new StringBuilder();
-        for (String attr : attrs.split("\\.")) {
+        final StringBuilder classes = new StringBuilder();
+        for (final String attr : attrs.split("\\.")) {
             if (attr.contains("#")) {
                 if (!attr.startsWith("#")) {
                     throw new IllegalArgumentException("# cannot be in the middle of string");
@@ -211,7 +211,7 @@ public abstract class Attr {
      * @param attr The attribute helper to apply
      * @return The modified tag
      */
-    public static <T extends Tag<T>> T addTo(T tag, Attr attr) {
+    public static <T extends Tag<T>> T addTo(final T tag, final Attr attr) {
         if (null != attr)
             attr.addTo(tag);
         return tag;
@@ -230,10 +230,10 @@ public abstract class Attr {
      * Represents a shorthand attribute containing parsed ID and CSS class names.
      */
     public static class ShortForm extends Attr {
-        String id;
-        String classes;
+        final String id;
+        final String classes;
 
-        private ShortForm(String id, String classes) {
+        private ShortForm(final String id, final String classes) {
             this.id = id;
             this.classes = classes;
         }
@@ -247,7 +247,7 @@ public abstract class Attr {
         }
 
         @Override
-        public <T extends Tag<T>> T addTo(T tag) {
+        public <T extends Tag<T>> T addTo(final T tag) {
             if (hasId() && hasClasses()) {
                 return tag.withId(id).withClass(classes);
             }

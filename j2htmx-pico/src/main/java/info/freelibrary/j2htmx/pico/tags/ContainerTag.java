@@ -20,14 +20,14 @@ import java.util.stream.Stream;
 public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
 
     /** The child DOM content nodes of this container tag. */
-    protected List<DomContent> children;
+    protected final List<DomContent> children;
 
     /**
      * Constructs a ContainerTag with the given tag name.
      *
      * @param tagName The HTML tag name
      */
-    public ContainerTag(String tagName) {
+    public ContainerTag(final String tagName) {
         super(tagName);
         this.children = new ArrayList<>();
     }
@@ -39,7 +39,7 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
      * @param child DomContent-object to be appended
      * @return itself for easy chaining
      */
-    public T with(DomContent child) {
+    public T with(final DomContent child) {
         if (this == child) {
             throw new RuntimeException("Cannot append a tag to itself.");
         }
@@ -59,7 +59,7 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
      * @param child     DomContent-object to be appended if condition met
      * @return itself for easy chaining
      */
-    public T condWith(boolean condition, DomContent child) {
+    public T condWith(final boolean condition, final DomContent child) {
         return condition ? this.with(child) : self();
     }
 
@@ -70,9 +70,9 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
      * @param children DomContent-objects to be appended
      * @return itself for easy chaining
      */
-    public T with(Iterable<? extends DomContent> children) {
+    public T with(final Iterable<? extends DomContent> children) {
         if (children != null) {
-            for (DomContent child : children) {
+            for (final DomContent child : children) {
                 this.with(child);
             }
         }
@@ -88,7 +88,7 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
      * @param children  DomContent-objects to be appended if condition met
      * @return itself for easy chaining
      */
-    public T condWith(boolean condition, Iterable<? extends DomContent> children) {
+    public T condWith(final boolean condition, final Iterable<? extends DomContent> children) {
         return condition ? this.with(children) : self();
     }
 
@@ -99,8 +99,8 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
      * @param children DomContent-objects to be appended
      * @return itself for easy chaining
      */
-    public T with(DomContent... children) {
-        for (DomContent child : children) {
+    public T with(final DomContent... children) {
+        for (final DomContent child : children) {
             with(child);
         }
         return self();
@@ -113,7 +113,7 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
      * @param children Stream of DomContent-objects to be appended
      * @return itself for easy chaining
      */
-    public T with(Stream<DomContent> children) {
+    public T with(final Stream<DomContent> children) {
         children.forEach(this::with);
         return self();
     }
@@ -127,7 +127,7 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
      * @param children  DomContent-objects to be appended if condition met
      * @return itself for easy chaining
      */
-    public T condWith(boolean condition, DomContent... children) {
+    public T condWith(final boolean condition, final DomContent... children) {
         return condition ? this.with(children) : self();
     }
 
@@ -138,7 +138,7 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
      * @param text the text to be appended
      * @return itself for easy chaining
      */
-    public T withText(String text) {
+    public T withText(final String text) {
         return with(new Text(text));
     }
 
@@ -167,16 +167,16 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
     }
 
     @Override
-    public <A extends Appendable> A render(HtmlBuilder<A> builder, Object model) throws IOException {
+    public <A extends Appendable> A render(final HtmlBuilder<A> builder, final Object model) throws IOException {
         if (hasTagName()) {
-            TagBuilder tagBuilder = builder.appendStartTag(getTagName());
-            for(Attribute attribute : getAttributes()){
+            final TagBuilder tagBuilder = builder.appendStartTag(getTagName());
+            for(final Attribute attribute : getAttributes()){
                 attribute.render(tagBuilder, model);
             }
             tagBuilder.completeTag();
         }
 
-        for(DomContent child : children){
+        for(final DomContent child : children){
             child.render(builder, model);
         }
 
@@ -189,8 +189,8 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
 
     @Override
     @Deprecated
-    public void renderModel(Appendable writer, Object model) throws IOException {
-        HtmlBuilder<?> builder = (writer instanceof HtmlBuilder)
+    public void renderModel(final Appendable writer, final Object model) throws IOException {
+        final HtmlBuilder<?> builder = (writer instanceof HtmlBuilder)
             ? (HtmlBuilder<?>) writer
             : FlatHtml.into(writer, Config.global());
 

@@ -23,7 +23,7 @@ public final class AttributesList {
     public static List<String> getCustomAttributesForHtmlTag(final String tagLowercase){
 
         final List<String> attrs = new ArrayList<>();
-        for(AttrD attrD : attributesDescriptive()){
+        for(final AttrD attrD : attributesDescriptive()){
             if(
                 Arrays.asList(attrD.tags).contains(tagLowercase)
             ){

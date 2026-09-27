@@ -82,7 +82,7 @@ public final class AttributeInterfaceCodeGenerator {
         sb.append(getPackage());
         sb.append("\n");
 
-        for(String importName : imports){
+        for(final String importName : imports){
             sb.append("import ").append(importName).append(";\n");
         }
         sb.append("\n");
@@ -135,7 +135,7 @@ public final class AttributeInterfaceCodeGenerator {
         sb.append(");\n");
     }
 
-    private static void writeAttributeMethodCond(String interfaceNameSimple, AttrD attrD, StringBuilder sb, String attrName, String paramName) {
+    private static void writeAttributeMethodCond(final String interfaceNameSimple, final AttrD attrD, final StringBuilder sb, final String attrName, final String paramName) {
 
         sb.append(makeReturnTypeAndMethodName("withCond"+interfaceNameSimple));
 
@@ -161,7 +161,7 @@ public final class AttributeInterfaceCodeGenerator {
         sb.append("}\n");
     }
 
-    private static void writeAttributeMethod(String interfaceNameSimple, AttrD attrD, StringBuilder sb, String attrName, String paramName) {
+    private static void writeAttributeMethod(final String interfaceNameSimple, final AttrD attrD, final StringBuilder sb, final String attrName, final String paramName) {
 
         sb.append(makeReturnTypeAndMethodName(
             ((attrD.hasArgument)?"with":"is")+interfaceNameSimple)
@@ -191,11 +191,11 @@ public final class AttributeInterfaceCodeGenerator {
      * @param attribute The attribute name
      * @return The interface name with first letter capitalized
      */
-    public static String interfaceNameFromAttribute(String attribute){
+    public static String interfaceNameFromAttribute(final String attribute){
         return attribute.substring(0,1).toUpperCase()+attribute.substring(1);
     }
 
-    private static Path makePath(String tagLowerCase, final Path absPath){
+    private static Path makePath(final String tagLowerCase, final Path absPath){
         final String filename = interfaceNameFromAttribute(tagLowerCase)+".java";
         return Paths.get(absPath.toString(),relPath,filename);
     }

@@ -20,7 +20,7 @@ public final class App
      *
      * @param args Command-line arguments
      */
-    public static void main( String[] args )
+    public static void main( final String[] args )
     {
         final Path relPath = Paths.get("../library/src/main/java/j2html/");
         final Path absPath = relPath.toAbsolutePath();

@@ -20,7 +20,7 @@ public class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
      * @param <T> The type of the Appendable to which HTML will be appended.
      * @return An HtmlBuilder for flat HTML.
      */
-    public static final <T extends Appendable> FlatHtml<T> into(T out) {
+    public static final <T extends Appendable> FlatHtml<T> into(final T out) {
         return new FlatHtml<>(out, Config.defaults());
     }
 
@@ -33,7 +33,7 @@ public class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
      * @param <T>    The type of the Appendable to which HTML will be appended.
      * @return An HtmlBuilder for flat HTML.
      */
-    public static final <T extends Appendable> FlatHtml<T> into(T out, Config config) {
+    public static final <T extends Appendable> FlatHtml<T> into(final T out, final Config config) {
         return new FlatHtml<>(out, config);
     }
 
@@ -53,7 +53,7 @@ public class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
      * @param config The Config which will specify text escapement, tag closing, etc.
      * @return An HtmlBuilder for flat HTML.
      */
-    public static final FlatHtml<StringBuilder> inMemory(Config config) {
+    public static final FlatHtml<StringBuilder> inMemory(final Config config) {
         return into(new StringBuilder(), config);
     }
 
@@ -62,7 +62,7 @@ public class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
     private final TagBuilder enclosingElementAttributes;
     private final TagBuilder emptyElementAttributes;
 
-    private FlatHtml(T out, Config config) {
+    private FlatHtml(final T out, final Config config) {
         this.out = out;
         this.textEscaper = config.textEscaper();
         this.enclosingElementAttributes = new FlatTagBuilder(false);
@@ -80,51 +80,51 @@ public class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
 
     @Override
     @Deprecated
-    public HtmlBuilder<T> append(CharSequence csq) throws IOException {
+    public HtmlBuilder<T> append(final CharSequence csq) throws IOException {
         out.append(csq);
         return this;
     }
 
     @Override
     @Deprecated
-    public HtmlBuilder<T> append(CharSequence csq, int start, int end) throws IOException {
+    public HtmlBuilder<T> append(final CharSequence csq, final int start, final int end) throws IOException {
         out.append(csq, start, end);
         return this;
     }
 
     @Override
     @Deprecated
-    public HtmlBuilder<T> append(char c) throws IOException {
+    public HtmlBuilder<T> append(final char c) throws IOException {
         out.append(c);
         return this;
     }
 
     @Override
-    public TagBuilder appendStartTag(String name) throws IOException {
+    public TagBuilder appendStartTag(final String name) throws IOException {
         out.append("<").append(name);
         return enclosingElementAttributes;
     }
 
     @Override
-    public HtmlBuilder<T> appendEndTag(String name) throws IOException {
+    public HtmlBuilder<T> appendEndTag(final String name) throws IOException {
         out.append("</").append(name).append(">");
         return this;
     }
 
     @Override
-    public TagBuilder appendEmptyTag(String name) throws IOException {
+    public TagBuilder appendEmptyTag(final String name) throws IOException {
         out.append("<").append(name);
         return emptyElementAttributes;
     }
 
     @Override
-    public HtmlBuilder<T> appendEscapedText(String txt) throws IOException {
+    public HtmlBuilder<T> appendEscapedText(final String txt) throws IOException {
         out.append(textEscaper.escape(txt));
         return this;
     }
 
     @Override
-    public HtmlBuilder<T> appendUnescapedText(String txt) throws IOException {
+    public HtmlBuilder<T> appendUnescapedText(final String txt) throws IOException {
         out.append(txt);
         return this;
     }
@@ -133,12 +133,12 @@ public class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
 
         private final boolean closeTag;
 
-        private FlatTagBuilder(boolean closeTag) {
+        private FlatTagBuilder(final boolean closeTag) {
             this.closeTag = closeTag;
         }
 
         @Override
-        public TagBuilder appendAttribute(String name, String value) throws IOException {
+        public TagBuilder appendAttribute(final String name, final String value) throws IOException {
             out.append(" ")
                 .append(name)
                 .append("=\"")
@@ -148,7 +148,7 @@ public class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
         }
 
         @Override
-        public TagBuilder appendBooleanAttribute(String name) throws IOException {
+        public TagBuilder appendBooleanAttribute(final String name) throws IOException {
             out.append(" ").append(name);
             return this;
         }
@@ -165,21 +165,21 @@ public class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
 
         @Override
         @Deprecated
-        public TagBuilder append(CharSequence csq) throws IOException {
+        public TagBuilder append(final CharSequence csq) throws IOException {
             out.append(csq);
             return this;
         }
 
         @Override
         @Deprecated
-        public TagBuilder append(CharSequence csq, int start, int end) throws IOException {
+        public TagBuilder append(final CharSequence csq, final int start, final int end) throws IOException {
             out.append(csq, start, end);
             return this;
         }
 
         @Override
         @Deprecated
-        public TagBuilder append(char c) throws IOException {
+        public TagBuilder append(final char c) throws IOException {
             out.append(c);
             return this;
         }

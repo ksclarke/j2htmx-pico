@@ -110,12 +110,12 @@ public final class SpecializedTagClassCodeGenerator {
      * @param tageNameLowerCase The lowercase tag name
      * @return The Java class name with "Tag" suffix
      */
-    public static String classNameFromTag(String tageNameLowerCase){
-        String res = tageNameLowerCase.substring(0,1).toUpperCase()+tageNameLowerCase.substring(1);
+    public static String classNameFromTag(final String tageNameLowerCase){
+        final String res = tageNameLowerCase.substring(0,1).toUpperCase()+tageNameLowerCase.substring(1);
         return res + "Tag";
     }
 
-    private static Path makePath(final Path absPath, String tagLowerCase){
+    private static Path makePath(final Path absPath, final String tagLowerCase){
         final String filename = classNameFromTag(tagLowerCase)+".java";
         return Paths.get(absPath.toString(),relPath,filename);
     }
@@ -137,7 +137,7 @@ public final class SpecializedTagClassCodeGenerator {
         sb.append(getPackage());
         sb.append("\n");
 
-        for(String importName : imports){
+        for(final String importName : imports){
             sb.append("import ").append(importName).append(";\n");
         }
         sb.append("\n");

@@ -25,8 +25,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class ComplexRenderTest {
 
     private String renderTest() {
-        boolean USER_SHOULD_LOG_IN = true;
-        boolean USER_SHOULD_SIGN_UP = false;
+        final boolean USER_SHOULD_LOG_IN = true;
+        final boolean USER_SHOULD_SIGN_UP = false;
         return document().render() +
             html(
                 head(
@@ -55,8 +55,8 @@ public class ComplexRenderTest {
     }
 
     private String renderTest2() {
-        boolean USER_SHOULD_LOG_IN = true;
-        boolean USER_SHOULD_SIGN_UP = false;
+        final boolean USER_SHOULD_LOG_IN = true;
+        final boolean USER_SHOULD_SIGN_UP = false;
         return document().render() +
             html(
                 head(
@@ -86,8 +86,8 @@ public class ComplexRenderTest {
     }
 
     private String renderTest3() {
-        boolean USER_SHOULD_LOG_IN = true;
-        boolean USER_SHOULD_SIGN_UP = false;
+        final boolean USER_SHOULD_LOG_IN = true;
+        final boolean USER_SHOULD_SIGN_UP = false;
         return document().render() + "\n" +
             html(
                 head(
@@ -118,7 +118,7 @@ public class ComplexRenderTest {
 
     @Test
     public void testComplexRender() {
-        String expectedResult = "<!DOCTYPE html><html><head><title>Test</title></head><body><header><h1>Test Header <a href=\"http://example.com\">with link</a>.</h1></header><main><h2>Test Form</h2><div><input type=\"email\" name=\"email\" placeholder=\"Email\"><input type=\"password\" name=\"password\" placeholder=\"Password\"><button type=\"submit\">Login</button></div></main><footer class=\"footer\" id=\"id\">Test Footer</footer><script src=\"/testScript.js\"></script></body></html>";
+        final String expectedResult = "<!DOCTYPE html><html><head><title>Test</title></head><body><header><h1>Test Header <a href=\"http://example.com\">with link</a>.</h1></header><main><h2>Test Form</h2><div><input type=\"email\" name=\"email\" placeholder=\"Email\"><input type=\"password\" name=\"password\" placeholder=\"Password\"><button type=\"submit\">Login</button></div></main><footer class=\"footer\" id=\"id\">Test Footer</footer><script src=\"/testScript.js\"></script></body></html>";
         assertThat(renderTest(), is(expectedResult));
         assertThat(renderTest2(), is(expectedResult));
     }

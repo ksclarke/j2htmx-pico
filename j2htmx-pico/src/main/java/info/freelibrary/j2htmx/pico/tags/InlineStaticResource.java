@@ -24,8 +24,8 @@ public class InlineStaticResource {
      * @param format The target format determining tag type and minification
      * @return A ContainerTag representing the inline style or script element
      */
-    public static ContainerTag<? extends Tag<?>> get(String path, TargetFormat format) {
-        String fileString = getFileAsString(path);
+    public static ContainerTag<? extends Tag<?>> get(final String path, final TargetFormat format) {
+        final String fileString = getFileAsString(path);
         switch (format) {
             case CSS_MIN:
                 return style().with(rawHtml(Config.cssMinifier.minify(fileString)));
@@ -46,7 +46,7 @@ public class InlineStaticResource {
      * @param path The path to the file
      * @return The file contents as a string
      */
-    public static String getFileAsString(String path) {
+    public static String getFileAsString(final String path) {
         try {
             return streamToString(InlineStaticResource.class.getResourceAsStream(path));
         } catch (Exception expected) { // we don't ask users to specify classpath or file-system
@@ -58,8 +58,8 @@ public class InlineStaticResource {
         }
     }
 
-    private static String streamToString(InputStream inputStream) {
-        Scanner s = new Scanner(inputStream).useDelimiter("\\A");
+    private static String streamToString(final InputStream inputStream) {
+        final Scanner s = new Scanner(inputStream).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
     }
 

@@ -10,7 +10,7 @@ public class DynamicHrefAttribute extends Attribute {
     }
 
     @Override
-    public void renderModel(Appendable writer, Object model) throws IOException {
+    public void renderModel(final Appendable writer, final Object model) throws IOException {
         writer.append(" ");
         writer.append(getName());
         writer.append("=\"");
@@ -18,7 +18,7 @@ public class DynamicHrefAttribute extends Attribute {
         writer.append("\"");
     }
 
-    public String getUrl(Object model) {
+    public String getUrl(final Object model) {
         return "/";
     }
 }

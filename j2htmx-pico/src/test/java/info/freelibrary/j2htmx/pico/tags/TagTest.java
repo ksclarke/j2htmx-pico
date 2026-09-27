@@ -40,13 +40,13 @@ public class TagTest {
 
     @Test
     public void unnamed_containers_do_not_render_tags_or_attributes(){
-        Tag<?> tag = new ContainerTag<>(null).attr("xyz", "123");
+        final Tag<?> tag = new ContainerTag<>(null).attr("xyz", "123");
         assertThat(tag.render(), is(""));
     }
 
     @Test
     public void unnamed_containers_render_children(){
-        ContainerTag<?> tag = new ContainerTag<>(null)
+        final ContainerTag<?> tag = new ContainerTag<>(null)
             .with(new EmptyTag<>("abc"))
             .with(new ContainerTag<>("def"))
             .withText("ghi");
@@ -55,13 +55,13 @@ public class TagTest {
 
     @Test
     public void named_containers_without_children_only_render_tags_and_attributes(){
-        Tag<?> tag = new ContainerTag<>("abc").attr("xyz", "123");
+        final Tag<?> tag = new ContainerTag<>("abc").attr("xyz", "123");
         assertThat(tag.render(), is("<abc xyz=\"123\"></abc>"));
     }
 
     @Test
     public void populated_named_containers_render_tags_attributes_and_children(){
-        Tag<?> tag = new ContainerTag<>("abc")
+        final Tag<?> tag = new ContainerTag<>("abc")
             .with(new EmptyTag<>("def"))
             .with(new ContainerTag<>("ghi"))
             .withText("jkl")
@@ -97,13 +97,13 @@ public class TagTest {
 
     @Test
     public void attributes_are_rendered_in_the_order_that_they_are_defined(){
-        Tag<?> container = new ContainerTag<>("abc")
+        final Tag<?> container = new ContainerTag<>("abc")
             .attr("a","A")
             .attr(new Attribute("b","B"))
             .attr("c");
         assertThat(container.render(), is("<abc a=\"A\" b=\"B\" c></abc>"));
 
-        Tag<?> tag = new EmptyTag<>("abc")
+        final Tag<?> tag = new EmptyTag<>("abc")
             .attr("c")
             .attr(new Attribute("b","B"))
             .attr("a","A");
@@ -112,18 +112,18 @@ public class TagTest {
 
     @Test
     public void testRender() {
-        ContainerTag<?> testTag = new ContainerTag<>("a");
+        final ContainerTag<?> testTag = new ContainerTag<>("a");
         testTag.setAttribute("href", "http://example.com");
         assertThat(testTag.render(), is("<a href=\"http://example.com\"></a>"));
 
-        HtmlTag complexTestTag = html(
+        final HtmlTag complexTestTag = html(
             body(
                 header(),
                 main().with(p("Main stuff...")),
                 footer().condWith(1 == 1, p("Conditional with!"))
             )
         );
-        String expectedResult = "<html><body><header></header><main><p>Main stuff...</p></main><footer><p>Conditional with!</p></footer></body></html>";
+        final String expectedResult = "<html><body><header></header><main><p>Main stuff...</p></main><footer><p>Conditional with!</p></footer></body></html>";
         assertThat(complexTestTag.render(), is((expectedResult)));
     }
 
@@ -134,20 +134,20 @@ public class TagTest {
 
     @Test
     public void testEquals() throws Exception {
-        Tag<?> tagOne = tag("p").withText("Test").withClass("class");
-        Tag<?> tagTwo = p("Test").withClass("class");
+        final Tag<?> tagOne = tag("p").withText("Test").withClass("class");
+        final Tag<?> tagTwo = p("Test").withClass("class");
         assertThat(tagOne.equals(tagTwo), is(true));
     }
 
     @Test
     public void attribute_values_are_converted_to_strings() throws Exception {
-        Tag<?> container = new ContainerTag<>("abc")
+        final Tag<?> container = new ContainerTag<>("abc")
             .attr("string", "value1")
             .attr("integer", 2)
             .attr("none", null);
         assertThat(container.render(), is("<abc string=\"value1\" integer=\"2\" none></abc>"));
 
-        Tag<?> tag = new EmptyTag<>("abc")
+        final Tag<?> tag = new EmptyTag<>("abc")
             .attr("string", "value1")
             .attr("integer", 2)
             .attr("none", null);
@@ -156,35 +156,35 @@ public class TagTest {
 
     @Test
     public void testWithClasses() throws Exception {
-        String expected = "<div class=\"c1 c2\"></div>";
-        String actual = div().withClasses("c1", iff(1 == 1, "c2"), iff(1 == 2, "c3")).render();
+        final String expected = "<div class=\"c1 c2\"></div>";
+        final String actual = div().withClasses("c1", iff(1 == 1, "c2"), iff(1 == 2, "c3")).render();
         assertThat(actual, is(expected));
     }
 
     @Test
     public void testEmptyAttribute() throws Exception {
-        Tag<?> testTagWithAttrValueNull = new ContainerTag<>("a").attr("attribute", null);
+        final Tag<?> testTagWithAttrValueNull = new ContainerTag<>("a").attr("attribute", null);
         assertThat(testTagWithAttrValueNull.render(), is("<a attribute></a>"));
 
-        Tag<?> testTagAttrWithoutAttr = new ContainerTag<>("a").attr("attribute");
+        final Tag<?> testTagAttrWithoutAttr = new ContainerTag<>("a").attr("attribute");
         assertThat(testTagAttrWithoutAttr.render(), is("<a attribute></a>"));
     }
 
     @Test
     public void testDynamicAttribute() throws Exception {
-        Tag<?> testTagWithAttrValueNull = new ContainerTag<>("a").attr(new DynamicHrefAttribute());
+        final Tag<?> testTagWithAttrValueNull = new ContainerTag<>("a").attr(new DynamicHrefAttribute());
         assertThat(testTagWithAttrValueNull.render(), is("<a href=\"/\"></a>"));
     }
 
     @Test
     public void testDynamicAttributeReplacement() throws Exception {
-        Tag<?> testTagWithAttrValueNull = new ContainerTag<>("a").attr("href", "/link").attr(new DynamicHrefAttribute());
+        final Tag<?> testTagWithAttrValueNull = new ContainerTag<>("a").attr("href", "/link").attr(new DynamicHrefAttribute());
         assertThat(testTagWithAttrValueNull.render(), is("<a href=\"/\"></a>"));
     }
 
     @Test
     public void renderToFile() throws Exception {
-        FileWriter fileWriter = new FileWriter("file.txt");
+        final FileWriter fileWriter = new FileWriter("file.txt");
         div("Test").render(fileWriter);
         fileWriter.close();
         new File("file.txt").delete();

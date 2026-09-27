@@ -11,36 +11,36 @@ public class AttrShortFormTest {
 
     @Test
     public void addTo_emptyTag() throws Exception {
-        String expected = "<input id=\"some-id\" class=\"some-class\">";
-        String actual = input(attrs("#some-id.some-class")).render();
+        final String expected = "<input id=\"some-id\" class=\"some-class\">";
+        final String actual = input(attrs("#some-id.some-class")).render();
         assertThat(actual, is(expected));
     }
 
     @Test
     public void addTo_containerTag() throws Exception {
-        String expected = "<div id=\"some-id\" class=\"some-class\"></div>";
-        String actual = div(attrs("#some-id.some-class")).render();
+        final String expected = "<div id=\"some-id\" class=\"some-class\"></div>";
+        final String actual = div(attrs("#some-id.some-class")).render();
         assertThat(actual, is(expected));
     }
 
     @Test
     public void addTo_justId() throws Exception {
-        String expected = "<div id=\"some-id\"></div>";
-        String actual = div(attrs("#some-id")).render();
+        final String expected = "<div id=\"some-id\"></div>";
+        final String actual = div(attrs("#some-id")).render();
         assertThat(actual, is(expected));
     }
 
     @Test
     public void addTo_justClass() throws Exception {
-        String expected = "<div class=\"some-class\"></div>";
-        String actual = div(attrs(".some-class")).render();
+        final String expected = "<div class=\"some-class\"></div>";
+        final String actual = div(attrs(".some-class")).render();
         assertThat(actual, is(expected));
     }
 
     @Test
     public void addTo_addTwoClasses() throws Exception {
-        String expected = "<div class=\"some-class some-other-class\"></div>";
-        String actual = div(attrs(".some-class.some-other-class")).render();
+        final String expected = "<div class=\"some-class some-other-class\"></div>";
+        final String actual = div(attrs(".some-class.some-other-class")).render();
         assertThat(actual, is(expected));
     }
 

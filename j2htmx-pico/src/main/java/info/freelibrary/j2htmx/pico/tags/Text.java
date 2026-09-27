@@ -18,20 +18,20 @@ public class Text extends DomContent {
      *
      * @param text The text content to be escaped when rendered
      */
-    public Text(String text) {
+    public Text(final String text) {
         this.text = text;
     }
 
     @Override
-    public <T extends Appendable> T render(HtmlBuilder<T> builder, Object model) throws IOException {
+    public <T extends Appendable> T render(final HtmlBuilder<T> builder, final Object model) throws IOException {
         builder.appendEscapedText(String.valueOf(text));
         return builder.output();
     }
 
     @Override
     @Deprecated
-    public void renderModel(Appendable writer, Object model) throws IOException {
-        HtmlBuilder<?> builder = (writer instanceof HtmlBuilder)
+    public void renderModel(final Appendable writer, final Object model) throws IOException {
+        final HtmlBuilder<?> builder = (writer instanceof HtmlBuilder)
             ? (HtmlBuilder<?>) writer
             : FlatHtml.into(writer, Config.global());
 

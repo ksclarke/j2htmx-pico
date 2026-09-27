@@ -40,18 +40,18 @@ public class J2htmlCodeGeneratorMojo extends AbstractMojo {
         getLog().debug("Attribute Package: " + attributePackage);
         getLog().debug("Tag Package: " + tagPackage);
 
-        String outputDirectory = project.getBuild().getDirectory() + "/generated-sources/j2html-codegen";
+        final String outputDirectory = project.getBuild().getDirectory() + "/generated-sources/j2html-codegen";
         project.addCompileSourceRoot(outputDirectory);
         getLog().debug("Generating J2Html sources in: " + outputDirectory);
 
-        String definitions;
+        final String definitions;
         try {
             definitions = new String(Files.readAllBytes(Paths.get(modelFile)));
         } catch (IOException e) {
             throw new MojoFailureException("Unable to locate model file: " + modelFile, e);
         }
 
-        Model model = new Model();
+        final Model model = new Model();
         try {
             Parser.parse(definitions, model);
         }catch (RuntimeException e){

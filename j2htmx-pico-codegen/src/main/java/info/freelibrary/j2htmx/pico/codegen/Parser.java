@@ -93,12 +93,12 @@ public class Parser {
      * @param txt The model text content
      * @param listener The listener callback handler
      */
-    public static void parse(String txt, Listener listener) {
-        String[] lines = txt.split("[\r\n]+");
+    public static void parse(final String txt, final Listener listener) {
+        final String[] lines = txt.split("[\r\n]+");
 
         for (int i = 0; i < lines.length; i++) {
-            int number = i + 1;
-            String line = lines[i];
+            final int number = i + 1;
+            final String line = lines[i];
 
             if (match(EMPTY_LINE_PATTERN, line)) continue;
 
@@ -107,8 +107,8 @@ public class Parser {
             })) continue;
 
             if (match(NODE_PATTERN, line, matcher -> {
-                String type = matcher.group("type");
-                String name = matcher.group("name");
+                final String type = matcher.group("type");
+                final String name = matcher.group("name");
                 switch (type) {
                     case "ELEMENT":
                         listener.elementDefined(number, name);
@@ -140,12 +140,12 @@ public class Parser {
         }
     }
 
-    private static boolean match(Pattern pattern, String txt) {
+    private static boolean match(final Pattern pattern, final String txt) {
         return pattern.matcher(txt).matches();
     }
 
-    private static boolean match(Pattern pattern, String txt, Consumer<Matcher> onMatch) {
-        Matcher matcher = pattern.matcher(txt);
+    private static boolean match(final Pattern pattern, final String txt, final Consumer<Matcher> onMatch) {
+        final Matcher matcher = pattern.matcher(txt);
         if (matcher.matches()) {
             onMatch.accept(matcher);
             return true;

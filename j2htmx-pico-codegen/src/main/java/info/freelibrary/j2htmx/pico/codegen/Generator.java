@@ -40,13 +40,13 @@ public class Generator {
      * @param args Command-line arguments
      * @throws IOException If an I/O error occurs
      */
-    public static void main(String... args) throws IOException {
-        Path path = Paths.get("j2html-codegen", "src", "test", "resources", "html.model");
-        String definitions = new String(Files.readAllBytes(path));
-        Model model = new Model();
+    public static void main(final String... args) throws IOException {
+        final Path path = Paths.get("j2html-codegen", "src", "test", "resources", "html.model");
+        final String definitions = new String(Files.readAllBytes(path));
+        final Model model = new Model();
         Parser.parse(definitions, model);
 
-        Path dir = Paths.get("/j2html/generated-source");
+        final Path dir = Paths.get("/j2html/generated-source");
         Files.createDirectories(dir);
         generate(dir, "info.freelibrary.j2htmx.pico.tags.attributes", "info.freelibrary.j2htmx.pico.tags.specialized", model);
     }
@@ -60,30 +60,30 @@ public class Generator {
      * @param model The model definitions
      * @throws IOException If an I/O error occurs
      */
-    public static void generate(Path root, String attributePkg, String elementPkg, Model model) throws IOException {
-        Map<String, JavaFile> attributes = generateAttributePackage(attributePkg, model);
-        for (JavaFile file : attributes.values()) {
+    public static void generate(final Path root, final String attributePkg, final String elementPkg, final Model model) throws IOException {
+        final Map<String, JavaFile> attributes = generateAttributePackage(attributePkg, model);
+        for (final JavaFile file : attributes.values()) {
             file.writeTo(root);
         }
 
-        Map<String, JavaFile> elements = generateElementPackage(elementPkg, model, attributes);
-        for (JavaFile file : elements.values()) {
+        final Map<String, JavaFile> elements = generateElementPackage(elementPkg, model, attributes);
+        for (final JavaFile file : elements.values()) {
             file.writeTo(root);
         }
     }
 
-    private static Map<String, JavaFile> generateElementPackage(String pkg, Model model, Map<String, JavaFile> attributes) {
-        Map<String, JavaFile> files = new HashMap<>();
+    private static Map<String, JavaFile> generateElementPackage(final String pkg, final Model model, final Map<String, JavaFile> attributes) {
+        final Map<String, JavaFile> files = new HashMap<>();
 
         // Convert all elements into classes.
-        for (Node element : model.elements()) {
-            ClassName className = ClassName.get(pkg, capitalize(element.name) + "Tag");
+        for (final Node element : model.elements()) {
+            final ClassName className = ClassName.get(pkg, capitalize(element.name) + "Tag");
 
-            TypeSpec.Builder type = defineElementClass(element, className);
+            final TypeSpec.Builder type = defineElementClass(element, className);
 
             // Assign attributes to this element.
-            for (Node attribute : element.children) {
-                JavaFile file = attributes.get(attribute.name);
+            for (final Node attribute : element.children) {
+                final JavaFile file = attributes.get(attribute.name);
                 type.addSuperinterface(
                     ParameterizedTypeName.get(
                         ClassName.get(file.packageName(), file.typeSpec().name()),
@@ -103,12 +103,12 @@ public class Generator {
         return files;
     }
 
-    private static Map<String, JavaFile> generateAttributePackage(String pkg, Model model) {
-        Map<String, JavaFile> files = new HashMap<>();
+    private static Map<String, JavaFile> generateAttributePackage(final String pkg, final Model model) {
+        final Map<String, JavaFile> files = new HashMap<>();
 
         // Convert all attributes into classes.
-        for (Node attribute : model.attributes()) {
-            TypeSpec.Builder type = defineAttributeClass(pkg, attribute);
+        for (final Node attribute : model.attributes()) {
+            final TypeSpec.Builder type = defineAttributeClass(pkg, attribute);
 
             if (attribute.type.equals(Node.Type.STRING)) {
                 defineStringAttributeMethods(attribute, type);
@@ -129,13 +129,13 @@ public class Generator {
         return files;
     }
 
-    private static TypeSpec.Builder defineElementClass(Node element, ClassName className) {
-        MethodSpec constructor = MethodSpec.constructorBuilder()
+    private static TypeSpec.Builder defineElementClass(final Node element, final ClassName className) {
+        final MethodSpec constructor = MethodSpec.constructorBuilder()
             .addModifiers(Modifier.PUBLIC)
             .addStatement("super(\"" + element.name + "\")")
             .build();
 
-        TypeSpec.Builder type = TypeSpec.classBuilder(className)
+        final TypeSpec.Builder type = TypeSpec.classBuilder(className)
             .addModifiers(Modifier.PUBLIC)
             .superclass(
                 ParameterizedTypeName.get(element.is(SELF_CLOSING) ? EMPTY_TAG : CONTAINER_TAG, className)
@@ -144,22 +144,22 @@ public class Generator {
         return type;
     }
 
-    private static TypeSpec.Builder defineAttributeClass(String pkg, Node attribute) {
-        ClassName name = ClassName.get(pkg, capitalize(attribute.name));
+    private static TypeSpec.Builder defineAttributeClass(final String pkg, final Node attribute) {
+        final ClassName name = ClassName.get(pkg, capitalize(attribute.name));
         return TypeSpec.interfaceBuilder(name)
             .addSuperinterface(ParameterizedTypeName.get(INSTANCE, TypeVariableName.get("T")))
             .addTypeVariable(TypeVariableName.get("T", ParameterizedTypeName.get(TAG, TypeVariableName.get("T"))))
             .addModifiers(Modifier.PUBLIC);
     }
 
-    private static void defineBooleanAttributeMethods(Node attribute, TypeSpec.Builder type) {
-        MethodSpec with = MethodSpec.methodBuilder(methodName("is", attribute.name))
+    private static void defineBooleanAttributeMethods(final Node attribute, final TypeSpec.Builder type) {
+        final MethodSpec with = MethodSpec.methodBuilder(methodName("is", attribute.name))
             .addModifiers(Modifier.PUBLIC, Modifier.DEFAULT)
             .addStatement("return self().attr(\"" + attribute.name + "\")")
             .returns(TypeVariableName.get("T"))
             .build();
 
-        MethodSpec withCond = MethodSpec.methodBuilder(methodName("withCond", attribute.name))
+        final MethodSpec withCond = MethodSpec.methodBuilder(methodName("withCond", attribute.name))
             .addModifiers(Modifier.PUBLIC, Modifier.DEFAULT)
             .addParameter(TypeName.BOOLEAN, "enable", Modifier.FINAL)
             .addStatement("return enable ? self().attr(\"" + attribute.name + "\") : self()")
@@ -170,14 +170,14 @@ public class Generator {
         type.addMethod(withCond);
     }
 
-    private static void defineOnOffAttributeMethods(Node attribute, TypeSpec.Builder type) {
-        MethodSpec with = MethodSpec.methodBuilder(methodName("is", attribute.name))
+    private static void defineOnOffAttributeMethods(final Node attribute, final TypeSpec.Builder type) {
+        final MethodSpec with = MethodSpec.methodBuilder(methodName("is", attribute.name))
             .addModifiers(Modifier.PUBLIC, Modifier.DEFAULT)
             .addStatement("return self().attr(\"" + attribute.name + "\", \"on\")")
             .returns(TypeVariableName.get("T"))
             .build();
 
-        MethodSpec withCond = MethodSpec.methodBuilder(methodName("withCond", attribute.name))
+        final MethodSpec withCond = MethodSpec.methodBuilder(methodName("withCond", attribute.name))
             .addModifiers(Modifier.PUBLIC, Modifier.DEFAULT)
             .addParameter(TypeName.BOOLEAN, "enable", Modifier.FINAL)
             .addStatement("return enable ? self().attr(\"" + attribute.name + "\", \"on\") : self()")
@@ -188,15 +188,15 @@ public class Generator {
         type.addMethod(withCond);
     }
 
-    private static void defineStringAttributeMethods(Node attribute, TypeSpec.Builder type) {
-        MethodSpec with = MethodSpec.methodBuilder(methodName("with", attribute.name))
+    private static void defineStringAttributeMethods(final Node attribute, final TypeSpec.Builder type) {
+        final MethodSpec with = MethodSpec.methodBuilder(methodName("with", attribute.name))
             .addModifiers(Modifier.PUBLIC, Modifier.DEFAULT)
             .addParameter(String.class, parameter(attribute), Modifier.FINAL)
             .addStatement("return self().attr(\"" + attribute.name + "\", " + parameter(attribute) + ")")
             .returns(TypeVariableName.get("T"))
             .build();
 
-        MethodSpec withCond = MethodSpec.methodBuilder(methodName("withCond", attribute.name))
+        final MethodSpec withCond = MethodSpec.methodBuilder(methodName("withCond", attribute.name))
             .addModifiers(Modifier.PUBLIC, Modifier.DEFAULT)
             .addParameter(TypeName.BOOLEAN, "enable", Modifier.FINAL)
             .addParameter(String.class, parameter(attribute), Modifier.FINAL)
@@ -208,12 +208,12 @@ public class Generator {
         type.addMethod(withCond);
     }
 
-    private static String parameter(Node attribute) {
+    private static String parameter(final Node attribute) {
         return attribute.name.replace("-", "_") + "_";
     }
 
-    private static String methodName(String... words) {
-        String[] camelCase = new String[words.length];
+    private static String methodName(final String... words) {
+        final String[] camelCase = new String[words.length];
         camelCase[0] = words[0];
         for (int i = 1; i < words.length; i++) {
             camelCase[i] = capitalize(words[i]);
@@ -221,11 +221,11 @@ public class Generator {
         return String.join("", camelCase);
     }
 
-    private static String capitalize(String word) {
+    private static String capitalize(final String word) {
         if (word.contains("-")) {
-            String[] parts = word.split("-");
-            StringBuilder sb = new StringBuilder();
-            for (String part : parts) {
+            final String[] parts = word.split("-");
+            final StringBuilder sb = new StringBuilder();
+            for (final String part : parts) {
                 sb.append(part.substring(0, 1).toUpperCase()).append(part.substring(1).toLowerCase());
             }
             return sb.toString();

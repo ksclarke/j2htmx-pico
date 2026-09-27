@@ -80,15 +80,15 @@ public class CSSMin {
      * @param input the CSS
      * @return the compressed version
      */
-    public static String compressCss(String input) {
+    public static String compressCss(final String input) {
         try {
             int k,
                 j, // Number of open braces
                 n; // Current position in stream
             char curr;
 
-            BufferedReader br = new BufferedReader(new StringReader(input));
-            StringBuilder sb = new StringBuilder();
+            final BufferedReader br = new BufferedReader(new StringReader(input));
+            final StringBuilder sb = new StringBuilder();
 
             if (debugLogging) {
                 LOG.info("Reading file into StringBuffer...");
@@ -125,7 +125,7 @@ public class CSSMin {
             if (debugLogging) {
                 LOG.info("Parsing and processing selectors...");
             }
-            Vector<Selector> selectors = new Vector<>();
+            final Vector<Selector> selectors = new Vector<>();
             n = 0;
             j = 0;
             for (int i = 0; i < sb.length(); i++) {
@@ -152,9 +152,9 @@ public class CSSMin {
                 }
             }
 
-            StringBuilder result = new StringBuilder();
+            final StringBuilder result = new StringBuilder();
 
-            for (Selector selector : selectors) {
+            for (final Selector selector : selectors) {
                 result.append(selector);
             }
 
@@ -191,7 +191,7 @@ class Selector {
      * @param selector The selector; for example, "div { border: solid 1px red; color: blue; }"
      * @throws IncompleteSelectorException, UnterminatedSelectorException, EmptySelectorBodyException If the selector is incomplete and cannot be parsed.
      */
-    Selector(String selector) throws IncompleteSelectorException, UnterminatedSelectorException, EmptySelectorBodyException {
+    Selector(final String selector) throws IncompleteSelectorException, UnterminatedSelectorException, EmptySelectorBodyException {
         String[] parts = selector.split("\\{"); // We have to escape the { with a \ for the regex, which itself requires escaping for the string. Sigh.
         if (parts.length < 2) {
             throw new IncompleteSelectorException(selector);
@@ -225,7 +225,7 @@ class Selector {
             if (contents.length() == 1) {
                 throw new EmptySelectorBodyException(selector);
             }
-            int endIndex = contents.endsWith(";}") ? 2 : 1;
+            final int endIndex = contents.endsWith(";}") ? 2 : 1;
             contents = contents.substring(0, contents.length() - endIndex);
 
             this.properties = new Property[0];
@@ -240,15 +240,15 @@ class Selector {
      * @return A string representing this selector, minified.
      */
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
         sb.append(this.selector).append("{");
         if (this.subSelectors != null) {
-            for (Selector s : this.subSelectors) {
+            for (final Selector s : this.subSelectors) {
                 sb.append(s.toString());
             }
         }
         if (this.properties != null) {
-            for (Property p : this.properties) {
+            for (final Property p : this.properties) {
                 sb.append(p.toString());
             }
         }
@@ -265,8 +265,8 @@ class Selector {
      * @param contents The body; for example, "border: solid 1px red; color: blue;"
      * @return An array of properties parsed from this selector.
      */
-    private ArrayList<Property> parseProperties(String contents) {
-        ArrayList<String> parts = new ArrayList<>();
+    private ArrayList<Property> parseProperties(final String contents) {
+        final ArrayList<String> parts = new ArrayList<>();
         boolean bInsideString = false,
             bInsideURL = false;
         int j = 0;
@@ -295,8 +295,8 @@ class Selector {
             parts.add(substr);
         }
 
-        ArrayList<Property> results = new ArrayList<>();
-        for (String part : parts) {
+        final ArrayList<Property> results = new ArrayList<>();
+        for (final String part : parts) {
             try {
                 results.add(new Property(part));
             } catch (IncompletePropertyException ipex) {
@@ -312,7 +312,7 @@ class Selector {
      *
      * @param properties The array to be sorted.
      */
-    private void sortProperties(Property[] properties) {
+    private void sortProperties(final Property[] properties) {
         Arrays.sort(properties);
     }
 }
@@ -330,10 +330,10 @@ class Property implements Comparable<Property> {
      * @param property The property; for example, "border: solid 1px red;" or "-moz-box-shadow: 3px 3px 3px rgba(255, 255, 0, 0.5);".
      * @throws IncompletePropertyException If the property is incomplete and cannot be parsed.
      */
-    Property(String property) throws IncompletePropertyException {
+    Property(final String property) throws IncompletePropertyException {
         try {
             // Parse the property.
-            ArrayList<String> parts = new ArrayList<>();
+            final ArrayList<String> parts = new ArrayList<>();
             boolean bCanSplit = true;
             int j = 0;
             String substr;
@@ -380,9 +380,9 @@ class Property implements Comparable<Property> {
      * @return A string representing this property, minified.
      */
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
         sb.append(this.property).append(":");
-        for (Part p : this.parts) {
+        for (final Part p : this.parts) {
             sb.append(p.toString()).append(",");
         }
         sb.deleteCharAt(sb.length() - 1); // Delete the trailing comma.
@@ -396,7 +396,7 @@ class Property implements Comparable<Property> {
     /**
      * Compare this property with another.
      */
-    public int compareTo(Property other) {
+    public int compareTo(final Property other) {
         // We can't just use String.compareTo(), because we need to sort properties that have hack prefixes last -- eg, *display should come after display.
         return sort(this.property).compareTo(sort(other.property));
     }
@@ -417,9 +417,9 @@ class Property implements Comparable<Property> {
      * @param contents The property to parse
      * @return An array of Parts
      */
-    private Part[] parseValues(String contents) {
-        String[] parts = contents.split(",");
-        Part[] results = new Part[parts.length];
+    private Part[] parseValues(final String contents) {
+        final String[] parts = contents.split(",");
+        final Part[] results = new Part[parts.length];
 
         for (int i = 0; i < parts.length; i++) {
             try {
@@ -433,7 +433,7 @@ class Property implements Comparable<Property> {
         return results;
     }
 
-    private String simplifyColours(String contents) {
+    private String simplifyColours(final String contents) {
         // This replacement, although it results in a smaller uncompressed file,
         // actually makes the gzipped file bigger -- people tend to use rgba(0,0,0,0.x)
         // quite a lot, which means that rgba(0,0,0,0) has its first eight or so characters
@@ -444,19 +444,19 @@ class Property implements Comparable<Property> {
     }
 
     // Convert rgb(51,102,153) to #336699 (this code largely based on YUI code)
-    private String simplifyRGBColours(String contents) {
-        StringBuffer newContents = new StringBuffer();
+    private String simplifyRGBColours(final String contents) {
+        final StringBuffer newContents = new StringBuffer();
         StringBuffer hexColour;
         String[] rgbColours;
         int colourValue;
 
-        Pattern pattern = Pattern.compile("rgb\\s*\\(\\s*([0-9,\\s]+)\\s*\\)");
-        Matcher matcher = pattern.matcher(contents);
+        final Pattern pattern = Pattern.compile("rgb\\s*\\(\\s*([0-9,\\s]+)\\s*\\)");
+        final Matcher matcher = pattern.matcher(contents);
 
         while (matcher.find()) {
             hexColour = new StringBuffer("#");
             rgbColours = matcher.group(1).split(",");
-            for (String rgbColour : rgbColours) {
+            for (final String rgbColour : rgbColours) {
                 colourValue = Integer.parseInt(rgbColour);
                 if (colourValue < 16) {
                     hexColour.append("0");
@@ -481,7 +481,7 @@ class Part {
      * @param contents The string to parse.
      * @throws Exception If the part cannot be parsed.
      */
-    Part(String contents, String property) throws Exception {
+    Part(final String contents, final String property) throws Exception {
         // Many of these regular expressions are adapted from those used in the YUI CSS Compressor.
 
         // For simpler regexes.
@@ -531,7 +531,7 @@ class Part {
             return;
         }
 
-        StringBuilder newContents = new StringBuilder();
+        final StringBuilder newContents = new StringBuilder();
 
         String[] params = this.contents.split(" ");
         if (params.length == 4 && params[1].equalsIgnoreCase(params[3])) {
@@ -550,7 +550,7 @@ class Part {
             params = Arrays.copyOf(params, 1);
         }
 
-        for (String param : params) {
+        for (final String param : params) {
             newContents.append(param).append(" ");
         }
         newContents.deleteCharAt(newContents.length() - 1); // Delete the trailing space
@@ -563,7 +563,7 @@ class Part {
             return;
         }
 
-        String lcContents = this.contents.toLowerCase();
+        final String lcContents = this.contents.toLowerCase();
 
         for (int i = 0; i < Constants.fontWeightNames.length; i++) {
             if (lcContents.equals(Constants.fontWeightNames[i])) {
@@ -580,7 +580,7 @@ class Part {
         } else if ((this.contents.length() > 4) && (this.contents.substring(0, 4).equalsIgnoreCase("var("))) {
             this.contents = this.contents.replaceAll("\\s", "");
         } else {
-            String[] words = this.contents.split("\\s");
+            final String[] words = this.contents.split("\\s");
             if (words.length == 1) {
                 if (!this.property.equalsIgnoreCase("animation-name")) {
                     this.contents = this.contents.toLowerCase();
@@ -591,7 +591,7 @@ class Part {
     }
 
     private void simplifyColourNames() {
-        String lcContents = this.contents.toLowerCase();
+        final String lcContents = this.contents.toLowerCase();
 
         for (int i = 0; i < Constants.htmlColourNames.length; i++) {
             if (lcContents.equals(Constants.htmlColourNames[i])) {
@@ -608,10 +608,10 @@ class Part {
     }
 
     private void simplifyHexColours() {
-        StringBuffer newContents = new StringBuffer();
+        final StringBuffer newContents = new StringBuffer();
 
-        Pattern pattern = Pattern.compile("#([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])");
-        Matcher matcher = pattern.matcher(this.contents);
+        final Pattern pattern = Pattern.compile("#([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])");
+        final Matcher matcher = pattern.matcher(this.contents);
 
         while (matcher.find()) {
             if (matcher.group(1).equalsIgnoreCase(matcher.group(2)) && matcher.group(3).equalsIgnoreCase(matcher.group(4)) && matcher.group(5).equalsIgnoreCase(matcher.group(6))) {
@@ -651,7 +651,7 @@ class IncompletePropertyException extends Exception {
 
     private final String message;
 
-    IncompletePropertyException(String message) {
+    IncompletePropertyException(final String message) {
         this.message = message;
     }
 
@@ -666,7 +666,7 @@ class EmptySelectorBodyException extends Exception {
 
     private final String message;
 
-    EmptySelectorBodyException(String message) {
+    EmptySelectorBodyException(final String message) {
         this.message = message;
     }
 
@@ -681,7 +681,7 @@ class UnterminatedSelectorException extends Exception {
 
     private final String message;
 
-    UnterminatedSelectorException(String message) {
+    UnterminatedSelectorException(final String message) {
         this.message = message;
     }
 
@@ -696,7 +696,7 @@ class IncompleteSelectorException extends Exception {
 
     private final String message;
 
-    IncompleteSelectorException(String message) {
+    IncompleteSelectorException(final String message) {
         this.message = message;
     }
 

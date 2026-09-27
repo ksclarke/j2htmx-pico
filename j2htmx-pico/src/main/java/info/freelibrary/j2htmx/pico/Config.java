@@ -50,11 +50,11 @@ public class Config {
 
 
     private Config(
-        TextEscaper _textEscaper,
-        Minifier _cssMinifier,
-        Minifier _jsMinifier,
-        boolean _closeEmptyTags,
-        Indenter _indenter
+        final TextEscaper _textEscaper,
+        final Minifier _cssMinifier,
+        final Minifier _jsMinifier,
+        final boolean _closeEmptyTags,
+        final Indenter _indenter
     ) {
         this._textEscaper = _textEscaper;
         this._cssMinifier = _cssMinifier;
@@ -68,7 +68,7 @@ public class Config {
      *
      * @param original The Config to copy fields from.
      */
-    private Config(Config original) {
+    private Config(final Config original) {
         this._textEscaper = original._textEscaper;
         this._cssMinifier = original._cssMinifier;
         this._jsMinifier = original._jsMinifier;
@@ -127,8 +127,8 @@ public class Config {
      * @param textEscaper The text escaper
      * @return A new Config instance
      */
-    public Config withTextEscaper(TextEscaper textEscaper){
-        Config copy = new Config(this);
+    public Config withTextEscaper(final TextEscaper textEscaper){
+        final Config copy = new Config(this);
         copy._textEscaper = textEscaper;
         return copy;
     }
@@ -139,8 +139,8 @@ public class Config {
      * @param cssMinifier The CSS minifier
      * @return A new Config instance
      */
-    public Config withCssMinifier(Minifier cssMinifier){
-        Config copy = new Config(this);
+    public Config withCssMinifier(final Minifier cssMinifier){
+        final Config copy = new Config(this);
         copy._cssMinifier = cssMinifier;
         return copy;
     }
@@ -151,8 +151,8 @@ public class Config {
      * @param jsMinifier The JavaScript minifier
      * @return A new Config instance
      */
-    public Config withJsMinifier(Minifier jsMinifier){
-        Config copy = new Config(this);
+    public Config withJsMinifier(final Minifier jsMinifier){
+        final Config copy = new Config(this);
         copy._jsMinifier = jsMinifier;
         return copy;
     }
@@ -163,8 +163,8 @@ public class Config {
      * @param closeEmptyTags Whether empty tags should be closed
      * @return A new Config instance
      */
-    public Config withEmptyTagsClosed(boolean closeEmptyTags){
-        Config copy = new Config(this);
+    public Config withEmptyTagsClosed(final boolean closeEmptyTags){
+        final Config copy = new Config(this);
         copy._closeEmptyTags = closeEmptyTags;
         return copy;
     }
@@ -175,8 +175,8 @@ public class Config {
      * @param indenter The indenter
      * @return A new Config instance
      */
-    public Config withIndenter(Indenter indenter){
-        Config copy = new Config(this);
+    public Config withIndenter(final Indenter indenter){
+        final Config copy = new Config(this);
         copy._indenter = indenter;
         return copy;
     }
