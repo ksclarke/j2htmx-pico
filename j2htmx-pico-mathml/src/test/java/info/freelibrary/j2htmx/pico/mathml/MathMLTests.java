@@ -1,14 +1,42 @@
 package info.freelibrary.j2htmx.pico.mathml;
 
+import static info.freelibrary.j2htmx.pico.mathml.MathML.annotation;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.maction;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.math;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.merror;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.mfrac;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.mi;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.mmultiscripts;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.mn;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.mo;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.mover;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.mpadded;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.mphantom;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.mprescripts;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.mroot;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.mrow;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.ms;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.mspace;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.msqrt;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.mstyle;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.msub;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.msubsup;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.msup;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.mtable;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.mtd;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.mtext;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.mtr;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.munder;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.munderover;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.none;
+import static info.freelibrary.j2htmx.pico.mathml.MathML.semantics;
+
 import org.junit.jupiter.api.Test;
 
-import static info.freelibrary.j2htmx.pico.mathml.MathML.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 public class MathMLTests {
-    
+
     @Test
-    public void all_tags_render_containers(){
+    public void all_tags_render_containers() {
         assertEquals("<annotation></annotation>", annotation().render());
         assertEquals("<maction></maction>", maction().render());
         assertEquals("<math></math>", math().render());
@@ -40,5 +68,5 @@ public class MathMLTests {
         assertEquals("<none></none>", none().render());
         assertEquals("<semantics></semantics>", semantics().render());
     }
-    
+
 }

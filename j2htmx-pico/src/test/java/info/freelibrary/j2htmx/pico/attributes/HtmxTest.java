@@ -1,9 +1,13 @@
 package info.freelibrary.j2htmx.pico.attributes;
 
-import org.junit.jupiter.api.Test;
-import static info.freelibrary.j2htmx.pico.TagCreator.*;
+import static info.freelibrary.j2htmx.pico.TagCreator.button;
+import static info.freelibrary.j2htmx.pico.TagCreator.div;
+import static info.freelibrary.j2htmx.pico.TagCreator.hxPartial;
+import static info.freelibrary.j2htmx.pico.TagCreator.template;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
+
+import org.junit.jupiter.api.Test;
 
 public class HtmxTest {
 
@@ -37,8 +41,8 @@ public class HtmxTest {
     @Test
     public void testHxPartialTag() {
         final String html = hxPartial(
-            div("Content 1").withHxTarget("#t1"),
-            hxPartial(div("Content 2")).withHxTarget("#t2")
+          div("Content 1").withHxTarget("#t1"),
+          hxPartial(div("Content 2")).withHxTarget("#t2")
         ).render();
         assertThat(html, containsString("<hx-partial"));
         assertThat(html, containsString("hx-target=\"#t1\""));

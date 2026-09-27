@@ -35,7 +35,7 @@ If you want to build the project yourself, there are a few pre-requisites that n
   [SDKMAN!](https://sdkman.io)_
 * **Maven 3.8.6 or higher** – _Optional, if you use the `mvnw` or `mvnw.cmd` command in the project's root directory_
 
-Once the pre-requisites are installed, check the project out from its source repository and then run the following 
+Once the pre-requisites are installed, check the project out from its source repository and then run the following
 command inside the project's root directory:
 
 ```bash
@@ -56,28 +56,28 @@ overhead.
 import static info.freelibrary.j2htmx.pico.TagCreator.*;
 
 public class Main {
-  public static void main(String[] args) {
-    String html = html(
-      head(
-        title("Basic Example")
-      ),
-      body(
-        header(
-          h1("Welcome to j2htmx-pico")
-        ),
-        main(
-          p("Generate type-safe HTML directly in Java with minimal runtime overhead."),
-          ul(
-            li("Compile-time safety for element hierarchies"),
-            li("Zero reflection or external template parsing costs"),
-            li("Fluent tag chaining and conditional attributes")
+    public static void main(String[] args) {
+        String html = html(
+          head(
+            title("Basic Example")
+          ),
+          body(
+            header(
+              h1("Welcome to j2htmx-pico")
+            ),
+            main(
+              p("Generate type-safe HTML directly in Java with minimal runtime overhead."),
+              ul(
+                li("Compile-time safety for element hierarchies"),
+                li("Zero reflection or external template parsing costs"),
+                li("Fluent tag chaining and conditional attributes")
+              )
+            )
           )
-        )
-      )
-    ).render();
+        ).render();
 
-    System.out.println(html);
-  }
+        System.out.println(html);
+    }
 }
 ```
 
@@ -86,6 +86,7 @@ helper:
 
 ```java
 import static info.freelibrary.j2htmx.pico.TagCreator.*;
+
 import java.util.List;
 
 List<String> items = List.of("Item Alpha", "Item Beta", "Item Gamma");
@@ -109,21 +110,33 @@ Core HTMX interaction attributes—including `hx-get`, `hx-post`, `hx-target`, `
 import static info.freelibrary.j2htmx.pico.TagCreator.*;
 
 button("Load Items")
-  .withHxGet("/api/items")
-  .withHxTarget("#item-list")
-  .withHxSwap("innerHTML")
-  .withHxIndicator("#loading-spinner")
-  .render();
+  .
+
+withHxGet("/api/items")
+  .
+
+withHxTarget("#item-list")
+  .
+
+withHxSwap("innerHTML")
+  .
+
+withHxIndicator("#loading-spinner")
+  .
+
+render();
 ```
 
 This generates:
 
 ```html
+
 <button
-  hx-get="/api/items"
-  hx-target="#item-list"
-  hx-swap="innerHTML"
-  hx-indicator="#loading-spinner">Load Items</button>
+        hx-get="/api/items"
+        hx-target="#item-list"
+        hx-swap="innerHTML"
+        hx-indicator="#loading-spinner">Load Items
+</button>
 ```
 
 ### Event Handlers, Confirmations, and Partial Responses
@@ -135,16 +148,23 @@ fragments using `hxPartial`:
 import static info.freelibrary.j2htmx.pico.TagCreator.*;
 
 // Action with confirmation dialog and response callback
-button("Delete Record")
-  .withHxDelete("/records/42")
-  .withHxConfirm("Are you sure you want to delete this record?")
-  .withHxOn("htmx:afterRequest", "console.log('Record removed')");
 
-// Server partial responses targeting multiple DOM regions
-String partialResponse = hxPartial(
-  div("Update successful!").withId("status-message"),
-  ul(li("Updated item 1"), li("Updated item 2")).withId("item-list")
-).render();
+button("Delete Record")
+  .
+
+  withHxDelete("/records/42")
+  .
+
+  withHxConfirm("Are you sure you want to delete this record?")
+  .
+
+  withHxOn("htmx:afterRequest","console.log('Record removed')");
+
+  // Server partial responses targeting multiple DOM regions
+  String partialResponse = hxPartial(
+    div("Update successful!").withId("status-message"),
+    ul(li("Updated item 1"), li("Updated item 2")).withId("item-list")
+  ).render();
 ```
 
 ## Styling with Pico CSS
@@ -159,18 +179,20 @@ offline-ready HTML documents:
 
 ```java
 import static info.freelibrary.j2htmx.pico.TagCreator.*;
+
 import info.freelibrary.j2htmx.pico.Pico;
 
 // Official Pico v2 CDN link
+
 head(picoCss());
-// Output: <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  // Output: <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
 
-// Specific version or color scheme (e.g. amber, azure, zinc)
-head(picoCss(Pico.Color.AZURE));
-// Output: <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.azure.min.css">
+  // Specific version or color scheme (e.g. amber, azure, zinc)
+  head(picoCss(Pico.Color.AZURE));
+  // Output: <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.azure.min.css">
 
-// Bundled inline stylesheet for offline/standalone output
-head(picoInlineCss());
+  // Bundled inline stylesheet for offline/standalone output
+  head(picoInlineCss());
 // Output: <style>...bundled minified css...</style>
 ```
 
@@ -181,12 +203,13 @@ Pico uses semantic HTML elements, grid layouts, and ARIA attributes for state an
 
 ```java
 import static info.freelibrary.j2htmx.pico.TagCreator.*;
+
 import info.freelibrary.j2htmx.pico.Pico;
 
 String page = html(
   head(
     title("Pico CSS Dashboard"),
-      picoCss()
+    picoCss()
   ),
   body(
     container(

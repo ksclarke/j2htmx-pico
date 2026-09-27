@@ -12,9 +12,24 @@ import java.io.IOException;
  */
 public class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
 
+    /** The Appendable output destination. */
+    private final T out;
+    /** The text escaper for escaping text and attribute values. */
+    private final TextEscaper textEscaper;
+    /** TagBuilder used for appending attributes to enclosing tags. */
+    private final TagBuilder enclosingElementAttributes;
+    /** TagBuilder used for appending attributes to empty/void tags. */
+    private final TagBuilder emptyElementAttributes;
+
+    private FlatHtml(final T out, final Config config) {
+        this.out = out;
+        this.textEscaper = config.textEscaper();
+        this.enclosingElementAttributes = new FlatTagBuilder(false);
+        this.emptyElementAttributes = new FlatTagBuilder(config.closeEmptyTags());
+    }
+
     /**
-     * Returns an HtmlBuilder that will generate flat HTML using
-     * Config defaults.
+     * Returns an HtmlBuilder that will generate flat HTML using Config defaults.
      *
      * @param out The Appendable to which HTML will be appended.
      * @param <T> The type of the Appendable to which HTML will be appended.
@@ -25,12 +40,11 @@ public class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
     }
 
     /**
-     * Returns an HtmlBuilder that will generate flat HTML using
-     * the given Config.
+     * Returns an HtmlBuilder that will generate flat HTML using the given Config.
      *
-     * @param out    The Appendable to which HTML will be appended.
+     * @param out The Appendable to which HTML will be appended.
      * @param config The Config which will specify text escapement, tag closing, etc.
-     * @param <T>    The type of the Appendable to which HTML will be appended.
+     * @param <T> The type of the Appendable to which HTML will be appended.
      * @return An HtmlBuilder for flat HTML.
      */
     public static final <T extends Appendable> FlatHtml<T> into(final T out, final Config config) {
@@ -38,8 +52,7 @@ public class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
     }
 
     /**
-     * Returns an HtmlBuilder that will generate flat HTML in memory
-     * using Config defaults.
+     * Returns an HtmlBuilder that will generate flat HTML in memory using Config defaults.
      *
      * @return An HtmlBuilder for flat HTML.
      */
@@ -48,32 +61,13 @@ public class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
     }
 
     /**
-     * Returns an HtmlBuilder that will generate flat HTML in memory
-     * using the given Config.
+     * Returns an HtmlBuilder that will generate flat HTML in memory using the given Config.
+     *
      * @param config The Config which will specify text escapement, tag closing, etc.
      * @return An HtmlBuilder for flat HTML.
      */
     public static final FlatHtml<StringBuilder> inMemory(final Config config) {
         return into(new StringBuilder(), config);
-    }
-
-    /** The Appendable output destination. */
-    private final T out;
-
-    /** The text escaper for escaping text and attribute values. */
-    private final TextEscaper textEscaper;
-
-    /** TagBuilder used for appending attributes to enclosing tags. */
-    private final TagBuilder enclosingElementAttributes;
-
-    /** TagBuilder used for appending attributes to empty/void tags. */
-    private final TagBuilder emptyElementAttributes;
-
-    private FlatHtml(final T out, final Config config) {
-        this.out = out;
-        this.textEscaper = config.textEscaper();
-        this.enclosingElementAttributes = new FlatTagBuilder(false);
-        this.emptyElementAttributes = new FlatTagBuilder(config.closeEmptyTags());
     }
 
     /**
@@ -151,10 +145,10 @@ public class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
         @Override
         public TagBuilder appendAttribute(final String name, final String value) throws IOException {
             out.append(" ")
-                .append(name)
-                .append("=\"")
-                .append(textEscaper.escape(value))
-                .append("\"");
+              .append(name)
+              .append("=\"")
+              .append(textEscaper.escape(value))
+              .append("\"");
             return this;
         }
 

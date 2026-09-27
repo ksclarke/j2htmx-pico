@@ -1,24 +1,27 @@
 package info.freelibrary.j2htmx.pico.tags;
 
+import static info.freelibrary.j2htmx.pico.TagCreator.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import info.freelibrary.j2htmx.pico.Config;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static info.freelibrary.j2htmx.pico.TagCreator.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TagCreatorTest {
 
     private static final String EOL = System.getProperty("line.separator"); // System independent End Of Line
 
-    final List<Employee> employees = Arrays.asList(new Employee(1, "Name 1", "Title 1"), new Employee(2, "Name 2", "Title 2"), new Employee(3, "Name 3", "Title 3"));
+    final List<Employee> employees = Arrays.asList(new Employee(1, "Name 1", "Title 1"),
+      new Employee(2, "Name 2", "Title 2"), new Employee(3, "Name 3", "Title 3"));
 
     final Map<Integer, Employee> employeeMap = new HashMap<>();
 
@@ -45,9 +48,9 @@ public class TagCreatorTest {
     public void testIff() throws Exception {
         final String expected = "<div><p>Test</p><a href=\"#\">Test</a></div>";
         final String actual = div(
-            p("Test"),
-            iff(1 == 1, a("Test").withHref("#")),
-            iff(1 == 2, a("Tast").withHref("#"))
+          p("Test"),
+          iff(1 == 1, a("Test").withHref("#")),
+          iff(1 == 2, a("Tast").withHref("#"))
         ).render();
         assertThat(actual, is(expected));
     }
@@ -56,9 +59,9 @@ public class TagCreatorTest {
     public void testIffOptional() {
         final String expected = "<div><p>Test</p><a href=\"#1\">Test</a></div>";
         final String actual = div(
-            p("Test"),
-            iff(Optional.of(1), i -> a("Test").withHref("#" + i)),
-            iff(Optional.empty(), i -> a("Tast").withHref("#2"))
+          p("Test"),
+          iff(Optional.of(1), i -> a("Test").withHref("#" + i)),
+          iff(Optional.empty(), i -> a("Tast").withHref("#2"))
         ).render();
         assertThat(actual, is(expected));
     }
@@ -72,57 +75,64 @@ public class TagCreatorTest {
 
     @Test
     public void testJoin() throws Exception {
-        final String expected = "This is my joined string. It has a <a href=\"#\">link in the middle</a> and <code>code at the end</code>.";
-        final String actual = join("This is my joined string. It has a", a("link in the middle").withHref("#"), "and", code("code at the end"), ".").render();
+        final String expected = "This is my joined string. It has a <a href=\"#\">link in the middle</a> and " +
+                                "<code>code at the end</code>.";
+        final String actual = join("This is my joined string. It has a", a("link in the middle").withHref("#"), "and",
+          code("code at the end"), ".").render();
         assertThat(actual, is(expected));
     }
 
     @Test
     public void testJoinWithNulls() throws Exception {
         final String expected = "This is my joined string. It has ignored null content in the middle.";
-        final String actual = join("This is my joined string.", iff(false, "this should not be displayed"), "It has ignored null content in the middle.").render();
+        final String actual = join("This is my joined string.", iff(false, "this should not be displayed"),
+          "It has ignored null content in the middle.").render();
         assertThat(actual, is(expected));
     }
 
     @Test
     public void testEach() throws Exception {
         final String j2htmlMap = ul().with(
-            li("Begin list"),
-            each(employees, employee -> li(
-                h2(employee.name),
-                p(employee.title)
-            ))
+          li("Begin list"),
+          each(employees, employee -> li(
+            h2(employee.name),
+            p(employee.title)
+          ))
         ).render();
         final String javaMap = ul().with(
-            li("Begin list"),
-            rawHtml(employees.stream().map(employee -> li(
-                h2(employee.name),
-                p(employee.title)
-            )).map(DomContent::render).collect(Collectors.joining()))
+          li("Begin list"),
+          rawHtml(employees.stream().map(employee -> li(
+            h2(employee.name),
+            p(employee.title)
+          )).map(DomContent::render).collect(Collectors.joining()))
         ).render();
-        assertThat(j2htmlMap, is("<ul><li>Begin list</li><li><h2>Name 1</h2><p>Title 1</p></li><li><h2>Name 2</h2><p>Title 2</p></li><li><h2>Name 3</h2><p>Title 3</p></li></ul>"));
+        assertThat(j2htmlMap, is(
+          "<ul><li>Begin list</li><li><h2>Name 1</h2><p>Title 1</p></li><li><h2>Name 2</h2><p>Title " +
+          "2</p></li><li><h2>Name 3</h2><p>Title 3</p></li></ul>"));
         assertThat(j2htmlMap.equals(javaMap), is(true));
     }
 
     @Test
-    public void each_provides_the_collection_index_to_bifunctions(){
+    public void each_provides_the_collection_index_to_bifunctions() {
         assertThat(
-            table(
-                each(employees, (index, employee) -> tr(
-                    td(Integer.toString(index)),
-                    td(employee.name),
-                    td(employee.title)
-                ))
-            ).render(),
-            is("<table><tr><td>0</td><td>Name 1</td><td>Title 1</td></tr><tr><td>1</td><td>Name 2</td><td>Title 2</td></tr><tr><td>2</td><td>Name 3</td><td>Title 3</td></tr></table>")
+          table(
+            each(employees, (index, employee) -> tr(
+              td(Integer.toString(index)),
+              td(employee.name),
+              td(employee.title)
+            ))
+          ).render(),
+          is(
+            "<table><tr><td>0</td><td>Name 1</td><td>Title 1</td></tr><tr><td>1</td><td>Name 2</td><td>Title " +
+            "2</td></tr><tr><td>2</td><td>Name 3</td><td>Title 3</td></tr></table>")
         );
     }
 
     @Test
     public void testEachWithMap() {
         final String j2htmlMap = ul().with(
-            li("Begin list"),
-            each(employeeMap, entry -> li(entry.getKey() + "-" + entry.getValue().name))
+          li("Begin list"),
+          each(employeeMap, entry -> li(entry.getKey() + "-" + entry.getValue().name))
         ).render();
 
         assertThat(j2htmlMap, is("<ul><li>Begin list</li><li>1-Name 1</li><li>2-Name 2</li><li>3-Name 3</li></ul>"));
@@ -131,8 +141,8 @@ public class TagCreatorTest {
     @Test
     public void testEachWithMapAndBiFunction() {
         final String j2htmlMap = ul().with(
-            li("Begin list"),
-            each(employeeMap, (id, employee) -> li(id + "-" + employee.name))
+          li("Begin list"),
+          each(employeeMap, (id, employee) -> li(id + "-" + employee.name))
         ).render();
 
         assertThat(j2htmlMap, is("<ul><li>Begin list</li><li>1-Name 1</li><li>2-Name 2</li><li>3-Name 3</li></ul>"));
@@ -141,28 +151,29 @@ public class TagCreatorTest {
     @Test
     public void testFilter() throws Exception {
         final String j2htmlFilter = ul().with(
-            li("Begin list"),
-            each(filter(employees, e -> e.id % 2 == 1), employee -> li(
-                h2(employee.name),
-                p(employee.title)
-            ))
+          li("Begin list"),
+          each(filter(employees, e -> e.id % 2 == 1), employee -> li(
+            h2(employee.name),
+            p(employee.title)
+          ))
         ).render();
         final String javaFilter = ul().with(
-            li("Begin list"),
-            rawHtml(employees.stream().filter(e -> e.id % 2 == 1).map(employee -> li(
-                h2(employee.name),
-                p(employee.title)
-            )).map(DomContent::render).collect(Collectors.joining()))
+          li("Begin list"),
+          rawHtml(employees.stream().filter(e -> e.id % 2 == 1).map(employee -> li(
+            h2(employee.name),
+            p(employee.title)
+          )).map(DomContent::render).collect(Collectors.joining()))
         ).render();
-        assertThat(j2htmlFilter, is("<ul><li>Begin list</li><li><h2>Name 1</h2><p>Title 1</p></li><li><h2>Name 3</h2><p>Title 3</p></li></ul>"));
+        assertThat(j2htmlFilter, is(
+          "<ul><li>Begin list</li><li><h2>Name 1</h2><p>Title 1</p></li><li><h2>Name 3</h2><p>Title 3</p></li></ul>"));
         assertThat(j2htmlFilter.equals(javaFilter), is(true));
     }
 
     @Test
     public void testEachWithStream() throws Exception {
         final String j2htmlMap = ul().with(
-            li("Begin list"),
-            each(employeeMap.entrySet().stream().map(e -> li(e.getKey() + "-" + e.getValue().name)))
+          li("Begin list"),
+          each(employeeMap.entrySet().stream().map(e -> li(e.getKey() + "-" + e.getValue().name)))
         ).render();
 
         assertThat(j2htmlMap, is("<ul><li>Begin list</li><li>1-Name 1</li><li>2-Name 2</li><li>3-Name 3</li></ul>"));
@@ -341,32 +352,37 @@ public class TagCreatorTest {
     @Test
     public void script_factories_do_not_escape_text_parameters() {
         assertEquals(
-            "<script>var test = 'Hello, world!';</script>",
-            script("var test = 'Hello, world!';").render()
+          "<script>var test = 'Hello, world!';</script>",
+          script("var test = 'Hello, world!';").render()
         );
         assertEquals(
-            "<script id=\"x\">var test = 'Hello, world!';</script>",
-            script(attrs("#x"), "var test = 'Hello, world!';").render()
+          "<script id=\"x\">var test = 'Hello, world!';</script>",
+          script(attrs("#x"), "var test = 'Hello, world!';").render()
         );
     }
 
     @Test
     public void style_factories_do_not_escape_text_parameters() {
         assertEquals(
-            "<style>.test>a {}</style>",
-            style(".test>a {}").render()
+          "<style>.test>a {}</style>",
+          style(".test>a {}").render()
         );
         assertEquals(
-            "<style id=\"x\">.test>a {}</style>",
-            style(attrs("#x"),".test>a {}").render()
+          "<style id=\"x\">.test>a {}</style>",
+          style(attrs("#x"), ".test>a {}").render()
         );
     }
 
     @Test
     public void testPicoDelegates() {
-        assertEquals("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css\">", picoCss().render());
-        assertEquals("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css\">", picoCss("2.0.6").render());
-        assertEquals("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.amber.min.css\">", picoCss("2.0.6", "amber").render());
+        assertEquals("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css\">",
+          picoCss().render());
+        assertEquals(
+          "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css\">",
+          picoCss("2.0.6").render());
+        assertEquals(
+          "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.amber.min.css\">",
+          picoCss("2.0.6", "amber").render());
         assertEquals("<main class=\"container\"><h1>Hello</h1></main>", container(h1("Hello")).render());
         assertEquals("<main class=\"container\">Hello</main>", container("Hello").render());
         assertEquals("<main class=\"container-fluid\"><p>Fluid</p></main>", containerFluid(p("Fluid")).render());

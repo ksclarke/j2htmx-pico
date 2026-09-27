@@ -1,8 +1,10 @@
 package info.freelibrary.j2htmx.pico.model;
 
-import info.freelibrary.j2htmx.pico.tags.ContainerTag;
-import java.io.IOException;
 import static info.freelibrary.j2htmx.pico.TagCreator.div;
+
+import info.freelibrary.j2htmx.pico.tags.ContainerTag;
+
+import java.io.IOException;
 
 public class Button extends Template<PageModel> {
 

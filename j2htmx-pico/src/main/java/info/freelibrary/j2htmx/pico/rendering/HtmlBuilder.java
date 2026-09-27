@@ -3,25 +3,19 @@ package info.freelibrary.j2htmx.pico.rendering;
 import java.io.IOException;
 
 /**
- * Implementations of HtmlBuilder are wrappers around an
- * Appendable, and support appending HTML-specific character
+ * Implementations of HtmlBuilder are wrappers around an Appendable, and support appending HTML-specific character
  * sequences to that Appendable.
  * <p>
- * Note:  HtmlBuilder extends Appendable for compatibility with
- * previous version of this library.  This extension will probably be
- * removed in the future, so avoid relying on the deprecated methods
- * of this interface.
+ * Note:  HtmlBuilder extends Appendable for compatibility with previous version of this library.  This extension will
+ * probably be removed in the future, so avoid relying on the deprecated methods of this interface.
  *
- * @param <T> The type of the Appendable.  Used so that the
- *            same type can be returned to the caller, allowing
- *            for additional work to be done on the Appendable
- *            without the need for manual casting.
+ * @param <T> The type of the Appendable.  Used so that the same type can be returned to the caller, allowing for
+ *   additional work to be done on the Appendable without the need for manual casting.
  */
 public interface HtmlBuilder<T extends Appendable> extends Appendable {
 
     /**
-     * Appends a start tag with the given name to the output. The
-     * returned TagBuilder is then used to append attributes
+     * Appends a start tag with the given name to the output. The returned TagBuilder is then used to append attributes
      * and eventually complete the start tag.
      *
      * @param name The name of the start tag.
@@ -40,8 +34,7 @@ public interface HtmlBuilder<T extends Appendable> extends Appendable {
     HtmlBuilder<T> appendEndTag(String name) throws IOException;
 
     /**
-     * Appends an empty tag with the given name to the output. The
-     * returned TagBuilder is then used to append attributes
+     * Appends an empty tag with the given name to the output. The returned TagBuilder is then used to append attributes
      * and eventually complete the empty tag.
      *
      * @param name The name of the empty tag.

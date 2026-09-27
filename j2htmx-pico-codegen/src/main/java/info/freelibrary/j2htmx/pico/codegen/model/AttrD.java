@@ -21,7 +21,7 @@ public final class AttrD {
      * @param attr The attribute name
      * @param hasArgument Whether the attribute accepts an argument
      */
-    public AttrD(final String attr, final boolean hasArgument){
+    public AttrD(final String attr, final boolean hasArgument) {
         this.attr = attr;
         this.hasArgument = hasArgument;
         this.tags = new String[]{};

@@ -1,13 +1,14 @@
 package info.freelibrary.j2htmx.pico.tags;
 
-import info.freelibrary.j2htmx.pico.Config;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.Scanner;
-
 import static info.freelibrary.j2htmx.pico.TagCreator.rawHtml;
 import static info.freelibrary.j2htmx.pico.TagCreator.script;
 import static info.freelibrary.j2htmx.pico.TagCreator.style;
+
+import info.freelibrary.j2htmx.pico.Config;
+
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.Scanner;
 
 /**
  * Utility for reading static resource files (CSS, JS) from the classpath or filesystem and embedding them into tags.

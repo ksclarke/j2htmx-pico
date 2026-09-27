@@ -1,11 +1,13 @@
 package info.freelibrary.j2htmx.pico.attributes;
 
-import org.junit.jupiter.api.Test;
-
-import static info.freelibrary.j2htmx.pico.TagCreator.*;
+import static info.freelibrary.j2htmx.pico.TagCreator.attrs;
+import static info.freelibrary.j2htmx.pico.TagCreator.div;
+import static info.freelibrary.j2htmx.pico.TagCreator.input;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
 
 public class AttrShortFormTest {
 

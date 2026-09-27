@@ -16,7 +16,8 @@ public class DomContentJoiner {
      * @param stringOrDomObjects The objects to join (can be String or DomContent)
      * @return An UnescapedText instance containing the joined content
      */
-    public static UnescapedText join(final CharSequence delimiter, final boolean fixPeriodAndCommaSpacing, final Object... stringOrDomObjects) {
+    public static UnescapedText join(final CharSequence delimiter, final boolean fixPeriodAndCommaSpacing,
+      final Object... stringOrDomObjects) {
         final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < stringOrDomObjects.length; i++) {
             final Object o = stringOrDomObjects[i];
@@ -30,7 +31,7 @@ public class DomContentJoiner {
             } else {
                 throw new RuntimeException("You can only join DomContent and String objects");
             }
-            if (i < stringOrDomObjects.length-1) {
+            if (i < stringOrDomObjects.length - 1) {
                 sb.append(delimiter);
             }
         }

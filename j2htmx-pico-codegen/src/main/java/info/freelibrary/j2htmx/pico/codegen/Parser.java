@@ -16,12 +16,87 @@ public class Parser {
     private static final Pattern COMMENT_PATTERN = Pattern.compile("#.*");
 
     /** Regex pattern matching element and attribute node definitions. */
-    private static final Pattern NODE_PATTERN = Pattern.compile("(?<type>ELEMENT|EMPTY-ELEMENT|BOOLEAN|ONOFF|STRING)\\[(?<name>\\S+)\\]");
+    private static final Pattern NODE_PATTERN = Pattern.compile(
+      "(?<type>ELEMENT|EMPTY-ELEMENT|BOOLEAN|ONOFF|STRING)\\[(?<name>\\S+)\\]");
 
     /** Regex pattern matching element-to-attribute mapping definitions. */
     private static final Pattern ATTRIBUTE_PATTERN = Pattern.compile("ATTRIBUTE\\[(?<element>\\S+):(?<name>\\S+)\\]");
 
     private Parser() {
+    }
+
+    /**
+     * Parses the specified model definition text using the given listener.
+     *
+     * @param txt The model text content
+     * @param listener The listener callback handler
+     */
+    public static void parse(final String txt, final Listener listener) {
+        final String[] lines = txt.split("[\r\n]+");
+
+        for (int i = 0; i < lines.length; i++) {
+            final int number = i + 1;
+            final String line = lines[i];
+
+            if (match(EMPTY_LINE_PATTERN, line)) {
+                continue;
+            }
+
+            if (match(COMMENT_PATTERN, line, matcher -> {
+                listener.lineCommented(number, line);
+            })) {
+                continue;
+            }
+
+            if (match(NODE_PATTERN, line, matcher -> {
+                final String type = matcher.group("type");
+                final String name = matcher.group("name");
+                switch (type) {
+                    case "ELEMENT":
+                        listener.elementDefined(number, name);
+                        break;
+                    case "EMPTY-ELEMENT":
+                        listener.emptyElementDefined(number, name);
+                        break;
+                    case "BOOLEAN":
+                        listener.booleanDefined(number, name);
+                        break;
+                    case "ONOFF":
+                        listener.onOffDefined(number, name);
+                        break;
+                    case "STRING":
+                        listener.stringDefined(number, name);
+                        break;
+                }
+            })) {
+                continue;
+            }
+
+            if (match(ATTRIBUTE_PATTERN, line, matcher -> {
+                listener.attributeDefined(
+                  number,
+                  matcher.group("element"),
+                  matcher.group("name")
+                );
+            })) {
+                continue;
+            }
+
+            listener.invalidLine(number, line);
+        }
+    }
+
+    private static boolean match(final Pattern pattern, final String txt) {
+        return pattern.matcher(txt).matches();
+    }
+
+    private static boolean match(final Pattern pattern, final String txt, final Consumer<Matcher> onMatch) {
+        final Matcher matcher = pattern.matcher(txt);
+        if (matcher.matches()) {
+            onMatch.accept(matcher);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -92,79 +167,5 @@ public class Parser {
          * @param txt The line content
          */
         void invalidLine(int line, String txt);
-    }
-
-    /**
-     * Parses the specified model definition text using the given listener.
-     *
-     * @param txt The model text content
-     * @param listener The listener callback handler
-     */
-    public static void parse(final String txt, final Listener listener) {
-        final String[] lines = txt.split("[\r\n]+");
-
-        for (int i = 0; i < lines.length; i++) {
-            final int number = i + 1;
-            final String line = lines[i];
-
-            if (match(EMPTY_LINE_PATTERN, line)) {
-                continue;
-            }
-
-            if (match(COMMENT_PATTERN, line, matcher -> {
-                listener.lineCommented(number, line);
-            })) {
-                continue;
-            }
-
-            if (match(NODE_PATTERN, line, matcher -> {
-                final String type = matcher.group("type");
-                final String name = matcher.group("name");
-                switch (type) {
-                    case "ELEMENT":
-                        listener.elementDefined(number, name);
-                        break;
-                    case "EMPTY-ELEMENT":
-                        listener.emptyElementDefined(number, name);
-                        break;
-                    case "BOOLEAN":
-                        listener.booleanDefined(number, name);
-                        break;
-                    case "ONOFF":
-                        listener.onOffDefined(number, name);
-                        break;
-                    case "STRING":
-                        listener.stringDefined(number, name);
-                        break;
-                }
-            })) {
-                continue;
-            }
-
-            if (match(ATTRIBUTE_PATTERN, line, matcher -> {
-                listener.attributeDefined(
-                    number,
-                    matcher.group("element"),
-                    matcher.group("name")
-                );
-            })) {
-                continue;
-            }
-
-            listener.invalidLine(number, line);
-        }
-    }
-
-    private static boolean match(final Pattern pattern, final String txt) {
-        return pattern.matcher(txt).matches();
-    }
-
-    private static boolean match(final Pattern pattern, final String txt, final Consumer<Matcher> onMatch) {
-        final Matcher matcher = pattern.matcher(txt);
-        if (matcher.matches()) {
-            onMatch.accept(matcher);
-            return true;
-        }
-        return false;
     }
 }

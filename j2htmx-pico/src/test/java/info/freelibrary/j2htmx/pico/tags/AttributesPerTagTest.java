@@ -1,10 +1,26 @@
 package info.freelibrary.j2htmx.pico.tags;
 
-import org.junit.jupiter.api.Test;
-
-import static info.freelibrary.j2htmx.pico.TagCreator.*;
+import static info.freelibrary.j2htmx.pico.TagCreator.a;
+import static info.freelibrary.j2htmx.pico.TagCreator.area;
+import static info.freelibrary.j2htmx.pico.TagCreator.audio;
+import static info.freelibrary.j2htmx.pico.TagCreator.blockquote;
+import static info.freelibrary.j2htmx.pico.TagCreator.button;
+import static info.freelibrary.j2htmx.pico.TagCreator.form;
+import static info.freelibrary.j2htmx.pico.TagCreator.img;
+import static info.freelibrary.j2htmx.pico.TagCreator.input;
+import static info.freelibrary.j2htmx.pico.TagCreator.label;
+import static info.freelibrary.j2htmx.pico.TagCreator.meta;
+import static info.freelibrary.j2htmx.pico.TagCreator.object;
+import static info.freelibrary.j2htmx.pico.TagCreator.script;
+import static info.freelibrary.j2htmx.pico.TagCreator.td;
+import static info.freelibrary.j2htmx.pico.TagCreator.textarea;
+import static info.freelibrary.j2htmx.pico.TagCreator.time;
+import static info.freelibrary.j2htmx.pico.TagCreator.track;
+import static info.freelibrary.j2htmx.pico.TagCreator.video;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+
+import org.junit.jupiter.api.Test;
 
 public final class AttributesPerTagTest {
 
@@ -15,7 +31,7 @@ public final class AttributesPerTagTest {
     //TODO: WARNING: only testing .with$ATTR and .is$ATTR Methods, not the 'Cond' Variants
 
     @Test
-    public void testAttributesPerTag1(){
+    public void testAttributesPerTag1() {
         //TEST:
         //accept, action, alt, async,
         //autocomplete, autofocus,
@@ -32,7 +48,7 @@ public final class AttributesPerTagTest {
     }
 
     @Test
-    public void testAttributesPerTag2(){
+    public void testAttributesPerTag2() {
         //TEST: cite, cols, colspan, content, controls
         assertThat(blockquote().withCite("hi").render(), is("<blockquote cite=\"hi\"></blockquote>"));
         assertThat(textarea().withCols("3").render(), is("<textarea cols=\"3\"></textarea>"));
@@ -42,11 +58,12 @@ public final class AttributesPerTagTest {
     }
 
     @Test
-    public void testAttributesPerTag3(){
+    public void testAttributesPerTag3() {
         //TEST: coords, data, datetime, default, defer, dirname
         assertThat(area().withCoords("0,0,82,126").render(), is("<area coords=\"0,0,82,126\">"));
         assertThat(object().withData("/1/2").render(), is("<object data=\"/1/2\"></object>"));
-        assertThat(time().withDatetime("2015-11-15T22:55:03Z").render(), is("<time datetime=\"2015-11-15T22:55:03Z\"></time>"));
+        assertThat(time().withDatetime("2015-11-15T22:55:03Z").render(),
+          is("<time datetime=\"2015-11-15T22:55:03Z\"></time>"));
         assertThat(object().withData("/1/2").render(), is("<object data=\"/1/2\"></object>"));
         assertThat(track().isDefault().render(), is("<track default>"));
         assertThat(script().isDefer().render(), is("<script defer></script>"));
@@ -54,7 +71,7 @@ public final class AttributesPerTagTest {
     }
 
     @Test
-    public void testAttributesPerTag4(){
+    public void testAttributesPerTag4() {
         //TEST: disabled, download, enctype, for, form, formaction
         assertThat(input().isDisabled().render(), is("<input disabled>"));
         assertThat(a().isDownload().render(), is("<a download></a>"));

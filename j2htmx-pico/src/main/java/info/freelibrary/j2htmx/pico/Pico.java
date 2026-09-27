@@ -127,83 +127,6 @@ public final class Pico {
     }
 
     /**
-     * Theme options for Pico CSS.
-     */
-    public enum Theme {
-        LIGHT("light"),
-        DARK("dark"),
-        AUTO("auto");
-
-        /** The theme string value. */
-        private final String myValue;
-
-        Theme(final String aValue) {
-            myValue = aValue;
-        }
-
-        /**
-         * Gets the CSS value string of this theme.
-         *
-         * @return The theme string value
-         */
-        public String getValue() {
-            return myValue;
-        }
-
-        @Override
-        public String toString() {
-            return myValue;
-        }
-    }
-
-    /**
-     * Color scheme variants supported by Pico CSS v2.
-     */
-    public enum Color {
-        AMBER("amber"),
-        AZURE("azure"),
-        BLUE("blue"),
-        CYAN("cyan"),
-        FUCHSIA("fuchsia"),
-        GREEN("green"),
-        GREY("grey"),
-        INDIGO("indigo"),
-        JADE("jade"),
-        LIME("lime"),
-        ORANGE("orange"),
-        PINK("pink"),
-        PUMPKIN("pumpkin"),
-        PURPLE("purple"),
-        RED("red"),
-        SAND("sand"),
-        SLATE("slate"),
-        VIOLET("violet"),
-        YELLOW("yellow"),
-        ZINC("zinc");
-
-        /** The color scheme string value. */
-        private final String myValue;
-
-        Color(final String aValue) {
-            myValue = aValue;
-        }
-
-        /**
-         * Gets the CSS color scheme name.
-         *
-         * @return The color scheme name
-         */
-        public String getValue() {
-            return myValue;
-        }
-
-        @Override
-        public String toString() {
-            return myValue;
-        }
-    }
-
-    /**
      * Creates a {@code <link>} stylesheet pointing to the default CDN Pico CSS v2.
      *
      * @return A LinkTag element
@@ -393,5 +316,82 @@ public final class Pico {
      */
     public static DialogTag modal(final DomContent... content) {
         return TagCreator.dialog().with(content);
+    }
+
+    /**
+     * Theme options for Pico CSS.
+     */
+    public enum Theme {
+        LIGHT("light"),
+        DARK("dark"),
+        AUTO("auto");
+
+        /** The theme string value. */
+        private final String myValue;
+
+        Theme(final String aValue) {
+            myValue = aValue;
+        }
+
+        /**
+         * Gets the CSS value string of this theme.
+         *
+         * @return The theme string value
+         */
+        public String getValue() {
+            return myValue;
+        }
+
+        @Override
+        public String toString() {
+            return myValue;
+        }
+    }
+
+    /**
+     * Color scheme variants supported by Pico CSS v2.
+     */
+    public enum Color {
+        AMBER("amber"),
+        AZURE("azure"),
+        BLUE("blue"),
+        CYAN("cyan"),
+        FUCHSIA("fuchsia"),
+        GREEN("green"),
+        GREY("grey"),
+        INDIGO("indigo"),
+        JADE("jade"),
+        LIME("lime"),
+        ORANGE("orange"),
+        PINK("pink"),
+        PUMPKIN("pumpkin"),
+        PURPLE("purple"),
+        RED("red"),
+        SAND("sand"),
+        SLATE("slate"),
+        VIOLET("violet"),
+        YELLOW("yellow"),
+        ZINC("zinc");
+
+        /** The color scheme string value. */
+        private final String myValue;
+
+        Color(final String aValue) {
+            myValue = aValue;
+        }
+
+        /**
+         * Gets the CSS color scheme name.
+         *
+         * @return The color scheme name
+         */
+        public String getValue() {
+            return myValue;
+        }
+
+        @Override
+        public String toString() {
+            return myValue;
+        }
     }
 }

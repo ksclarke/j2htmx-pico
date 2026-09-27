@@ -20,7 +20,7 @@ public final class GeneratorUtil {
      * @throws IOException If an I/O error occurs
      */
     public static final void deleteAllFilesInDir(final Path dir) throws IOException {
-        for(final File file : dir.toFile().listFiles()){
+        for (final File file : dir.toFile().listFiles()) {
             System.out.println("deleting " + file.toPath());
             Files.delete(file.toPath());
         }

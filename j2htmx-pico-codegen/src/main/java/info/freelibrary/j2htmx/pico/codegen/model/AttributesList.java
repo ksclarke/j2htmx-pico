@@ -1,18 +1,44 @@
 package info.freelibrary.j2htmx.pico.codegen.model;
 
+import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.AREA;
+import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.AUDIO;
+import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.BODY;
+import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.BUTTON;
+import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.EMBED;
+import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.FORM;
+import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.IFRAME;
+import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.IMAGE;
+import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.INPUT;
+import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.LINK;
+import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.METER;
+import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.OBJECT;
+import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.SCRIPT;
+import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.SELECT;
+import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.SOURCE;
+import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.STYLE;
+import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.TEXTAREA;
+import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.TRACK;
+import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.VIDEO;
+
+import info.freelibrary.util.warnings.PMD;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Arrays;
 
 /**
  * Comprehensive registry of HTML attribute descriptions and their associated tags.
  */
 public final class AttributesList {
 
+    /**
+     * Constructs a new {@code AttributesList}.
+     */
     private AttributesList() {
+        // This is intentionally left empty
     }
 
-    //https://www.w3schools.com/tags/ref_attributes.asp
+    // Cf. https://www.w3schools.com/tags/ref_attributes.asp
 
     /**
      * Retrieves all attribute names applicable to the specified lowercase HTML tag name.
@@ -20,16 +46,15 @@ public final class AttributesList {
      * @param tagLowercase The lowercase tag name
      * @return List of attribute names
      */
-    public static List<String> getCustomAttributesForHtmlTag(final String tagLowercase){
-
+    public static List<String> getCustomAttributesForHtmlTag(final String tagLowercase) {
         final List<String> attrs = new ArrayList<>();
-        for(final AttrD attrD : attributesDescriptive()){
-            if(
-                Arrays.asList(attrD.tags).contains(tagLowercase)
-            ){
+
+        for (final AttrD attrD : attributesDescriptive()) {
+            if (Arrays.asList(attrD.tags).contains(tagLowercase)) {
                 attrs.add(attrD.attr);
             }
         }
+
         return attrs;
     }
 
@@ -40,160 +65,228 @@ public final class AttributesList {
      */
     public static List<AttrD> attributesDescriptive() {
         return Arrays.asList(
-            new AttrD("accept", true, "input"),
-            //new AttrD("accept-charset","form"), //contains dashes, TODO
-            //new AttrD("accesskey"), //global attribute
-            new AttrD("action", true, "form"),
-            //"align", not supported in HTML5
-            new AttrD("alt", true, "area","img","input"),
-            new AttrD("async", false, "script"),
-            new AttrD("autocomplete", false, "form","input"),
-            new AttrD("autofocus", false, "button","input","select","textarea"),
-            new AttrD("autoplay", false, "audio","video"),
-            //"bgcolor", not supported in HTMTL5
-            //"border", not supported in HTML5
-            new AttrD("charset", true, "meta","script"),
-            new AttrD("checked", false, "input"),
-            new AttrD("cite", true, "blockquote","del","ins","q"),
-            //"class" already implemented in Tag.java // global attribute
-            new AttrD("cols", true, "textarea"),
-            new AttrD("colspan", true, "td","th"),
-            new AttrD("content", true, "meta"),
-            //"contenteditable" global attribute, should be in Tag.java
-            new AttrD("controls", false, "audio","video"),
-            new AttrD("coords", true, "area"),
-            new AttrD("data", true, "object"),
-            new AttrD("datetime", true, "del","ins","time"),
-            new AttrD("default", false, "track"),
-            new AttrD("defer", false, "script"),
-            //new AttrD("dir"), //global attribute
-            new AttrD("dirname", true, "input","textarea"),
-            new AttrD("disabled",false, "button","fieldset","input","optgroup","option","select","textarea"),
-            new AttrD("download",false, "a","area"),
-            //new AttrD("draggable") global attribute, should be in Tag.java
-            new AttrD("enctype", true, "form"),
-            new AttrD("for", true, "label","output"),
-            new AttrD("form", true, "button","fieldset","input","label","meter","object","output","select","textarea"),
-            new AttrD("formaction", true, "button","input"),
-            new AttrD("headers", true, "td","th"),
-            new AttrD("height", true, "canvas","embed","iframe","img","input","object","video"),
-            //new AttrD("hidden"), global attribute
-            new AttrD("high", true, "meter"),
-            new AttrD("href", true, "a","area","base","link"),
-            new AttrD("hreflang", true, "a","area","link"),
-            //"http-equiv", //TODO: '-' is problematic in code generation
-            //"id" global attribute, should be in Tag.java
-            new AttrD("ismap", false, "img"),
-            new AttrD("kind", true, "track"),
-            new AttrD("label", true, "track","option","optgroup"),
-            //"lang" global attribute, should be in Tag.java
-            new AttrD("list", true, "input"),
-            new AttrD("loop", false, "audio","video"),
-            new AttrD("low", true, "meter"),
-            new AttrD("max", true, "input","meter","progress"),
-            new AttrD("maxlength", true, "input","textarea"),
-            new AttrD("media", true, "a","area","link","source","style"),
-            new AttrD("method", true, "form"),
-            new AttrD("min", true, "input","meter"),
-            new AttrD("multiple", false, "input","select"),
-            new AttrD("muted", false, "video","audio"),
-            new AttrD("name", true, "button","fieldset","form","iframe","input","map","meta","object","output","param","select","slot","textarea"),
-            new AttrD("novalidate", false, "form"),
-            new AttrD("onabort", true, "audio","embed","img","object","video"),
-            new AttrD("onafterprint", true, "body"),
-            new AttrD("onbeforeprint", true, "body"),
-            new AttrD("onbeforeunload", true, "body"),
-            //new AttrD("onblur"), global attribute
-            new AttrD("oncanplay", true, "audio","embed","object","video"),
-            new AttrD("oncanplaythrough", true, "audio","video"),
+          new AttrD("accept", true, INPUT),
+          //new AttrD("accept-charset","form"), //contains dashes, TODO
+          //new AttrD("accesskey"), //global attribute
+          new AttrD("action", true, FORM),
+          //"align", not supported in HTML5
+          new AttrD("alt", true, AREA, IMAGE, INPUT),
+          new AttrD("async", false, SCRIPT),
+          new AttrD("autocomplete", false, FORM, INPUT),
+          new AttrD("autofocus", false, BUTTON, INPUT, SELECT, TEXTAREA),
+          new AttrD("autoplay", false, AUDIO, VIDEO),
+          //"bgcolor", not supported in HTMTL5
+          //"border", not supported in HTML5
+          new AttrD("charset", true, "meta", SCRIPT),
+          new AttrD("checked", false, INPUT),
+          new AttrD("cite", true, "blockquote", "del", "ins", "q"),
+          //"class" already implemented in Tag.java // global attribute
+          new AttrD("cols", true, TEXTAREA),
+          new AttrD("colspan", true, "td", "th"),
+          new AttrD("content", true, "meta"),
+          //"contenteditable" global attribute, should be in Tag.java
+          new AttrD("controls", false, AUDIO, VIDEO),
+          new AttrD("coords", true, AREA),
+          new AttrD("data", true, OBJECT),
+          new AttrD("datetime", true, "del", "ins", "time"),
+          new AttrD("default", false, TRACK),
+          new AttrD("defer", false, SCRIPT),
+          //new AttrD("dir"), //global attribute
+          new AttrD("dirname", true, INPUT, TEXTAREA),
+          new AttrD("disabled", false, BUTTON, "fieldset", INPUT, "optgroup", "option", SELECT, TEXTAREA),
+          new AttrD("download", false, "a", AREA),
+          //new AttrD("draggable") global attribute, should be in Tag.java
+          new AttrD("enctype", true, FORM),
+          new AttrD("for", true, "label", "output"),
+          new AttrD("form", true, BUTTON, "fieldset", INPUT, "label", METER, OBJECT, "output", SELECT, TEXTAREA),
+          new AttrD("formaction", true, BUTTON, INPUT),
+          new AttrD("headers", true, "td", "th"),
+          new AttrD("height", true, "canvas", EMBED, IFRAME, IMAGE, INPUT, OBJECT, VIDEO),
+          //new AttrD("hidden"), global attribute
+          new AttrD("high", true, METER),
+          new AttrD("href", true, "a", AREA, "base", LINK),
+          new AttrD("hreflang", true, "a", AREA, LINK),
+          //"http-equiv", //TODO: '-' is problematic in code generation
+          //"id" global attribute, should be in Tag.java
+          new AttrD("ismap", false, IMAGE),
+          new AttrD("kind", true, TRACK),
+          new AttrD("label", true, TRACK, "option", "optgroup"),
+          //"lang" global attribute, should be in Tag.java
+          new AttrD("list", true, INPUT),
+          new AttrD("loop", false, AUDIO, VIDEO),
+          new AttrD("low", true, METER),
+          new AttrD("max", true, INPUT, METER, "progress"),
+          new AttrD("maxlength", true, INPUT, TEXTAREA),
+          new AttrD("media", true, "a", AREA, LINK, SOURCE, STYLE),
+          new AttrD("method", true, FORM),
+          new AttrD("min", true, INPUT, METER),
+          new AttrD("multiple", false, INPUT, SELECT),
+          new AttrD("muted", false, VIDEO, AUDIO),
+          new AttrD("name", true, BUTTON, "fieldset", FORM, IFRAME, INPUT, "map", "meta", OBJECT, "output",
+            "param", SELECT, "slot", TEXTAREA),
+          new AttrD("novalidate", false, FORM),
+          new AttrD("onabort", true, AUDIO, EMBED, IMAGE, OBJECT, VIDEO),
+          new AttrD("onafterprint", true, BODY),
+          new AttrD("onbeforeprint", true, BODY),
+          new AttrD("onbeforeunload", true, BODY),
+          //new AttrD("onblur"), global attribute
+          new AttrD("oncanplay", true, AUDIO, EMBED, OBJECT, VIDEO),
+          new AttrD("oncanplaythrough", true, VIDEO, VIDEO),
             /* a bunch of event attributes that are on all visible elements (so should be in Tag.java)
             "onchange",
             "onclick",
             "oncontextmenu",
             "oncopy",
             */
-            new AttrD("oncuechange", true, "track"),
+          new AttrD("oncuechange", true, TRACK),
             /*
             "oncut",
             ...
             "ondrop",
              */
-            new AttrD("ondurationchange", true, "audio","video"),
-            new AttrD("onemptied", true, "audio","video"),
-            new AttrD("onended", true, "audio","video"),
-            new AttrD("onerror", true, "audio","body","embed","img","object","script","style","video"),
-            //new AttrD("onfocus"),// global attribute
-            new AttrD("onhashchange", true, "body"),
-            // ... a bunch of event attributes visible on all elements
-            new AttrD("onload", true, "body","iframe","img","input","link","script","style"),
-            new AttrD("onloadeddata", true, "audio","video"),
-            new AttrD("onloadedmetadata", true, "audio","video"),
-            new AttrD("onloadstart", true, "audio","video"),
-            // ... a bunch of event attributes visible on all elements
-            new AttrD("onoffline", true, "body"),
-            new AttrD("ononline", true, "body"),
-            new AttrD("onpagehide", true, "body"),
-            new AttrD("onpageshow", true, "body"),
-            //new AttrD("onpaste"),// global attribute
-            new AttrD("onpause", true, "audio","video"),
-            new AttrD("onplay", true, "audio","video"),
-            new AttrD("onplaying", true, "audio","video"),
-            new AttrD("onpopstate", true, "body"),
-            new AttrD("onprogress", true, "audio","video"),
-            new AttrD("onratechange", true, "audio","video"),
-            new AttrD("onreset", true, "form"),
-            new AttrD("onresize", true, "body"),
-            //new AttrD("onscroll"), //global attribute
-            new AttrD("onsearch", true, "input"),
-            new AttrD("onseeked", true, "audio","video"),
-            new AttrD("onseeking", true, "audio","video"),
-            //new AttrD("onselect"), //global attribute
-            new AttrD("onstalled", true, "audio","video"),
-            new AttrD("onstorage", true, "body"),
-            new AttrD("onsubmit", true, "form"),
-            new AttrD("onsuspend", true, "audio","video"),
-            new AttrD("ontimeupdate", true, "audio","video"),
-            new AttrD("ontoggle", true, "details"),
-            new AttrD("onunload", true, "body"),
-            new AttrD("onvolumechanged", true, "audio","video"),
-            new AttrD("onwaiting", true, "audio","video"),
-            //new AttrD("onwheel"), //global attribute
-            new AttrD("open", false, "details"),
-            new AttrD("optimum", true, "meter"),
-            new AttrD("pattern", true, "input"),
-            new AttrD("placeholder", true, "input","textarea"),
-            new AttrD("poster", true, "video"),
-            new AttrD("preload", true, "audio","video"),
-            new AttrD("readonly", false, "input","textarea"),
-            new AttrD("rel", true, "a","area","form","link"),
-            new AttrD("required", false, "input","select","textarea"),
-            new AttrD("reversed", false, "ol"),
-            new AttrD("rows", true, "textarea"),
-            new AttrD("rowspan", true, "td","th"),
-            new AttrD("sandbox", false, "iframe"),
-            new AttrD("scope", true, "th"),
-            new AttrD("selected", false, "option"),
-            new AttrD("shape", true, "area"),
-            new AttrD("size", true, "input","select"),
-            new AttrD("sizes", true, "img","link","source"),
-            new AttrD("span", true, "col","colgroup"),
-            //new AttrD("spellcheck"), //global attribute
-            new AttrD("src", true, "audio","embed","iframe","img","input","script","source","track","video"),
-            new AttrD("srcdoc", true, "iframe"),
-            new AttrD("srclang", true, "track"),
-            new AttrD("srcset", true, "img","source"),
-            new AttrD("start", true, "ol"),
-            new AttrD("step", true, "input"),
-            //new AttrD("style"), //global attribute
-            //new AttrD("tabindex"), //global attribute
-            new AttrD("target", true, "a","area","base","form"),
-            //new AttrD("title"), //global attribute
-            //new AttrD("translate"),// global attribute
-            new AttrD("type", true, "a","button","embed","input","link","menu","object","script","source","style"),
-            new AttrD("usemap", true, "img","object"),
-            new AttrD("value", true, "button","data","input","li","option","meter","progress","param"),
-            new AttrD("width", true, "canvas","embed","iframe","img","input","object","video"),
-            new AttrD("wrap", true, "textarea")
+          new AttrD("ondurationchange", true, AUDIO, VIDEO),
+          new AttrD("onemptied", true, AUDIO, VIDEO),
+          new AttrD("onended", true, AUDIO, VIDEO),
+          new AttrD("onerror", true, AUDIO, BODY, EMBED, IMAGE, OBJECT, SCRIPT, STYLE, VIDEO),
+          //new AttrD("onfocus"),// global attribute
+          new AttrD("onhashchange", true, BODY),
+          // ... a bunch of event attributes visible on all elements
+          new AttrD("onload", true, BODY, IFRAME, IMAGE, INPUT, LINK, SCRIPT, STYLE),
+          new AttrD("onloadeddata", true, AUDIO, VIDEO),
+          new AttrD("onloadedmetadata", true, AUDIO, VIDEO),
+          new AttrD("onloadstart", true, AUDIO, VIDEO),
+          // ... a bunch of event attributes visible on all elements
+          new AttrD("onoffline", true, BODY),
+          new AttrD("ononline", true, BODY),
+          new AttrD("onpagehide", true, BODY),
+          new AttrD("onpageshow", true, BODY),
+          //new AttrD("onpaste"),// global attribute
+          new AttrD("onpause", true, AUDIO, VIDEO),
+          new AttrD("onplay", true, AUDIO, VIDEO),
+          new AttrD("onplaying", true, AUDIO, VIDEO),
+          new AttrD("onpopstate", true, BODY),
+          new AttrD("onprogress", true, AUDIO, VIDEO),
+          new AttrD("onratechange", true, AUDIO, VIDEO),
+          new AttrD("onreset", true, FORM),
+          new AttrD("onresize", true, BODY),
+          //new AttrD("onscroll"), //global attribute
+          new AttrD("onsearch", true, INPUT),
+          new AttrD("onseeked", true, AUDIO, VIDEO),
+          new AttrD("onseeking", true, AUDIO, VIDEO),
+          //new AttrD("onselect"), //global attribute
+          new AttrD("onstalled", true, AUDIO, VIDEO),
+          new AttrD("onstorage", true, BODY),
+          new AttrD("onsubmit", true, FORM),
+          new AttrD("onsuspend", true, AUDIO, VIDEO),
+          new AttrD("ontimeupdate", true, AUDIO, VIDEO),
+          new AttrD("ontoggle", true, "details"),
+          new AttrD("onunload", true, BODY),
+          new AttrD("onvolumechanged", true, AUDIO, VIDEO),
+          new AttrD("onwaiting", true, AUDIO, VIDEO),
+          //new AttrD("onwheel"), //global attribute
+          new AttrD("open", false, "details"),
+          new AttrD("optimum", true, METER),
+          new AttrD("pattern", true, INPUT),
+          new AttrD("placeholder", true, INPUT, TEXTAREA),
+          new AttrD("poster", true, VIDEO),
+          new AttrD("preload", true, AUDIO, VIDEO),
+          new AttrD("readonly", false, INPUT, TEXTAREA),
+          new AttrD("rel", true, "a", AREA, FORM, LINK),
+          new AttrD("required", false, INPUT, SELECT, TEXTAREA),
+          new AttrD("reversed", false, "ol"),
+          new AttrD("rows", true, TEXTAREA),
+          new AttrD("rowspan", true, "td", "th"),
+          new AttrD("sandbox", false, IFRAME),
+          new AttrD("scope", true, "th"),
+          new AttrD("selected", false, "option"),
+          new AttrD("shape", true, AREA),
+          new AttrD("size", true, INPUT, SELECT),
+          new AttrD("sizes", true, IMAGE, LINK, SOURCE),
+          new AttrD("span", true, "col", "colgroup"),
+          //new AttrD("spellcheck"), //global attribute
+          new AttrD("src", true, AUDIO, EMBED, IFRAME, IMAGE, INPUT, SCRIPT, SOURCE, TRACK, VIDEO),
+          new AttrD("srcdoc", true, IFRAME),
+          new AttrD("srclang", true, TRACK),
+          new AttrD("srcset", true, IMAGE, SOURCE),
+          new AttrD("start", true, "ol"),
+          new AttrD("step", true, INPUT),
+          //new AttrD("style"), //global attribute
+          //new AttrD("tabindex"), //global attribute
+          new AttrD("target", true, "a", AREA, "base", FORM),
+          //new AttrD("title"), //global attribute
+          //new AttrD("translate"),// global attribute
+          new AttrD("type", true, "a", BUTTON, EMBED, INPUT, LINK, "menu", OBJECT, SCRIPT, SOURCE,
+            "style"),
+          new AttrD("usemap", true, IMAGE, OBJECT),
+          new AttrD("value", true, BUTTON, "data", INPUT, "li", "option", METER, "progress", "param"),
+          new AttrD("width", true, "canvas", EMBED, IFRAME, IMAGE, INPUT, OBJECT, VIDEO),
+          new AttrD("wrap", true, TEXTAREA)
         );
+    }
+
+    /**
+     * A class of constants that includes strings used repeatedly.
+     */
+    static class Names {
+
+        /** The input HTML tag name constant. */
+        static final String INPUT = "input";
+
+        /** The form HTML tag name constant. */
+        static final String FORM = "form";
+
+        /** The area HTML tag name constant. */
+        static final String AREA = "area";
+
+        /** The img HTML tag name constant. */
+        static final String IMAGE = "img";
+
+        /** The script HTML tag name constant. */
+        static final String SCRIPT = "script";
+
+        /** The button HTML tag name constant. */
+        static final String BUTTON = "button";
+
+        /** The select HTML tag name constant. */
+        static final String SELECT = "select";
+
+        /** The textarea HTML tag name constant. */
+        static final String TEXTAREA = "textarea";
+
+        /** The audio HTML tag name constant. */
+        static final String AUDIO = "audio";
+
+        /** The video HTML tag name constant. */
+        static final String VIDEO = "video";
+
+        /** The object HTML tag name constant. */
+        static final String OBJECT = "object";
+
+        /** The track HTML tag name constant. */
+        static final String TRACK = "track";
+
+        /** The option HTML tag name constant. */
+        static final String OPTION = "option";
+
+        /** The meter HTML tag name constant. */
+        static final String METER = "meter";
+
+        /** The embed HTML tag name constant. */
+        static final String EMBED = "embed";
+
+        /** The iframe HTML tag name constant. */
+        static final String IFRAME = "iframe";
+
+        /** The link HTML tag name constant. */
+        static final String LINK = "link";
+
+        /** The source HTML tag name constant. */
+        static final String SOURCE = "source";
+
+        /** The style HTML tag name constant. */
+        static final String STYLE = "style";
+
+        /** The body HTML tag name constant. */
+        static final String BODY = "body";
     }
 }

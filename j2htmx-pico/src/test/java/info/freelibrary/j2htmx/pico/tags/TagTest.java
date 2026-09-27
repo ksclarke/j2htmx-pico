@@ -1,15 +1,5 @@
 package info.freelibrary.j2htmx.pico.tags;
 
-import info.freelibrary.j2htmx.pico.Config;
-import info.freelibrary.j2htmx.pico.attributes.Attribute;
-import info.freelibrary.j2htmx.pico.model.DynamicHrefAttribute;
-import info.freelibrary.j2htmx.pico.tags.specialized.HtmlTag;
-import java.io.File;
-import java.io.FileWriter;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import static info.freelibrary.j2htmx.pico.TagCreator.body;
 import static info.freelibrary.j2htmx.pico.TagCreator.div;
 import static info.freelibrary.j2htmx.pico.TagCreator.footer;
@@ -23,15 +13,26 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import info.freelibrary.j2htmx.pico.Config;
+import info.freelibrary.j2htmx.pico.attributes.Attribute;
+import info.freelibrary.j2htmx.pico.model.DynamicHrefAttribute;
+import info.freelibrary.j2htmx.pico.tags.specialized.HtmlTag;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.io.File;
+import java.io.FileWriter;
+
 public class TagTest {
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         Config.closeEmptyTags = false;
     }
 
     @AfterEach
-    public void tearDown(){
+    public void tearDown() {
         // Restore Config defaults.
         Config.closeEmptyTags = false;
     }
@@ -39,55 +40,55 @@ public class TagTest {
     // TODO Introduce a different concept for a sequence of tags, and require valid names for all Tags.
 
     @Test
-    public void unnamed_containers_do_not_render_tags_or_attributes(){
+    public void unnamed_containers_do_not_render_tags_or_attributes() {
         final Tag<?> tag = new ContainerTag<>(null).attr("xyz", "123");
         assertThat(tag.render(), is(""));
     }
 
     @Test
-    public void unnamed_containers_render_children(){
+    public void unnamed_containers_render_children() {
         final ContainerTag<?> tag = new ContainerTag<>(null)
-            .with(new EmptyTag<>("abc"))
-            .with(new ContainerTag<>("def"))
-            .withText("ghi");
+          .with(new EmptyTag<>("abc"))
+          .with(new ContainerTag<>("def"))
+          .withText("ghi");
         assertThat(tag.render(), is("<abc><def></def>ghi"));
     }
 
     @Test
-    public void named_containers_without_children_only_render_tags_and_attributes(){
+    public void named_containers_without_children_only_render_tags_and_attributes() {
         final Tag<?> tag = new ContainerTag<>("abc").attr("xyz", "123");
         assertThat(tag.render(), is("<abc xyz=\"123\"></abc>"));
     }
 
     @Test
-    public void populated_named_containers_render_tags_attributes_and_children(){
+    public void populated_named_containers_render_tags_attributes_and_children() {
         final Tag<?> tag = new ContainerTag<>("abc")
-            .with(new EmptyTag<>("def"))
-            .with(new ContainerTag<>("ghi"))
-            .withText("jkl")
-            .attr("xyz", "123");
+          .with(new EmptyTag<>("def"))
+          .with(new ContainerTag<>("ghi"))
+          .withText("jkl")
+          .attr("xyz", "123");
         assertThat(tag.render(), is("<abc xyz=\"123\"><def><ghi></ghi>jkl</abc>"));
     }
 
     @Test
-    public void empty_tags_must_be_named(){
-        try{
+    public void empty_tags_must_be_named() {
+        try {
             new EmptyTag<>(null);
             fail("Exception was not thrown.");
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), is("Illegal tag name: null"));
         }
 
-        try{
+        try {
             new EmptyTag<>("");
             fail("Exception was not thrown.");
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), is("Illegal tag name: \"\""));
         }
     }
 
     @Test
-    public void empty_tags_can_be_configured_to_self_close(){
+    public void empty_tags_can_be_configured_to_self_close() {
         // By default they will not be self-closing.
         assertThat(new EmptyTag<>("xyz").render(), is("<xyz>"));
 
@@ -96,17 +97,17 @@ public class TagTest {
     }
 
     @Test
-    public void attributes_are_rendered_in_the_order_that_they_are_defined(){
+    public void attributes_are_rendered_in_the_order_that_they_are_defined() {
         final Tag<?> container = new ContainerTag<>("abc")
-            .attr("a","A")
-            .attr(new Attribute("b","B"))
-            .attr("c");
+          .attr("a", "A")
+          .attr(new Attribute("b", "B"))
+          .attr("c");
         assertThat(container.render(), is("<abc a=\"A\" b=\"B\" c></abc>"));
 
         final Tag<?> tag = new EmptyTag<>("abc")
-            .attr("c")
-            .attr(new Attribute("b","B"))
-            .attr("a","A");
+          .attr("c")
+          .attr(new Attribute("b", "B"))
+          .attr("a", "A");
         assertThat(tag.render(), is("<abc c b=\"B\" a=\"A\">"));
     }
 
@@ -117,13 +118,14 @@ public class TagTest {
         assertThat(testTag.render(), is("<a href=\"http://example.com\"></a>"));
 
         final HtmlTag complexTestTag = html(
-            body(
-                header(),
-                main().with(p("Main stuff...")),
-                footer().condWith(1 == 1, p("Conditional with!"))
-            )
+          body(
+            header(),
+            main().with(p("Main stuff...")),
+            footer().condWith(1 == 1, p("Conditional with!"))
+          )
         );
-        final String expectedResult = "<html><body><header></header><main><p>Main stuff...</p></main><footer><p>Conditional with!</p></footer></body></html>";
+        final String expectedResult = "<html><body><header></header><main><p>Main stuff.." +
+                                      ".</p></main><footer><p>Conditional with!</p></footer></body></html>";
         assertThat(complexTestTag.render(), is((expectedResult)));
     }
 
@@ -142,15 +144,15 @@ public class TagTest {
     @Test
     public void attribute_values_are_converted_to_strings() throws Exception {
         final Tag<?> container = new ContainerTag<>("abc")
-            .attr("string", "value1")
-            .attr("integer", 2)
-            .attr("none", null);
+          .attr("string", "value1")
+          .attr("integer", 2)
+          .attr("none", null);
         assertThat(container.render(), is("<abc string=\"value1\" integer=\"2\" none></abc>"));
 
         final Tag<?> tag = new EmptyTag<>("abc")
-            .attr("string", "value1")
-            .attr("integer", 2)
-            .attr("none", null);
+          .attr("string", "value1")
+          .attr("integer", 2)
+          .attr("none", null);
         assertThat(tag.render(), is("<abc string=\"value1\" integer=\"2\" none>"));
     }
 
@@ -178,7 +180,8 @@ public class TagTest {
 
     @Test
     public void testDynamicAttributeReplacement() throws Exception {
-        final Tag<?> testTagWithAttrValueNull = new ContainerTag<>("a").attr("href", "/link").attr(new DynamicHrefAttribute());
+        final Tag<?> testTagWithAttrValueNull = new ContainerTag<>("a").attr("href", "/link").attr(
+          new DynamicHrefAttribute());
         assertThat(testTagWithAttrValueNull.render(), is("<a href=\"/\"></a>"));
     }
 

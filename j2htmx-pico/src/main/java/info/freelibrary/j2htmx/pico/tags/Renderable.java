@@ -16,8 +16,8 @@ public interface Renderable {
      * Render the Renderable and it's children using the supplied builder.
      *
      * @param builder A builder that can compose HTML elements.
-     * @param model   A model object to provide data for children to render.
-     * @param <T>     The type of the Appendable which HTML is being appended to.
+     * @param model A model object to provide data for children to render.
+     * @param <T> The type of the Appendable which HTML is being appended to.
      * @return The Appendable to which HTML has been appended.
      * @throws IOException If an I/O error occurs.
      */
@@ -33,7 +33,7 @@ public interface Renderable {
      * Render the Renderable and it's children using the supplied builder.
      *
      * @param builder A builder that can compose HTML elements.
-     * @param <T>     The type of the Appendable to which HTML is being appended.
+     * @param <T> The type of the Appendable to which HTML is being appended.
      * @return The Appendable to which HTML has been appended.
      * @throws IOException If an I/O error occurs.
      */
@@ -42,8 +42,7 @@ public interface Renderable {
     }
 
     /**
-     * Create a StringBuilder and use it to render the Renderable and it's
-     * children.
+     * Create a StringBuilder and use it to render the Renderable and it's children.
      *
      * @return The rendered HTML string
      */
@@ -74,7 +73,7 @@ public interface Renderable {
      * Render the Renderable and it's children using the supplied writer and a model.
      *
      * @param writer the current writer
-     * @param model  a model object to provide data for children to render
+     * @param model a model object to provide data for children to render
      * @throws IOException If an I/O error occurs.
      */
     @Deprecated
@@ -83,6 +82,8 @@ public interface Renderable {
         // which previously extended Renderable implementers, such as Tags.
         // No internal classes should implement this method; except to support
         // compatibility.  Instead they should implement rendering with an HtmlBuilder.
-        throw new RuntimeException("Renderable.renderModel(Appendable writer, Object model) has been deprecated.  Please use Renderable.render(HtmlBuilder<T> builder, Object model) instead.");
+        throw new RuntimeException(
+          "Renderable.renderModel(Appendable writer, Object model) has been deprecated.  Please use Renderable.render" +
+          "(HtmlBuilder<T> builder, Object model) instead.");
     }
 }

@@ -1,6 +1,5 @@
 package info.freelibrary.j2htmx.pico.tags;
 
-import org.junit.jupiter.api.Test;
 import static info.freelibrary.j2htmx.pico.TagCreator.a;
 import static info.freelibrary.j2htmx.pico.TagCreator.div;
 import static info.freelibrary.j2htmx.pico.TagCreator.form;
@@ -10,6 +9,8 @@ import static info.freelibrary.j2htmx.pico.TagCreator.link;
 import static info.freelibrary.j2htmx.pico.TagCreator.meta;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+
+import org.junit.jupiter.api.Test;
 
 public class ConvenienceMethodTest {
 
@@ -29,15 +30,16 @@ public class ConvenienceMethodTest {
         assertThat(div().withData("testdata", "test").render(), is("<div data-testdata=\"test\"></div>"));
         assertThat(form().withMethod("get").render(), is("<form method=\"get\"></form>"));
         assertThat(input().withName("test-name").render(), is("<input name=\"test-name\">"));
-        assertThat(input().withPlaceholder("test-placeholder").render(), is("<input placeholder=\"test-placeholder\">"));
+        assertThat(input().withPlaceholder("test-placeholder").render(),
+          is("<input placeholder=\"test-placeholder\">"));
         assertThat(a().withTarget("_blank").render(), is("<a target=\"_blank\"></a>"));
         assertThat(a().withTitle("Title").render(), is("<a title=\"Title\"></a>"));
-        assertThat(input().attr("type","email").render(), is("<input type=\"email\">"));
+        assertThat(input().attr("type", "email").render(), is("<input type=\"email\">"));
         assertThat(link().withRel("stylesheet").render(), is("<link rel=\"stylesheet\">"));
-        assertThat(link().attr("role","role").render(), is("<link role=\"role\">"));
+        assertThat(link().attr("role", "role").render(), is("<link role=\"role\">"));
         assertThat(img().withSrc("/img/test.png").render(), is("<img src=\"/img/test.png\">"));
         assertThat(input().withStep("0.1").render(), is("<input step=\"0.1\">"));
         assertThat(div().withStyle("background:red;").render(), is("<div style=\"background:red;\"></div>"));
-        assertThat(input().attr("value","test-value").render(), is("<input value=\"test-value\">"));
+        assertThat(input().attr("value", "test-value").render(), is("<input value=\"test-value\">"));
     }
 }

@@ -13,6 +13,7 @@ public interface Instance<T> {
 
     // this method shows up in autocomplete.
     // this is really undesireable as it does not do anything.
+
     /**
      * Returns this instance cast to type {@code T}.
      *

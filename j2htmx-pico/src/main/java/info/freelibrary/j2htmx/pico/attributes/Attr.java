@@ -337,7 +337,8 @@ public abstract class Attr {
     public static final String ROLE_SEARCH = "search";
 
     /**
-     * Parses a CSS-like selector shorthand string (e.g. {@code "#my-id.class1.class2"}) into a {@link ShortForm} attribute.
+     * Parses a CSS-like selector shorthand string (e.g. {@code "#my-id.class1.class2"}) into a {@link ShortForm}
+     * attribute.
      *
      * @param attrs A selector string containing an optional ID and classes
      * @return A ShortForm instance containing the parsed ID and classes

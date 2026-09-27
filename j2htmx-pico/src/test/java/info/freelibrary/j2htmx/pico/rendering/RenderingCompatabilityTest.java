@@ -1,14 +1,17 @@
 package info.freelibrary.j2htmx.pico.rendering;
 
+import static info.freelibrary.j2htmx.pico.TagCreator.div;
+import static info.freelibrary.j2htmx.pico.TagCreator.input;
+import static info.freelibrary.j2htmx.pico.TagCreator.rawHtml;
+import static info.freelibrary.j2htmx.pico.TagCreator.text;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import info.freelibrary.j2htmx.pico.attributes.Attribute;
 import info.freelibrary.j2htmx.pico.tags.DomContent;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-
-import static info.freelibrary.j2htmx.pico.TagCreator.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 
 public class RenderingCompatabilityTest {
 
@@ -46,12 +49,12 @@ public class RenderingCompatabilityTest {
         // regular DomContent.  Those client classes should continue to work
         // even though HtmlBuilders are the newer approach to rendering.
         final DomContent dom = div(
-            new DomContent() {
-                @Override
-                public void renderModel(final Appendable writer, final Object model) throws IOException {
-                    writer.append(String.valueOf(model));
-                }
-            }
+          new DomContent() {
+              @Override
+              public void renderModel(final Appendable writer, final Object model) throws IOException {
+                  writer.append(String.valueOf(model));
+              }
+          }
         );
 
         // Default rendering assumes a null model. Ensure that
@@ -68,13 +71,14 @@ public class RenderingCompatabilityTest {
 
         // Rendering with an HtmlBuilder defers to the original methods.
         assertThat(
-            dom.render(FlatHtml.inMemory(), "success").toString(),
-            is("<div>success</div>")
+          dom.render(FlatHtml.inMemory(), "success").toString(),
+          is("<div>success</div>")
         );
     }
 
     @Test
-    public void client_classes_which_implement_attribute_rendering_continue_to_work_with_Attribute_builder() throws IOException {
+    public void client_classes_which_implement_attribute_rendering_continue_to_work_with_Attribute_builder()
+    throws IOException {
         final Attribute mock = new MockAttribute("XXX", "fail");
 
         // Stand-alone rendering.
@@ -85,20 +89,20 @@ public class RenderingCompatabilityTest {
         assertThat(stringBuilder.toString(), is(" mock=\"null\""));
 
         assertThat(
-            mock.render(FlatHtml.inMemory(), "success").toString(),
-            is(" mock=\"success\"")
+          mock.render(FlatHtml.inMemory(), "success").toString(),
+          is(" mock=\"success\"")
         );
 
         // In empty tags.
         assertThat(
-            input().attr(mock).render(FlatHtml.inMemory(), "success").toString(),
-            is("<input mock=\"success\">")
+          input().attr(mock).render(FlatHtml.inMemory(), "success").toString(),
+          is("<input mock=\"success\">")
         );
 
         // In container tags.
         assertThat(
-            div().attr(mock).render(FlatHtml.inMemory(), "success").toString(),
-            is("<div mock=\"success\"></div>")
+          div().attr(mock).render(FlatHtml.inMemory(), "success").toString(),
+          is("<div mock=\"success\"></div>")
         );
     }
 

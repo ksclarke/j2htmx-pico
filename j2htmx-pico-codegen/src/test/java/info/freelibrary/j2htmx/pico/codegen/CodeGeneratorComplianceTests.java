@@ -1,5 +1,9 @@
 package info.freelibrary.j2htmx.pico.codegen;
 
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import info.freelibrary.j2htmx.pico.codegen.generators.TagCreatorCodeGenerator;
 import info.freelibrary.j2htmx.pico.codegen.wattsi.ElementDefinition;
 import info.freelibrary.j2htmx.pico.codegen.wattsi.WattsiSource;
@@ -16,31 +20,27 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 public class CodeGeneratorComplianceTests {
 
     private WattsiSource specification;
 
     @BeforeEach
     public void setUp() throws IOException {
-        final Path source = Paths.get("src","test","resources","2022-01.wattsi");
+        final Path source = Paths.get("src", "test", "resources", "2022-01.wattsi");
         final Document doc = Jsoup.parse(source.toFile(), "UTF-8", "https://html.spec.whatwg.org/");
         specification = new WattsiSource(doc);
     }
 
-    private Set<String> generatedElements(){
+    private Set<String> generatedElements() {
         final Set<String> elements = new HashSet<>();
         elements.addAll(TagCreatorCodeGenerator.emptyTags());
         elements.addAll(TagCreatorCodeGenerator.containerTags());
         return elements;
     }
 
-    private Set<String> specifiedElements(final WattsiSource source){
+    private Set<String> specifiedElements(final WattsiSource source) {
         final Set<String> elements = new HashSet<>();
-        for(final ElementDefinition element : source.elementDefinitions()){
+        for (final ElementDefinition element : source.elementDefinitions()) {
             elements.add(element.name());
         }
         return elements;
@@ -53,10 +53,10 @@ public class CodeGeneratorComplianceTests {
         final Set<String> generated = generatedElements();
 
         final List<String> undefined = specification.elementDefinitions().stream()
-            .filter(element -> !element.isObsolete())
-            .filter(element -> !generated.contains(element.name()))
-            .map(ElementDefinition::name)
-            .collect(toList());
+          .filter(element -> !element.isObsolete())
+          .filter(element -> !generated.contains(element.name()))
+          .map(ElementDefinition::name)
+          .collect(toList());
 
         assertEquals(emptyList(), undefined, "HTML elements are missing");
         // Currently missing (and mostly deprecated):
@@ -64,12 +64,12 @@ public class CodeGeneratorComplianceTests {
     }
 
     @Test
-    public void only_wattsi_elements_are_defined_in_the_code_generator(){
+    public void only_wattsi_elements_are_defined_in_the_code_generator() {
         final Set<String> specified = specifiedElements(specification);
 
         final List<String> invalid = generatedElements().stream()
-            .filter(element -> !specified.contains(element))
-            .collect(toList());
+          .filter(element -> !specified.contains(element))
+          .collect(toList());
 
         assertEquals(emptyList(), invalid, "HTML elements are invalid");
     }

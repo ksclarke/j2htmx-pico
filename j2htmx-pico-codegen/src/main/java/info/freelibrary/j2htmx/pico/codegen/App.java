@@ -1,7 +1,7 @@
 package info.freelibrary.j2htmx.pico.codegen;
 
-import info.freelibrary.j2htmx.pico.codegen.generators.SpecializedTagClassCodeGenerator;
 import info.freelibrary.j2htmx.pico.codegen.generators.AttributeInterfaceCodeGenerator;
+import info.freelibrary.j2htmx.pico.codegen.generators.SpecializedTagClassCodeGenerator;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -10,8 +10,7 @@ import java.nio.file.Paths;
 /**
  * Standalone application runner for invoking code generation.
  */
-public final class App
-{
+public final class App {
     private App() {
     }
 
@@ -20,12 +19,11 @@ public final class App
      *
      * @param args Command-line arguments
      */
-    public static void main( final String[] args )
-    {
+    public static void main(final String[] args) {
         final Path relPath = Paths.get("../library/src/main/java/j2html/");
         final Path absPath = relPath.toAbsolutePath();
 
-        System.out.println("writing in "+absPath);
+        System.out.println("writing in " + absPath);
 
         //decide if the files should be
         //deleted or generated

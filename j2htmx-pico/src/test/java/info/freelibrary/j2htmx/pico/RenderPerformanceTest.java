@@ -1,12 +1,5 @@
 package info.freelibrary.j2htmx.pico;
 
-import info.freelibrary.j2htmx.pico.model.BrowserTitle;
-import info.freelibrary.j2htmx.pico.model.Button;
-import info.freelibrary.j2htmx.pico.model.ButtonModel;
-import info.freelibrary.j2htmx.pico.model.PageModel;
-import info.freelibrary.j2htmx.pico.model.TextTemplate;
-import info.freelibrary.j2htmx.pico.tags.DomContent;
-import org.junit.jupiter.api.Test;
 import static info.freelibrary.j2htmx.pico.TagCreator.attrs;
 import static info.freelibrary.j2htmx.pico.TagCreator.body;
 import static info.freelibrary.j2htmx.pico.TagCreator.div;
@@ -18,13 +11,64 @@ import static info.freelibrary.j2htmx.pico.TagCreator.p;
 import static info.freelibrary.j2htmx.pico.TagCreator.title;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import info.freelibrary.j2htmx.pico.model.BrowserTitle;
+import info.freelibrary.j2htmx.pico.model.Button;
+import info.freelibrary.j2htmx.pico.model.ButtonModel;
+import info.freelibrary.j2htmx.pico.model.PageModel;
+import info.freelibrary.j2htmx.pico.model.TextTemplate;
+import info.freelibrary.j2htmx.pico.tags.DomContent;
+import org.junit.jupiter.api.Test;
+
 public class RenderPerformanceTest {
-    final String expected = "<html><head><title>Browsertitle</title></head><body><h1>Hello World!</h1><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><p>Hello World!</p></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div><h2 id=\"title\" class=\"visible-small\">Hello World!</h2><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><p>Hello World!</p></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div><h2>Hello World!</h2><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><p>Hello World!</p></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div><h2 id=\"title\" class=\"visible-small\">Hello World!</h2><div class=\"button\"><div class=\"button-text\">Action!</div></div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><p>Hello World!</p></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div><h2>Hello World!</h2><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><p>Hello World!</p></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div><h1>Hello World!</h1><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><p>Hello World!</p></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div><h2>Hello World!</h2><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><p>Hello World!</p></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div><h2>Hello World!</h2><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><p>Hello World!</p></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div><h2>Hello World!</h2><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><p>Hello World!</p></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div><h2>Hello World!</h2><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><p>Hello World!</p></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></body></html>";
+    final String expected = "<html><head><title>Browsertitle</title></head><body><h1>Hello " +
+                            "World!</h1><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div" +
+                            "><div><div><div><div><div><div><div><div><div><div><div><p>Hello " +
+                            "World!</p></div></div></div></div></div></div></div></div></div></div></div></div></div" +
+                            "></div></div></div></div></div></div></div></div></div></div></div></div></div><h2 " +
+                            "id=\"title\" class=\"visible-small\">Hello " +
+                            "World!</h2><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div" +
+                            "><div><div><div><div><div><div><div><div><div><div><div><p>Hello " +
+                            "World!</p></div></div></div></div></div></div></div></div></div></div></div></div></div" +
+                            "></div></div></div></div></div></div></div></div></div></div></div></div></div><h2>Hello" +
+                            " World!</h2><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div" +
+                            "><div><div><div><div><div><div><div><div><div><div><div><p>Hello " +
+                            "World!</p></div></div></div></div></div></div></div></div></div></div></div></div></div" +
+                            "></div></div></div></div></div></div></div></div></div></div></div></div></div><h2 " +
+                            "id=\"title\" class=\"visible-small\">Hello World!</h2><div class=\"button\"><div " +
+                            "class=\"button-text\">Action!</div></div><div><div><div><div><div><div><div><div><div" +
+                            "><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div><p" +
+                            ">Hello World!</p></div></div></div></div></div></div></div></div></div></div></div></div" +
+                            "></div></div></div></div></div></div></div></div></div></div></div></div></div></div><h2" +
+                            ">Hello World!</h2><div><div><div><div><div><div><div><div><div><div><div><div><div><div" +
+                            "><div><div><div><div><div><div><div><div><div><div><div><div><p>Hello " +
+                            "World!</p></div></div></div></div></div></div></div></div></div></div></div></div></div" +
+                            "></div></div></div></div></div></div></div></div></div></div></div></div></div><h1>Hello" +
+                            " World!</h1><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div" +
+                            "><div><div><div><div><div><div><div><div><div><div><div><p>Hello " +
+                            "World!</p></div></div></div></div></div></div></div></div></div></div></div></div></div" +
+                            "></div></div></div></div></div></div></div></div></div></div></div></div></div><h2>Hello" +
+                            " World!</h2><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div" +
+                            "><div><div><div><div><div><div><div><div><div><div><div><p>Hello " +
+                            "World!</p></div></div></div></div></div></div></div></div></div></div></div></div></div" +
+                            "></div></div></div></div></div></div></div></div></div></div></div></div></div><h2>Hello" +
+                            " World!</h2><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div" +
+                            "><div><div><div><div><div><div><div><div><div><div><div><p>Hello " +
+                            "World!</p></div></div></div></div></div></div></div></div></div></div></div></div></div" +
+                            "></div></div></div></div></div></div></div></div></div></div></div></div></div><h2>Hello" +
+                            " World!</h2><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div" +
+                            "><div><div><div><div><div><div><div><div><div><div><div><p>Hello " +
+                            "World!</p></div></div></div></div></div></div></div></div></div></div></div></div></div" +
+                            "></div></div></div></div></div></div></div></div></div></div></div></div></div><h2>Hello" +
+                            " World!</h2><div><div><div><div><div><div><div><div><div><div><div><div><div><div><div" +
+                            "><div><div><div><div><div><div><div><div><div><div><div><p>Hello " +
+                            "World!</p></div></div></div></div></div></div></div></div></div></div></div></div></div" +
+                            "></div></div></div></div></div></div></div></div></div></div></div></div></div></body" +
+                            "></html>";
     private final DomContent template;
 
     public RenderPerformanceTest() {
         this.template =
-            // @formatter:off
+          // @formatter:off
                 html(
                      head(
                           title(new BrowserTitle())
@@ -58,7 +102,7 @@ public class RenderPerformanceTest {
 
     private DomContent getDomContent(final PageModel pageModel) throws Exception {
         return
-            // @formatter:off
+          // @formatter:off
         html(
              head(
                   title(pageModel.getTitle())

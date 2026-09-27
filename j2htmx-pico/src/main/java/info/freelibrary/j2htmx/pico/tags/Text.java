@@ -33,8 +33,8 @@ public class Text extends DomContent {
     @Deprecated
     public void renderModel(final Appendable writer, final Object model) throws IOException {
         final HtmlBuilder<?> builder = (writer instanceof HtmlBuilder)
-            ? (HtmlBuilder<?>) writer
-            : FlatHtml.into(writer, Config.global());
+          ? (HtmlBuilder<?>) writer
+          : FlatHtml.into(writer, Config.global());
 
         render(builder, model);
     }

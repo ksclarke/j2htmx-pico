@@ -33,12 +33,12 @@ public final class AttributeInterfaceCodeGenerator {
     public static void generate(final Path absPath, final boolean delete) throws IOException {
 
         //delete all files in the directory for fresh generation
-        final Path dir = Paths.get(absPath.toString(),relPath);
+        final Path dir = Paths.get(absPath.toString(), relPath);
         GeneratorUtil.deleteAllFilesInDir(dir);
 
         for (final AttrD attr : AttributesList.attributesDescriptive()) {
             final Path path = makePath(attr.attr, absPath);
-            final String interfaceName = interfaceNameFromAttribute(attr.attr)+"<T extends Tag<T>>";
+            final String interfaceName = interfaceNameFromAttribute(attr.attr) + "<T extends Tag<T>>";
             /*
             FormAction<T extends Tag<T>> extends Instance<T>
 
@@ -47,48 +47,48 @@ public final class AttributeInterfaceCodeGenerator {
             }
              */
             final String interfaceStr = getInterfaceTemplate(
-                interfaceName,
-                Optional.of("Instance<T>"),
-                Arrays.asList("info.freelibrary.j2htmx.pico.tags.Tag","info.freelibrary.j2htmx.pico.tags.Instance"),
-                interfaceNameFromAttribute(attr.attr),
-                attr
+              interfaceName,
+              Optional.of("Instance<T>"),
+              Arrays.asList("info.freelibrary.j2htmx.pico.tags.Tag", "info.freelibrary.j2htmx.pico.tags.Instance"),
+              interfaceNameFromAttribute(attr.attr),
+              attr
             );
 
             if (!delete) {
-                System.out.println("writing to "+path);
+                System.out.println("writing to " + path);
                 Files.write(path, interfaceStr.getBytes());
             }
         }
 
     }
 
-    private static String getPackage(){
+    private static String getPackage() {
         return "package info.freelibrary.j2htmx.pico.tags.attributes;\n";
     }
 
-    private static String makeReturnTypeAndMethodName(final String name){
-        return "default "+ "T "+name;
+    private static String makeReturnTypeAndMethodName(final String name) {
+        return "default " + "T " + name;
     }
 
     private static String getInterfaceTemplate(
-        final String interfaceName,
-        final Optional<String> optExtends,
-        final List<String> imports,
-        final String interfaceNameSimple,
-        final AttrD attrD
-    ){
+      final String interfaceName,
+      final Optional<String> optExtends,
+      final List<String> imports,
+      final String interfaceNameSimple,
+      final AttrD attrD
+    ) {
 
         final StringBuilder sb = new StringBuilder();
 
         sb.append(getPackage());
         sb.append("\n");
 
-        for(final String importName : imports){
+        for (final String importName : imports) {
             sb.append("import ").append(importName).append(";\n");
         }
         sb.append("\n");
         sb.append("public interface ")
-            .append(interfaceName);
+          .append(interfaceName);
 
         optExtends.ifPresent(ext -> sb.append(" extends ").append(ext).append(" "));
 
@@ -105,7 +105,7 @@ public final class AttributeInterfaceCodeGenerator {
         //IMPORTANT: '_' added as suffix to mitigate problems
         //where attributes are java keywords. Just to make it consistent and avoid special cases.
         final String attrName = interfaceNameSimple.toLowerCase();
-        final String paramName = attrName+"_";
+        final String paramName = attrName + "_";
 
         //depending on if the attribute has an argument or not,
         //generate methods according to the convention in Tag.java
@@ -121,14 +121,14 @@ public final class AttributeInterfaceCodeGenerator {
         return sb.toString();
     }
 
-    private static void addAttributeNoArg(final StringBuilder sb, final String attrName){
+    private static void addAttributeNoArg(final StringBuilder sb, final String attrName) {
         //generate the code to add an attribute without an argument
 
         //there are some special attributes
         //which do take an argument, but where the argument
         //is boolean (meaning on/off, yes/no and the like)
         sb.append("self().attr(\"");
-        if (attrName.equals("autocomplete")){
+        if (attrName.equals("autocomplete")) {
             sb.append(attrName).append("\",\"on\"");
         } else {
             sb.append(attrName).append("\"");
@@ -136,52 +136,54 @@ public final class AttributeInterfaceCodeGenerator {
         sb.append(");\n");
     }
 
-    private static void writeAttributeMethodCond(final String interfaceNameSimple, final AttrD attrD, final StringBuilder sb, final String attrName, final String paramName) {
+    private static void writeAttributeMethodCond(final String interfaceNameSimple, final AttrD attrD,
+      final StringBuilder sb, final String attrName, final String paramName) {
 
-        sb.append(makeReturnTypeAndMethodName("withCond"+interfaceNameSimple));
+        sb.append(makeReturnTypeAndMethodName("withCond" + interfaceNameSimple));
 
-        if(attrD.hasArgument){
+        if (attrD.hasArgument) {
             //add a variant where you can specify the argument
 
             sb.append("(final boolean enable, final String ").append(paramName).append(") {");
 
-                sb.append("if (enable){\n");
-                    sb.append("self().attr(\"").append(attrName).append("\", ").append(paramName).append(");\n");
-                sb.append("}\n");
+            sb.append("if (enable){\n");
+            sb.append("self().attr(\"").append(attrName).append("\", ").append(paramName).append(");\n");
+            sb.append("}\n");
 
-                sb.append("return self();\n");
-        }else{
+            sb.append("return self();\n");
+        } else {
             //add a variant where you can toggle the attribute
 
             sb.append("(final boolean enable) {");
-                sb.append("if (enable){\n");
-                    addAttributeNoArg(sb, attrName);
-                sb.append("}\n");
-                sb.append("return self();\n");
+            sb.append("if (enable){\n");
+            addAttributeNoArg(sb, attrName);
+            sb.append("}\n");
+            sb.append("return self();\n");
         }
         sb.append("}\n");
     }
 
-    private static void writeAttributeMethod(final String interfaceNameSimple, final AttrD attrD, final StringBuilder sb, final String attrName, final String paramName) {
+    private static void writeAttributeMethod(final String interfaceNameSimple, final AttrD attrD,
+      final StringBuilder sb, final String attrName, final String paramName) {
 
         sb.append(makeReturnTypeAndMethodName(
-            ((attrD.hasArgument)?"with":"is")+interfaceNameSimple)
+          ((attrD.hasArgument) ? "with" : "is") + interfaceNameSimple)
         );
 
-        if(attrD.hasArgument){
+        if (attrD.hasArgument) {
             //add a variant where you can specify the argument
 
             sb.append("(final String ").append(paramName).append(") {")
 
-                .append("return self().attr(\"").append(attrName).append("\", ").append(paramName).append(");\n");
-        }else{
+              .append("return self().attr(\"").append(attrName).append("\", ").append(paramName).append(");\n");
+        } else {
             //add a variant where you can toggle the attribute
 
             sb.append("() {");
 
-                addAttributeNoArg(sb, attrName);
+            addAttributeNoArg(sb, attrName);
 
-                sb.append("return self();\n");
+            sb.append("return self();\n");
         }
         sb.append("}\n");
     }
@@ -192,13 +194,13 @@ public final class AttributeInterfaceCodeGenerator {
      * @param attribute The attribute name
      * @return The interface name with first letter capitalized
      */
-    public static String interfaceNameFromAttribute(final String attribute){
-        return attribute.substring(0,1).toUpperCase()+attribute.substring(1);
+    public static String interfaceNameFromAttribute(final String attribute) {
+        return attribute.substring(0, 1).toUpperCase() + attribute.substring(1);
     }
 
-    private static Path makePath(final String tagLowerCase, final Path absPath){
-        final String filename = interfaceNameFromAttribute(tagLowerCase)+".java";
-        return Paths.get(absPath.toString(),relPath,filename);
+    private static Path makePath(final String tagLowerCase, final Path absPath) {
+        final String filename = interfaceNameFromAttribute(tagLowerCase) + ".java";
+        return Paths.get(absPath.toString(), relPath, filename);
     }
 
 }

@@ -1,6 +1,9 @@
 package info.freelibrary.j2htmx.pico.codegen.generators;
 
 
+import static info.freelibrary.j2htmx.pico.codegen.generators.TagCreatorCodeGenerator.containerTags;
+import static info.freelibrary.j2htmx.pico.codegen.generators.TagCreatorCodeGenerator.emptyTags;
+
 import info.freelibrary.j2htmx.pico.codegen.GeneratorUtil;
 import info.freelibrary.j2htmx.pico.codegen.model.AttributesList;
 
@@ -12,9 +15,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static info.freelibrary.j2htmx.pico.codegen.generators.TagCreatorCodeGenerator.containerTags;
-import static info.freelibrary.j2htmx.pico.codegen.generators.TagCreatorCodeGenerator.emptyTags;
 
 /**
  * Code generator that outputs specialized HTML tag classes extending ContainerTag or EmptyTag.
@@ -37,7 +37,7 @@ public final class SpecializedTagClassCodeGenerator {
     public static void generate(final Path absPath, final boolean delete) throws IOException {
 
         //delete all files in the directory for fresh generation
-        final Path dir = Paths.get(absPath.toString(),relPath);
+        final Path dir = Paths.get(absPath.toString(), relPath);
         GeneratorUtil.deleteAllFilesInDir(dir);
 
         //the delete argument serves to give the possibility
@@ -46,20 +46,20 @@ public final class SpecializedTagClassCodeGenerator {
 
         for (final String tag : emptyTags()) {
             final String className = classNameFromTag(tag);
-            final Path path = makePath(absPath,tag);
+            final Path path = makePath(absPath, tag);
 
             final List<String> interfaceNames = getInterfaceNamesForTag(tag);
 
             final String classString =
               getClassTemplate(
-                  className,
-                  Optional.of("EmptyTag<"+className+">"),
-                  Arrays.asList(
-                      "info.freelibrary.j2htmx.pico.tags.EmptyTag",
-                      "info.freelibrary.j2htmx.pico.tags.attributes.*"
-                      ),
-                  tag,
-                  interfaceNames
+                className,
+                Optional.of("EmptyTag<" + className + ">"),
+                Arrays.asList(
+                  "info.freelibrary.j2htmx.pico.tags.EmptyTag",
+                  "info.freelibrary.j2htmx.pico.tags.attributes.*"
+                ),
+                tag,
+                interfaceNames
               );
 
             /*
@@ -68,8 +68,8 @@ public final class SpecializedTagClassCodeGenerator {
             }
             */
 
-            if(!delete){
-                System.out.println("writing to "+path);
+            if (!delete) {
+                System.out.println("writing to " + path);
                 Files.write(path, classString.getBytes());
             }
         }
@@ -83,81 +83,82 @@ public final class SpecializedTagClassCodeGenerator {
             final List<String> interfaceNames = getInterfaceNamesForTag(tag);
 
             final String classString =
-                getClassTemplate(
-                    className,
-                    Optional.of("ContainerTag<"+className+">"),
-                    Arrays.asList(
-                        "info.freelibrary.j2htmx.pico.tags.ContainerTag",
-                        "info.freelibrary.j2htmx.pico.tags.attributes.*"
-                    ),
-                    tag,
-                    interfaceNames
-                );
+              getClassTemplate(
+                className,
+                Optional.of("ContainerTag<" + className + ">"),
+                Arrays.asList(
+                  "info.freelibrary.j2htmx.pico.tags.ContainerTag",
+                  "info.freelibrary.j2htmx.pico.tags.attributes.*"
+                ),
+                tag,
+                interfaceNames
+              );
 
-            if(delete){
-                if(Files.exists(path)) {
+            if (delete) {
+                if (Files.exists(path)) {
                     System.out.println("deleting " + path);
                     Files.delete(path);
                 }
-            }else {
-                System.out.println("writing to "+path);
+            } else {
+                System.out.println("writing to " + path);
                 Files.write(path, classString.getBytes());
             }
         }
     }
+
     /**
      * Converts an HTML tag name into its corresponding class name.
      *
      * @param tageNameLowerCase The lowercase tag name
      * @return The Java class name with "Tag" suffix
      */
-    public static String classNameFromTag(final String tageNameLowerCase){
-        final String res = tageNameLowerCase.substring(0,1).toUpperCase()+tageNameLowerCase.substring(1);
+    public static String classNameFromTag(final String tageNameLowerCase) {
+        final String res = tageNameLowerCase.substring(0, 1).toUpperCase() + tageNameLowerCase.substring(1);
         return res + "Tag";
     }
 
-    private static Path makePath(final Path absPath, final String tagLowerCase){
-        final String filename = classNameFromTag(tagLowerCase)+".java";
-        return Paths.get(absPath.toString(),relPath,filename);
+    private static Path makePath(final Path absPath, final String tagLowerCase) {
+        final String filename = classNameFromTag(tagLowerCase) + ".java";
+        return Paths.get(absPath.toString(), relPath, filename);
     }
 
-    private static String getPackage(){
+    private static String getPackage() {
         return "package info.freelibrary.j2htmx.pico.tags.specialized;\n";
     }
 
     private static String getClassTemplate(
-        final String className,
-        final Optional<String> optExtends,
-        final List<String> imports,
-        final String tag,
-        final List<String> interfaces
-    ){
+      final String className,
+      final Optional<String> optExtends,
+      final List<String> imports,
+      final String tag,
+      final List<String> interfaces
+    ) {
 
         final StringBuilder sb = new StringBuilder();
 
         sb.append(getPackage());
         sb.append("\n");
 
-        for(final String importName : imports){
+        for (final String importName : imports) {
             sb.append("import ").append(importName).append(";\n");
         }
         sb.append("\n");
         sb.append("public final class ")
-            .append(className)
-            .append(" ");
+          .append(className)
+          .append(" ");
 
         optExtends.ifPresent(ext -> sb.append("extends ").append(ext).append(" "));
 
         //add the 'implements' clause
-        if(!interfaces.isEmpty()) {
+        if (!interfaces.isEmpty()) {
             sb.append("\n");
             sb.append("implements ");
 
             final List<String> genericInterfaceNames
-                = interfaces.stream().map(iName -> iName+"<"+className+">")
-                .collect(Collectors.toList());
+              = interfaces.stream().map(iName -> iName + "<" + className + ">")
+              .collect(Collectors.toList());
             sb.append(
-                String.join(",", genericInterfaceNames)
+              String.join(",", genericInterfaceNames)
             );
         }
 
@@ -165,22 +166,22 @@ public final class SpecializedTagClassCodeGenerator {
 
         //class contents
         sb.append("public ")
-            .append(className)
-            .append("() {")
-            .append("super(\"").append(tag).append("\");")
-            .append("}\n");
+          .append(className)
+          .append("() {")
+          .append("super(\"").append(tag).append("\");")
+          .append("}\n");
 
         sb.append("}\n");
 
         return sb.toString();
     }
 
-    private static List<String> getInterfaceNamesForTag(final String tagNameLowercase){
+    private static List<String> getInterfaceNamesForTag(final String tagNameLowercase) {
         return AttributesList.getCustomAttributesForHtmlTag(tagNameLowercase)
-            .stream()
-            .map(
-                AttributeInterfaceCodeGenerator::interfaceNameFromAttribute
-            ).collect(Collectors.toList());
+          .stream()
+          .map(
+            AttributeInterfaceCodeGenerator::interfaceNameFromAttribute
+          ).collect(Collectors.toList());
     }
 
 }

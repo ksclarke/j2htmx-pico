@@ -18,7 +18,7 @@ public class EscapeUtil {
         if (s == null) {
             return null;
         }
-        final StringBuilder escapedText = new StringBuilder(s.length()+16);
+        final StringBuilder escapedText = new StringBuilder(s.length() + 16);
         char currentChar;
         for (int i = 0; i < s.length(); i++) {
             currentChar = s.charAt(i);

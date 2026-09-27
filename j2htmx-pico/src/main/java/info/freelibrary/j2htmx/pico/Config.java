@@ -14,59 +14,55 @@ import java.util.Collections;
  */
 public class Config {
 
+    /** Constant representing four space characters used for indentation. */
+    private static final String FOUR_SPACES = "    ";
+    /** Default configuration instance with standard settings. */
+    private static final Config DEFAULTS = new Config(
+      EscapeUtil::escape,
+      CSSMin::compressCss,
+      JSMin::compressJs,
+      false,
+      (level, text) -> String.join("", Collections.nCopies(level, FOUR_SPACES)) + text
+    );
     /**
-     * Change this to configure text-escaping
-     * For example, to disable escaping, do {@code Config.textEscaper = text -> text;}
+     * Change this to configure text-escaping For example, to disable escaping, do
+     * {@code Config.textEscaper = text -> text;}
      */
     public static volatile TextEscaper textEscaper = EscapeUtil::escape;
     /**
-     * Change this to configure css-minification.
-     * The default minifier is https://github.com/barryvan/CSSMin
+     * Change this to configure css-minification. The default minifier is https://github.com/barryvan/CSSMin
      */
     public static volatile Minifier cssMinifier = CSSMin::compressCss;
     /**
-     * Change this to configure js-minification.
-     * The default minifier is a simple whitespace/newline stripper
+     * Change this to configure js-minification. The default minifier is a simple whitespace/newline stripper
      */
     public static volatile Minifier jsMinifier = JSMin::compressJs;
     /**
-     * Change this to configure enable/disable closing empty tags
-     * The default is to NOT close them
+     * Change this to configure enable/disable closing empty tags The default is to NOT close them
      */
     public static volatile boolean closeEmptyTags = false;
-
-    /** Constant representing four space characters used for indentation. */
-    private static final String FOUR_SPACES = "    ";
-
     /**
-     * Change this to configure indentation when rendering formatted html
-     * The default is four spaces
+     * Change this to configure indentation when rendering formatted html The default is four spaces
      */
-    public static volatile Indenter indenter = (level, text) -> String.join("", Collections.nCopies(level, FOUR_SPACES)) + text;
-
-
+    public static volatile Indenter indenter = (level, text) -> String.join("",
+      Collections.nCopies(level, FOUR_SPACES)) + text;
     /** The configured text escaper. */
     private TextEscaper _textEscaper;
-
     /** The configured CSS minifier. */
     private Minifier _cssMinifier;
-
     /** The configured JavaScript minifier. */
     private Minifier _jsMinifier;
-
     /** Whether empty tags should be closed. */
     private boolean _closeEmptyTags;
-
     /** The configured HTML indenter. */
     private Indenter _indenter;
 
-
     private Config(
-        final TextEscaper _textEscaper,
-        final Minifier _cssMinifier,
-        final Minifier _jsMinifier,
-        final boolean _closeEmptyTags,
-        final Indenter _indenter
+      final TextEscaper _textEscaper,
+      final Minifier _cssMinifier,
+      final Minifier _jsMinifier,
+      final boolean _closeEmptyTags,
+      final Indenter _indenter
     ) {
         this._textEscaper = _textEscaper;
         this._cssMinifier = _cssMinifier;
@@ -86,6 +82,30 @@ public class Config {
         this._jsMinifier = original._jsMinifier;
         this._closeEmptyTags = original._closeEmptyTags;
         this._indenter = original._indenter;
+    }
+
+    /**
+     * Returns the default configuration.
+     *
+     * @return The default Config instance
+     */
+    public static final Config defaults() {
+        return DEFAULTS;
+    }
+
+    /**
+     * Returns a new configuration snapshot reflecting the current global static settings.
+     *
+     * @return A Config instance with global settings
+     */
+    public static final Config global() {
+        return new Config(
+          textEscaper,
+          cssMinifier,
+          jsMinifier,
+          closeEmptyTags,
+          indenter
+        );
     }
 
     /**
@@ -139,7 +159,7 @@ public class Config {
      * @param textEscaper The text escaper
      * @return A new Config instance
      */
-    public Config withTextEscaper(final TextEscaper textEscaper){
+    public Config withTextEscaper(final TextEscaper textEscaper) {
         final Config copy = new Config(this);
         copy._textEscaper = textEscaper;
         return copy;
@@ -151,7 +171,7 @@ public class Config {
      * @param cssMinifier The CSS minifier
      * @return A new Config instance
      */
-    public Config withCssMinifier(final Minifier cssMinifier){
+    public Config withCssMinifier(final Minifier cssMinifier) {
         final Config copy = new Config(this);
         copy._cssMinifier = cssMinifier;
         return copy;
@@ -163,7 +183,7 @@ public class Config {
      * @param jsMinifier The JavaScript minifier
      * @return A new Config instance
      */
-    public Config withJsMinifier(final Minifier jsMinifier){
+    public Config withJsMinifier(final Minifier jsMinifier) {
         final Config copy = new Config(this);
         copy._jsMinifier = jsMinifier;
         return copy;
@@ -175,7 +195,7 @@ public class Config {
      * @param closeEmptyTags Whether empty tags should be closed
      * @return A new Config instance
      */
-    public Config withEmptyTagsClosed(final boolean closeEmptyTags){
+    public Config withEmptyTagsClosed(final boolean closeEmptyTags) {
         final Config copy = new Config(this);
         copy._closeEmptyTags = closeEmptyTags;
         return copy;
@@ -187,43 +207,10 @@ public class Config {
      * @param indenter The indenter
      * @return A new Config instance
      */
-    public Config withIndenter(final Indenter indenter){
+    public Config withIndenter(final Indenter indenter) {
         final Config copy = new Config(this);
         copy._indenter = indenter;
         return copy;
-    }
-
-    /** Default configuration instance with standard settings. */
-    private static final Config DEFAULTS = new Config(
-        EscapeUtil::escape,
-        CSSMin::compressCss,
-        JSMin::compressJs,
-        false,
-        (level, text) -> String.join("", Collections.nCopies(level, FOUR_SPACES)) + text
-    );
-
-    /**
-     * Returns the default configuration.
-     *
-     * @return The default Config instance
-     */
-    public static final Config defaults() {
-        return DEFAULTS;
-    }
-
-    /**
-     * Returns a new configuration snapshot reflecting the current global static settings.
-     *
-     * @return A Config instance with global settings
-     */
-    public static final Config global() {
-        return new Config(
-            textEscaper,
-            cssMinifier,
-            jsMinifier,
-            closeEmptyTags,
-            indenter
-        );
     }
 
 }

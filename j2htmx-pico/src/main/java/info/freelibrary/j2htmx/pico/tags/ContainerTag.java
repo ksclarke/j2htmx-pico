@@ -2,10 +2,10 @@ package info.freelibrary.j2htmx.pico.tags;
 
 import info.freelibrary.j2htmx.pico.Config;
 import info.freelibrary.j2htmx.pico.attributes.Attribute;
-import info.freelibrary.j2htmx.pico.rendering.TagBuilder;
 import info.freelibrary.j2htmx.pico.rendering.FlatHtml;
 import info.freelibrary.j2htmx.pico.rendering.HtmlBuilder;
 import info.freelibrary.j2htmx.pico.rendering.IndentedHtml;
+import info.freelibrary.j2htmx.pico.rendering.TagBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,11 +52,10 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
 
 
     /**
-     * Call with-method based on condition
-     * {@link #with(DomContent)}
+     * Call with-method based on condition {@link #with(DomContent)}
      *
      * @param condition the condition to use
-     * @param child     DomContent-object to be appended if condition met
+     * @param child DomContent-object to be appended if condition met
      * @return itself for easy chaining
      */
     public T condWith(final boolean condition, final DomContent child) {
@@ -81,11 +80,10 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
 
 
     /**
-     * Call with-method based on condition
-     * {@link #with(java.lang.Iterable)}
+     * Call with-method based on condition {@link #with(java.lang.Iterable)}
      *
      * @param condition the condition to use
-     * @param children  DomContent-objects to be appended if condition met
+     * @param children DomContent-objects to be appended if condition met
      * @return itself for easy chaining
      */
     public T condWith(final boolean condition, final Iterable<? extends DomContent> children) {
@@ -120,11 +118,10 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
 
 
     /**
-     * Call with-method based on condition
-     * {@link #with(DomContent...)}
+     * Call with-method based on condition {@link #with(DomContent...)}
      *
      * @param condition the condition to use
-     * @param children  DomContent-objects to be appended if condition met
+     * @param children DomContent-objects to be appended if condition met
      * @return itself for easy chaining
      */
     public T condWith(final boolean condition, final DomContent... children) {
@@ -152,16 +149,15 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
     }
 
     /**
-     * Render the ContainerTag and its children, adding newlines before each
-     * child and using Config.indenter to indent child based on how deep
-     * in the tree it is
+     * Render the ContainerTag and its children, adding newlines before each child and using Config.indenter to indent
+     * child based on how deep in the tree it is
      *
      * @return the rendered and formatted string
      */
     public String renderFormatted() {
         try {
             return render(IndentedHtml.into(new StringBuilder(), Config.global())).toString();
-        }catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
@@ -170,17 +166,17 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
     public <A extends Appendable> A render(final HtmlBuilder<A> builder, final Object model) throws IOException {
         if (hasTagName()) {
             final TagBuilder tagBuilder = builder.appendStartTag(getTagName());
-            for(final Attribute attribute : getAttributes()){
+            for (final Attribute attribute : getAttributes()) {
                 attribute.render(tagBuilder, model);
             }
             tagBuilder.completeTag();
         }
 
-        for(final DomContent child : children){
+        for (final DomContent child : children) {
             child.render(builder, model);
         }
 
-        if(hasTagName()) {
+        if (hasTagName()) {
             builder.appendEndTag(getTagName());
         }
 
@@ -191,8 +187,8 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
     @Deprecated
     public void renderModel(final Appendable writer, final Object model) throws IOException {
         final HtmlBuilder<?> builder = (writer instanceof HtmlBuilder)
-            ? (HtmlBuilder<?>) writer
-            : FlatHtml.into(writer, Config.global());
+          ? (HtmlBuilder<?>) writer
+          : FlatHtml.into(writer, Config.global());
 
         render(builder, model);
     }

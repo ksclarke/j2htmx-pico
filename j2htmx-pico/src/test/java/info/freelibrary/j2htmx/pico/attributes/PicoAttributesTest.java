@@ -1,10 +1,16 @@
 package info.freelibrary.j2htmx.pico.attributes;
 
-import org.junit.jupiter.api.Test;
-import static info.freelibrary.j2htmx.pico.TagCreator.*;
+import static info.freelibrary.j2htmx.pico.TagCreator.a;
+import static info.freelibrary.j2htmx.pico.TagCreator.button;
+import static info.freelibrary.j2htmx.pico.TagCreator.div;
+import static info.freelibrary.j2htmx.pico.TagCreator.form;
+import static info.freelibrary.j2htmx.pico.TagCreator.html;
+import static info.freelibrary.j2htmx.pico.TagCreator.input;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
+
+import org.junit.jupiter.api.Test;
 
 public class PicoAttributesTest {
 
@@ -26,9 +32,9 @@ public class PicoAttributesTest {
     @Test
     public void testTooltipAndPlacement() {
         final String html = button("Submit")
-            .withDataTooltip("Helpful text")
-            .withDataPlacement("bottom")
-            .render();
+          .withDataTooltip("Helpful text")
+          .withDataPlacement("bottom")
+          .render();
         assertThat(html, containsString("data-tooltip=\"Helpful text\""));
         assertThat(html, containsString("data-placement=\"bottom\""));
     }
@@ -36,9 +42,9 @@ public class PicoAttributesTest {
     @Test
     public void testCondTooltipAndPlacement() {
         final String html = button("Submit")
-            .withCondDataTooltip(true, "Visible tooltip")
-            .withCondDataPlacement(false, "top")
-            .render();
+          .withCondDataTooltip(true, "Visible tooltip")
+          .withCondDataPlacement(false, "top")
+          .render();
         assertThat(html, containsString("data-tooltip=\"Visible tooltip\""));
         assertThat(html, not(containsString("data-placement")));
     }

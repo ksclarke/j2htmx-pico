@@ -1,11 +1,12 @@
 package info.freelibrary.j2htmx.pico;
 
-import info.freelibrary.j2htmx.pico.utils.EscapeUtil;
-import info.freelibrary.j2htmx.pico.utils.TextEscaper;
-import org.junit.jupiter.api.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+
+import info.freelibrary.j2htmx.pico.utils.EscapeUtil;
+import info.freelibrary.j2htmx.pico.utils.TextEscaper;
+import org.junit.jupiter.api.Test;
 
 public class TextEscaperTest {
 
@@ -13,15 +14,15 @@ public class TextEscaperTest {
     public void testTextEscaper() throws Exception {
         String expected = "&lt;div&gt;&lt;/div&gt;";
         assertThat("default text escaper works",
-            Config.textEscaper.escape("<div></div>"), is(expected));
+          Config.textEscaper.escape("<div></div>"), is(expected));
 
         Config.textEscaper = new NoOpEscaper();
         assertThat("user can change text escaper implementation",
-            Config.textEscaper, is(instanceOf(NoOpEscaper.class)));
+          Config.textEscaper, is(instanceOf(NoOpEscaper.class)));
 
         expected = "<div></div>";
         assertThat("user provided text escaper actually works",
-            Config.textEscaper.escape("<div></div>"), is(expected));
+          Config.textEscaper.escape("<div></div>"), is(expected));
         Config.textEscaper = EscapeUtil::escape; // reset escaper
     }
 

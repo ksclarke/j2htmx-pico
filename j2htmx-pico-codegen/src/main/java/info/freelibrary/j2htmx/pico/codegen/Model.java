@@ -1,10 +1,16 @@
 package info.freelibrary.j2htmx.pico.codegen;
 
-import java.util.*;
-
 import static info.freelibrary.j2htmx.pico.codegen.Model.Metadata.ON_OFF;
 import static info.freelibrary.j2htmx.pico.codegen.Model.Metadata.SELF_CLOSING;
-import static info.freelibrary.j2htmx.pico.codegen.Model.Node.Type.*;
+import static info.freelibrary.j2htmx.pico.codegen.Model.Node.Type.BOOLEAN;
+import static info.freelibrary.j2htmx.pico.codegen.Model.Node.Type.ELEMENT;
+import static info.freelibrary.j2htmx.pico.codegen.Model.Node.Type.STRING;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Represents the parsed HTML/MathML tag and attribute definition model.
@@ -30,7 +36,7 @@ public class Model implements Parser.Listener {
      *
      * @return Collection of element nodes
      */
-    public Collection<Node> elements(){
+    public Collection<Node> elements() {
         return elements.values();
     }
 
@@ -39,7 +45,7 @@ public class Model implements Parser.Listener {
      *
      * @return Collection of attribute nodes
      */
-    public Collection<Node> attributes(){
+    public Collection<Node> attributes() {
         return attributes.values();
     }
 
@@ -149,6 +155,26 @@ public class Model implements Parser.Listener {
         throw new RuntimeException("Invalid line [" + line + "]: " + txt);
     }
 
+    private void attempt(final Unsafe operation, final int line) {
+        try {
+            operation.call();
+        } catch (RuntimeException e) {
+            throw new InvalidModel(e, line);
+        }
+    }
+
+    /**
+     * Metadata tags applied to model elements and attributes.
+     */
+    public enum Metadata {
+        /** Indicates an element is self-closing/void. */
+        SELF_CLOSING,
+        /** Indicates a boolean attribute uses "on"/"off" syntax. */
+        ON_OFF,
+        /** Indicates an element or attribute is obsolete. */
+        OBSOLETE
+    }
+
     /**
      * Functional interface representing an operation that may throw a RuntimeException.
      */
@@ -163,40 +189,17 @@ public class Model implements Parser.Listener {
         void call() throws RuntimeException;
     }
 
-    private void attempt(final Unsafe operation, final int line) {
-        try {
-            operation.call();
-        } catch (RuntimeException e) {
-            throw new InvalidModel(e, line);
-        }
-    }
-
     /**
      * Represents an element or attribute node within the model.
      */
     public static class Node {
 
-        /**
-         * The type of model node.
-         */
-        enum Type {
-            /** Element node type. */
-            ELEMENT,
-            /** Boolean attribute node type. */
-            BOOLEAN,
-            /** String attribute node type. */
-            STRING
-        }
-
         /** The type of this node. */
         public final Type type;
-
         /** The name of this node. */
         public final String name;
-
         /** Metadata annotations associated with this node. */
         public final List<Metadata> metadata;
-
         /** Child nodes under this node. */
         public final List<Node> children;
 
@@ -231,21 +234,21 @@ public class Model implements Parser.Listener {
          * @param annotation The metadata annotation to test
          * @return True if present, false otherwise
          */
-        public boolean is(final Metadata annotation){
+        public boolean is(final Metadata annotation) {
             return metadata.contains(annotation);
         }
-    }
 
-    /**
-     * Metadata tags applied to model elements and attributes.
-     */
-    public enum Metadata {
-        /** Indicates an element is self-closing/void. */
-        SELF_CLOSING,
-        /** Indicates a boolean attribute uses "on"/"off" syntax. */
-        ON_OFF,
-        /** Indicates an element or attribute is obsolete. */
-        OBSOLETE
+        /**
+         * The type of model node.
+         */
+        enum Type {
+            /** Element node type. */
+            ELEMENT,
+            /** Boolean attribute node type. */
+            BOOLEAN,
+            /** String attribute node type. */
+            STRING
+        }
     }
 
     /**

@@ -84,20 +84,20 @@ public class Attribute implements Renderable {
     }
 
     /**
-     * Sets the attribute value.
-     *
-     * @param value The attribute value
-     */
-    public void setValue(final String value) {
-        this.value = value;
-    }
-
-    /**
      * Gets the attribute value.
      *
      * @return The attribute value, or null if boolean
      */
     public String getValue() {
         return value;
+    }
+
+    /**
+     * Sets the attribute value.
+     *
+     * @param value The attribute value
+     */
+    public void setValue(final String value) {
+        this.value = value;
     }
 }

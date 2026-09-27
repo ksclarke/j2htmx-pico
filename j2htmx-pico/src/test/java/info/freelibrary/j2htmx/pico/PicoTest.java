@@ -1,17 +1,42 @@
 package info.freelibrary.j2htmx.pico;
 
-import org.junit.jupiter.api.Test;
-
-import static info.freelibrary.j2htmx.pico.TagCreator.*;
+import static info.freelibrary.j2htmx.pico.TagCreator.a;
+import static info.freelibrary.j2htmx.pico.TagCreator.article;
+import static info.freelibrary.j2htmx.pico.TagCreator.body;
+import static info.freelibrary.j2htmx.pico.TagCreator.button;
+import static info.freelibrary.j2htmx.pico.TagCreator.container;
+import static info.freelibrary.j2htmx.pico.TagCreator.div;
+import static info.freelibrary.j2htmx.pico.TagCreator.form;
+import static info.freelibrary.j2htmx.pico.TagCreator.grid;
+import static info.freelibrary.j2htmx.pico.TagCreator.h1;
+import static info.freelibrary.j2htmx.pico.TagCreator.h2;
+import static info.freelibrary.j2htmx.pico.TagCreator.head;
+import static info.freelibrary.j2htmx.pico.TagCreator.header;
+import static info.freelibrary.j2htmx.pico.TagCreator.html;
+import static info.freelibrary.j2htmx.pico.TagCreator.hxPartial;
+import static info.freelibrary.j2htmx.pico.TagCreator.input;
+import static info.freelibrary.j2htmx.pico.TagCreator.li;
+import static info.freelibrary.j2htmx.pico.TagCreator.main;
+import static info.freelibrary.j2htmx.pico.TagCreator.p;
+import static info.freelibrary.j2htmx.pico.TagCreator.picoCss;
+import static info.freelibrary.j2htmx.pico.TagCreator.summary;
+import static info.freelibrary.j2htmx.pico.TagCreator.title;
+import static info.freelibrary.j2htmx.pico.TagCreator.ul;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.endsWith;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.startsWith;
+
+import org.junit.jupiter.api.Test;
 
 public class PicoTest {
 
     @Test
     public void testCssLinkDefault() {
         final String html = Pico.css().render();
-        assertThat(html, is("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css\">"));
+        assertThat(html,
+          is("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css\">"));
     }
 
     @Test
@@ -26,22 +51,27 @@ public class PicoTest {
     @Test
     public void testCssLinkWithVersion() {
         final String html = Pico.css("2.0.6").render();
-        assertThat(html, is("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css\">"));
+        assertThat(html,
+          is("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css\">"));
     }
 
     @Test
     public void testCssLinkWithVersionAndColorScheme() {
         final String html = Pico.css("2.0.6", "amber").render();
-        assertThat(html, is("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.amber.min.css\">"));
+        assertThat(html, is(
+          "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.amber.min" +
+          ".css\">"));
     }
 
     @Test
     public void testCssLinkWithColorEnum() {
         final String htmlDefaultWithColor = Pico.css(Pico.Color.AZURE).render();
-        assertThat(htmlDefaultWithColor, is("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.azure.min.css\">"));
+        assertThat(htmlDefaultWithColor,
+          is("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.azure.min.css\">"));
 
         final String htmlVersionedWithColor = Pico.css("2.1.0", Pico.Color.ZINC).render();
-        assertThat(htmlVersionedWithColor, is("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2.1.0/css/pico.zinc.min.css\">"));
+        assertThat(htmlVersionedWithColor, is(
+          "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2.1.0/css/pico.zinc.min.css\">"));
     }
 
     @Test
@@ -82,10 +112,12 @@ public class PicoTest {
     @Test
     public void testDropdown() {
         final String htmlWithSummaryTag = Pico.dropdown(summary("Options"), a("Link 1")).render();
-        assertThat(htmlWithSummaryTag, is("<details class=\"dropdown\"><summary>Options</summary><a>Link 1</a></details>"));
+        assertThat(htmlWithSummaryTag,
+          is("<details class=\"dropdown\"><summary>Options</summary><a>Link 1</a></details>"));
 
         final String htmlWithStringSummary = Pico.dropdown("Actions", button("Action 1")).render();
-        assertThat(htmlWithStringSummary, is("<details class=\"dropdown\"><summary>Actions</summary><button>Action 1</button></details>"));
+        assertThat(htmlWithStringSummary,
+          is("<details class=\"dropdown\"><summary>Actions</summary><button>Action 1</button></details>"));
     }
 
     @Test
@@ -109,11 +141,11 @@ public class PicoTest {
     @Test
     public void testHtmxAndPicoSynergy() {
         final String html = Pico.grid(
-            button("Save")
-                .asButton()
-                .isAriaBusy()
-                .withHxPost("/api/save")
-                .withHxTarget("#result")
+          button("Save")
+            .asButton()
+            .isAriaBusy()
+            .withHxPost("/api/save")
+            .withHxTarget("#result")
         ).render();
 
         assertThat(html, containsString("class=\"grid\""));
@@ -127,67 +159,67 @@ public class PicoTest {
     public void testReadmeExamples() {
         // Basic Use Example
         final String basicHtml = html(
-            head(
-                title("Basic Example")
+          head(
+            title("Basic Example")
+          ),
+          body(
+            header(
+              h1("Welcome to j2htmx-pico")
             ),
-            body(
-                header(
-                    h1("Welcome to j2htmx-pico")
-                ),
-                main(
-                    p("Generate type-safe HTML directly in Java with minimal runtime overhead."),
-                    ul(
-                        li("Compile-time safety for element hierarchies"),
-                        li("Zero reflection or external template parsing costs"),
-                        li("Fluent tag chaining and conditional attributes")
-                    )
-                )
+            main(
+              p("Generate type-safe HTML directly in Java with minimal runtime overhead."),
+              ul(
+                li("Compile-time safety for element hierarchies"),
+                li("Zero reflection or external template parsing costs"),
+                li("Fluent tag chaining and conditional attributes")
+              )
             )
+          )
         ).render();
         assertThat(basicHtml, containsString("<h1>Welcome to j2htmx-pico</h1>"));
 
         // HTMX Example
         final String htmxBtn = button("Load Items")
-            .withHxGet("/api/items")
-            .withHxTarget("#item-list")
-            .withHxSwap("innerHTML")
-            .withHxIndicator("#loading-spinner")
-            .render();
+          .withHxGet("/api/items")
+          .withHxTarget("#item-list")
+          .withHxSwap("innerHTML")
+          .withHxIndicator("#loading-spinner")
+          .render();
         assertThat(htmxBtn, containsString("hx-get=\"/api/items\""));
 
         final String partialResponse = hxPartial(
-            div("Update successful!").withId("status-message"),
-            ul(li("Updated item 1"), li("Updated item 2")).withId("item-list")
+          div("Update successful!").withId("status-message"),
+          ul(li("Updated item 1"), li("Updated item 2")).withId("item-list")
         ).render();
         assertThat(partialResponse, containsString("<hx-partial"));
 
         // Pico CSS Example
         final String page = html(
-            head(
-                title("Pico CSS Dashboard"),
-                picoCss()
-            ),
-            body(
-                container(
-                    h2("Interactive Form"),
-                    Pico.card(
-                        form(
-                            grid(
-                                input().withType("text").withName("name").withPlaceholder("Name"),
-                                input().withType("email").withName("email").withPlaceholder("Email")
-                            ),
-                            button("Submit")
-                                .asButton()
-                                .isAriaBusy()
-                                .withDataTooltip("Click to save record")
-                                .withDataPlacement("top")
-                                .withHxPost("/api/users")
-                                .withHxTarget("#result")
-                        )
-                    ),
-                    div().withId("result")
+          head(
+            title("Pico CSS Dashboard"),
+            picoCss()
+          ),
+          body(
+            container(
+              h2("Interactive Form"),
+              Pico.card(
+                form(
+                  grid(
+                    input().withType("text").withName("name").withPlaceholder("Name"),
+                    input().withType("email").withName("email").withPlaceholder("Email")
+                  ),
+                  button("Submit")
+                    .asButton()
+                    .isAriaBusy()
+                    .withDataTooltip("Click to save record")
+                    .withDataPlacement("top")
+                    .withHxPost("/api/users")
+                    .withHxTarget("#result")
                 )
+              ),
+              div().withId("result")
             )
+          )
         ).withDataTheme("dark").render();
         assertThat(page, containsString("data-theme=\"dark\""));
         assertThat(page, containsString("class=\"container\""));

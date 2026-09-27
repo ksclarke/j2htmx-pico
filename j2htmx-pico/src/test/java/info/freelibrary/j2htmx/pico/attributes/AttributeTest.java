@@ -1,10 +1,10 @@
 package info.freelibrary.j2htmx.pico.attributes;
 
-import info.freelibrary.j2htmx.pico.tags.ContainerTag;
-import org.junit.jupiter.api.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+
+import info.freelibrary.j2htmx.pico.tags.ContainerTag;
+import org.junit.jupiter.api.Test;
 
 public class AttributeTest {
 

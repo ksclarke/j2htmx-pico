@@ -1,15 +1,20 @@
 package info.freelibrary.j2htmx.pico.codegen.wattsi;
 
+import static java.util.stream.Collectors.toList;
+
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * Parses and extracts element and attribute definitions from a WHATWG HTML specification document.
@@ -31,41 +36,42 @@ public class WattsiSource {
         this.doc = doc;
 
         // Find where obsolete elements are defined or referenced.
-        final Elements obsoleteElements = doc.select("p:contains(Elements in the following list are entirely obsolete) + dl");
+        final Elements obsoleteElements = doc.select(
+          "p:contains(Elements in the following list are entirely obsolete) + dl");
 
         // Convert definitions into references to record obsolete elements.
         obsoleteElements.select("dt > dfn[element]")
-            .stream()
-            .map(WattsiElement::new)
-            .map(WattsiElement::reference)
-            .forEach(obsolete::add);
+          .stream()
+          .map(WattsiElement::new)
+          .map(WattsiElement::reference)
+          .forEach(obsolete::add);
 
         // Extract references to record obsolete elements.
         obsoleteElements.select("dt > code")
-            .stream()
-            .map(Element::childNodes)
-            .map(Reference::from)
-            .forEach(obsolete::add);
+          .stream()
+          .map(Element::childNodes)
+          .map(Reference::from)
+          .forEach(obsolete::add);
 
         // Find where obsolete attributes are defined or referenced.
         final Elements obsoleteAttributes = doc.select("p:contains(The following attributes are obsolete) + dl");
 
         // Convert definitions into references to record obsolete attributes.
         obsoleteAttributes.select("dt > dfn[element-attr]").stream()
-            .map(WattsiAttribute::new)
-            .map(WattsiAttribute::reference)
-            .forEach(obsolete::add);
+          .map(WattsiAttribute::new)
+          .map(WattsiAttribute::reference)
+          .forEach(obsolete::add);
 
-//        System.out.println(obsoleteAttributes.select("dt"));
+        //        System.out.println(obsoleteAttributes.select("dt"));
 
-//        obsoleteAttributes.select("dt > code").stream()
-//            .map(Element::childNodes)
-//            .map(Reference::from)
-//            .forEach(System.err::println);
+        //        obsoleteAttributes.select("dt > code").stream()
+        //            .map(Element::childNodes)
+        //            .map(Reference::from)
+        //            .forEach(System.err::println);
 
-//        System.out.println(
-//            doc.select("dfn[obsolete]")
-//        );
+        //        System.out.println(
+        //            doc.select("dfn[obsolete]")
+        //        );
     }
 
     /**
@@ -75,8 +81,8 @@ public class WattsiSource {
      */
     public List<ElementDefinition> elementDefinitions() {
         return doc.select("dfn[element]").stream()
-            .map(WattsiElement::new)
-            .collect(toList());
+          .map(WattsiElement::new)
+          .collect(toList());
     }
 
     /**
@@ -86,8 +92,78 @@ public class WattsiSource {
      */
     public List<AttributeDefinition> attributeDefinitions() {
         return doc.select("dfn[element-attr]").stream()
-            .map(WattsiAttribute::new)
-            .collect(toList());
+          .map(WattsiAttribute::new)
+          .collect(toList());
+    }
+
+    /**
+     * Internal reference representation pairing a unique key with display text.
+     */
+    private static class Reference {
+
+        /** The normalized lookup key. */
+        private final String key;
+
+        /** The display text. */
+        private final String text;
+
+        Reference(final String key, final String text) {
+            this.key = key;
+            this.text = text;
+        }
+
+        /**
+         * Creates a Reference from a list of DOM child nodes.
+         *
+         * @param nodes The child nodes to inspect
+         * @return A Reference instance or null if not resolved
+         */
+        public static Reference from(final List<Node> nodes) {
+            if (nodes.stream().allMatch(n -> n instanceof TextNode)) {
+                final String txt = nodes.stream()
+                  .map(n -> (TextNode) n)
+                  .map(TextNode::text)
+                  .collect(Collectors.joining(" "));
+                return new Reference(txt, txt);
+            }
+
+            for (final Node node : nodes) {
+                if (node instanceof Element) {
+                    final Element element = (Element) node;
+                    if (element.is("code") || element.is("span")) {
+                        if (element.hasAttr("data-x")) {
+                            return new Reference(element.attr("data-x").toLowerCase(), element.text());
+                        } else {
+                            return new Reference(element.text().toLowerCase(), element.text());
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        @Override
+        public String toString() {
+            return key + "[" + text + "]";
+        }
+
+        @Override
+        public boolean equals(final Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            final Reference reference = (Reference) o;
+            return key.equals(reference.key);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(key);
+        }
     }
 
     /**
@@ -181,76 +257,6 @@ public class WattsiSource {
         @Override
         public boolean isObsolete() {
             return obsolete.contains(reference());
-        }
-    }
-
-    /**
-     * Internal reference representation pairing a unique key with display text.
-     */
-    private static class Reference {
-
-        /** The normalized lookup key. */
-        private final String key;
-
-        /** The display text. */
-        private final String text;
-
-        Reference(final String key, final String text) {
-            this.key = key;
-            this.text = text;
-        }
-
-        @Override
-        public String toString() {
-            return key + "[" + text + "]";
-        }
-
-        @Override
-        public boolean equals(final Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-            final Reference reference = (Reference) o;
-            return key.equals(reference.key);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(key);
-        }
-
-        /**
-         * Creates a Reference from a list of DOM child nodes.
-         *
-         * @param nodes The child nodes to inspect
-         * @return A Reference instance or null if not resolved
-         */
-        public static Reference from(final List<Node> nodes) {
-            if (nodes.stream().allMatch(n -> n instanceof TextNode)) {
-                final String txt = nodes.stream()
-                    .map(n -> (TextNode) n)
-                    .map(TextNode::text)
-                    .collect(Collectors.joining(" "));
-                return new Reference(txt, txt);
-            }
-
-            for (final Node node : nodes) {
-                if (node instanceof Element) {
-                    final Element element = (Element) node;
-                    if (element.is("code") || element.is("span")) {
-                        if (element.hasAttr("data-x")) {
-                            return new Reference(element.attr("data-x").toLowerCase(), element.text());
-                        } else {
-                            return new Reference(element.text().toLowerCase(), element.text());
-                        }
-                    }
-                }
-            }
-
-            return null;
         }
     }
 }

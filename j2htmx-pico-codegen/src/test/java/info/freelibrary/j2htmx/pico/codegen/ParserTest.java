@@ -1,11 +1,13 @@
 package info.freelibrary.j2htmx.pico.codegen;
 
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyNoInteractions;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 
 import java.util.function.Consumer;
-
-import static org.mockito.Mockito.*;
 
 public class ParserTest {
 

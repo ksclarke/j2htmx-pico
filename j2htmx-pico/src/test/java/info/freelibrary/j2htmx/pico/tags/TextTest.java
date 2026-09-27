@@ -1,15 +1,15 @@
 package info.freelibrary.j2htmx.pico.tags;
 
+import static info.freelibrary.j2htmx.pico.TagCreator.rawHtml;
+import static info.freelibrary.j2htmx.pico.TagCreator.text;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import info.freelibrary.j2htmx.pico.rendering.FlatHtml;
 import info.freelibrary.j2htmx.pico.rendering.IndentedHtml;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-
-import static info.freelibrary.j2htmx.pico.TagCreator.rawHtml;
-import static info.freelibrary.j2htmx.pico.TagCreator.text;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 
 public class TextTest {
 

@@ -1,14 +1,18 @@
 package info.freelibrary.j2htmx.pico.codegen.generators;
 
+import info.freelibrary.util.warnings.PMD;
+
 import java.util.Arrays;
 import java.util.List;
 
 /**
  * Generator that creates method definitions for empty and container tags in TagCreator.
  */
+@SuppressWarnings(PMD.SYSTEM_PRINTLN)
 public final class TagCreatorCodeGenerator {
 
     private TagCreatorCodeGenerator() {
+        // This is intentionally left empty
     }
 
     /**
@@ -20,15 +24,15 @@ public final class TagCreatorCodeGenerator {
 
         for (final String tag : emptyTags()) {
             final String className = SpecializedTagClassCodeGenerator.classNameFromTag(tag);
-            final String publicstaticTypeMethod = "public static "+className+" "+tag+" ";
-            final String castReturn = " return ("+className+") ";
-            final String construct = " new "+className+"()";
+            final String publicstaticTypeMethod = "public static " + className + " " + tag + " ";
+            final String castReturn = " return (" + className + ") ";
+            final String construct = " new " + className + "()";
 
             final String emptyA1 = publicstaticTypeMethod + "()";
-            final String emptyA2 = "{ return "+construct+"; }";
+            final String emptyA2 = "{ return " + construct + "; }";
             // Attr shorthands
             final String emptyB1 = publicstaticTypeMethod + "(Attr.ShortForm shortAttr)";
-            final String emptyB2 = "{ "+castReturn+" Attr.addTo("+construct+", shortAttr); }";
+            final String emptyB2 = "{ " + castReturn + " Attr.addTo(" + construct + ", shortAttr); }";
             // Print
             System.out.println(String.format("%-80s%1s", emptyA1, emptyA2));
             System.out.println(String.format("%-80s%1s", emptyB1, emptyB2));
@@ -39,27 +43,28 @@ public final class TagCreatorCodeGenerator {
 
         for (final String tag : containerTags()) {
             final String className = SpecializedTagClassCodeGenerator.classNameFromTag(tag);
-            final String publicstaticTypeMethod = "public static "+className+" "+tag+" ";
-            final String castReturn = " return ("+className+") ";
-            final String construct = " new "+className+"()";
+            final String publicstaticTypeMethod = "public static " + className + " " + tag + " ";
+            final String castReturn = " return (" + className + ") ";
+            final String construct = " new " + className + "()";
 
-            final String containerA1 = publicstaticTypeMethod+ "()";
-            final String containerA2 = "{ "+castReturn + construct + "; }";
+            final String containerA1 = publicstaticTypeMethod + "()";
+            final String containerA2 = "{ " + castReturn + construct + "; }";
 
             final String containerB1 = publicstaticTypeMethod + "(String text)";
-            final String containerB2 = "{ "+castReturn + construct + ".withText(text); }";
+            final String containerB2 = "{ " + castReturn + construct + ".withText(text); }";
 
             final String containerC1 = publicstaticTypeMethod + "(DomContent... dc)";
-            final String containerC2 = "{ "+castReturn + construct+".with(dc); }";
+            final String containerC2 = "{ " + castReturn + construct + ".with(dc); }";
             // Attr shorthands
             final String containerD1 = publicstaticTypeMethod + "(Attr.ShortForm shortAttr)";
-            final String containerD2 = "{ "+castReturn+" Attr.addTo("+construct+", shortAttr); }";
+            final String containerD2 = "{ " + castReturn + " Attr.addTo(" + construct + ", shortAttr); }";
 
             final String containerE1 = publicstaticTypeMethod + "(Attr.ShortForm shortAttr, String text)";
-            final String containerE2 = "{ "+castReturn+" Attr.addTo("+construct+".withText(text), shortAttr); }";
+            final String containerE2 =
+              "{ " + castReturn + " Attr.addTo(" + construct + ".withText(text), shortAttr); }";
 
             final String containerF1 = publicstaticTypeMethod + "(Attr.ShortForm shortAttr, DomContent... dc)";
-            final String containerF2 = "{ "+castReturn+" Attr.addTo("+construct+".with(dc), shortAttr); }";
+            final String containerF2 = "{ " + castReturn + " Attr.addTo(" + construct + ".with(dc), shortAttr); }";
             // Print
             System.out.println(String.format("%-80s%1s", containerA1, containerA2));
             System.out.println(String.format("%-80s%1s", containerB1, containerB2));
@@ -78,22 +83,22 @@ public final class TagCreatorCodeGenerator {
      */
     public static List<String> emptyTags() {
         return Arrays.asList(
-            "area",
-            "base",
-            "br",
-            "col",
-            //"!DOCTYPE html",
-            "embed",
-            "hr",
-            "img",
-            "input",
-            "keygen",
-            "link",
-            "meta",
-            "param",
-            "source",
-            "track",
-            "wbr"
+          "area",
+          "base",
+          "br",
+          "col",
+          //"!DOCTYPE html",
+          "embed",
+          "hr",
+          "img",
+          "input",
+          "keygen",
+          "link",
+          "meta",
+          "param",
+          "source",
+          "track",
+          "wbr"
         );
     }
 
@@ -104,104 +109,104 @@ public final class TagCreatorCodeGenerator {
      */
     public static List<String> containerTags() {
         return Arrays.asList(
-            "a",
-            "abbr",
-            "address",
-            "article",
-            "aside",
-            "audio",
-            "b",
-            "bdi",
-            "bdo",
-            "blockquote",
-            "body",
-            "button",
-            "canvas",
-            "caption",
-            "cite",
-            "code",
-            "colgroup",
-            "data",
-            "datalist",
-            "dd",
-            "del",
-            "details",
-            "dfn",
-            "dialog",
-            "div",
-            "dl",
-            "dt",
-            "em",
-            "fieldset",
-            "figcaption",
-            "figure",
-            "footer",
-            "form",
-            "h1",
-            "h2",
-            "h3",
-            "h4",
-            "h5",
-            "h6",
-            "head",
-            "header",
-            "html",
-            "i",
-            "iframe",
-            "ins",
-            "kbd",
-            "label",
-            "legend",
-            "li",
-            "main",
-            "map",
-            "mark",
-            "menu",
-            "menuitem",
-            "meter",
-            "nav",
-            "noscript",
-            "object",
-            "ol",
-            "optgroup",
-            "option",
-            "output",
-            "p",
-            "picture",
-            "pre",
-            "progress",
-            "q",
-            "rp",
-            "rt",
-            "ruby",
-            "s",
-            "samp",
-            "script",
-            "section",
-            "select",
-            "slot",
-            "small",
-            "span",
-            "strong",
-            "style",
-            "sub",
-            "summary",
-            "sup",
-            "table",
-            "tbody",
-            "td",
-            "template",
-            "textarea",
-            "tfoot",
-            "th",
-            "thead",
-            "time",
-            "title",
-            "tr",
-            "u",
-            "ul",
-            "var",
-            "video"
+          "a",
+          "abbr",
+          "address",
+          "article",
+          "aside",
+          "audio",
+          "b",
+          "bdi",
+          "bdo",
+          "blockquote",
+          "body",
+          "button",
+          "canvas",
+          "caption",
+          "cite",
+          "code",
+          "colgroup",
+          "data",
+          "datalist",
+          "dd",
+          "del",
+          "details",
+          "dfn",
+          "dialog",
+          "div",
+          "dl",
+          "dt",
+          "em",
+          "fieldset",
+          "figcaption",
+          "figure",
+          "footer",
+          "form",
+          "h1",
+          "h2",
+          "h3",
+          "h4",
+          "h5",
+          "h6",
+          "head",
+          "header",
+          "html",
+          "i",
+          "iframe",
+          "ins",
+          "kbd",
+          "label",
+          "legend",
+          "li",
+          "main",
+          "map",
+          "mark",
+          "menu",
+          "menuitem",
+          "meter",
+          "nav",
+          "noscript",
+          "object",
+          "ol",
+          "optgroup",
+          "option",
+          "output",
+          "p",
+          "picture",
+          "pre",
+          "progress",
+          "q",
+          "rp",
+          "rt",
+          "ruby",
+          "s",
+          "samp",
+          "script",
+          "section",
+          "select",
+          "slot",
+          "small",
+          "span",
+          "strong",
+          "style",
+          "sub",
+          "summary",
+          "sup",
+          "table",
+          "tbody",
+          "td",
+          "template",
+          "textarea",
+          "tfoot",
+          "th",
+          "thead",
+          "time",
+          "title",
+          "tr",
+          "u",
+          "ul",
+          "var",
+          "video"
         );
     }
 }

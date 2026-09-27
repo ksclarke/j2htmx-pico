@@ -1,6 +1,7 @@
 package info.freelibrary.j2htmx.pico.model;
 
 import info.freelibrary.j2htmx.pico.attributes.Attribute;
+
 import java.io.IOException;
 
 public class DynamicHrefAttribute extends Attribute {

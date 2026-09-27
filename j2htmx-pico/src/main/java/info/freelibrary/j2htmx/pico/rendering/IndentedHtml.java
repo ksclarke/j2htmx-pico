@@ -15,73 +15,16 @@ import java.util.Deque;
  */
 public class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> {
 
-    /**
-     * Returns an HtmlBuilder that will generate indented HTML using
-     * Config defaults.
-     *
-     * @param out The Appendable to which HTML will be appended.
-     * @param <T> The type of the Appendable to which HTML will be appended.
-     * @return An HtmlBuilder for indented HTML.
-     */
-    public static final <T extends Appendable> IndentedHtml<T> into(final T out) {
-        return new IndentedHtml<>(out, Config.defaults());
-    }
-
-    /**
-     * Returns an HtmlBuilder that will generate indented HTML using
-     * the given Config.
-     *
-     * @param out    The Appendable to which HTML will be appended.
-     * @param config The Config which will specify indentation, text escapement, tag closing, etc.
-     * @param <T>    The type of the Appendable to which HTML will be appended.
-     * @return An HtmlBuilder for indented HTML.
-     */
-    public static final <T extends Appendable> IndentedHtml<T> into(final T out, final Config config) {
-        return new IndentedHtml<>(out, config);
-    }
-
-    /**
-     * Returns an HtmlBuilder that will generate indented HTML in memory using
-     * Config defaults.
-     *
-     * @return An HtmlBuilder for indented HTML.
-     */
-    public static final IndentedHtml<StringBuilder> inMemory() {
-        return into(new StringBuilder());
-    }
-
-    /**
-     * Returns an HtmlBuilder that will generate indented HTML in memory using
-     * the given Config.
-     *
-     * @param config The Config which will specify indentation, text escapement, tag closing, etc.
-     * @return An HtmlBuilder for indented HTML.
-     */
-    public static final IndentedHtml<StringBuilder> inMemory(final Config config) {
-        return into(new StringBuilder(), config);
-    }
-
     /** The Appendable output destination. */
     private final T out;
-
     /** The indenter specifying indentation rules. */
     private final Indenter indenter;
-
     /** The text escaper for escaping text and attribute values. */
     private final TextEscaper textEscaper;
-
     /** TagBuilder used for appending attributes to enclosing tags. */
     private final TagBuilder enclosingElementAttributes;
-
     /** TagBuilder used for appending attributes to empty/void tags. */
     private final TagBuilder emptyElementAttributes;
-
-    // Dealing with preformatted elements (pre and textarea) requires
-    // that we know what our parent elements are.  To do that we use
-    // a stack; adding items as start tags are created, and removing them
-    // as those tags are closed.  Determining whether or not we are
-    // currently rendering into a preformatted element is as simple as
-    // asking if any tags on the stack match a preformatted element name.
     /**
      * Stack tracking currently open element tags to handle indentation and preformatted blocks.
      */
@@ -93,6 +36,55 @@ public class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> {
         this.textEscaper = config.textEscaper();
         this.enclosingElementAttributes = new IndentedTagBuilder(false);
         this.emptyElementAttributes = new IndentedTagBuilder(config.closeEmptyTags());
+    }
+
+    /**
+     * Returns an HtmlBuilder that will generate indented HTML using Config defaults.
+     *
+     * @param out The Appendable to which HTML will be appended.
+     * @param <T> The type of the Appendable to which HTML will be appended.
+     * @return An HtmlBuilder for indented HTML.
+     */
+    public static final <T extends Appendable> IndentedHtml<T> into(final T out) {
+        return new IndentedHtml<>(out, Config.defaults());
+    }
+
+    /**
+     * Returns an HtmlBuilder that will generate indented HTML using the given Config.
+     *
+     * @param out The Appendable to which HTML will be appended.
+     * @param config The Config which will specify indentation, text escapement, tag closing, etc.
+     * @param <T> The type of the Appendable to which HTML will be appended.
+     * @return An HtmlBuilder for indented HTML.
+     */
+    public static final <T extends Appendable> IndentedHtml<T> into(final T out, final Config config) {
+        return new IndentedHtml<>(out, config);
+    }
+
+    // Dealing with preformatted elements (pre and textarea) requires
+    // that we know what our parent elements are.  To do that we use
+    // a stack; adding items as start tags are created, and removing them
+    // as those tags are closed.  Determining whether or not we are
+    // currently rendering into a preformatted element is as simple as
+    // asking if any tags on the stack match a preformatted element name.
+
+    /**
+     * Returns an HtmlBuilder that will generate indented HTML in memory using Config defaults.
+     *
+     * @return An HtmlBuilder for indented HTML.
+     */
+    public static final IndentedHtml<StringBuilder> inMemory() {
+        return into(new StringBuilder());
+    }
+
+    /**
+     * Returns an HtmlBuilder that will generate indented HTML in memory using the given Config.
+     *
+     * @param config The Config which will specify indentation, text escapement, tag closing, etc.
+     * @return An HtmlBuilder for indented HTML.
+     */
+    public static final IndentedHtml<StringBuilder> inMemory(final Config config) {
+        return into(new StringBuilder(), config);
     }
 
     private boolean isContentSelfFormatting() {
@@ -216,10 +208,10 @@ public class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> {
         @Override
         public TagBuilder appendAttribute(final String name, final String value) throws IOException {
             out.append(" ")
-                .append(name)
-                .append("=\"")
-                .append(textEscaper.escape(value))
-                .append("\"");
+              .append(name)
+              .append("=\"")
+              .append(textEscaper.escape(value))
+              .append("\"");
             return this;
         }
 

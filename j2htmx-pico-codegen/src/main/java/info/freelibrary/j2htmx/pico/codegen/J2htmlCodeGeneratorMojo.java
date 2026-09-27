@@ -54,16 +54,16 @@ public class J2htmlCodeGeneratorMojo extends AbstractMojo {
         final Model model = new Model();
         try {
             Parser.parse(definitions, model);
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             throw new MojoFailureException("Unable to parse model file.", e);
         }
 
         try {
             Generator.generate(
-                Paths.get(outputDirectory).toAbsolutePath(),
-                attributePackage,
-                tagPackage,
-                model
+              Paths.get(outputDirectory).toAbsolutePath(),
+              attributePackage,
+              tagPackage,
+              model
             );
         } catch (IOException e) {
             throw new MojoFailureException("Failed to generate source files.", e);
