@@ -207,8 +207,12 @@ public class WattsiSource {
 
         @Override
         public boolean equals(final Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
             final Reference reference = (Reference) o;
             return key.equals(reference.key);
         }

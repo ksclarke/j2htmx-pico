@@ -107,11 +107,15 @@ public class Parser {
             final int number = i + 1;
             final String line = lines[i];
 
-            if (match(EMPTY_LINE_PATTERN, line)) continue;
+            if (match(EMPTY_LINE_PATTERN, line)) {
+                continue;
+            }
 
             if (match(COMMENT_PATTERN, line, matcher -> {
                 listener.lineCommented(number, line);
-            })) continue;
+            })) {
+                continue;
+            }
 
             if (match(NODE_PATTERN, line, matcher -> {
                 final String type = matcher.group("type");
@@ -133,7 +137,9 @@ public class Parser {
                         listener.stringDefined(number, name);
                         break;
                 }
-            })) continue;
+            })) {
+                continue;
+            }
 
             if (match(ATTRIBUTE_PATTERN, line, matcher -> {
                 listener.attributeDefined(
@@ -141,7 +147,9 @@ public class Parser {
                     matcher.group("element"),
                     matcher.group("name")
                 );
-            })) continue;
+            })) {
+                continue;
+            }
 
             listener.invalidLine(number, line);
         }

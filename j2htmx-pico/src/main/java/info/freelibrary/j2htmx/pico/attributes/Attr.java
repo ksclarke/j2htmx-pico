@@ -374,8 +374,9 @@ public abstract class Attr {
      * @return The modified tag
      */
     public static <T extends Tag<T>> T addTo(final T tag, final Attr attr) {
-        if (null != attr)
+        if (null != attr) {
             attr.addTo(tag);
+        }
         return tag;
     }
 
