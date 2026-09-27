@@ -116,10 +116,29 @@
                     <version>${maven.bundle.version}</version>
                 </plugin>
                 <plugin>
-                    <groupId>net.revelc.code.formatter</groupId>
-                    <artifactId>formatter-maven-plugin</artifactId>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>enforce-no-snapshots</id>
+                            <configuration>
+                                <rules>
+                                    <requireReleaseDeps>
+                                        <excludes>
+                                            <exclude>info.freelibrary:*</exclude>
+                                        </excludes>
+                                    </requireReleaseDeps>
+                                </rules>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
                     <configuration>
-                        <skipFormatting>true</skipFormatting>
+                        <doclint>all,-missing</doclint>
+                        <sourcepath>${project.basedir}/src/main/java:${project.build.directory}/generated-sources/j2html-codegen</sourcepath>
                     </configuration>
                 </plugin>
             </plugins>
@@ -129,7 +148,7 @@
     <parent>
         <artifactId>freelib-parent</artifactId>
         <groupId>info.freelibrary</groupId>
-        <version>14.0.8</version>
+        <version>14.2.0</version>
     </parent>
 
 </project>

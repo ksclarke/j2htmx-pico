@@ -117,7 +117,7 @@ public abstract class Tag<T extends Tag<T>> extends DomContent implements Instan
 
     /**
      * Call attr-method based on condition
-     * {@link #attr(String attribute, Object value)}
+     * {@link #attr(String, Object)}
      *
      * @param condition the condition
      * @param attribute the attribute name
@@ -139,6 +139,7 @@ public abstract class Tag<T extends Tag<T>> extends DomContent implements Instan
     /**
      * Convenience methods that call attr with predefined attributes
      *
+     * @param classes The CSS classes to add
      * @return itself for easy chaining
      */
     public T withClasses(String... classes) {

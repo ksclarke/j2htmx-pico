@@ -53,7 +53,7 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
 
     /**
      * Call with-method based on condition
-     * {@link #with(DomContent child)}
+     * {@link #with(DomContent)}
      *
      * @param condition the condition to use
      * @param child     DomContent-object to be appended if condition met
@@ -121,7 +121,7 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
 
     /**
      * Call with-method based on condition
-     * {@link #with(DomContent... children)}
+     * {@link #with(DomContent...)}
      *
      * @param condition the condition to use
      * @param children  DomContent-objects to be appended if condition met

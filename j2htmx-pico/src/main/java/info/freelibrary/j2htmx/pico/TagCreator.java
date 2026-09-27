@@ -57,7 +57,7 @@ public class TagCreator {
     }
 
     /**
-     * Like {@link info.freelibrary.j2html.TagCreator#iff}, but returns else-value instead of null
+     * Like {@link #iff}, but returns else-value instead of null
      */
     public static <T> T iffElse(boolean condition, T ifValue, T elseValue) {
         return condition ? ifValue : elseValue;
@@ -167,7 +167,7 @@ public class TagCreator {
     }
 
     /**
-     * Filters a collection to a list, to be used with {@link info.freelibrary.j2html.TagCreator#each}
+     * Filters a collection to a list, to be used with {@link #each}
      * Intended usage: {@literal each(filter(numbers, n -> n % 2 == 0), n -> li(n.toString()))}
      *
      * @param <T>        The derived generic parameter type
