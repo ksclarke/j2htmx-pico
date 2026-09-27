@@ -34,7 +34,10 @@ public class Config {
      * The default is to NOT close them
      */
     public static volatile boolean closeEmptyTags = false;
-    private static String FOUR_SPACES = "    ";
+
+    /** Constant representing four space characters used for indentation. */
+    private static final String FOUR_SPACES = "    ";
+
     /**
      * Change this to configure indentation when rendering formatted html
      * The default is four spaces
@@ -42,10 +45,19 @@ public class Config {
     public static volatile Indenter indenter = (level, text) -> String.join("", Collections.nCopies(level, FOUR_SPACES)) + text;
 
 
+    /** The configured text escaper. */
     private TextEscaper _textEscaper;
+
+    /** The configured CSS minifier. */
     private Minifier _cssMinifier;
+
+    /** The configured JavaScript minifier. */
     private Minifier _jsMinifier;
+
+    /** Whether empty tags should be closed. */
     private boolean _closeEmptyTags;
+
+    /** The configured HTML indenter. */
     private Indenter _indenter;
 
 
@@ -181,6 +193,7 @@ public class Config {
         return copy;
     }
 
+    /** Default configuration instance with standard settings. */
     private static final Config DEFAULTS = new Config(
         EscapeUtil::escape,
         CSSMin::compressCss,

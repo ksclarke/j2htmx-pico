@@ -11,6 +11,7 @@ import java.io.IOException;
  */
 public class UnescapedText extends DomContent {
 
+    /** The raw unescaped text content. */
     private final String text;
 
     /**

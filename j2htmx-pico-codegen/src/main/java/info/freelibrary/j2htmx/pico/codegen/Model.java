@@ -11,7 +11,10 @@ import static info.freelibrary.j2htmx.pico.codegen.Model.Node.Type.*;
  */
 public class Model implements Parser.Listener {
 
+    /** Map of element names to their node representations. */
     private final Map<String, Node> elements;
+
+    /** Map of attribute names to their node representations. */
     private final Map<String, Node> attributes;
 
     /**
@@ -146,8 +149,17 @@ public class Model implements Parser.Listener {
         throw new RuntimeException("Invalid line [" + line + "]: " + txt);
     }
 
+    /**
+     * Functional interface representing an operation that may throw a RuntimeException.
+     */
     @FunctionalInterface
     private interface Unsafe {
+
+        /**
+         * Executes the operation.
+         *
+         * @throws RuntimeException If an error occurs during execution
+         */
         void call() throws RuntimeException;
     }
 
@@ -163,9 +175,16 @@ public class Model implements Parser.Listener {
      * Represents an element or attribute node within the model.
      */
     public static class Node {
+
+        /**
+         * The type of model node.
+         */
         enum Type {
+            /** Element node type. */
             ELEMENT,
+            /** Boolean attribute node type. */
             BOOLEAN,
+            /** String attribute node type. */
             STRING
         }
 

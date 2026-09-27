@@ -61,10 +61,19 @@ public class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> {
         return into(new StringBuilder(), config);
     }
 
+    /** The Appendable output destination. */
     private final T out;
+
+    /** The indenter specifying indentation rules. */
     private final Indenter indenter;
+
+    /** The text escaper for escaping text and attribute values. */
     private final TextEscaper textEscaper;
+
+    /** TagBuilder used for appending attributes to enclosing tags. */
     private final TagBuilder enclosingElementAttributes;
+
+    /** TagBuilder used for appending attributes to empty/void tags. */
     private final TagBuilder emptyElementAttributes;
 
     // Dealing with preformatted elements (pre and textarea) requires
@@ -73,6 +82,9 @@ public class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> {
     // as those tags are closed.  Determining whether or not we are
     // currently rendering into a preformatted element is as simple as
     // asking if any tags on the stack match a preformatted element name.
+    /**
+     * Stack tracking currently open element tags to handle indentation and preformatted blocks.
+     */
     private final Deque<String> trace = new ArrayDeque<>();
 
     private IndentedHtml(final T out, final Config config) {
@@ -189,8 +201,12 @@ public class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> {
     }
 
 
+    /**
+     * TagBuilder implementation for formatted, indented HTML rendering.
+     */
     private class IndentedTagBuilder implements TagBuilder {
 
+        /** Whether to append a trailing slash before closing the tag. */
         private final boolean closeTag;
 
         private IndentedTagBuilder(final boolean closeTag) {

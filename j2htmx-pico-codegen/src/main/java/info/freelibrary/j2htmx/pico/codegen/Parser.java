@@ -9,9 +9,16 @@ import java.util.regex.Pattern;
  */
 public class Parser {
 
+    /** Regex pattern matching empty or whitespace-only lines. */
     private static final Pattern EMPTY_LINE_PATTERN = Pattern.compile("\\s*");
+
+    /** Regex pattern matching comment lines starting with '#'. */
     private static final Pattern COMMENT_PATTERN = Pattern.compile("#.*");
+
+    /** Regex pattern matching element and attribute node definitions. */
     private static final Pattern NODE_PATTERN = Pattern.compile("(?<type>ELEMENT|EMPTY-ELEMENT|BOOLEAN|ONOFF|STRING)\\[(?<name>\\S+)\\]");
+
+    /** Regex pattern matching element-to-attribute mapping definitions. */
     private static final Pattern ATTRIBUTE_PATTERN = Pattern.compile("ATTRIBUTE\\[(?<element>\\S+):(?<name>\\S+)\\]");
 
     private Parser() {

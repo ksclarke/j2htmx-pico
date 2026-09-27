@@ -57,9 +57,16 @@ public class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
         return into(new StringBuilder(), config);
     }
 
+    /** The Appendable output destination. */
     private final T out;
+
+    /** The text escaper for escaping text and attribute values. */
     private final TextEscaper textEscaper;
+
+    /** TagBuilder used for appending attributes to enclosing tags. */
     private final TagBuilder enclosingElementAttributes;
+
+    /** TagBuilder used for appending attributes to empty/void tags. */
     private final TagBuilder emptyElementAttributes;
 
     private FlatHtml(final T out, final Config config) {
@@ -129,8 +136,12 @@ public class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
         return this;
     }
 
+    /**
+     * TagBuilder implementation for flat, unindented HTML rendering.
+     */
     private class FlatTagBuilder implements TagBuilder {
 
+        /** Whether to append a trailing slash before closing the tag. */
         private final boolean closeTag;
 
         private FlatTagBuilder(final boolean closeTag) {

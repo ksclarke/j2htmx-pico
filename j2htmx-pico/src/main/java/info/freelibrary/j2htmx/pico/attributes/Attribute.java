@@ -10,7 +10,10 @@ import java.io.IOException;
  * Represents an HTML element attribute key-value pair or boolean attribute.
  */
 public class Attribute implements Renderable {
+    /** The attribute name. */
     private final String name;
+
+    /** The attribute value, or null for a boolean attribute. */
     private String value;
 
     /**

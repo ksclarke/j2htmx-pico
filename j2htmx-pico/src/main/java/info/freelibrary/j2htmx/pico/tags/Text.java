@@ -11,6 +11,7 @@ import java.io.IOException;
  */
 public class Text extends DomContent {
 
+    /** The raw text content. */
     private final String text;
 
     /**

@@ -17,6 +17,7 @@ import java.util.Optional;
  */
 public final class AttributeInterfaceCodeGenerator {
 
+    /** The relative output path for attribute interface classes. */
     private static final String relPath = "tags/attributes/";
 
     private AttributeInterfaceCodeGenerator() {

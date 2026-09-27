@@ -50,10 +50,19 @@ import java.io.PushbackInputStream;
  */
 public class JSMin {
 
+    /** End-of-file indicator constant. */
     private static final int EOF = -1;
+
+    /** Input stream providing JavaScript source bytes. */
     private final PushbackInputStream in;
+
+    /** Output stream receiving minified JavaScript bytes. */
     private final OutputStream out;
+
+    /** Lookahead character buffer A. */
     private int theA;
+
+    /** Lookahead character buffer B. */
     private int theB;
     private JSMin(final InputStream in, final OutputStream out) {
         this.in = new PushbackInputStream(in);
@@ -291,16 +300,25 @@ public class JSMin {
         out.flush();
     }
 
+    /**
+     * Exception thrown when an unterminated comment is encountered.
+     */
     public class UnterminatedCommentException extends Exception {
 
         private static final long serialVersionUID = -6843493496391588799L;
     }
 
+    /**
+     * Exception thrown when an unterminated string literal is encountered.
+     */
     public class UnterminatedStringLiteralException extends Exception {
 
         private static final long serialVersionUID = 7919153854243389391L;
     }
 
+    /**
+     * Exception thrown when an unterminated regular expression literal is encountered.
+     */
     public class UnterminatedRegExpLiteralException extends Exception {
 
         private static final long serialVersionUID = 3904862912673589752L;

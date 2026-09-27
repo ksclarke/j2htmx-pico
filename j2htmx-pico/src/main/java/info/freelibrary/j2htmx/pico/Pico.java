@@ -134,6 +134,7 @@ public final class Pico {
         DARK("dark"),
         AUTO("auto");
 
+        /** The theme string value. */
         private final String myValue;
 
         Theme(final String aValue) {
@@ -180,6 +181,7 @@ public final class Pico {
         YELLOW("yellow"),
         ZINC("zinc");
 
+        /** The color scheme string value. */
         private final String myValue;
 
         Color(final String aValue) {

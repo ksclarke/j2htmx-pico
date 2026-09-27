@@ -16,8 +16,10 @@ import static java.util.stream.Collectors.toList;
  */
 public class WattsiSource {
 
+    /** The HTML document being parsed. */
     private final Document doc;
 
+    /** Set of references marked as obsolete in the specification. */
     private final Set<Reference> obsolete = new HashSet<>();
 
     /**
@@ -92,6 +94,8 @@ public class WattsiSource {
      * Element definition implementation backed by a JSoup element.
      */
     public class WattsiElement implements ElementDefinition {
+
+        /** The underlying dfn element defining this HTML element. */
         private final Element dfn;
 
         WattsiElement(final Element dfn) {
@@ -135,6 +139,8 @@ public class WattsiSource {
      * Attribute definition implementation backed by a JSoup element.
      */
     public class WattsiAttribute implements AttributeDefinition {
+
+        /** The underlying dfn element defining this attribute. */
         private final Element dfn;
 
         WattsiAttribute(final Element dfn) {
@@ -178,8 +184,15 @@ public class WattsiSource {
         }
     }
 
+    /**
+     * Internal reference representation pairing a unique key with display text.
+     */
     private static class Reference {
+
+        /** The normalized lookup key. */
         private final String key;
+
+        /** The display text. */
         private final String text;
 
         Reference(final String key, final String text) {
@@ -205,6 +218,12 @@ public class WattsiSource {
             return Objects.hash(key);
         }
 
+        /**
+         * Creates a Reference from a list of DOM child nodes.
+         *
+         * @param nodes The child nodes to inspect
+         * @return A Reference instance or null if not resolved
+         */
         public static Reference from(final List<Node> nodes) {
             if (nodes.stream().allMatch(n -> n instanceof TextNode)) {
                 final String txt = nodes.stream()

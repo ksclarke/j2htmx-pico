@@ -21,6 +21,7 @@ import static info.freelibrary.j2htmx.pico.codegen.generators.TagCreatorCodeGene
  */
 public final class SpecializedTagClassCodeGenerator {
 
+    /** The relative output path for specialized tag classes. */
     private static final String relPath = "tags/specialized";
 
     private SpecializedTagClassCodeGenerator() {
