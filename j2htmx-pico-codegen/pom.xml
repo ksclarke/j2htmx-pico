@@ -37,14 +37,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!--
-          Note:  The use of version properties below is to avoid
-          redefining these versions when using this maven plugin
-          in other projects.  Using the more concise dependency-
-          management strategy for versioning doesn't work when
-          another project tries to detect this plugin's dependency
-          versions.
-        -->
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>

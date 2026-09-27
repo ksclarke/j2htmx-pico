@@ -15,6 +15,7 @@ buildNumber.properties
 ### Build artifacts ###
 .flattened-pom.xml
 .mvn/wrapper/maven-wrapper.jar
+target/
 
 ### AI artifacts ###
 .junie

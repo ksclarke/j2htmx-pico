@@ -1,0 +1,38 @@
+name: Build with Maven
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        java_version: [21, 25]
+        java_distro: [temurin, graalvm]
+        os: [windows-latest, macOS-latest, ubuntu-latest]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java_version }}
+          distribution: ${{ matrix.java_distro }}
+          cache: maven
+
+      # If running locally in act, install Maven
+      - name: Set up Maven if needed
+        if: ${{ env.ACT }}
+        uses: stCarolas/setup-maven@07fbbe97d97ef44336b7382563d66743297e442f # v4.5
+        with:
+          maven-version: 3.8.6
+
+      - name: Build with Maven
+        run: mvn verify javadoc:javadoc -Denforcer.skip=true
