@@ -68,7 +68,7 @@ public final class AttributeInterfaceCodeGenerator {
     }
 
     private static String makeReturnTypeAndMethodName(final String name) {
-        return "default " + "T " + name;
+        return "default T " + name;
     }
 
     private static String getInterfaceTemplate(
@@ -79,19 +79,18 @@ public final class AttributeInterfaceCodeGenerator {
       final AttrD attrD
     ) {
 
-        final StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder(512);
 
-        sb.append(getPackage());
-        sb.append("\n");
+        sb.append(getPackage()).append('\n');
 
         for (final String importName : imports) {
             sb.append("import ").append(importName).append(";\n");
         }
-        sb.append("\n");
-        sb.append("public interface ")
+
+        sb.append("\npublic interface ")
           .append(interfaceName);
 
-        optExtends.ifPresent(ext -> sb.append(" extends ").append(ext).append(" "));
+        optExtends.ifPresent(ext -> sb.append(" extends ").append(ext).append(' '));
 
         sb.append(" {\n");
 
@@ -128,13 +127,11 @@ public final class AttributeInterfaceCodeGenerator {
         //there are some special attributes
         //which do take an argument, but where the argument
         //is boolean (meaning on/off, yes/no and the like)
-        sb.append("self().attr(\"");
-        if (attrName.equals("autocomplete")) {
-            sb.append(attrName).append("\",\"on\"");
+        if ("autocomplete".equals(attrName)) {
+            sb.append("self().attr(\"").append(attrName).append("\",\"on\");\n");
         } else {
-            sb.append(attrName).append("\"");
+            sb.append("self().attr(\"").append(attrName).append("\");\n");
         }
-        sb.append(");\n");
     }
 
     private static void writeAttributeMethodCond(final String interfaceNameSimple, final AttrD attrD,
@@ -144,24 +141,19 @@ public final class AttributeInterfaceCodeGenerator {
 
         if (attrD.hasArgument) {
             //add a variant where you can specify the argument
-
-            sb.append("(final boolean enable, final String ").append(paramName).append(") {");
-
-            sb.append("if (enable){\n");
-            sb.append("self().attr(\"").append(attrName).append("\", ").append(paramName).append(");\n");
-            sb.append("}\n");
-
-            sb.append("return self();\n");
+            sb.append("(final boolean enable, final String ")
+              .append(paramName)
+              .append(") {if (enable){\nself().attr(\"")
+              .append(attrName)
+              .append("\", ")
+              .append(paramName)
+              .append(");\n}\nreturn self();\n}\n");
         } else {
             //add a variant where you can toggle the attribute
-
-            sb.append("(final boolean enable) {");
-            sb.append("if (enable){\n");
+            sb.append("(final boolean enable) {if (enable){\n");
             addAttributeNoArg(sb, attrName);
-            sb.append("}\n");
-            sb.append("return self();\n");
+            sb.append("}\nreturn self();\n}\n");
         }
-        sb.append("}\n");
     }
 
     private static void writeAttributeMethod(final String interfaceNameSimple, final AttrD attrD,
@@ -173,20 +165,19 @@ public final class AttributeInterfaceCodeGenerator {
 
         if (attrD.hasArgument) {
             //add a variant where you can specify the argument
-
-            sb.append("(final String ").append(paramName).append(") {")
-
-              .append("return self().attr(\"").append(attrName).append("\", ").append(paramName).append(");\n");
+            sb.append("(final String ")
+              .append(paramName)
+              .append(") {return self().attr(\"")
+              .append(attrName)
+              .append("\", ")
+              .append(paramName)
+              .append(");\n}\n");
         } else {
             //add a variant where you can toggle the attribute
-
             sb.append("() {");
-
             addAttributeNoArg(sb, attrName);
-
-            sb.append("return self();\n");
+            sb.append("return self();\n}\n");
         }
-        sb.append("}\n");
     }
 
     /**

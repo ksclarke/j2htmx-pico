@@ -6,6 +6,7 @@ import com.palantir.javapoet.TypeSpec;
 import info.freelibrary.j2htmx.pico.codegen.wattsi.AttributeDefinition;
 import info.freelibrary.j2htmx.pico.codegen.wattsi.ElementDefinition;
 import info.freelibrary.j2htmx.pico.codegen.wattsi.WattsiSource;
+import info.freelibrary.util.warnings.PMD;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -19,9 +20,14 @@ import java.util.Locale;
 /**
  * Generator that creates tag and attribute code by parsing WHATWG HTML spec sources.
  */
+@SuppressWarnings(PMD.SYSTEM_PRINTLN)
 public class WattsiGenerator {
 
+    /**
+     * Private constructor to prevent instantiation.
+     */
     private WattsiGenerator() {
+        // This is intentionally left empty
     }
 
     /**
@@ -50,8 +56,7 @@ public class WattsiGenerator {
 
         for (final ElementDefinition element : elements) {
             final ClassName className = ClassName.get(
-              "info.freelibrary.j2htmx.pico.",
-              capitalize(element.name()) + "Tag"
+              "info.freelibrary.j2htmx.pico.", capitalize(element.name()) + "Tag"
             );
 
             final TypeSpec.Builder type = TypeSpec.classBuilder(className)
@@ -79,8 +84,6 @@ public class WattsiGenerator {
 
             System.out.println(type.build().toString());
         }
-
-        //        System.out.println(doc.select("dfn"));
     }
 
     private static String methodName(final String prefix, final String... words) {

@@ -258,7 +258,7 @@ class Selector {
      */
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        sb.append(this.selector).append("{");
+        sb.append(this.selector).append('{');
         if (this.subSelectors != null) {
             for (final Selector s : this.subSelectors) {
                 sb.append(s.toString());
@@ -272,7 +272,7 @@ class Selector {
         if (sb.charAt(sb.length() - 1) == ';') {
             sb.deleteCharAt(sb.length() - 1);
         }
-        sb.append("}");
+        sb.append('}');
         return sb.toString();
     }
 
@@ -406,12 +406,12 @@ class Property implements Comparable<Property> {
      */
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        sb.append(this.property).append(":");
+        sb.append(this.property).append(':');
         for (final Part p : this.parts) {
-            sb.append(p.toString()).append(",");
+            sb.append(p.toString()).append(',');
         }
         sb.deleteCharAt(sb.length() - 1); // Delete the trailing comma.
-        sb.append(";");
+        sb.append(';');
         if (CSSMin.debugLogging) {
             LOG.info(sb.toString());
         }
@@ -485,7 +485,7 @@ class Property implements Comparable<Property> {
             for (final String rgbColour : rgbColours) {
                 colourValue = Integer.parseInt(rgbColour);
                 if (colourValue < 16) {
-                    hexColour.append("0");
+                    hexColour.append('0');
                 }
                 hexColour.append(Integer.toHexString(colourValue));
             }
@@ -584,7 +584,7 @@ class Part {
         }
 
         for (final String param : params) {
-            newContents.append(param).append(" ");
+            newContents.append(param).append(' ');
         }
         newContents.deleteCharAt(newContents.length() - 1); // Delete the trailing space
 

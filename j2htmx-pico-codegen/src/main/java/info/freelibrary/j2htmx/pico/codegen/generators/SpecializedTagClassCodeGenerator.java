@@ -137,44 +137,34 @@ public final class SpecializedTagClassCodeGenerator {
       final List<String> interfaces
     ) {
 
-        final StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder(256);
 
-        sb.append(getPackage());
-        sb.append("\n");
+        sb.append(getPackage()).append('\n');
 
         for (final String importName : imports) {
             sb.append("import ").append(importName).append(";\n");
         }
-        sb.append("\n");
-        sb.append("public final class ")
-          .append(className)
-          .append(" ");
 
-        optExtends.ifPresent(ext -> sb.append("extends ").append(ext).append(" "));
+        sb.append("\npublic final class ")
+          .append(className)
+          .append(' ');
+
+        optExtends.ifPresent(ext -> sb.append("extends ").append(ext).append(' '));
 
         //add the 'implements' clause
         if (!interfaces.isEmpty()) {
-            sb.append("\n");
-            sb.append("implements ");
-
             final List<String> genericInterfaceNames
               = interfaces.stream().map(iName -> iName + "<" + className + ">")
               .collect(Collectors.toList());
-            sb.append(
-              String.join(",", genericInterfaceNames)
-            );
+            sb.append("\nimplements ").append(String.join(",", genericInterfaceNames));
         }
 
-        sb.append(" {\n");
-
         //class contents
-        sb.append("public ")
+        sb.append(" {\npublic ")
           .append(className)
-          .append("() {")
-          .append("super(\"").append(tag).append("\");")
-          .append("}\n");
-
-        sb.append("}\n");
+          .append("() {super(\"")
+          .append(tag)
+          .append("\");}\n}\n");
 
         return sb.toString();
     }

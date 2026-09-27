@@ -1,5 +1,6 @@
 package info.freelibrary.j2htmx.pico.codegen.wattsi;
 
+import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
 import static java.util.stream.Collectors.toList;
 
 import org.jsoup.nodes.Document;
@@ -129,16 +130,16 @@ public class WattsiSource {
             }
 
             for (final Node node : nodes) {
-                if (node instanceof Element) {
-                    final Element element = (Element) node;
-                    if (element.is("code") || element.is("span")) {
-                        if (element.hasAttr("data-x")) {
-                            return new Reference(element.attr("data-x").toLowerCase(Locale.US), element.text());
-                        } else {
-                            return new Reference(element.text().toLowerCase(Locale.US), element.text());
-                        }
-                    }
+                if (!(node instanceof Element element)) {
+                    continue;
                 }
+
+                if (!element.is("code") && !element.is("span")) {
+                    continue;
+                }
+
+                final String key = element.hasAttr("data-x") ? element.attr("data-x") : element.text();
+                return new Reference(key.toLowerCase(Locale.US), element.text());
             }
 
             return null;
@@ -182,7 +183,7 @@ public class WattsiSource {
             if (!dfn.hasAttr("element")) {
                 throw new IllegalArgumentException("Does not define an element: " + dfn);
             }
-            if (dfn.childrenSize() != 1) {
+            if ( dfn.childrenSize() != SINGLE_INSTANCE) {
                 throw new IllegalArgumentException("Element cannot have multiple definitions: " + dfn);
             }
             this.dfn = dfn;
@@ -227,7 +228,7 @@ public class WattsiSource {
             if (!dfn.hasAttr("element-attr")) {
                 throw new IllegalArgumentException("Does not define an attribute: " + dfn);
             }
-            if (dfn.childrenSize() != 1) {
+            if (dfn.childrenSize() != SINGLE_INSTANCE) {
                 throw new IllegalArgumentException("Attribute cannot have multiple definitions: " + dfn);
             }
 

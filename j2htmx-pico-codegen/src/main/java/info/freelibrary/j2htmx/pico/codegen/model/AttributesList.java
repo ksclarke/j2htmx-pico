@@ -1,24 +1,6 @@
 package info.freelibrary.j2htmx.pico.codegen.model;
 
-import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.AREA;
-import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.AUDIO;
-import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.BODY;
-import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.BUTTON;
-import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.EMBED;
-import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.FORM;
-import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.IFRAME;
-import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.IMAGE;
-import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.INPUT;
-import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.LINK;
-import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.METER;
-import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.OBJECT;
-import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.SCRIPT;
-import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.SELECT;
-import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.SOURCE;
-import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.STYLE;
-import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.TEXTAREA;
-import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.TRACK;
-import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.VIDEO;
+import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.*;
 
 import info.freelibrary.util.warnings.PMD;
 
@@ -93,7 +75,7 @@ public final class AttributesList {
           new AttrD("defer", false, SCRIPT),
           //new AttrD("dir"), //global attribute
           new AttrD("dirname", true, INPUT, TEXTAREA),
-          new AttrD("disabled", false, BUTTON, "fieldset", INPUT, "optgroup", "option", SELECT, TEXTAREA),
+          new AttrD("disabled", false, BUTTON, "fieldset", INPUT, "optgroup", OPTION, SELECT, TEXTAREA),
           new AttrD("download", false, "a", AREA),
           //new AttrD("draggable") global attribute, should be in Tag.java
           new AttrD("enctype", true, FORM),
@@ -110,7 +92,7 @@ public final class AttributesList {
           //"id" global attribute, should be in Tag.java
           new AttrD("ismap", false, IMAGE),
           new AttrD("kind", true, TRACK),
-          new AttrD("label", true, TRACK, "option", "optgroup"),
+          new AttrD("label", true, TRACK, OPTION, "optgroup"),
           //"lang" global attribute, should be in Tag.java
           new AttrD("list", true, INPUT),
           new AttrD("loop", false, AUDIO, VIDEO),
@@ -198,7 +180,7 @@ public final class AttributesList {
           new AttrD("rowspan", true, "td", "th"),
           new AttrD("sandbox", false, IFRAME),
           new AttrD("scope", true, "th"),
-          new AttrD("selected", false, "option"),
+          new AttrD("selected", false, OPTION),
           new AttrD("shape", true, AREA),
           new AttrD("size", true, INPUT, SELECT),
           new AttrD("sizes", true, IMAGE, LINK, SOURCE),
@@ -218,7 +200,7 @@ public final class AttributesList {
           new AttrD("type", true, "a", BUTTON, EMBED, INPUT, LINK, "menu", OBJECT, SCRIPT, SOURCE,
             "style"),
           new AttrD("usemap", true, IMAGE, OBJECT),
-          new AttrD("value", true, BUTTON, "data", INPUT, "li", "option", METER, "progress", "param"),
+          new AttrD("value", true, BUTTON, "data", INPUT, "li", OPTION, METER, "progress", "param"),
           new AttrD("width", true, "canvas", EMBED, IFRAME, IMAGE, INPUT, OBJECT, VIDEO),
           new AttrD("wrap", true, TEXTAREA)
         );
@@ -288,5 +270,12 @@ public final class AttributesList {
 
         /** The body HTML tag name constant. */
         static final String BODY = "body";
+
+        /**
+         * Private constructor to prevent instantiation.
+         */
+        private Names() {
+            // This is intentionally left empty
+        }
     }
 }

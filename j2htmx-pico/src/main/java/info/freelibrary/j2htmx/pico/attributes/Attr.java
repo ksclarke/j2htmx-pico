@@ -360,7 +360,7 @@ public abstract class Attr {
                 }
                 id = attr.replace("#", "");
             } else {
-                classes.append(attr).append(" ");
+                classes.append(attr).append(' ');
             }
         }
         return new ShortForm(id.trim(), classes.toString().trim());
