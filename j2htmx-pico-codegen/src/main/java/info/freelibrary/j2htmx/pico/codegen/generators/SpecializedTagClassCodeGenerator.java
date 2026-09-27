@@ -6,6 +6,7 @@ import static info.freelibrary.j2htmx.pico.codegen.generators.TagCreatorCodeGene
 
 import info.freelibrary.j2htmx.pico.codegen.GeneratorUtil;
 import info.freelibrary.j2htmx.pico.codegen.model.AttributesList;
+import info.freelibrary.util.warnings.PMD;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,12 +14,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
  * Code generator that outputs specialized HTML tag classes extending ContainerTag or EmptyTag.
  */
+@SuppressWarnings(PMD.SYSTEM_PRINTLN)
 public final class SpecializedTagClassCodeGenerator {
 
     /** The relative output path for specialized tag classes. */
@@ -113,7 +116,7 @@ public final class SpecializedTagClassCodeGenerator {
      * @return The Java class name with "Tag" suffix
      */
     public static String classNameFromTag(final String tageNameLowerCase) {
-        final String res = tageNameLowerCase.substring(0, 1).toUpperCase() + tageNameLowerCase.substring(1);
+        final String res = tageNameLowerCase.substring(0, 1).toUpperCase(Locale.US) + tageNameLowerCase.substring(1);
         return res + "Tag";
     }
 

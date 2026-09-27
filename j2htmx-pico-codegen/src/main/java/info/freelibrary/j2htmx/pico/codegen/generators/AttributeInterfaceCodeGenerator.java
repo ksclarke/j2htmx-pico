@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -104,7 +105,7 @@ public final class AttributeInterfaceCodeGenerator {
          */
         //IMPORTANT: '_' added as suffix to mitigate problems
         //where attributes are java keywords. Just to make it consistent and avoid special cases.
-        final String attrName = interfaceNameSimple.toLowerCase();
+        final String attrName = interfaceNameSimple.toLowerCase(Locale.US);
         final String paramName = attrName + "_";
 
         //depending on if the attribute has an argument or not,
@@ -195,7 +196,7 @@ public final class AttributeInterfaceCodeGenerator {
      * @return The interface name with first letter capitalized
      */
     public static String interfaceNameFromAttribute(final String attribute) {
-        return attribute.substring(0, 1).toUpperCase() + attribute.substring(1);
+        return attribute.substring(0, 1).toUpperCase(Locale.US) + attribute.substring(1);
     }
 
     private static Path makePath(final String tagLowerCase, final Path absPath) {

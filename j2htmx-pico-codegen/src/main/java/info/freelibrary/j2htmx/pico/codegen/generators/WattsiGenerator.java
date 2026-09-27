@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Generator that creates tag and attribute code by parsing WHATWG HTML spec sources.
@@ -101,6 +102,6 @@ public class WattsiGenerator {
     }
 
     private static String capitalize(final String word) {
-        return word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase();
+        return word.substring(0, 1).toUpperCase(Locale.US) + word.substring(1).toLowerCase(Locale.US);
     }
 }

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -132,9 +133,9 @@ public class WattsiSource {
                     final Element element = (Element) node;
                     if (element.is("code") || element.is("span")) {
                         if (element.hasAttr("data-x")) {
-                            return new Reference(element.attr("data-x").toLowerCase(), element.text());
+                            return new Reference(element.attr("data-x").toLowerCase(Locale.US), element.text());
                         } else {
-                            return new Reference(element.text().toLowerCase(), element.text());
+                            return new Reference(element.text().toLowerCase(Locale.US), element.text());
                         }
                     }
                 }

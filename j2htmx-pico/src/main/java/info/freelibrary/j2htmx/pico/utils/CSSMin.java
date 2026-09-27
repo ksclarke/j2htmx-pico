@@ -57,6 +57,7 @@ import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Vector;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -387,7 +388,7 @@ class Property implements Comparable<Property> {
 
             String prop = parts.get(0).trim();
             if (!(prop.length() > 2 && prop.substring(0, 2).equals("--"))) {
-                prop = prop.toLowerCase();
+                prop = prop.toLowerCase(Locale.US);
             }
             this.property = prop;
 
@@ -595,7 +596,7 @@ class Part {
             return;
         }
 
-        final String lcContents = this.contents.toLowerCase();
+        final String lcContents = this.contents.toLowerCase(Locale.US);
 
         for (int i = 0; i < Constants.fontWeightNames.length; i++) {
             if (lcContents.equals(Constants.fontWeightNames[i])) {
@@ -615,7 +616,7 @@ class Part {
             final String[] words = this.contents.split("\\s");
             if (words.length == 1) {
                 if (!this.property.equalsIgnoreCase("animation-name")) {
-                    this.contents = this.contents.toLowerCase();
+                    this.contents = this.contents.toLowerCase(Locale.US);
                 }
                 this.contents = this.contents.replaceAll("('|\")?(.*?)\1", "$2");
             }
@@ -623,7 +624,7 @@ class Part {
     }
 
     private void simplifyColourNames() {
-        final String lcContents = this.contents.toLowerCase();
+        final String lcContents = this.contents.toLowerCase(Locale.US);
 
         for (int i = 0; i < Constants.htmlColourNames.length; i++) {
             if (lcContents.equals(Constants.htmlColourNames[i])) {
@@ -650,10 +651,10 @@ class Part {
             if (matcher.group(1).equalsIgnoreCase(matcher.group(2)) && matcher.group(3).equalsIgnoreCase(
               matcher.group(4)) && matcher.group(5).equalsIgnoreCase(matcher.group(6))) {
                 matcher.appendReplacement(newContents,
-                  "#" + matcher.group(1).toLowerCase() + matcher.group(3).toLowerCase() +
-                  matcher.group(5).toLowerCase());
+                  "#" + matcher.group(1).toLowerCase(Locale.US) + matcher.group(3).toLowerCase(Locale.US) +
+                  matcher.group(5).toLowerCase(Locale.US));
             } else {
-                matcher.appendReplacement(newContents, matcher.group().toLowerCase());
+                matcher.appendReplacement(newContents, matcher.group().toLowerCase(Locale.US));
             }
         }
         matcher.appendTail(newContents);
