@@ -3,8 +3,10 @@ package info.freelibrary.j2htmx.pico.codegen.generators;
 import info.freelibrary.j2htmx.pico.codegen.GeneratorUtil;
 import info.freelibrary.j2htmx.pico.codegen.model.AttrD;
 import info.freelibrary.j2htmx.pico.codegen.model.AttributesList;
+import info.freelibrary.util.warnings.PMD;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,12 +18,17 @@ import java.util.Optional;
 /**
  * Code generator that outputs Java attribute interfaces for HTML elements.
  */
+@SuppressWarnings(PMD.SYSTEM_PRINTLN)
 public final class AttributeInterfaceCodeGenerator {
 
     /** The relative output path for attribute interface classes. */
-    private static final String relPath = "tags/attributes/";
+    private static final String RELATIVE_OUTPUT_PATH = "tags/attributes/";
 
+    /**
+     * Private constructor to prevent instantiation.
+     */
     private AttributeInterfaceCodeGenerator() {
+        // This is intentionally left empty
     }
 
     /**
@@ -32,21 +39,14 @@ public final class AttributeInterfaceCodeGenerator {
      * @throws IOException If an I/O error occurs
      */
     public static void generate(final Path absPath, final boolean delete) throws IOException {
+        final Path dir = Paths.get(absPath.toString(), RELATIVE_OUTPUT_PATH);
 
-        //delete all files in the directory for fresh generation
-        final Path dir = Paths.get(absPath.toString(), relPath);
+        // Delete all files in the directory for fresh generation
         GeneratorUtil.deleteAllFilesInDir(dir);
 
         for (final AttrD attr : AttributesList.attributesDescriptive()) {
             final Path path = makePath(attr.attr, absPath);
             final String interfaceName = interfaceNameFromAttribute(attr.attr) + "<T extends Tag<T>>";
-            /*
-            FormAction<T extends Tag<T>> extends Instance<T>
-
-            default T withFormAction(String formAction){
-                return self().attr("formaction", formAction);
-            }
-             */
             final String interfaceStr = getInterfaceTemplate(
               interfaceName,
               Optional.of("Instance<T>"),
@@ -57,7 +57,7 @@ public final class AttributeInterfaceCodeGenerator {
 
             if (!delete) {
                 System.out.println("writing to " + path);
-                Files.write(path, interfaceStr.getBytes());
+                Files.write(path, interfaceStr.getBytes(StandardCharsets.UTF_8));
             }
         }
 
@@ -94,14 +94,6 @@ public final class AttributeInterfaceCodeGenerator {
 
         sb.append(" {\n");
 
-        //interface contents
-        /*
-        FormAction<T extends Tag> extends Instance<T>
-
-        default T withFormAction(String formAction){
-            return self().attr("formaction", formAction);
-        }
-         */
         //IMPORTANT: '_' added as suffix to mitigate problems
         //where attributes are java keywords. Just to make it consistent and avoid special cases.
         final String attrName = interfaceNameSimple.toLowerCase(Locale.US);
@@ -110,7 +102,7 @@ public final class AttributeInterfaceCodeGenerator {
         //depending on if the attribute has an argument or not,
         //generate methods according to the convention in Tag.java
         // arg -> with$ATTR(arg), withCond$ATTR(condition, arg)
-        // no arg -> is$ATTR(), withCond$ATTR(condition)
+        // no arg -> has$ATTR(), withCond$ATTR(condition)
 
         //append the 'with$ATTR' method
         writeAttributeMethod(interfaceNameSimple, attrD, sb, attrName, paramName);
@@ -121,12 +113,8 @@ public final class AttributeInterfaceCodeGenerator {
         return sb.toString();
     }
 
+    @SuppressWarnings(PMD.AVOID_LITERALS_IN_IF_CONDITION)
     private static void addAttributeNoArg(final StringBuilder sb, final String attrName) {
-        //generate the code to add an attribute without an argument
-
-        //there are some special attributes
-        //which do take an argument, but where the argument
-        //is boolean (meaning on/off, yes/no and the like)
         if ("autocomplete".equals(attrName)) {
             sb.append("self().attr(\"").append(attrName).append("\",\"on\");\n");
         } else {
@@ -160,7 +148,7 @@ public final class AttributeInterfaceCodeGenerator {
       final StringBuilder sb, final String attrName, final String paramName) {
 
         sb.append(makeReturnTypeAndMethodName(
-          ((attrD.hasArgument) ? "with" : "is") + interfaceNameSimple)
+          (attrD.hasArgument ? "with" : "has") + interfaceNameSimple)
         );
 
         if (attrD.hasArgument) {
@@ -192,7 +180,7 @@ public final class AttributeInterfaceCodeGenerator {
 
     private static Path makePath(final String tagLowerCase, final Path absPath) {
         final String filename = interfaceNameFromAttribute(tagLowerCase) + ".java";
-        return Paths.get(absPath.toString(), relPath, filename);
+        return Paths.get(absPath.toString(), RELATIVE_OUTPUT_PATH, filename);
     }
 
 }

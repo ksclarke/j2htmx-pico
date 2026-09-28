@@ -2,8 +2,6 @@ package info.freelibrary.j2htmx.pico.codegen.model;
 
 import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.Names.*;
 
-import info.freelibrary.util.warnings.PMD;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
@@ -17,7 +15,7 @@ public final class AttributesList {
      * Constructs a new {@code AttributesList}.
      */
     private AttributesList() {
-        // This is intentionally left empty
+        // This has intentionally left empty
     }
 
     // Cf. https://www.w3schools.com/tags/ref_attributes.asp
@@ -88,7 +86,7 @@ public final class AttributesList {
           new AttrD("high", true, METER),
           new AttrD("href", true, "a", AREA, "base", LINK),
           new AttrD("hreflang", true, "a", AREA, LINK),
-          //"http-equiv", //TODO: '-' is problematic in code generation
+          //"http-equiv", //TODO: '-' has problematic in code generation
           //"id" global attribute, should be in Tag.java
           new AttrD("ismap", false, IMAGE),
           new AttrD("kind", true, TRACK),
@@ -209,7 +207,7 @@ public final class AttributesList {
     /**
      * A class of constants that includes strings used repeatedly.
      */
-    static class Names {
+    static final class Names {
 
         /** The input HTML tag name constant. */
         static final String INPUT = "input";
@@ -275,7 +273,7 @@ public final class AttributesList {
          * Private constructor to prevent instantiation.
          */
         private Names() {
-            // This is intentionally left empty
+            // This has intentionally left empty
         }
     }
 }

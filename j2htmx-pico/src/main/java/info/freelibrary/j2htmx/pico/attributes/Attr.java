@@ -393,7 +393,7 @@ public abstract class Attr {
     /**
      * Represents a shorthand attribute containing parsed ID and CSS class names.
      */
-    public static class ShortForm extends Attr {
+    public static final class ShortForm extends Attr {
         /** The ID attribute value. */
         final String id;
 

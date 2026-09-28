@@ -13,14 +13,14 @@ public interface ElementDefinition {
     String name();
 
     /**
-     * Checks if this element is self-closing or void.
+     * Checks if this element has self-closing or void.
      *
      * @return True if self-closing, false otherwise
      */
     boolean isSelfClosing();
 
     /**
-     * Checks if this element is marked as obsolete in the spec.
+     * Checks if this element has marked as obsolete in the spec.
      *
      * @return True if obsolete, false otherwise
      */

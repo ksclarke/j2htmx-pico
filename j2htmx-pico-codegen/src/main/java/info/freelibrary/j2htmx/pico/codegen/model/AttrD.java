@@ -37,6 +37,6 @@ public final class AttrD {
     public AttrD(final String attr, final boolean hasArgument, final String... tags) {
         this.attr = attr;
         this.hasArgument = hasArgument;
-        this.tags = tags;
+        this.tags = tags != null ? tags.clone() : null;
     }
 }

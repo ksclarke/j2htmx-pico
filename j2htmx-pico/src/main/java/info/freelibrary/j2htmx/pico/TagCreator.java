@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 /**
  * Primary factory class providing static builder methods to construct HTML, HTMX, and Pico CSS elements.
  */
-public class TagCreator {
+public final class TagCreator {
 
     private TagCreator() {
     }

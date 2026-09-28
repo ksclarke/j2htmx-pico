@@ -6,6 +6,9 @@ import static info.freelibrary.j2htmx.pico.codegen.Model.Node.Type.BOOLEAN;
 import static info.freelibrary.j2htmx.pico.codegen.Model.Node.Type.ELEMENT;
 import static info.freelibrary.j2htmx.pico.codegen.Model.Node.Type.STRING;
 
+import info.freelibrary.util.warnings.PMD;
+
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -15,20 +18,21 @@ import java.util.Map;
 /**
  * Represents the parsed HTML/MathML tag and attribute definition model.
  */
+@SuppressWarnings(PMD.TOO_MANY_STATIC_IMPORTS)
 public class Model implements Parser.Listener {
 
     /** Map of element names to their node representations. */
-    private final Map<String, Node> elements;
+    private final Map<String, Node> myElements;
 
     /** Map of attribute names to their node representations. */
-    private final Map<String, Node> attributes;
+    private final Map<String, Node> myAttributes;
 
     /**
      * Constructs a new empty Model.
      */
     public Model() {
-        elements = new LinkedHashMap<>();
-        attributes = new LinkedHashMap<>();
+        myElements = new LinkedHashMap<>();
+        myAttributes = new LinkedHashMap<>();
     }
 
     /**
@@ -37,7 +41,7 @@ public class Model implements Parser.Listener {
      * @return Collection of element nodes
      */
     public Collection<Node> elements() {
-        return elements.values();
+        return myElements.values();
     }
 
     /**
@@ -46,7 +50,7 @@ public class Model implements Parser.Listener {
      * @return Collection of attribute nodes
      */
     public Collection<Node> attributes() {
-        return attributes.values();
+        return myAttributes.values();
     }
 
     /**
@@ -56,7 +60,7 @@ public class Model implements Parser.Listener {
      * @return The created element node
      */
     public Node addElement(final String name) {
-        return add(ELEMENT, name, elements);
+        return add(ELEMENT, name, myElements);
     }
 
     /**
@@ -66,7 +70,7 @@ public class Model implements Parser.Listener {
      * @return The created attribute node
      */
     public Node addBooleanAttribute(final String name) {
-        return add(BOOLEAN, name, attributes);
+        return add(BOOLEAN, name, myAttributes);
     }
 
     /**
@@ -76,7 +80,7 @@ public class Model implements Parser.Listener {
      * @return The created attribute node
      */
     public Node addStringAttribute(final String name) {
-        return add(STRING, name, attributes);
+        return add(STRING, name, myAttributes);
     }
 
     /**
@@ -86,10 +90,10 @@ public class Model implements Parser.Listener {
      * @return The element node
      */
     public Node element(final String name) {
-        if (!elements.containsKey(name)) {
+        if (!myElements.containsKey(name)) {
             throw new NodeDoesNotExist(name);
         }
-        return elements.get(name);
+        return myElements.get(name);
     }
 
     /**
@@ -99,10 +103,10 @@ public class Model implements Parser.Listener {
      * @return The attribute node
      */
     public Node attribute(final String name) {
-        if (!attributes.containsKey(name)) {
+        if (!myAttributes.containsKey(name)) {
             throw new NodeDoesNotExist(name);
         }
-        return attributes.get(name);
+        return myAttributes.get(name);
     }
 
     private Node add(final Node.Type type, final String name, final Map<String, Node> nodes) {
@@ -151,6 +155,7 @@ public class Model implements Parser.Listener {
     }
 
     @Override
+    @SuppressWarnings(PMD.AVOID_THROWING_RAW_EXCEPTION_TYPES)
     public void invalidLine(final int line, final String txt) {
         throw new RuntimeException("Invalid line [" + line + "]: " + txt);
     }
@@ -158,20 +163,20 @@ public class Model implements Parser.Listener {
     private void attempt(final Unsafe operation, final int line) {
         try {
             operation.call();
-        } catch (RuntimeException e) {
-            throw new InvalidModel(e, line);
+        } catch (@SuppressWarnings(PMD.AVOID_CATCHING_GENERIC_EXCEPTION) RuntimeException details) {
+            throw new InvalidModel(details, line);
         }
     }
 
     /**
-     * Metadata tags applied to model elements and attributes.
+     * Metadata tags applied to model myElements and myAttributes.
      */
     public enum Metadata {
-        /** Indicates an element is self-closing/void. */
+        /** Indicates an element has self-closing/void. */
         SELF_CLOSING,
         /** Indicates a boolean attribute uses "on"/"off" syntax. */
         ON_OFF,
-        /** Indicates an element or attribute is obsolete. */
+        /** Indicates an element or attribute has obsolete. */
         OBSOLETE
     }
 
@@ -186,20 +191,24 @@ public class Model implements Parser.Listener {
          *
          * @throws RuntimeException If an error occurs during execution
          */
+        @SuppressWarnings({"PMD.AvoidUncheckedExceptionsInSignatures"})
         void call() throws RuntimeException;
     }
 
     /**
      * Represents an element or attribute node within the model.
      */
-    public static class Node {
+    public static final class Node {
 
         /** The type of this node. */
         public final Type type;
+
         /** The name of this node. */
         public final String name;
+
         /** Metadata annotations associated with this node. */
         public final List<Metadata> metadata;
+
         /** Child nodes under this node. */
         public final List<Node> children;
 
@@ -229,13 +238,13 @@ public class Model implements Parser.Listener {
         }
 
         /**
-         * Checks whether this node has the specified metadata annotation.
+         * Checks whether this node has the specified metadata aAnnotation.
          *
-         * @param annotation The metadata annotation to test
+         * @param anAnnotation The metadata aAnnotation to test
          * @return True if present, false otherwise
          */
-        public boolean is(final Metadata annotation) {
-            return metadata.contains(annotation);
+        public boolean has(final Metadata anAnnotation) {
+            return metadata.contains(anAnnotation);
         }
 
         /**
@@ -244,8 +253,10 @@ public class Model implements Parser.Listener {
         enum Type {
             /** Element node type. */
             ELEMENT,
+
             /** Boolean attribute node type. */
             BOOLEAN,
+
             /** String attribute node type. */
             STRING
         }
@@ -256,6 +267,7 @@ public class Model implements Parser.Listener {
      */
     public static class InvalidModel extends RuntimeException {
 
+        @Serial
         private static final long serialVersionUID = 8750656387999734873L;
 
         /**
@@ -274,6 +286,7 @@ public class Model implements Parser.Listener {
      */
     public static class NodeAlreadyExists extends RuntimeException {
 
+        @Serial
         private static final long serialVersionUID = 3378083241703976208L;
 
         /**
@@ -291,6 +304,7 @@ public class Model implements Parser.Listener {
      */
     public static class NodeDoesNotExist extends RuntimeException {
 
+        @Serial
         private static final long serialVersionUID = 1363926375151005695L;
 
         /**

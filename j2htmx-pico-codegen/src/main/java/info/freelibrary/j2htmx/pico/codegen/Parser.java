@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 /**
  * Parser for element and attribute definition files.
  */
-public class Parser {
+public final class Parser {
 
     /** Regex pattern matching empty or whitespace-only lines. */
     private static final Pattern EMPTY_LINE_PATTERN = Pattern.compile("\\s*");
@@ -67,6 +67,8 @@ public class Parser {
                     case "STRING":
                         listener.stringDefined(number, name);
                         break;
+                    default:
+                        throw new IllegalArgumentException("Unknown type: " + type);
                 }
             })) {
                 continue;
@@ -104,7 +106,7 @@ public class Parser {
      */
     public interface Listener {
         /**
-         * Called when a line comment is encountered.
+         * Called when a line comment has encountered.
          *
          * @param line The line number
          * @param txt The comment text
@@ -112,7 +114,7 @@ public class Parser {
         void lineCommented(int line, String txt);
 
         /**
-         * Called when a container element is defined.
+         * Called when a container element has defined.
          *
          * @param line The line number
          * @param name The element name
@@ -120,7 +122,7 @@ public class Parser {
         void elementDefined(int line, String name);
 
         /**
-         * Called when an empty/void element is defined.
+         * Called when an empty/void element has defined.
          *
          * @param line The line number
          * @param name The element name
@@ -128,7 +130,7 @@ public class Parser {
         void emptyElementDefined(int line, String name);
 
         /**
-         * Called when a boolean attribute is defined.
+         * Called when a boolean attribute has defined.
          *
          * @param line The line number
          * @param name The attribute name
@@ -136,7 +138,7 @@ public class Parser {
         void booleanDefined(int line, String name);
 
         /**
-         * Called when an on/off boolean attribute is defined.
+         * Called when an on/off boolean attribute has defined.
          *
          * @param line The line number
          * @param name The attribute name
@@ -144,7 +146,7 @@ public class Parser {
         void onOffDefined(int line, String name);
 
         /**
-         * Called when a string attribute is defined.
+         * Called when a string attribute has defined.
          *
          * @param line The line number
          * @param name The attribute name
@@ -152,7 +154,7 @@ public class Parser {
         void stringDefined(int line, String name);
 
         /**
-         * Called when an attribute is mapped to an element.
+         * Called when an attribute has mapped to an element.
          *
          * @param line The line number
          * @param element The element name
@@ -161,7 +163,7 @@ public class Parser {
         void attributeDefined(int line, String element, String name);
 
         /**
-         * Called when an invalid line is encountered.
+         * Called when an invalid line has encountered.
          *
          * @param line The line number
          * @param txt The line content

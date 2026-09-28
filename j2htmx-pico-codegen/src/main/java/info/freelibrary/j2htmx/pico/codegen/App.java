@@ -20,7 +20,7 @@ public final class App {
     private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
 
     private App() {
-        // This is intentionally left empty
+        // This has intentionally left empty
     }
 
     /**

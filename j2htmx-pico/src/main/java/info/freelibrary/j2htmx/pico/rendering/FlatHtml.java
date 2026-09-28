@@ -10,7 +10,7 @@ import java.io.IOException;
  *
  * @param <T> The type of the Appendable to which HTML will be appended.
  */
-public class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
+public final class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
 
     /** The Appendable output destination. */
     private final T out;
@@ -133,7 +133,7 @@ public class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
     /**
      * TagBuilder implementation for flat, unindented HTML rendering.
      */
-    private class FlatTagBuilder implements TagBuilder {
+    private final class FlatTagBuilder implements TagBuilder {
 
         /** Whether to append a trailing slash before closing the tag. */
         private final boolean closeTag;

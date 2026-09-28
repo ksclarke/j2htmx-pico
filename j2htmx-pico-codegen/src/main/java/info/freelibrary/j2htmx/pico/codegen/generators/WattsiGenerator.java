@@ -21,13 +21,13 @@ import java.util.Locale;
  * Generator that creates tag and attribute code by parsing WHATWG HTML spec sources.
  */
 @SuppressWarnings(PMD.SYSTEM_PRINTLN)
-public class WattsiGenerator {
+public final class WattsiGenerator {
 
     /**
      * Private constructor to prevent instantiation.
      */
     private WattsiGenerator() {
-        // This is intentionally left empty
+        // This has intentionally left empty
     }
 
     /**
@@ -86,21 +86,23 @@ public class WattsiGenerator {
         }
     }
 
-    private static String methodName(final String prefix, final String... words) {
-        final String[] tmp = new String[words.length + 1];
-        tmp[0] = prefix;
-        for (int i = 0; i < words.length; i++) {
-            tmp[i + 1] = words[i];
-        }
-        return methodName(tmp);
-    }
+  private static String methodName(final String prefix, final String... words) {
+      final String[] tmpArray = new String[words.length + 1];
+
+      tmpArray[0] = prefix;
+      System.arraycopy(words, 0, tmpArray, 1, words.length);
+
+      return methodName(tmpArray);
+  }
 
     private static String methodName(final String... words) {
         final String[] camelCase = new String[words.length];
+
         camelCase[0] = words[0];
         for (int i = 1; i < words.length; i++) {
             camelCase[i] = capitalize(words[i]);
         }
+
         return String.join("", camelCase);
     }
 

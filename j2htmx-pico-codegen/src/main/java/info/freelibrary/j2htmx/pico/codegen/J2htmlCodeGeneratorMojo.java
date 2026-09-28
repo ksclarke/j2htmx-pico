@@ -1,5 +1,6 @@
 package info.freelibrary.j2htmx.pico.codegen;
 
+import info.freelibrary.util.warnings.PMD;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -46,7 +47,7 @@ public class J2htmlCodeGeneratorMojo extends AbstractMojo {
 
         final String definitions;
         try {
-            definitions = new String(Files.readAllBytes(Paths.get(modelFile)));
+            definitions = Files.readString(Paths.get(modelFile));
         } catch (IOException e) {
             throw new MojoFailureException("Unable to locate model file: " + modelFile, e);
         }
@@ -54,19 +55,14 @@ public class J2htmlCodeGeneratorMojo extends AbstractMojo {
         final Model model = new Model();
         try {
             Parser.parse(definitions, model);
-        } catch (RuntimeException e) {
-            throw new MojoFailureException("Unable to parse model file.", e);
+        } catch (@SuppressWarnings(PMD.AVOID_CATCHING_GENERIC_EXCEPTION) RuntimeException details) {
+            throw new MojoFailureException("Unable to parse model file.", details);
         }
 
         try {
-            Generator.generate(
-              Paths.get(outputDirectory).toAbsolutePath(),
-              attributePackage,
-              tagPackage,
-              model
-            );
-        } catch (IOException e) {
-            throw new MojoFailureException("Failed to generate source files.", e);
+            Generator.generate(Paths.get(outputDirectory).toAbsolutePath(), attributePackage, tagPackage, model);
+        } catch (IOException details) {
+            throw new MojoFailureException("Failed to generate source files.", details);
         }
     }
 }

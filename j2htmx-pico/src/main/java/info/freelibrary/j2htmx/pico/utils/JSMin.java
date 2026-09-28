@@ -48,7 +48,7 @@ import java.io.PushbackInputStream;
 /**
  * JavaScript minifier based on Douglas Crockford's JSMin.
  */
-public class JSMin {
+public final class JSMin {
 
     /** End-of-file indicator constant. */
     private static final int EOF = -1;

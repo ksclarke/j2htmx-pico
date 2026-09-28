@@ -13,7 +13,7 @@ import java.util.Scanner;
 /**
  * Utility for reading static resource files (CSS, JS) from the classpath or filesystem and embedding them into tags.
  */
-public class InlineStaticResource {
+public final class InlineStaticResource {
 
     private InlineStaticResource() {
     }

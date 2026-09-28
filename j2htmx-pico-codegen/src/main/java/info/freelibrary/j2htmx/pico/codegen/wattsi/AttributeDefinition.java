@@ -21,7 +21,7 @@ public interface AttributeDefinition {
     boolean appliesTo(ElementDefinition element);
 
     /**
-     * Checks if this attribute is marked as obsolete in the spec.
+     * Checks if this attribute has marked as obsolete in the spec.
      *
      * @return True if obsolete, false otherwise
      */

@@ -9,6 +9,7 @@ import info.freelibrary.j2htmx.pico.codegen.model.AttributesList;
 import info.freelibrary.util.warnings.PMD;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,9 +26,13 @@ import java.util.stream.Collectors;
 public final class SpecializedTagClassCodeGenerator {
 
     /** The relative output path for specialized tag classes. */
-    private static final String relPath = "tags/specialized";
+    private static final String RELATIVE_OUTPUT_PATH = "tags/specialized";
 
+    /**
+     * Constructs an instance of SpecializedTagClassCodeGenerator.
+     */
     private SpecializedTagClassCodeGenerator() {
+        // This has intentionally left empty
     }
 
     /**
@@ -40,7 +45,7 @@ public final class SpecializedTagClassCodeGenerator {
     public static void generate(final Path absPath, final boolean delete) throws IOException {
 
         //delete all files in the directory for fresh generation
-        final Path dir = Paths.get(absPath.toString(), relPath);
+        final Path dir = Paths.get(absPath.toString(), RELATIVE_OUTPUT_PATH);
         GeneratorUtil.deleteAllFilesInDir(dir);
 
         //the delete argument serves to give the possibility
@@ -73,7 +78,7 @@ public final class SpecializedTagClassCodeGenerator {
 
             if (!delete) {
                 System.out.println("writing to " + path);
-                Files.write(path, classString.getBytes());
+                Files.write(path, classString.getBytes(StandardCharsets.UTF_8));
             }
         }
 
@@ -104,7 +109,7 @@ public final class SpecializedTagClassCodeGenerator {
                 }
             } else {
                 System.out.println("writing to " + path);
-                Files.write(path, classString.getBytes());
+                Files.write(path, classString.getBytes(StandardCharsets.UTF_8));
             }
         }
     }
@@ -122,7 +127,7 @@ public final class SpecializedTagClassCodeGenerator {
 
     private static Path makePath(final Path absPath, final String tagLowerCase) {
         final String filename = classNameFromTag(tagLowerCase) + ".java";
-        return Paths.get(absPath.toString(), relPath, filename);
+        return Paths.get(absPath.toString(), RELATIVE_OUTPUT_PATH, filename);
     }
 
     private static String getPackage() {

@@ -1,6 +1,7 @@
 package info.freelibrary.j2htmx.pico.codegen.wattsi;
 
 import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
+import static info.freelibrary.util.Constants.SPACE;
 import static java.util.stream.Collectors.toList;
 
 import org.jsoup.nodes.Document;
@@ -22,6 +23,9 @@ import java.util.stream.Collectors;
  * Parses and extracts element and attribute definitions from a WHATWG HTML specification document.
  */
 public class WattsiSource {
+
+    /** The data-x attribute. */
+    private static final String DATA_X = "data-x";
 
     /** The HTML document being parsed. */
     private final Document doc;
@@ -121,25 +125,19 @@ public class WattsiSource {
          * @return A Reference instance or null if not resolved
          */
         public static Reference from(final List<Node> nodes) {
-            if (nodes.stream().allMatch(n -> n instanceof TextNode)) {
+            if (nodes.stream().allMatch(TextNode.class::isInstance)) {
                 final String txt = nodes.stream()
-                  .map(n -> (TextNode) n)
+                  .map(TextNode.class::cast)
                   .map(TextNode::text)
-                  .collect(Collectors.joining(" "));
+                  .collect(Collectors.joining(SPACE));
                 return new Reference(txt, txt);
             }
 
             for (final Node node : nodes) {
-                if (!(node instanceof Element element)) {
-                    continue;
+                if (node instanceof Element element && (element.is("code") || element.is("span"))) {
+                    final String key = element.hasAttr(DATA_X) ? element.attr(DATA_X) : element.text();
+                    return new Reference(key.toLowerCase(Locale.US), element.text());
                 }
-
-                if (!element.is("code") && !element.is("span")) {
-                    continue;
-                }
-
-                final String key = element.hasAttr("data-x") ? element.attr("data-x") : element.text();
-                return new Reference(key.toLowerCase(Locale.US), element.text());
             }
 
             return null;
@@ -180,12 +178,15 @@ public class WattsiSource {
             if (!"dfn".equals(dfn.tagName())) {
                 throw new IllegalArgumentException("Element cannot be defined from: " + dfn);
             }
+
             if (!dfn.hasAttr("element")) {
                 throw new IllegalArgumentException("Does not define an element: " + dfn);
             }
+
             if ( dfn.childrenSize() != SINGLE_INSTANCE) {
                 throw new IllegalArgumentException("Element cannot have multiple definitions: " + dfn);
             }
+
             this.dfn = dfn;
         }
 
@@ -195,8 +196,8 @@ public class WattsiSource {
 
         @Override
         public String name() {
-            if (dfn.hasAttr("data-x")) {
-                return dfn.attr("data-x");
+            if (dfn.hasAttr(DATA_X)) {
+                return dfn.attr(DATA_X);
             }
 
             return Reference.from(dfn.childNodes()).key;

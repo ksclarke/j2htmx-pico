@@ -3,7 +3,7 @@ package info.freelibrary.j2htmx.pico.tags;
 /**
  * Utility for joining strings and {@link DomContent} objects with a delimiter.
  */
-public class DomContentJoiner {
+public final class DomContentJoiner {
 
     private DomContentJoiner() {
     }

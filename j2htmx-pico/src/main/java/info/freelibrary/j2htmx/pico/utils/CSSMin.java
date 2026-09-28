@@ -67,7 +67,7 @@ import java.util.regex.PatternSyntaxException;
 /**
  * CSS minifier that removes unnecessary whitespace and comments, and compresses CSS.
  */
-public class CSSMin {
+public final class CSSMin {
 
     /** Logger instance for CSSMin. */
     private static final Logger LOG = Logger.getLogger(CSSMin.class.getName());

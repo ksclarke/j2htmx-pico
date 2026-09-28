@@ -25,7 +25,10 @@
             <scope>test</scope>
         </dependency>
 
-
+        <dependency>
+            <groupId>info.freelibrary</groupId>
+            <artifactId>freelib-utils</artifactId>
+        </dependency>
     </dependencies>
 
     <packaging>jar</packaging>
@@ -104,6 +107,17 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>info.freelibrary</groupId>
+                <artifactId>freelib-maven-plugins</artifactId>
+                <version>${freelib.maven.version}</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

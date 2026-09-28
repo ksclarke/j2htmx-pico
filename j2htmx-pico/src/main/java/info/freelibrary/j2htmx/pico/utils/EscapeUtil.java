@@ -3,7 +3,7 @@ package info.freelibrary.j2htmx.pico.utils;
 /**
  * Utility for escaping special characters in HTML strings.
  */
-public class EscapeUtil {
+public final class EscapeUtil {
 
     private EscapeUtil() {
     }

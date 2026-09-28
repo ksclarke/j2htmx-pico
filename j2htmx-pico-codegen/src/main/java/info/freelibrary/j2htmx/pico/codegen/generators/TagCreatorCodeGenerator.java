@@ -11,8 +11,14 @@ import java.util.List;
 @SuppressWarnings(PMD.SYSTEM_PRINTLN)
 public final class TagCreatorCodeGenerator {
 
+    /** The formatting for a single line of code. */
+    private static final String LINE_FORMAT = "%-120s%s%n";
+
+    /** Java code that adds to an attribute. */
+    private static final String ATTR_ADD_TO_METHOD = " Attr.addTo(";
+
     private TagCreatorCodeGenerator() {
-        // This is intentionally left empty
+        // This has intentionally left empty
     }
 
     /**
@@ -32,10 +38,10 @@ public final class TagCreatorCodeGenerator {
             final String emptyA2 = "{ return " + construct + "; }";
             // Attr shorthands
             final String emptyB1 = publicstaticTypeMethod + "(Attr.ShortForm shortAttr)";
-            final String emptyB2 = "{ " + castReturn + " Attr.addTo(" + construct + ", shortAttr); }";
+            final String emptyB2 = "{ " + castReturn + ATTR_ADD_TO_METHOD + construct + ", shortAttr); }";
             // Print
-            System.out.println(String.format("%-80s%1s", emptyA1, emptyA2));
-            System.out.println(String.format("%-80s%1s", emptyB1, emptyB2));
+            System.out.printf(LINE_FORMAT, emptyA1, emptyA2);
+            System.out.printf(LINE_FORMAT, emptyB1, emptyB2);
             System.out.println();
         }
 
@@ -57,21 +63,21 @@ public final class TagCreatorCodeGenerator {
             final String containerC2 = "{ " + castReturn + construct + ".with(dc); }";
             // Attr shorthands
             final String containerD1 = publicstaticTypeMethod + "(Attr.ShortForm shortAttr)";
-            final String containerD2 = "{ " + castReturn + " Attr.addTo(" + construct + ", shortAttr); }";
+            final String containerD2 = "{ " + castReturn + ATTR_ADD_TO_METHOD + construct + ", shortAttr); }";
 
             final String containerE1 = publicstaticTypeMethod + "(Attr.ShortForm shortAttr, String text)";
             final String containerE2 =
-              "{ " + castReturn + " Attr.addTo(" + construct + ".withText(text), shortAttr); }";
+              "{ " + castReturn + ATTR_ADD_TO_METHOD + construct + ".withText(text), shortAttr); }";
 
             final String containerF1 = publicstaticTypeMethod + "(Attr.ShortForm shortAttr, DomContent... dc)";
-            final String containerF2 = "{ " + castReturn + " Attr.addTo(" + construct + ".with(dc), shortAttr); }";
+            final String containerF2 = "{ " + castReturn + ATTR_ADD_TO_METHOD + construct + ".with(dc), shortAttr); }";
             // Print
-            System.out.println(String.format("%-80s%1s", containerA1, containerA2));
-            System.out.println(String.format("%-80s%1s", containerB1, containerB2));
-            System.out.println(String.format("%-80s%1s", containerC1, containerC2));
-            System.out.println(String.format("%-80s%1s", containerD1, containerD2));
-            System.out.println(String.format("%-80s%1s", containerE1, containerE2));
-            System.out.println(String.format("%-80s%1s", containerF1, containerF2));
+            System.out.printf(LINE_FORMAT, containerA1, containerA2);
+            System.out.printf(LINE_FORMAT, containerB1, containerB2);
+            System.out.printf(LINE_FORMAT, containerC1, containerC2);
+            System.out.printf(LINE_FORMAT, containerD1, containerD2);
+            System.out.printf(LINE_FORMAT, containerE1, containerE2);
+            System.out.printf(LINE_FORMAT, containerF1, containerF2);
             System.out.println();
         }
     }
@@ -82,24 +88,8 @@ public final class TagCreatorCodeGenerator {
      * @return List of empty tag names
      */
     public static List<String> emptyTags() {
-        return Arrays.asList(
-          "area",
-          "base",
-          "br",
-          "col",
-          //"!DOCTYPE html",
-          "embed",
-          "hr",
-          "img",
-          "input",
-          "keygen",
-          "link",
-          "meta",
-          "param",
-          "source",
-          "track",
-          "wbr"
-        );
+        return Arrays.asList("area", "base", "br", "col", "embed", "hr", "img", "input", "keygen", "link", "meta",
+          "param", "source", "track", "wbr");
     }
 
     /**
@@ -108,105 +98,13 @@ public final class TagCreatorCodeGenerator {
      * @return List of container tag names
      */
     public static List<String> containerTags() {
-        return Arrays.asList(
-          "a",
-          "abbr",
-          "address",
-          "article",
-          "aside",
-          "audio",
-          "b",
-          "bdi",
-          "bdo",
-          "blockquote",
-          "body",
-          "button",
-          "canvas",
-          "caption",
-          "cite",
-          "code",
-          "colgroup",
-          "data",
-          "datalist",
-          "dd",
-          "del",
-          "details",
-          "dfn",
-          "dialog",
-          "div",
-          "dl",
-          "dt",
-          "em",
-          "fieldset",
-          "figcaption",
-          "figure",
-          "footer",
-          "form",
-          "h1",
-          "h2",
-          "h3",
-          "h4",
-          "h5",
-          "h6",
-          "head",
-          "header",
-          "html",
-          "i",
-          "iframe",
-          "ins",
-          "kbd",
-          "label",
-          "legend",
-          "li",
-          "main",
-          "map",
-          "mark",
-          "menu",
-          "menuitem",
-          "meter",
-          "nav",
-          "noscript",
-          "object",
-          "ol",
-          "optgroup",
-          "option",
-          "output",
-          "p",
-          "picture",
-          "pre",
-          "progress",
-          "q",
-          "rp",
-          "rt",
-          "ruby",
-          "s",
-          "samp",
-          "script",
-          "section",
-          "select",
-          "slot",
-          "small",
-          "span",
-          "strong",
-          "style",
-          "sub",
-          "summary",
-          "sup",
-          "table",
-          "tbody",
-          "td",
-          "template",
-          "textarea",
-          "tfoot",
-          "th",
-          "thead",
-          "time",
-          "title",
-          "tr",
-          "u",
-          "ul",
-          "var",
-          "video"
-        );
+        return Arrays.asList("a", "abbr", "address", "article", "aside", "audio", "b", "bdi", "bdo", "blockquote",
+          "body", "button", "canvas", "caption", "cite", "code", "colgroup", "data", "datalist", "dd", "del", "details",
+          "dfn", "dialog", "div", "dl", "dt", "em", "fieldset", "figcaption", "figure", "footer", "form", "h1", "h2",
+          "h3", "h4", "h5", "h6", "head", "header", "html", "i", "iframe", "ins", "kbd", "label", "legend", "li",
+          "main", "map", "mark", "menu", "menuitem", "meter", "nav", "noscript", "object", "ol", "optgroup", "option",
+          "output", "p", "picture", "pre", "progress", "q", "rp", "rt", "ruby", "s", "samp", "script", "section",
+          "select", "slot", "small", "span", "strong", "style", "sub", "summary", "sup", "table", "tbody", "td",
+          "template", "textarea", "tfoot", "th", "thead", "time", "title", "tr", "u", "ul", "var", "video");
     }
 }

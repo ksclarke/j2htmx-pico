@@ -10,7 +10,7 @@ import info.freelibrary.j2htmx.pico.codegen.model.AttrD;
 /**
  * Utility to export HTML element and attribute definitions to standard output.
  */
-public class Export {
+public final class Export {
 
     private Export() {
     }

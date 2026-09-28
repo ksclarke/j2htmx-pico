@@ -13,7 +13,7 @@ import java.util.Deque;
  *
  * @param <T> The type of the Appendable to which HTML will be appended.
  */
-public class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> {
+public final class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> {
 
     /** The Appendable output destination. */
     private final T out;
@@ -196,7 +196,7 @@ public class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> {
     /**
      * TagBuilder implementation for formatted, indented HTML rendering.
      */
-    private class IndentedTagBuilder implements TagBuilder {
+    private final class IndentedTagBuilder implements TagBuilder {
 
         /** Whether to append a trailing slash before closing the tag. */
         private final boolean closeTag;
