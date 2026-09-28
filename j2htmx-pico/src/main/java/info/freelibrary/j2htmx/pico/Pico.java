@@ -123,6 +123,9 @@ public final class Pico {
     /** Classpath resource path to the bundled minified Pico CSS stylesheet. */
     public static final String BUNDLED_CSS_PATH = "/pico/pico.min.css";
 
+    /**
+     * Constructs a new Pico instance.
+     */
     private Pico() {
     }
 
@@ -322,13 +325,21 @@ public final class Pico {
      * Theme options for Pico CSS.
      */
     public enum Theme {
+        /** Light theme mode. */
         LIGHT("light"),
+        /** Dark theme mode. */
         DARK("dark"),
+        /** Automatic theme mode following system preferences. */
         AUTO("auto");
 
         /** The theme string value. */
         private final String myValue;
 
+        /**
+         * Constructs a Theme option.
+         *
+         * @param aValue The theme string value
+         */
         Theme(final String aValue) {
             myValue = aValue;
         }
@@ -352,30 +363,55 @@ public final class Pico {
      * Color scheme variants supported by Pico CSS v2.
      */
     public enum Color {
+        /** Amber color palette. */
         AMBER("amber"),
+        /** Azure color palette. */
         AZURE("azure"),
+        /** Blue color palette. */
         BLUE("blue"),
+        /** Cyan color palette. */
         CYAN("cyan"),
+        /** Fuchsia color palette. */
         FUCHSIA("fuchsia"),
+        /** Green color palette. */
         GREEN("green"),
+        /** Grey color palette. */
         GREY("grey"),
+        /** Indigo color palette. */
         INDIGO("indigo"),
+        /** Jade color palette. */
         JADE("jade"),
+        /** Lime color palette. */
         LIME("lime"),
+        /** Orange color palette. */
         ORANGE("orange"),
+        /** Pink color palette. */
         PINK("pink"),
+        /** Pumpkin color palette. */
         PUMPKIN("pumpkin"),
+        /** Purple color palette. */
         PURPLE("purple"),
+        /** Red color palette. */
         RED("red"),
+        /** Sand color palette. */
         SAND("sand"),
+        /** Slate color palette. */
         SLATE("slate"),
+        /** Violet color palette. */
         VIOLET("violet"),
+        /** Yellow color palette. */
         YELLOW("yellow"),
+        /** Zinc color palette. */
         ZINC("zinc");
 
         /** The color scheme string value. */
         private final String myValue;
 
+        /**
+         * Constructs a Color scheme option.
+         *
+         * @param aValue The color scheme string value
+         */
         Color(final String aValue) {
             myValue = aValue;
         }

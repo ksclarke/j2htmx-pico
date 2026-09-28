@@ -15,6 +15,9 @@ import java.util.Scanner;
  */
 public final class InlineStaticResource {
 
+    /**
+     * Constructs a new inline static resource utility.
+     */
     private InlineStaticResource() {
     }
 
@@ -24,6 +27,7 @@ public final class InlineStaticResource {
      * @param path The file path on the classpath or filesystem
      * @param format The target format determining tag type and minification
      * @return A ContainerTag representing the inline style or script element
+     * @throws RuntimeException If an invalid target format is specified
      */
     public static ContainerTag<? extends Tag<?>> get(final String path, final TargetFormat format) {
         final String fileString = getFileAsString(path);
@@ -46,6 +50,7 @@ public final class InlineStaticResource {
      *
      * @param path The path to the file
      * @return The file contents as a string
+     * @throws RuntimeException If the file cannot be found on the classpath or filesystem
      */
     public static String getFileAsString(final String path) {
         try {
@@ -59,6 +64,12 @@ public final class InlineStaticResource {
         }
     }
 
+    /**
+     * Reads an input stream into a string.
+     *
+     * @param inputStream The input stream to read
+     * @return The string content of the stream
+     */
     private static String streamToString(final InputStream inputStream) {
         final Scanner s = new Scanner(inputStream).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";

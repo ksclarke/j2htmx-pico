@@ -400,15 +400,31 @@ public abstract class Attr {
         /** The CSS classes string. */
         final String classes;
 
+        /**
+         * Constructs a new ShortForm attribute.
+         *
+         * @param id The element ID
+         * @param classes The CSS class names
+         */
         private ShortForm(final String id, final String classes) {
             this.id = id;
             this.classes = classes;
         }
 
+        /**
+         * Checks if an ID is present.
+         *
+         * @return True if ID is non-null and non-empty, false otherwise
+         */
         boolean hasId() {
             return id != null && !"".equals(id);
         }
 
+        /**
+         * Checks if classes are present.
+         *
+         * @return True if classes are non-null and non-empty, false otherwise
+         */
         boolean hasClasses() {
             return classes != null && !"".equals(classes);
         }

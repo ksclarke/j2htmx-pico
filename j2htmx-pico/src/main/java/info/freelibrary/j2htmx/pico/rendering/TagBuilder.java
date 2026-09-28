@@ -5,6 +5,7 @@ import java.io.IOException;
 /**
  * Implementations of TagBuilder are used to append HTML tag attributes to an Appendable.  TagBuilders are scoped to the
  * creation and completion of a specific tag, and should not be used outside of that tag.
+ *
  * <p>
  * Note:  TagBuilder extends Appendable for compatibility with previous version of this library.  This extension will
  * probably be removed in the future, so avoid relying on the deprecated methods of this interface.

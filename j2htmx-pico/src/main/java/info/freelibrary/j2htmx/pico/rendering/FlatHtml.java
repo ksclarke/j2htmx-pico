@@ -21,6 +21,12 @@ public final class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
     /** TagBuilder used for appending attributes to empty/void tags. */
     private final TagBuilder emptyElementAttributes;
 
+    /**
+     * Creates a new FlatHtml builder.
+     *
+     * @param out The Appendable to which HTML will be appended
+     * @param config The configuration to use
+     */
     private FlatHtml(final T out, final Config config) {
         this.out = out;
         this.textEscaper = config.textEscaper();
@@ -138,6 +144,11 @@ public final class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
         /** Whether to append a trailing slash before closing the tag. */
         private final boolean closeTag;
 
+        /**
+         * Creates a new FlatTagBuilder.
+         *
+         * @param closeTag Whether to close empty tags
+         */
         private FlatTagBuilder(final boolean closeTag) {
             this.closeTag = closeTag;
         }

@@ -56,10 +56,11 @@ public abstract class Tag<T extends Tag<T>> extends DomContent implements Instan
     }
 
     /**
-     * Sets an attribute on an element
+     * Sets an attribute on an element.
      *
      * @param name the attribute
      * @param value the attribute value
+     * @return True if the attribute was added or updated
      */
     boolean setAttribute(final String name, final String value) {
         if (value == null) {
@@ -75,7 +76,7 @@ public abstract class Tag<T extends Tag<T>> extends DomContent implements Instan
     }
 
     /**
-     * Sets a custom attribute
+     * Sets a custom attribute.
      *
      * @param attribute the attribute name
      * @param value the attribute value
@@ -110,7 +111,7 @@ public abstract class Tag<T extends Tag<T>> extends DomContent implements Instan
     }
 
     /**
-     * Sets a custom attribute without value
+     * Sets a custom attribute without value.
      *
      * @param attribute the attribute name
      * @return itself for easy chaining
@@ -121,7 +122,7 @@ public abstract class Tag<T extends Tag<T>> extends DomContent implements Instan
     }
 
     /**
-     * Call attr-method based on condition {@link #attr(String, Object)}
+     * Call attr-method based on condition {@link #attr(String, Object)}.
      *
      * @param condition the condition
      * @param attribute the attribute name
@@ -141,7 +142,7 @@ public abstract class Tag<T extends Tag<T>> extends DomContent implements Instan
     }
 
     /**
-     * Convenience methods that call attr with predefined attributes
+     * Convenience methods that call attr with predefined attributes.
      *
      * @param classes The CSS classes to add
      * @return itself for easy chaining

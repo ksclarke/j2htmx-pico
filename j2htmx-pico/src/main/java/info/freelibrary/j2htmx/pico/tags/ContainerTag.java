@@ -34,10 +34,11 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
 
 
     /**
-     * Appends a DomContent-object to the end of this element
+     * Appends a DomContent-object to the end of this element.
      *
      * @param child DomContent-object to be appended
      * @return itself for easy chaining
+     * @throws RuntimeException If trying to append a tag to itself
      */
     public T with(final DomContent child) {
         if (this == child) {
@@ -52,7 +53,7 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
 
 
     /**
-     * Call with-method based on condition {@link #with(DomContent)}
+     * Call with-method based on condition {@link #with(DomContent)}.
      *
      * @param condition the condition to use
      * @param child DomContent-object to be appended if condition met
@@ -64,7 +65,7 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
 
 
     /**
-     * Appends a list of DomContent-objects to the end of this element
+     * Appends a list of DomContent-objects to the end of this element.
      *
      * @param children DomContent-objects to be appended
      * @return itself for easy chaining
@@ -80,7 +81,7 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
 
 
     /**
-     * Call with-method based on condition {@link #with(java.lang.Iterable)}
+     * Call with-method based on condition {@link #with(java.lang.Iterable)}.
      *
      * @param condition the condition to use
      * @param children DomContent-objects to be appended if condition met
@@ -92,7 +93,7 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
 
 
     /**
-     * Appends the DomContent-objects to the end of this element
+     * Appends the DomContent-objects to the end of this element.
      *
      * @param children DomContent-objects to be appended
      * @return itself for easy chaining
@@ -106,7 +107,7 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
 
 
     /**
-     * Appends the DomContent-objects in the stream to the end of this element
+     * Appends the DomContent-objects in the stream to the end of this element.
      *
      * @param children Stream of DomContent-objects to be appended
      * @return itself for easy chaining
@@ -118,7 +119,7 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
 
 
     /**
-     * Call with-method based on condition {@link #with(DomContent...)}
+     * Call with-method based on condition {@link #with(DomContent...)}.
      *
      * @param condition the condition to use
      * @param children DomContent-objects to be appended if condition met
@@ -130,7 +131,7 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
 
 
     /**
-     * Appends a Text-object to this element
+     * Appends a Text-object to this element.
      *
      * @param text the text to be appended
      * @return itself for easy chaining
@@ -150,9 +151,10 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
 
     /**
      * Render the ContainerTag and its children, adding newlines before each child and using Config.indenter to indent
-     * child based on how deep in the tree it is
+     * child based on how deep in the tree it is.
      *
      * @return the rendered and formatted string
+     * @throws RuntimeException If rendering fails with an IOException
      */
     public String renderFormatted() {
         try {

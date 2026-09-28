@@ -28,11 +28,14 @@ import java.util.stream.Stream;
  */
 public final class TagCreator {
 
+    /**
+     * Constructs a new TagCreator instance.
+     */
     private TagCreator() {
     }
 
     /**
-     * Generic if-expression to do if'ing inside method calls
+     * Generic if-expression to do if'ing inside method calls.
      *
      * @param <T> The derived generic parameter type
      * @param condition the condition to if-on
@@ -44,7 +47,7 @@ public final class TagCreator {
     }
 
     /**
-     * Generic if-expression to if'ing inside method calls
+     * Generic if-expression to if'ing inside method calls.
      *
      * @param optional The item that may be present
      * @param ifFunction The function that will be called if that optional is present
@@ -61,7 +64,13 @@ public final class TagCreator {
     }
 
     /**
-     * Like {@link #iff}, but returns else-value instead of null
+     * Like {@link #iff}, but returns else-value instead of null.
+     *
+     * @param <T> The value type
+     * @param condition The condition to check
+     * @param ifValue The value to return if condition is true
+     * @param elseValue The value to return if condition is false
+     * @return The ifValue if condition is true, otherwise the elseValue
      */
     public static <T> T iffElse(final boolean condition, final T ifValue, final T elseValue) {
         return condition ? ifValue : elseValue;
@@ -69,7 +78,7 @@ public final class TagCreator {
 
     /**
      * Returns a Attr.ShortForm object with either id, classes or both, obtained from parsing the input string using css
-     * selector syntax
+     * selector syntax.
      *
      * @param attrs the string with shortform attributes, only id and class is supported
      * @return a Attr.ShortForm object
@@ -112,7 +121,7 @@ public final class TagCreator {
     }
 
     /**
-     * Creates a DomContent object containing HTML using a mapping function on a collection Intended usage:
+     * Creates a DomContent object containing HTML using a mapping function on a collection. Intended usage:
      * {@literal each(numbers, n -> li(n.toString()))}
      *
      * @param <T> The derived generic parameter type
@@ -125,7 +134,7 @@ public final class TagCreator {
     }
 
     /**
-     * Creates a DomContent object containing HTML using a mapping BiFunction on a collection Intended usage:
+     * Creates a DomContent object containing HTML using a mapping BiFunction on a collection. Intended usage:
      * {@literal each(names, (index, name) -> li(index + " " + name))}
      *
      * @param <T> The derived generic parameter type
@@ -157,7 +166,7 @@ public final class TagCreator {
     }
 
     /**
-     * Creates a DomContent object containing HTML using a mapping function on a map Intended usage:
+     * Creates a DomContent object containing HTML using a mapping function on a map. Intended usage:
      * {@literal each(idsToNames, (id, name) -> li(id + " " + name))}
      *
      * @param <I> The type of the keys
@@ -171,7 +180,7 @@ public final class TagCreator {
     }
 
     /**
-     * Filters a collection to a list, to be used with {@link #each} Intended usage:
+     * Filters a collection to a list, to be used with {@link #each}. Intended usage:
      * {@literal each(filter(numbers, n -> n % 2 == 0), n -> li(n.toString()))}
      *
      * @param <T> The derived generic parameter type
@@ -184,7 +193,7 @@ public final class TagCreator {
     }
 
     /**
-     * Wraps a String in an UnescapedText element
+     * Wraps a String in an UnescapedText element.
      *
      * @param html the input html
      * @return the input html wrapped in an UnescapedText element
@@ -194,7 +203,7 @@ public final class TagCreator {
     }
 
     /**
-     * Wraps a String in a Text element (does html-escaping)
+     * Wraps a String in a Text element (does html-escaping).
      *
      * @param text the input string
      * @return the input string, html-escaped
@@ -204,7 +213,7 @@ public final class TagCreator {
     }
 
     /**
-     * Return a complete html document string
+     * Returns a complete html document string.
      *
      * @param htmlTag the html content of a website
      * @return document declaration and rendered html content

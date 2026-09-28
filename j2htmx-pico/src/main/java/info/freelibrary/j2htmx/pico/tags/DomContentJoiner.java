@@ -5,6 +5,9 @@ package info.freelibrary.j2htmx.pico.tags;
  */
 public final class DomContentJoiner {
 
+    /**
+     * Constructs a new DOM content joiner utility.
+     */
     private DomContentJoiner() {
     }
 
@@ -15,6 +18,7 @@ public final class DomContentJoiner {
      * @param fixPeriodAndCommaSpacing Whether to clean up spaces before periods and commas
      * @param stringOrDomObjects The objects to join (can be String or DomContent)
      * @return An UnescapedText instance containing the joined content
+     * @throws RuntimeException If an object is not a String or DomContent
      */
     public static UnescapedText join(final CharSequence delimiter, final boolean fixPeriodAndCommaSpacing,
       final Object... stringOrDomObjects) {

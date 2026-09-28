@@ -30,6 +30,12 @@ public final class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> 
      */
     private final Deque<String> trace = new ArrayDeque<>();
 
+    /**
+     * Creates a new IndentedHtml builder.
+     *
+     * @param out The Appendable to which HTML will be appended
+     * @param config The configuration to use
+     */
     private IndentedHtml(final T out, final Config config) {
         this.out = out;
         this.indenter = config.indenter();
@@ -87,10 +93,20 @@ public final class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> 
         return into(new StringBuilder(), config);
     }
 
+    /**
+     * Checks if the current element context is self-formatting (e.g. {@code <pre>} or {@code <textarea>}).
+     *
+     * @return True if self-formatting, false otherwise
+     */
     private boolean isContentSelfFormatting() {
         return trace.contains("pre") || trace.contains("textarea");
     }
 
+    /**
+     * Gets the current indentation level based on the tag nesting depth.
+     *
+     * @return The current indentation level
+     */
     private int lvl() {
         return trace.size();
     }
@@ -138,6 +154,12 @@ public final class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> 
         return emptyElementAttributes;
     }
 
+    /**
+     * Appends lines of text with appropriate indentation.
+     *
+     * @param txt The text lines to append
+     * @throws IOException If an I/O error occurs
+     */
     private void appendLines(final String txt) throws IOException {
         if (!isContentSelfFormatting()) {
             final String[] lines = txt.split("\n");
@@ -201,6 +223,11 @@ public final class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> 
         /** Whether to append a trailing slash before closing the tag. */
         private final boolean closeTag;
 
+        /**
+         * Creates a new IndentedTagBuilder.
+         *
+         * @param closeTag Whether to close empty tags
+         */
         private IndentedTagBuilder(final boolean closeTag) {
             this.closeTag = closeTag;
         }

@@ -45,6 +45,7 @@ public interface Renderable {
      * Create a StringBuilder and use it to render the Renderable and it's children.
      *
      * @return The rendered HTML string
+     * @throws UncheckedIOException If an I/O error occurs
      */
     default String render() {
         try {
@@ -55,7 +56,7 @@ public interface Renderable {
     }
 
     /**
-     * Render the Renderable and it's children using the supplied writer
+     * Render the Renderable and it's children using the supplied writer.
      *
      * @param writer the current writer
      * @throws IOException If an I/O error occurs.
@@ -75,6 +76,7 @@ public interface Renderable {
      * @param writer the current writer
      * @param model a model object to provide data for children to render
      * @throws IOException If an I/O error occurs.
+     * @throws RuntimeException When called, as this method is deprecated.
      */
     @Deprecated
     default void renderModel(Appendable writer, Object model) throws IOException {

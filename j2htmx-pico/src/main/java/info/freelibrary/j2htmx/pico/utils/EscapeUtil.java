@@ -5,6 +5,9 @@ package info.freelibrary.j2htmx.pico.utils;
  */
 public final class EscapeUtil {
 
+    /**
+     * Constructs a new HTML escape utility.
+     */
     private EscapeUtil() {
     }
 

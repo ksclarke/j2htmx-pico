@@ -20,6 +20,7 @@ public class EmptyTag<T extends EmptyTag<T>> extends Tag<T> {
      * Constructs an EmptyTag with the given tag name.
      *
      * @param tagName The HTML tag name
+     * @throws IllegalArgumentException If the tag name is null or empty
      */
     public EmptyTag(final String tagName) {
         super(tagName);

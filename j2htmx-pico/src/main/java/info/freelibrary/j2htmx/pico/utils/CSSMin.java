@@ -75,6 +75,9 @@ public final class CSSMin {
     /** Flag indicating whether debug logging is enabled. */
     static boolean debugLogging = false;
 
+    /**
+     * Constructs a new CSSMin utility.
+     */
     private CSSMin() {
     }
 
@@ -202,8 +205,9 @@ class Selector {
      * Creates a new Selector using the supplied strings.
      *
      * @param selector The selector; for example, "div { border: solid 1px red; color: blue; }"
-     * @throws IncompleteSelectorException, UnterminatedSelectorException, EmptySelectorBodyException If the selector
-     *   is incomplete and cannot be parsed.
+     * @throws IncompleteSelectorException If the selector is incomplete and cannot be parsed
+     * @throws UnterminatedSelectorException If the selector is not closed with a brace
+     * @throws EmptySelectorBodyException If the selector has an empty body
      */
     Selector(final String selector)
     throws IncompleteSelectorException, UnterminatedSelectorException, EmptySelectorBodyException {
@@ -352,7 +356,7 @@ class Property implements Comparable<Property> {
      * Creates a new Property using the supplied strings. Parses out the values of the property selector.
      *
      * @param property The property; for example, "border: solid 1px red;" or "-moz-box-shadow: 3px 3px 3px rgba(255,
-     *   255, 0, 0.5);".
+     *     255, 0, 0.5);".
      * @throws IncompletePropertyException If the property is incomplete and cannot be parsed.
      */
     Property(final String property) throws IncompletePropertyException {
@@ -420,6 +424,10 @@ class Property implements Comparable<Property> {
 
     /**
      * Compare this property with another.
+     *
+     * @param other The other Property to compare to
+     * @return A negative integer, zero, or a positive integer as this property is less than, equal to, or greater than
+     *     the specified property
      */
     public int compareTo(final Property other) {
         // We can't just use String.compareTo(), because we need to sort properties that have hack prefixes last --
@@ -427,6 +435,12 @@ class Property implements Comparable<Property> {
         return sort(this.property).compareTo(sort(other.property));
     }
 
+    /**
+     * Normalizes a property name for sorting purposes.
+     *
+     * @param thisProp The property name to normalize
+     * @return The normalized property name for sorting
+     */
     private String sort(String thisProp) {
         if (thisProp.charAt(0) == '-') {
             thisProp = thisProp.substring(1);
@@ -459,6 +473,12 @@ class Property implements Comparable<Property> {
         return results;
     }
 
+    /**
+     * Simplifies color representations in property contents.
+     *
+     * @param contents The property contents to simplify
+     * @return The simplified contents
+     */
     private String simplifyColours(final String contents) {
         // This replacement, although it results in a smaller uncompressed file,
         // actually makes the gzipped file bigger -- people tend to use rgba(0,0,0,0.x)
@@ -469,7 +489,12 @@ class Property implements Comparable<Property> {
         return simplifyRGBColours(contents);
     }
 
-    // Convert rgb(51,102,153) to #336699 (this code largely based on YUI code)
+    /**
+     * Converts rgb(r,g,b) color formats to hex #rrggbb notation.
+     *
+     * @param contents The property contents to simplify
+     * @return The simplified contents with RGB colors converted to hex
+     */
     private String simplifyRGBColours(final String contents) {
         final StringBuffer newContents = new StringBuffer();
         StringBuffer hexColour;
@@ -512,6 +537,7 @@ class Part {
      * Create a new property by parsing the given string.
      *
      * @param contents The string to parse.
+     * @param property The property name to which this part belongs.
      * @throws Exception If the part cannot be parsed.
      */
     Part(final String contents, final String property) throws Exception {
@@ -524,6 +550,9 @@ class Part {
         simplify();
     }
 
+    /**
+     * Simplifies this property part by applying whitespace, unit, and color optimizations.
+     */
     private void simplify() {
 
         // !important doesn't need to be spaced
@@ -559,6 +588,9 @@ class Part {
         simplifyHexColours();
     }
 
+    /**
+     * Simplifies multiple parameters (e.g. margin/padding values).
+     */
     private void simplifyParameters() {
         if (this.property.equals("background-size")) {
             return;
@@ -591,6 +623,9 @@ class Part {
         this.contents = newContents.toString();
     }
 
+    /**
+     * Simplifies font weight names to numerical values where shorter.
+     */
     private void simplifyFontWeights() {
         if (!this.property.equals("font-weight")) {
             return;
@@ -606,6 +641,9 @@ class Part {
         }
     }
 
+    /**
+     * Strips unnecessary quotes from URLs and converts keywords to lowercase.
+     */
     private void simplifyQuotesAndCaps() {
         // Strip quotes from URLs
         if ((this.contents.length() > 4) && (this.contents.substring(0, 4).equalsIgnoreCase("url("))) {
@@ -623,6 +661,9 @@ class Part {
         }
     }
 
+    /**
+     * Replaces HTML color names with hex values where shorter.
+     */
     private void simplifyColourNames() {
         final String lcContents = this.contents.toLowerCase(Locale.US);
 
@@ -640,6 +681,9 @@ class Part {
         }
     }
 
+    /**
+     * Compresses 6-digit hex colors to 3-digit hex where possible.
+     */
     private void simplifyHexColours() {
         final StringBuffer newContents = new StringBuffer();
 
@@ -698,10 +742,20 @@ class IncompletePropertyException extends Exception {
     /** The exception detail message. */
     private final String message;
 
+    /**
+     * Constructs an IncompletePropertyException with the specified detail message.
+     *
+     * @param message The detail message
+     */
     IncompletePropertyException(final String message) {
         this.message = message;
     }
 
+    /**
+     * Returns the detail message string of this throwable.
+     *
+     * @return The detail message string
+     */
     public String getMessage() {
         return this.message;
     }
@@ -717,10 +771,20 @@ class EmptySelectorBodyException extends Exception {
     /** The exception detail message. */
     private final String message;
 
+    /**
+     * Constructs an EmptySelectorBodyException with the specified detail message.
+     *
+     * @param message The detail message
+     */
     EmptySelectorBodyException(final String message) {
         this.message = message;
     }
 
+    /**
+     * Returns the detail message string of this throwable.
+     *
+     * @return The detail message string
+     */
     public String getMessage() {
         return this.message;
     }
@@ -736,10 +800,20 @@ class UnterminatedSelectorException extends Exception {
     /** The exception detail message. */
     private final String message;
 
+    /**
+     * Constructs an UnterminatedSelectorException with the specified detail message.
+     *
+     * @param message The detail message
+     */
     UnterminatedSelectorException(final String message) {
         this.message = message;
     }
 
+    /**
+     * Returns the detail message string of this throwable.
+     *
+     * @return The detail message string
+     */
     public String getMessage() {
         return this.message;
     }
@@ -755,10 +829,20 @@ class IncompleteSelectorException extends Exception {
     /** The exception detail message. */
     private final String message;
 
+    /**
+     * Constructs an IncompleteSelectorException with the specified detail message.
+     *
+     * @param message The detail message
+     */
     IncompleteSelectorException(final String message) {
         this.message = message;
     }
 
+    /**
+     * Returns the detail message string of this throwable.
+     *
+     * @return The detail message string
+     */
     public String getMessage() {
         return this.message;
     }

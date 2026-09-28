@@ -25,7 +25,7 @@ public class Config {
       (level, text) -> String.join("", Collections.nCopies(level, FOUR_SPACES)) + text
     );
     /**
-     * Change this to configure text-escaping For example, to disable escaping, do
+     * Change this to configure text-escaping. For example, to disable escaping, do
      * {@code Config.textEscaper = text -> text;}
      */
     public static volatile TextEscaper textEscaper = EscapeUtil::escape;
@@ -38,11 +38,11 @@ public class Config {
      */
     public static volatile Minifier jsMinifier = JSMin::compressJs;
     /**
-     * Change this to configure enable/disable closing empty tags The default is to NOT close them
+     * Change this to configure enable/disable closing empty tags. The default is to NOT close them.
      */
     public static volatile boolean closeEmptyTags = false;
     /**
-     * Change this to configure indentation when rendering formatted html The default is four spaces
+     * Change this to configure indentation when rendering formatted html. The default is four spaces.
      */
     public static volatile Indenter indenter = (level, text) -> String.join("",
       Collections.nCopies(level, FOUR_SPACES)) + text;
@@ -57,6 +57,15 @@ public class Config {
     /** The configured HTML indenter. */
     private Indenter _indenter;
 
+    /**
+     * Creates a new configuration instance with the specified settings.
+     *
+     * @param _textEscaper The text escaper
+     * @param _cssMinifier The CSS minifier
+     * @param _jsMinifier The JavaScript minifier
+     * @param _closeEmptyTags Whether empty tags should be closed
+     * @param _indenter The HTML indenter
+     */
     private Config(
       final TextEscaper _textEscaper,
       final Minifier _cssMinifier,

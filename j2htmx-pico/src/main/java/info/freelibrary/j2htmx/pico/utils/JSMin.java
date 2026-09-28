@@ -65,13 +65,19 @@ public final class JSMin {
     /** Lookahead character buffer B. */
     private int theB;
 
+    /**
+     * Constructs a JSMin compressor wrapping the given input and output streams.
+     *
+     * @param in The input stream to read JavaScript from
+     * @param out The output stream to write minified JavaScript to
+     */
     private JSMin(final InputStream in, final OutputStream out) {
         this.in = new PushbackInputStream(in);
         this.out = out;
     }
 
     /**
-     * Compress a JS-string
+     * Compress a JS-string.
      *
      * @param code the js-code you want to compress
      * @return the compressed code
@@ -90,7 +96,10 @@ public final class JSMin {
     }
 
     /**
-     * isAlphanum -- return true if the character is a letter, digit, underscore, dollar sign, or non-ASCII character.
+     * Return true if the character is a letter, digit, underscore, dollar sign, or non-ASCII character.
+     *
+     * @param c The character code to check
+     * @return True if alphanumeric, false otherwise
      */
     private static boolean isAlphanum(final int c) {
         return ((c >= 'a' && c <= 'z') ||
@@ -103,8 +112,11 @@ public final class JSMin {
     }
 
     /**
-     * get -- return the next character from stdin. Watch out for lookahead. If the character is a control character,
+     * Return the next character from stdin. Watch out for lookahead. If the character is a control character,
      * translate it to a space or linefeed.
+     *
+     * @return The next character code
+     * @throws IOException If an I/O error occurs
      */
     private int get() throws IOException {
         final int c = in.read();
@@ -123,6 +135,9 @@ public final class JSMin {
 
     /**
      * Get the next character without getting it.
+     *
+     * @return The peeked character code
+     * @throws IOException If an I/O error occurs
      */
     private int peek() throws IOException {
         final int lookaheadChar = in.read();
@@ -131,7 +146,11 @@ public final class JSMin {
     }
 
     /**
-     * next -- get the next character, excluding comments. peek() is used to see if a '/' is followed by a '/' or '*'.
+     * Get the next character, excluding comments. peek() is used to see if a '/' is followed by a '/' or '*'.
+     *
+     * @return The next non-comment character code
+     * @throws IOException If an I/O error occurs
+     * @throws UnterminatedCommentException If a comment is not terminated
      */
     private int next() throws IOException, UnterminatedCommentException {
         int c = get();
@@ -169,11 +188,16 @@ public final class JSMin {
     }
 
     /**
-     * action -- do something! What you do is determined by the argument: 1 Output A. Copy B to A. Get the next B. 2
+     * Action -- do something! What you do is determined by the argument: 1 Output A. Copy B to A. Get the next B. 2
      * Copy B to A. Get the next B. (Delete A). 3 Get the next B. (Delete B). action treats a string as a single
      * character. Wow! action recognizes a regular expression if it is preceded by ( or , or =.
+     *
+     * @param d The action to perform (1, 2, or 3)
+     * @throws IOException If an I/O error occurs
+     * @throws UnterminatedRegExpLiteralException If a regular expression is not closed
+     * @throws UnterminatedCommentException If a comment is not closed
+     * @throws UnterminatedStringLiteralException If a string literal is not closed
      */
-
     private void action(final int d) throws IOException, UnterminatedRegExpLiteralException,
                                             UnterminatedCommentException, UnterminatedStringLiteralException {
         switch (d) {
@@ -222,9 +246,14 @@ public final class JSMin {
     }
 
     /**
-     * jsmin -- Copy the input to the output, deleting the characters which are insignificant to JavaScript. Comments
+     * Copy the input to the output, deleting the characters which are insignificant to JavaScript. Comments
      * will be removed. Tabs will be replaced with spaces. Carriage returns will be replaced with linefeeds. Most spaces
      * and linefeeds will be removed.
+     *
+     * @throws IOException If an I/O error occurs
+     * @throws UnterminatedRegExpLiteralException If a regular expression is not closed
+     * @throws UnterminatedCommentException If a comment is not closed
+     * @throws UnterminatedStringLiteralException If a string literal is not closed
      */
     public void jsmin() throws IOException, UnterminatedRegExpLiteralException, UnterminatedCommentException,
                                UnterminatedStringLiteralException {
