@@ -52,7 +52,7 @@ public final class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> 
      * @return An HtmlBuilder for indented HTML.
      */
     public static final <T extends Appendable> IndentedHtml<T> into(final T out) {
-        return new IndentedHtml<>(out, Config.defaults());
+        return new IndentedHtml<>(out, Config.getDefaults());
     }
 
     /**

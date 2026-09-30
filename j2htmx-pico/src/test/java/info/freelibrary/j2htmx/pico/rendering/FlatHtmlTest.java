@@ -61,12 +61,12 @@ public class FlatHtmlTest {
     @Test
     public void empty_tags_are_closed_when_configured() throws IOException {
         assertThat(
-          input().render(FlatHtml.inMemory(Config.defaults().withEmptyTagsClosed(false))).toString(),
+          input().render(FlatHtml.inMemory(Config.getDefaults().withEmptyTagsClosed(false))).toString(),
           is("<input>")
         );
 
         assertThat(
-          input().render(FlatHtml.inMemory(Config.defaults().withEmptyTagsClosed(true))).toString(),
+          input().render(FlatHtml.inMemory(Config.getDefaults().withEmptyTagsClosed(true))).toString(),
           is("<input/>")
         );
     }
@@ -74,12 +74,12 @@ public class FlatHtmlTest {
     @Test
     public void end_tags_are_never_closed() throws IOException {
         assertThat(
-          div().render(FlatHtml.inMemory(Config.defaults().withEmptyTagsClosed(false))).toString(),
+          div().render(FlatHtml.inMemory(Config.getDefaults().withEmptyTagsClosed(false))).toString(),
           is("<div></div>")
         );
 
         assertThat(
-          div().render(FlatHtml.inMemory(Config.defaults().withEmptyTagsClosed(true))).toString(),
+          div().render(FlatHtml.inMemory(Config.getDefaults().withEmptyTagsClosed(true))).toString(),
           is("<div></div>")
         );
     }

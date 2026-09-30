@@ -191,7 +191,7 @@ public class Model implements Parser.Listener {
          *
          * @throws RuntimeException If an error occurs during execution
          */
-        @SuppressWarnings({"PMD.AvoidUncheckedExceptionsInSignatures"})
+        @SuppressWarnings({PMD.AVOID_UNCHECKED_EXCEPTIONS_IN_SIGNATURES})
         void call() throws RuntimeException;
     }
 

@@ -3,6 +3,7 @@ package info.freelibrary.j2htmx.pico.tags;
 import info.freelibrary.j2htmx.pico.Config;
 import info.freelibrary.j2htmx.pico.rendering.FlatHtml;
 import info.freelibrary.j2htmx.pico.rendering.HtmlBuilder;
+import info.freelibrary.util.warnings.PMD;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -21,7 +22,7 @@ public interface Renderable {
      * @return The Appendable to which HTML has been appended.
      * @throws IOException If an I/O error occurs.
      */
-    default <T extends Appendable> T render(HtmlBuilder<T> builder, Object model) throws IOException {
+    default <T extends Appendable> T render(final HtmlBuilder<T> builder, final Object model) throws IOException {
         // This method should be overridden by any internal classes.
         // renderModel() is only being called to support backwards
         // compatibility.
@@ -37,7 +38,7 @@ public interface Renderable {
      * @return The Appendable to which HTML has been appended.
      * @throws IOException If an I/O error occurs.
      */
-    default <T extends Appendable> T render(HtmlBuilder<T> builder) throws IOException {
+    default <T extends Appendable> T render(final HtmlBuilder<T> builder) throws IOException {
         return render(builder, null);
     }
 
@@ -62,7 +63,7 @@ public interface Renderable {
      * @throws IOException If an I/O error occurs.
      */
     @Deprecated
-    default void render(Appendable writer) throws IOException {
+    default void render(final Appendable writer) throws IOException {
         if (writer instanceof HtmlBuilder) {
             render((HtmlBuilder<? extends Appendable>) writer);
         } else {
@@ -79,13 +80,14 @@ public interface Renderable {
      * @throws RuntimeException When called, as this method is deprecated.
      */
     @Deprecated
-    default void renderModel(Appendable writer, Object model) throws IOException {
-        // This method is a placeholder to support any client classes
-        // which previously extended Renderable implementers, such as Tags.
-        // No internal classes should implement this method; except to support
-        // compatibility.  Instead they should implement rendering with an HtmlBuilder.
+    @SuppressWarnings(PMD.AVOID_THROWING_RAW_EXCEPTION_TYPES)
+    default void renderModel(final Appendable writer, final Object model) throws IOException {
+        // This method is a placeholder to support any client classes which previously extended Renderable
+        // implementers, such as Tags. No internal classes should implement this method; except to support
+        // compatibility. Instead, they should implement rendering with an HtmlBuilder.
         throw new RuntimeException(
-          "Renderable.renderModel(Appendable writer, Object model) has been deprecated.  Please use Renderable.render" +
-          "(HtmlBuilder<T> builder, Object model) instead.");
+          "Renderable.renderModel(Appendable writer, Object model) has been deprecated. " +
+          "Please use Renderable.render (HtmlBuilder<T> builder, Object model) instead."
+        );
     }
 }

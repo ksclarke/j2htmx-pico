@@ -33,9 +33,9 @@ public final class InlineStaticResource {
         final String fileString = getFileAsString(path);
         switch (format) {
             case CSS_MIN:
-                return style().with(rawHtml(Config.cssMinifier.minify(fileString)));
+                return style().with(rawHtml(Config.getGlobalCssMinifier().minify(fileString)));
             case JS_MIN:
-                return script().with(rawHtml(Config.jsMinifier.minify((fileString))));
+                return script().with(rawHtml(Config.getGlobalJsMinifier().minify((fileString))));
             case CSS:
                 return style().with(rawHtml(fileString));
             case JS:

@@ -10,6 +10,7 @@ import info.freelibrary.j2htmx.pico.tags.Tag;
 import info.freelibrary.j2htmx.pico.tags.Text;
 import info.freelibrary.j2htmx.pico.tags.UnescapedText;
 import info.freelibrary.j2htmx.pico.tags.specialized.*;
+import info.freelibrary.util.warnings.PMD;
 
 import java.util.Collection;
 import java.util.List;
@@ -26,12 +27,16 @@ import java.util.stream.Stream;
 /**
  * Primary factory class providing static builder methods to construct HTML, HTMX, and Pico CSS elements.
  */
+@SuppressWarnings(
+  {PMD.SHORT_METHOD_NAME, PMD.COUPLING_BETWEEN_OBJECTS, PMD.CYCLOMATIC_COMPLEXITY, PMD.TOO_MANY_METHODS,
+    PMD.EXCESSIVE_PUBLIC_COUNT})
 public final class TagCreator {
 
     /**
      * Constructs a new TagCreator instance.
      */
     private TagCreator() {
+        // This is intentionally left empty
     }
 
     /**
@@ -84,7 +89,7 @@ public final class TagCreator {
      * @return a Attr.ShortForm object
      */
     public static Attr.ShortForm attrs(final String attrs) {
-        return Attr.shortFormFromAttrsString(attrs);
+        return Attr.ShortForm.parse(attrs);
     }
 
     /**
@@ -277,21 +282,21 @@ public final class TagCreator {
     /**
      * Creates a {@code <script>} tag containing unminified JavaScript read from the specified file path.
      *
-     * @param path The JavaScript file path
+     * @param aPath The JavaScript file path
      * @return A ScriptTag containing the JavaScript content
      */
-    public static ScriptTag scriptWithInlineFile(final String path) {
-        return (ScriptTag) InlineStaticResource.get(path, InlineStaticResource.TargetFormat.JS);
+    public static ScriptTag scriptWithInlineFile(final String aPath) {
+        return (ScriptTag) InlineStaticResource.get(aPath, InlineStaticResource.TargetFormat.JS);
     }
 
     /**
      * Creates a {@code <style>} tag containing minified CSS read from the specified file path.
      *
-     * @param path The CSS file path
+     * @param aPath The CSS file path
      * @return A StyleTag containing the minified CSS content
      */
-    public static StyleTag styleWithInlineFile_min(final String path) {
-        return (StyleTag) InlineStaticResource.get(path, InlineStaticResource.TargetFormat.CSS_MIN);
+    public static StyleTag styleWithInlineFileMinimized(final String aPath) {
+        return (StyleTag) InlineStaticResource.get(aPath, InlineStaticResource.TargetFormat.CSS_MIN);
     }
 
     /**
@@ -300,7 +305,7 @@ public final class TagCreator {
      * @param path The JavaScript file path
      * @return A ScriptTag containing the minified JavaScript content
      */
-    public static ScriptTag scriptWithInlineFile_min(final String path) {
+    public static ScriptTag scriptWithInlineFileMinimized(final String path) {
         return (ScriptTag) InlineStaticResource.get(path, InlineStaticResource.TargetFormat.JS_MIN);
     }
 
@@ -349,7 +354,7 @@ public final class TagCreator {
      * @return A HtmlTag element
      */
     public static HtmlTag html(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(html(), shortAttr);
+        return Attr.ShortForm.addTo(html(), shortAttr);
     }
 
     /**
@@ -360,7 +365,7 @@ public final class TagCreator {
      * @return A HtmlTag element
      */
     public static HtmlTag html(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(html(text), shortAttr);
+        return Attr.ShortForm.addTo(html(text), shortAttr);
     }
 
     /**
@@ -371,7 +376,7 @@ public final class TagCreator {
      * @return A HtmlTag element
      */
     public static HtmlTag html(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(html(dc), shortAttr);
+        return Attr.ShortForm.addTo(html(dc), shortAttr);
     }
 
     /**
@@ -410,7 +415,7 @@ public final class TagCreator {
      * @return A HxPartialTag element
      */
     public static HxPartialTag hxPartial(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(hxPartial(), shortAttr);
+        return Attr.ShortForm.addTo(hxPartial(), shortAttr);
     }
 
     /**
@@ -421,7 +426,7 @@ public final class TagCreator {
      * @return A HxPartialTag element
      */
     public static HxPartialTag hxPartial(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(hxPartial(text), shortAttr);
+        return Attr.ShortForm.addTo(hxPartial(text), shortAttr);
     }
 
     /**
@@ -432,7 +437,7 @@ public final class TagCreator {
      * @return A HxPartialTag element
      */
     public static HxPartialTag hxPartial(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(hxPartial(dc), shortAttr);
+        return Attr.ShortForm.addTo(hxPartial(dc), shortAttr);
     }
 
     /**
@@ -471,7 +476,7 @@ public final class TagCreator {
      * @return A BodyTag element
      */
     public static BodyTag body(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new BodyTag(), shortAttr);
+        return Attr.ShortForm.addTo(new BodyTag(), shortAttr);
     }
 
     /**
@@ -482,7 +487,7 @@ public final class TagCreator {
      * @return A BodyTag element
      */
     public static BodyTag body(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new BodyTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new BodyTag().withText(text), shortAttr);
     }
 
     /**
@@ -493,7 +498,7 @@ public final class TagCreator {
      * @return A BodyTag element
      */
     public static BodyTag body(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new BodyTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new BodyTag().with(dc), shortAttr);
     }
 
     /**
@@ -532,7 +537,7 @@ public final class TagCreator {
      * @return A HeadTag element
      */
     public static HeadTag head(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new HeadTag(), shortAttr);
+        return Attr.ShortForm.addTo(new HeadTag(), shortAttr);
     }
 
     /**
@@ -543,7 +548,7 @@ public final class TagCreator {
      * @return A HeadTag element
      */
     public static HeadTag head(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new HeadTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new HeadTag().withText(text), shortAttr);
     }
 
     /**
@@ -554,7 +559,7 @@ public final class TagCreator {
      * @return A HeadTag element
      */
     public static HeadTag head(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new HeadTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new HeadTag().with(dc), shortAttr);
     }
 
     // EmptyTags, generated in class info.freelibrary.j2html.tags.generators.TagCreatorCodeGenerator
@@ -575,7 +580,7 @@ public final class TagCreator {
      * @return A AreaTag element
      */
     public static AreaTag area(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new AreaTag(), shortAttr);
+        return Attr.ShortForm.addTo(new AreaTag(), shortAttr);
     }
 
     /**
@@ -594,7 +599,7 @@ public final class TagCreator {
      * @return A BaseTag element
      */
     public static BaseTag base(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new BaseTag(), shortAttr);
+        return Attr.ShortForm.addTo(new BaseTag(), shortAttr);
     }
 
     /**
@@ -613,7 +618,7 @@ public final class TagCreator {
      * @return A BrTag element
      */
     public static BrTag br(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new BrTag(), shortAttr);
+        return Attr.ShortForm.addTo(new BrTag(), shortAttr);
     }
 
     /**
@@ -632,7 +637,7 @@ public final class TagCreator {
      * @return A ColTag element
      */
     public static ColTag col(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new ColTag(), shortAttr);
+        return Attr.ShortForm.addTo(new ColTag(), shortAttr);
     }
 
     /**
@@ -651,7 +656,7 @@ public final class TagCreator {
      * @return A EmbedTag element
      */
     public static EmbedTag embed(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new EmbedTag(), shortAttr);
+        return Attr.ShortForm.addTo(new EmbedTag(), shortAttr);
     }
 
     /**
@@ -670,7 +675,7 @@ public final class TagCreator {
      * @return A HrTag element
      */
     public static HrTag hr(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new HrTag(), shortAttr);
+        return Attr.ShortForm.addTo(new HrTag(), shortAttr);
     }
 
     /**
@@ -689,7 +694,7 @@ public final class TagCreator {
      * @return A ImgTag element
      */
     public static ImgTag img(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new ImgTag(), shortAttr);
+        return Attr.ShortForm.addTo(new ImgTag(), shortAttr);
     }
 
     /**
@@ -708,7 +713,7 @@ public final class TagCreator {
      * @return A InputTag element
      */
     public static InputTag input(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new InputTag(), shortAttr);
+        return Attr.ShortForm.addTo(new InputTag(), shortAttr);
     }
 
     /**
@@ -727,7 +732,7 @@ public final class TagCreator {
      * @return A KeygenTag element
      */
     public static KeygenTag keygen(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new KeygenTag(), shortAttr);
+        return Attr.ShortForm.addTo(new KeygenTag(), shortAttr);
     }
 
     /**
@@ -746,7 +751,7 @@ public final class TagCreator {
      * @return A LinkTag element
      */
     public static LinkTag link(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new LinkTag(), shortAttr);
+        return Attr.ShortForm.addTo(new LinkTag(), shortAttr);
     }
 
     /**
@@ -765,7 +770,7 @@ public final class TagCreator {
      * @return A MetaTag element
      */
     public static MetaTag meta(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new MetaTag(), shortAttr);
+        return Attr.ShortForm.addTo(new MetaTag(), shortAttr);
     }
 
     /**
@@ -784,7 +789,7 @@ public final class TagCreator {
      * @return A ParamTag element
      */
     public static ParamTag param(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new ParamTag(), shortAttr);
+        return Attr.ShortForm.addTo(new ParamTag(), shortAttr);
     }
 
     /**
@@ -803,7 +808,7 @@ public final class TagCreator {
      * @return A SourceTag element
      */
     public static SourceTag source(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new SourceTag(), shortAttr);
+        return Attr.ShortForm.addTo(new SourceTag(), shortAttr);
     }
 
     /**
@@ -822,7 +827,7 @@ public final class TagCreator {
      * @return A TrackTag element
      */
     public static TrackTag track(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new TrackTag(), shortAttr);
+        return Attr.ShortForm.addTo(new TrackTag(), shortAttr);
     }
 
     /**
@@ -841,7 +846,7 @@ public final class TagCreator {
      * @return A WbrTag element
      */
     public static WbrTag wbr(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new WbrTag(), shortAttr);
+        return Attr.ShortForm.addTo(new WbrTag(), shortAttr);
     }
 
     // ContainerTags, generated in class info.freelibrary.j2html.tags.generators.TagCreatorCodeGenerator
@@ -882,7 +887,7 @@ public final class TagCreator {
      * @return A ATag element
      */
     public static ATag a(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new ATag(), shortAttr);
+        return Attr.ShortForm.addTo(new ATag(), shortAttr);
     }
 
     /**
@@ -893,7 +898,7 @@ public final class TagCreator {
      * @return A ATag element
      */
     public static ATag a(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new ATag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new ATag().withText(text), shortAttr);
     }
 
     /**
@@ -904,7 +909,7 @@ public final class TagCreator {
      * @return A ATag element
      */
     public static ATag a(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new ATag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new ATag().with(dc), shortAttr);
     }
 
     /**
@@ -943,7 +948,7 @@ public final class TagCreator {
      * @return A AbbrTag element
      */
     public static AbbrTag abbr(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new AbbrTag(), shortAttr);
+        return Attr.ShortForm.addTo(new AbbrTag(), shortAttr);
     }
 
     /**
@@ -954,7 +959,7 @@ public final class TagCreator {
      * @return A AbbrTag element
      */
     public static AbbrTag abbr(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new AbbrTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new AbbrTag().withText(text), shortAttr);
     }
 
     /**
@@ -965,7 +970,7 @@ public final class TagCreator {
      * @return A AbbrTag element
      */
     public static AbbrTag abbr(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new AbbrTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new AbbrTag().with(dc), shortAttr);
     }
 
     /**
@@ -1004,7 +1009,7 @@ public final class TagCreator {
      * @return A AddressTag element
      */
     public static AddressTag address(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new AddressTag(), shortAttr);
+        return Attr.ShortForm.addTo(new AddressTag(), shortAttr);
     }
 
     /**
@@ -1015,7 +1020,7 @@ public final class TagCreator {
      * @return A AddressTag element
      */
     public static AddressTag address(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new AddressTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new AddressTag().withText(text), shortAttr);
     }
 
     /**
@@ -1026,7 +1031,7 @@ public final class TagCreator {
      * @return A AddressTag element
      */
     public static AddressTag address(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new AddressTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new AddressTag().with(dc), shortAttr);
     }
 
     /**
@@ -1065,7 +1070,7 @@ public final class TagCreator {
      * @return A ArticleTag element
      */
     public static ArticleTag article(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new ArticleTag(), shortAttr);
+        return Attr.ShortForm.addTo(new ArticleTag(), shortAttr);
     }
 
     /**
@@ -1076,7 +1081,7 @@ public final class TagCreator {
      * @return A ArticleTag element
      */
     public static ArticleTag article(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new ArticleTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new ArticleTag().withText(text), shortAttr);
     }
 
     /**
@@ -1087,7 +1092,7 @@ public final class TagCreator {
      * @return A ArticleTag element
      */
     public static ArticleTag article(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new ArticleTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new ArticleTag().with(dc), shortAttr);
     }
 
     /**
@@ -1126,7 +1131,7 @@ public final class TagCreator {
      * @return A AsideTag element
      */
     public static AsideTag aside(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new AsideTag(), shortAttr);
+        return Attr.ShortForm.addTo(new AsideTag(), shortAttr);
     }
 
     /**
@@ -1137,7 +1142,7 @@ public final class TagCreator {
      * @return A AsideTag element
      */
     public static AsideTag aside(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new AsideTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new AsideTag().withText(text), shortAttr);
     }
 
     /**
@@ -1148,7 +1153,7 @@ public final class TagCreator {
      * @return A AsideTag element
      */
     public static AsideTag aside(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new AsideTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new AsideTag().with(dc), shortAttr);
     }
 
     /**
@@ -1187,7 +1192,7 @@ public final class TagCreator {
      * @return A AudioTag element
      */
     public static AudioTag audio(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new AudioTag(), shortAttr);
+        return Attr.ShortForm.addTo(new AudioTag(), shortAttr);
     }
 
     /**
@@ -1198,7 +1203,7 @@ public final class TagCreator {
      * @return A AudioTag element
      */
     public static AudioTag audio(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new AudioTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new AudioTag().withText(text), shortAttr);
     }
 
     /**
@@ -1209,7 +1214,7 @@ public final class TagCreator {
      * @return A AudioTag element
      */
     public static AudioTag audio(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new AudioTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new AudioTag().with(dc), shortAttr);
     }
 
     /**
@@ -1248,7 +1253,7 @@ public final class TagCreator {
      * @return A BTag element
      */
     public static BTag b(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new BTag(), shortAttr);
+        return Attr.ShortForm.addTo(new BTag(), shortAttr);
     }
 
     /**
@@ -1259,7 +1264,7 @@ public final class TagCreator {
      * @return A BTag element
      */
     public static BTag b(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new BTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new BTag().withText(text), shortAttr);
     }
 
     /**
@@ -1270,7 +1275,7 @@ public final class TagCreator {
      * @return A BTag element
      */
     public static BTag b(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new BTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new BTag().with(dc), shortAttr);
     }
 
     /**
@@ -1309,7 +1314,7 @@ public final class TagCreator {
      * @return A BdiTag element
      */
     public static BdiTag bdi(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new BdiTag(), shortAttr);
+        return Attr.ShortForm.addTo(new BdiTag(), shortAttr);
     }
 
     /**
@@ -1320,7 +1325,7 @@ public final class TagCreator {
      * @return A BdiTag element
      */
     public static BdiTag bdi(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new BdiTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new BdiTag().withText(text), shortAttr);
     }
 
     /**
@@ -1331,7 +1336,7 @@ public final class TagCreator {
      * @return A BdiTag element
      */
     public static BdiTag bdi(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new BdiTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new BdiTag().with(dc), shortAttr);
     }
 
     /**
@@ -1370,7 +1375,7 @@ public final class TagCreator {
      * @return A BdoTag element
      */
     public static BdoTag bdo(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new BdoTag(), shortAttr);
+        return Attr.ShortForm.addTo(new BdoTag(), shortAttr);
     }
 
     /**
@@ -1381,7 +1386,7 @@ public final class TagCreator {
      * @return A BdoTag element
      */
     public static BdoTag bdo(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new BdoTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new BdoTag().withText(text), shortAttr);
     }
 
     /**
@@ -1392,7 +1397,7 @@ public final class TagCreator {
      * @return A BdoTag element
      */
     public static BdoTag bdo(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new BdoTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new BdoTag().with(dc), shortAttr);
     }
 
     /**
@@ -1431,7 +1436,7 @@ public final class TagCreator {
      * @return A BlockquoteTag element
      */
     public static BlockquoteTag blockquote(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new BlockquoteTag(), shortAttr);
+        return Attr.ShortForm.addTo(new BlockquoteTag(), shortAttr);
     }
 
     /**
@@ -1442,7 +1447,7 @@ public final class TagCreator {
      * @return A BlockquoteTag element
      */
     public static BlockquoteTag blockquote(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new BlockquoteTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new BlockquoteTag().withText(text), shortAttr);
     }
 
     /**
@@ -1453,7 +1458,7 @@ public final class TagCreator {
      * @return A BlockquoteTag element
      */
     public static BlockquoteTag blockquote(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new BlockquoteTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new BlockquoteTag().with(dc), shortAttr);
     }
 
     /**
@@ -1492,7 +1497,7 @@ public final class TagCreator {
      * @return A ButtonTag element
      */
     public static ButtonTag button(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new ButtonTag(), shortAttr);
+        return Attr.ShortForm.addTo(new ButtonTag(), shortAttr);
     }
 
     /**
@@ -1503,7 +1508,7 @@ public final class TagCreator {
      * @return A ButtonTag element
      */
     public static ButtonTag button(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new ButtonTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new ButtonTag().withText(text), shortAttr);
     }
 
     /**
@@ -1514,7 +1519,7 @@ public final class TagCreator {
      * @return A ButtonTag element
      */
     public static ButtonTag button(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new ButtonTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new ButtonTag().with(dc), shortAttr);
     }
 
     /**
@@ -1553,7 +1558,7 @@ public final class TagCreator {
      * @return A CanvasTag element
      */
     public static CanvasTag canvas(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new CanvasTag(), shortAttr);
+        return Attr.ShortForm.addTo(new CanvasTag(), shortAttr);
     }
 
     /**
@@ -1564,7 +1569,7 @@ public final class TagCreator {
      * @return A CanvasTag element
      */
     public static CanvasTag canvas(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new CanvasTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new CanvasTag().withText(text), shortAttr);
     }
 
     /**
@@ -1575,7 +1580,7 @@ public final class TagCreator {
      * @return A CanvasTag element
      */
     public static CanvasTag canvas(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new CanvasTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new CanvasTag().with(dc), shortAttr);
     }
 
     /**
@@ -1614,7 +1619,7 @@ public final class TagCreator {
      * @return A CaptionTag element
      */
     public static CaptionTag caption(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new CaptionTag(), shortAttr);
+        return Attr.ShortForm.addTo(new CaptionTag(), shortAttr);
     }
 
     /**
@@ -1625,7 +1630,7 @@ public final class TagCreator {
      * @return A CaptionTag element
      */
     public static CaptionTag caption(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new CaptionTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new CaptionTag().withText(text), shortAttr);
     }
 
     /**
@@ -1636,7 +1641,7 @@ public final class TagCreator {
      * @return A CaptionTag element
      */
     public static CaptionTag caption(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new CaptionTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new CaptionTag().with(dc), shortAttr);
     }
 
     /**
@@ -1675,7 +1680,7 @@ public final class TagCreator {
      * @return A CiteTag element
      */
     public static CiteTag cite(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new CiteTag(), shortAttr);
+        return Attr.ShortForm.addTo(new CiteTag(), shortAttr);
     }
 
     /**
@@ -1686,7 +1691,7 @@ public final class TagCreator {
      * @return A CiteTag element
      */
     public static CiteTag cite(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new CiteTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new CiteTag().withText(text), shortAttr);
     }
 
     /**
@@ -1697,7 +1702,7 @@ public final class TagCreator {
      * @return A CiteTag element
      */
     public static CiteTag cite(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new CiteTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new CiteTag().with(dc), shortAttr);
     }
 
     /**
@@ -1736,7 +1741,7 @@ public final class TagCreator {
      * @return A CodeTag element
      */
     public static CodeTag code(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new CodeTag(), shortAttr);
+        return Attr.ShortForm.addTo(new CodeTag(), shortAttr);
     }
 
     /**
@@ -1747,7 +1752,7 @@ public final class TagCreator {
      * @return A CodeTag element
      */
     public static CodeTag code(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new CodeTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new CodeTag().withText(text), shortAttr);
     }
 
     /**
@@ -1758,7 +1763,7 @@ public final class TagCreator {
      * @return A CodeTag element
      */
     public static CodeTag code(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new CodeTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new CodeTag().with(dc), shortAttr);
     }
 
     /**
@@ -1797,7 +1802,7 @@ public final class TagCreator {
      * @return A ColgroupTag element
      */
     public static ColgroupTag colgroup(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new ColgroupTag(), shortAttr);
+        return Attr.ShortForm.addTo(new ColgroupTag(), shortAttr);
     }
 
     /**
@@ -1808,7 +1813,7 @@ public final class TagCreator {
      * @return A ColgroupTag element
      */
     public static ColgroupTag colgroup(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new ColgroupTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new ColgroupTag().withText(text), shortAttr);
     }
 
     /**
@@ -1819,7 +1824,7 @@ public final class TagCreator {
      * @return A ColgroupTag element
      */
     public static ColgroupTag colgroup(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new ColgroupTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new ColgroupTag().with(dc), shortAttr);
     }
 
     /**
@@ -1858,7 +1863,7 @@ public final class TagCreator {
      * @return A DataTag element
      */
     public static DataTag data(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new DataTag(), shortAttr);
+        return Attr.ShortForm.addTo(new DataTag(), shortAttr);
     }
 
     /**
@@ -1869,7 +1874,7 @@ public final class TagCreator {
      * @return A DataTag element
      */
     public static DataTag data(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new DataTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new DataTag().withText(text), shortAttr);
     }
 
     /**
@@ -1880,7 +1885,7 @@ public final class TagCreator {
      * @return A DataTag element
      */
     public static DataTag data(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new DataTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new DataTag().with(dc), shortAttr);
     }
 
     /**
@@ -1919,7 +1924,7 @@ public final class TagCreator {
      * @return A DatalistTag element
      */
     public static DatalistTag datalist(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new DatalistTag(), shortAttr);
+        return Attr.ShortForm.addTo(new DatalistTag(), shortAttr);
     }
 
     /**
@@ -1930,7 +1935,7 @@ public final class TagCreator {
      * @return A DatalistTag element
      */
     public static DatalistTag datalist(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new DatalistTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new DatalistTag().withText(text), shortAttr);
     }
 
     /**
@@ -1941,7 +1946,7 @@ public final class TagCreator {
      * @return A DatalistTag element
      */
     public static DatalistTag datalist(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new DatalistTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new DatalistTag().with(dc), shortAttr);
     }
 
     /**
@@ -1980,7 +1985,7 @@ public final class TagCreator {
      * @return A DdTag element
      */
     public static DdTag dd(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new DdTag(), shortAttr);
+        return Attr.ShortForm.addTo(new DdTag(), shortAttr);
     }
 
     /**
@@ -1991,7 +1996,7 @@ public final class TagCreator {
      * @return A DdTag element
      */
     public static DdTag dd(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new DdTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new DdTag().withText(text), shortAttr);
     }
 
     /**
@@ -2002,7 +2007,7 @@ public final class TagCreator {
      * @return A DdTag element
      */
     public static DdTag dd(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new DdTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new DdTag().with(dc), shortAttr);
     }
 
     /**
@@ -2041,7 +2046,7 @@ public final class TagCreator {
      * @return A DelTag element
      */
     public static DelTag del(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new DelTag(), shortAttr);
+        return Attr.ShortForm.addTo(new DelTag(), shortAttr);
     }
 
     /**
@@ -2052,7 +2057,7 @@ public final class TagCreator {
      * @return A DelTag element
      */
     public static DelTag del(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new DelTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new DelTag().withText(text), shortAttr);
     }
 
     /**
@@ -2063,7 +2068,7 @@ public final class TagCreator {
      * @return A DelTag element
      */
     public static DelTag del(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new DelTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new DelTag().with(dc), shortAttr);
     }
 
     /**
@@ -2102,7 +2107,7 @@ public final class TagCreator {
      * @return A DetailsTag element
      */
     public static DetailsTag details(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new DetailsTag(), shortAttr);
+        return Attr.ShortForm.addTo(new DetailsTag(), shortAttr);
     }
 
     /**
@@ -2113,7 +2118,7 @@ public final class TagCreator {
      * @return A DetailsTag element
      */
     public static DetailsTag details(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new DetailsTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new DetailsTag().withText(text), shortAttr);
     }
 
     /**
@@ -2124,7 +2129,7 @@ public final class TagCreator {
      * @return A DetailsTag element
      */
     public static DetailsTag details(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new DetailsTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new DetailsTag().with(dc), shortAttr);
     }
 
     /**
@@ -2163,7 +2168,7 @@ public final class TagCreator {
      * @return A DfnTag element
      */
     public static DfnTag dfn(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new DfnTag(), shortAttr);
+        return Attr.ShortForm.addTo(new DfnTag(), shortAttr);
     }
 
     /**
@@ -2174,7 +2179,7 @@ public final class TagCreator {
      * @return A DfnTag element
      */
     public static DfnTag dfn(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new DfnTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new DfnTag().withText(text), shortAttr);
     }
 
     /**
@@ -2185,7 +2190,7 @@ public final class TagCreator {
      * @return A DfnTag element
      */
     public static DfnTag dfn(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new DfnTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new DfnTag().with(dc), shortAttr);
     }
 
     /**
@@ -2224,7 +2229,7 @@ public final class TagCreator {
      * @return A DialogTag element
      */
     public static DialogTag dialog(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new DialogTag(), shortAttr);
+        return Attr.ShortForm.addTo(new DialogTag(), shortAttr);
     }
 
     /**
@@ -2235,7 +2240,7 @@ public final class TagCreator {
      * @return A DialogTag element
      */
     public static DialogTag dialog(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new DialogTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new DialogTag().withText(text), shortAttr);
     }
 
     /**
@@ -2246,7 +2251,7 @@ public final class TagCreator {
      * @return A DialogTag element
      */
     public static DialogTag dialog(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new DialogTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new DialogTag().with(dc), shortAttr);
     }
 
     /**
@@ -2285,7 +2290,7 @@ public final class TagCreator {
      * @return A DivTag element
      */
     public static DivTag div(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new DivTag(), shortAttr);
+        return Attr.ShortForm.addTo(new DivTag(), shortAttr);
     }
 
     /**
@@ -2296,7 +2301,7 @@ public final class TagCreator {
      * @return A DivTag element
      */
     public static DivTag div(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new DivTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new DivTag().withText(text), shortAttr);
     }
 
     /**
@@ -2307,7 +2312,7 @@ public final class TagCreator {
      * @return A DivTag element
      */
     public static DivTag div(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new DivTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new DivTag().with(dc), shortAttr);
     }
 
     /**
@@ -2346,7 +2351,7 @@ public final class TagCreator {
      * @return A DlTag element
      */
     public static DlTag dl(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new DlTag(), shortAttr);
+        return Attr.ShortForm.addTo(new DlTag(), shortAttr);
     }
 
     /**
@@ -2357,7 +2362,7 @@ public final class TagCreator {
      * @return A DlTag element
      */
     public static DlTag dl(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new DlTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new DlTag().withText(text), shortAttr);
     }
 
     /**
@@ -2368,7 +2373,7 @@ public final class TagCreator {
      * @return A DlTag element
      */
     public static DlTag dl(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new DlTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new DlTag().with(dc), shortAttr);
     }
 
     /**
@@ -2407,7 +2412,7 @@ public final class TagCreator {
      * @return A DtTag element
      */
     public static DtTag dt(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new DtTag(), shortAttr);
+        return Attr.ShortForm.addTo(new DtTag(), shortAttr);
     }
 
     /**
@@ -2418,7 +2423,7 @@ public final class TagCreator {
      * @return A DtTag element
      */
     public static DtTag dt(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new DtTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new DtTag().withText(text), shortAttr);
     }
 
     /**
@@ -2429,7 +2434,7 @@ public final class TagCreator {
      * @return A DtTag element
      */
     public static DtTag dt(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new DtTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new DtTag().with(dc), shortAttr);
     }
 
     /**
@@ -2468,7 +2473,7 @@ public final class TagCreator {
      * @return A EmTag element
      */
     public static EmTag em(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new EmTag(), shortAttr);
+        return Attr.ShortForm.addTo(new EmTag(), shortAttr);
     }
 
     /**
@@ -2479,7 +2484,7 @@ public final class TagCreator {
      * @return A EmTag element
      */
     public static EmTag em(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new EmTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new EmTag().withText(text), shortAttr);
     }
 
     /**
@@ -2490,7 +2495,7 @@ public final class TagCreator {
      * @return A EmTag element
      */
     public static EmTag em(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new EmTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new EmTag().with(dc), shortAttr);
     }
 
     /**
@@ -2529,7 +2534,7 @@ public final class TagCreator {
      * @return A FieldsetTag element
      */
     public static FieldsetTag fieldset(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new FieldsetTag(), shortAttr);
+        return Attr.ShortForm.addTo(new FieldsetTag(), shortAttr);
     }
 
     /**
@@ -2540,7 +2545,7 @@ public final class TagCreator {
      * @return A FieldsetTag element
      */
     public static FieldsetTag fieldset(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new FieldsetTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new FieldsetTag().withText(text), shortAttr);
     }
 
     /**
@@ -2551,7 +2556,7 @@ public final class TagCreator {
      * @return A FieldsetTag element
      */
     public static FieldsetTag fieldset(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new FieldsetTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new FieldsetTag().with(dc), shortAttr);
     }
 
     /**
@@ -2590,7 +2595,7 @@ public final class TagCreator {
      * @return A FigcaptionTag element
      */
     public static FigcaptionTag figcaption(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new FigcaptionTag(), shortAttr);
+        return Attr.ShortForm.addTo(new FigcaptionTag(), shortAttr);
     }
 
     /**
@@ -2601,7 +2606,7 @@ public final class TagCreator {
      * @return A FigcaptionTag element
      */
     public static FigcaptionTag figcaption(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new FigcaptionTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new FigcaptionTag().withText(text), shortAttr);
     }
 
     /**
@@ -2612,7 +2617,7 @@ public final class TagCreator {
      * @return A FigcaptionTag element
      */
     public static FigcaptionTag figcaption(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new FigcaptionTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new FigcaptionTag().with(dc), shortAttr);
     }
 
     /**
@@ -2651,7 +2656,7 @@ public final class TagCreator {
      * @return A FigureTag element
      */
     public static FigureTag figure(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new FigureTag(), shortAttr);
+        return Attr.ShortForm.addTo(new FigureTag(), shortAttr);
     }
 
     /**
@@ -2662,7 +2667,7 @@ public final class TagCreator {
      * @return A FigureTag element
      */
     public static FigureTag figure(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new FigureTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new FigureTag().withText(text), shortAttr);
     }
 
     /**
@@ -2673,7 +2678,7 @@ public final class TagCreator {
      * @return A FigureTag element
      */
     public static FigureTag figure(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new FigureTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new FigureTag().with(dc), shortAttr);
     }
 
     /**
@@ -2712,7 +2717,7 @@ public final class TagCreator {
      * @return A FooterTag element
      */
     public static FooterTag footer(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new FooterTag(), shortAttr);
+        return Attr.ShortForm.addTo(new FooterTag(), shortAttr);
     }
 
     /**
@@ -2723,7 +2728,7 @@ public final class TagCreator {
      * @return A FooterTag element
      */
     public static FooterTag footer(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new FooterTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new FooterTag().withText(text), shortAttr);
     }
 
     /**
@@ -2734,7 +2739,7 @@ public final class TagCreator {
      * @return A FooterTag element
      */
     public static FooterTag footer(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new FooterTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new FooterTag().with(dc), shortAttr);
     }
 
     /**
@@ -2773,7 +2778,7 @@ public final class TagCreator {
      * @return A FormTag element
      */
     public static FormTag form(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new FormTag(), shortAttr);
+        return Attr.ShortForm.addTo(new FormTag(), shortAttr);
     }
 
     /**
@@ -2784,7 +2789,7 @@ public final class TagCreator {
      * @return A FormTag element
      */
     public static FormTag form(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new FormTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new FormTag().withText(text), shortAttr);
     }
 
     /**
@@ -2795,7 +2800,7 @@ public final class TagCreator {
      * @return A FormTag element
      */
     public static FormTag form(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new FormTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new FormTag().with(dc), shortAttr);
     }
 
     /**
@@ -2834,7 +2839,7 @@ public final class TagCreator {
      * @return A H1Tag element
      */
     public static H1Tag h1(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new H1Tag(), shortAttr);
+        return Attr.ShortForm.addTo(new H1Tag(), shortAttr);
     }
 
     /**
@@ -2845,7 +2850,7 @@ public final class TagCreator {
      * @return A H1Tag element
      */
     public static H1Tag h1(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new H1Tag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new H1Tag().withText(text), shortAttr);
     }
 
     /**
@@ -2856,7 +2861,7 @@ public final class TagCreator {
      * @return A H1Tag element
      */
     public static H1Tag h1(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new H1Tag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new H1Tag().with(dc), shortAttr);
     }
 
     /**
@@ -2895,7 +2900,7 @@ public final class TagCreator {
      * @return A H2Tag element
      */
     public static H2Tag h2(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new H2Tag(), shortAttr);
+        return Attr.ShortForm.addTo(new H2Tag(), shortAttr);
     }
 
     /**
@@ -2906,7 +2911,7 @@ public final class TagCreator {
      * @return A H2Tag element
      */
     public static H2Tag h2(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new H2Tag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new H2Tag().withText(text), shortAttr);
     }
 
     /**
@@ -2917,7 +2922,7 @@ public final class TagCreator {
      * @return A H2Tag element
      */
     public static H2Tag h2(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new H2Tag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new H2Tag().with(dc), shortAttr);
     }
 
     /**
@@ -2956,7 +2961,7 @@ public final class TagCreator {
      * @return A H3Tag element
      */
     public static H3Tag h3(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new H3Tag(), shortAttr);
+        return Attr.ShortForm.addTo(new H3Tag(), shortAttr);
     }
 
     /**
@@ -2967,7 +2972,7 @@ public final class TagCreator {
      * @return A H3Tag element
      */
     public static H3Tag h3(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new H3Tag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new H3Tag().withText(text), shortAttr);
     }
 
     /**
@@ -2978,7 +2983,7 @@ public final class TagCreator {
      * @return A H3Tag element
      */
     public static H3Tag h3(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new H3Tag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new H3Tag().with(dc), shortAttr);
     }
 
     /**
@@ -3017,7 +3022,7 @@ public final class TagCreator {
      * @return A H4Tag element
      */
     public static H4Tag h4(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new H4Tag(), shortAttr);
+        return Attr.ShortForm.addTo(new H4Tag(), shortAttr);
     }
 
     /**
@@ -3028,7 +3033,7 @@ public final class TagCreator {
      * @return A H4Tag element
      */
     public static H4Tag h4(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new H4Tag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new H4Tag().withText(text), shortAttr);
     }
 
     /**
@@ -3039,7 +3044,7 @@ public final class TagCreator {
      * @return A H4Tag element
      */
     public static H4Tag h4(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new H4Tag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new H4Tag().with(dc), shortAttr);
     }
 
     /**
@@ -3078,7 +3083,7 @@ public final class TagCreator {
      * @return A H5Tag element
      */
     public static H5Tag h5(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new H5Tag(), shortAttr);
+        return Attr.ShortForm.addTo(new H5Tag(), shortAttr);
     }
 
     /**
@@ -3089,7 +3094,7 @@ public final class TagCreator {
      * @return A H5Tag element
      */
     public static H5Tag h5(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new H5Tag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new H5Tag().withText(text), shortAttr);
     }
 
     /**
@@ -3100,7 +3105,7 @@ public final class TagCreator {
      * @return A H5Tag element
      */
     public static H5Tag h5(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new H5Tag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new H5Tag().with(dc), shortAttr);
     }
 
     /**
@@ -3139,7 +3144,7 @@ public final class TagCreator {
      * @return A H6Tag element
      */
     public static H6Tag h6(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new H6Tag(), shortAttr);
+        return Attr.ShortForm.addTo(new H6Tag(), shortAttr);
     }
 
     /**
@@ -3150,7 +3155,7 @@ public final class TagCreator {
      * @return A H6Tag element
      */
     public static H6Tag h6(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new H6Tag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new H6Tag().withText(text), shortAttr);
     }
 
     /**
@@ -3161,7 +3166,7 @@ public final class TagCreator {
      * @return A H6Tag element
      */
     public static H6Tag h6(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new H6Tag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new H6Tag().with(dc), shortAttr);
     }
 
     /**
@@ -3200,7 +3205,7 @@ public final class TagCreator {
      * @return A HeaderTag element
      */
     public static HeaderTag header(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new HeaderTag(), shortAttr);
+        return Attr.ShortForm.addTo(new HeaderTag(), shortAttr);
     }
 
     /**
@@ -3211,7 +3216,7 @@ public final class TagCreator {
      * @return A HeaderTag element
      */
     public static HeaderTag header(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new HeaderTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new HeaderTag().withText(text), shortAttr);
     }
 
     /**
@@ -3222,7 +3227,7 @@ public final class TagCreator {
      * @return A HeaderTag element
      */
     public static HeaderTag header(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new HeaderTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new HeaderTag().with(dc), shortAttr);
     }
 
     /**
@@ -3261,7 +3266,7 @@ public final class TagCreator {
      * @return A ITag element
      */
     public static ITag i(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new ITag(), shortAttr);
+        return Attr.ShortForm.addTo(new ITag(), shortAttr);
     }
 
     /**
@@ -3272,7 +3277,7 @@ public final class TagCreator {
      * @return A ITag element
      */
     public static ITag i(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new ITag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new ITag().withText(text), shortAttr);
     }
 
     /**
@@ -3283,7 +3288,7 @@ public final class TagCreator {
      * @return A ITag element
      */
     public static ITag i(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new ITag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new ITag().with(dc), shortAttr);
     }
 
     /**
@@ -3322,7 +3327,7 @@ public final class TagCreator {
      * @return A IframeTag element
      */
     public static IframeTag iframe(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new IframeTag(), shortAttr);
+        return Attr.ShortForm.addTo(new IframeTag(), shortAttr);
     }
 
     /**
@@ -3333,7 +3338,7 @@ public final class TagCreator {
      * @return A IframeTag element
      */
     public static IframeTag iframe(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new IframeTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new IframeTag().withText(text), shortAttr);
     }
 
     /**
@@ -3344,7 +3349,7 @@ public final class TagCreator {
      * @return A IframeTag element
      */
     public static IframeTag iframe(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new IframeTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new IframeTag().with(dc), shortAttr);
     }
 
     /**
@@ -3383,7 +3388,7 @@ public final class TagCreator {
      * @return A InsTag element
      */
     public static InsTag ins(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new InsTag(), shortAttr);
+        return Attr.ShortForm.addTo(new InsTag(), shortAttr);
     }
 
     /**
@@ -3394,7 +3399,7 @@ public final class TagCreator {
      * @return A InsTag element
      */
     public static InsTag ins(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new InsTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new InsTag().withText(text), shortAttr);
     }
 
     /**
@@ -3405,7 +3410,7 @@ public final class TagCreator {
      * @return A InsTag element
      */
     public static InsTag ins(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new InsTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new InsTag().with(dc), shortAttr);
     }
 
     /**
@@ -3444,7 +3449,7 @@ public final class TagCreator {
      * @return A KbdTag element
      */
     public static KbdTag kbd(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new KbdTag(), shortAttr);
+        return Attr.ShortForm.addTo(new KbdTag(), shortAttr);
     }
 
     /**
@@ -3455,7 +3460,7 @@ public final class TagCreator {
      * @return A KbdTag element
      */
     public static KbdTag kbd(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new KbdTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new KbdTag().withText(text), shortAttr);
     }
 
     /**
@@ -3466,7 +3471,7 @@ public final class TagCreator {
      * @return A KbdTag element
      */
     public static KbdTag kbd(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new KbdTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new KbdTag().with(dc), shortAttr);
     }
 
     /**
@@ -3505,7 +3510,7 @@ public final class TagCreator {
      * @return A LabelTag element
      */
     public static LabelTag label(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new LabelTag(), shortAttr);
+        return Attr.ShortForm.addTo(new LabelTag(), shortAttr);
     }
 
     /**
@@ -3516,7 +3521,7 @@ public final class TagCreator {
      * @return A LabelTag element
      */
     public static LabelTag label(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new LabelTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new LabelTag().withText(text), shortAttr);
     }
 
     /**
@@ -3527,7 +3532,7 @@ public final class TagCreator {
      * @return A LabelTag element
      */
     public static LabelTag label(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new LabelTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new LabelTag().with(dc), shortAttr);
     }
 
     /**
@@ -3566,7 +3571,7 @@ public final class TagCreator {
      * @return A LegendTag element
      */
     public static LegendTag legend(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new LegendTag(), shortAttr);
+        return Attr.ShortForm.addTo(new LegendTag(), shortAttr);
     }
 
     /**
@@ -3577,7 +3582,7 @@ public final class TagCreator {
      * @return A LegendTag element
      */
     public static LegendTag legend(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new LegendTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new LegendTag().withText(text), shortAttr);
     }
 
     /**
@@ -3588,7 +3593,7 @@ public final class TagCreator {
      * @return A LegendTag element
      */
     public static LegendTag legend(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new LegendTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new LegendTag().with(dc), shortAttr);
     }
 
     /**
@@ -3627,7 +3632,7 @@ public final class TagCreator {
      * @return A LiTag element
      */
     public static LiTag li(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new LiTag(), shortAttr);
+        return Attr.ShortForm.addTo(new LiTag(), shortAttr);
     }
 
     /**
@@ -3638,7 +3643,7 @@ public final class TagCreator {
      * @return A LiTag element
      */
     public static LiTag li(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new LiTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new LiTag().withText(text), shortAttr);
     }
 
     /**
@@ -3649,7 +3654,7 @@ public final class TagCreator {
      * @return A LiTag element
      */
     public static LiTag li(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new LiTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new LiTag().with(dc), shortAttr);
     }
 
     /**
@@ -3688,7 +3693,7 @@ public final class TagCreator {
      * @return A MainTag element
      */
     public static MainTag main(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new MainTag(), shortAttr);
+        return Attr.ShortForm.addTo(new MainTag(), shortAttr);
     }
 
     /**
@@ -3699,7 +3704,7 @@ public final class TagCreator {
      * @return A MainTag element
      */
     public static MainTag main(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new MainTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new MainTag().withText(text), shortAttr);
     }
 
     /**
@@ -3710,7 +3715,7 @@ public final class TagCreator {
      * @return A MainTag element
      */
     public static MainTag main(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new MainTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new MainTag().with(dc), shortAttr);
     }
 
     /**
@@ -3749,7 +3754,7 @@ public final class TagCreator {
      * @return A MapTag element
      */
     public static MapTag map(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new MapTag(), shortAttr);
+        return Attr.ShortForm.addTo(new MapTag(), shortAttr);
     }
 
     /**
@@ -3760,7 +3765,7 @@ public final class TagCreator {
      * @return A MapTag element
      */
     public static MapTag map(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new MapTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new MapTag().withText(text), shortAttr);
     }
 
     /**
@@ -3771,7 +3776,7 @@ public final class TagCreator {
      * @return A MapTag element
      */
     public static MapTag map(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new MapTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new MapTag().with(dc), shortAttr);
     }
 
     /**
@@ -3810,7 +3815,7 @@ public final class TagCreator {
      * @return A MarkTag element
      */
     public static MarkTag mark(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new MarkTag(), shortAttr);
+        return Attr.ShortForm.addTo(new MarkTag(), shortAttr);
     }
 
     /**
@@ -3821,7 +3826,7 @@ public final class TagCreator {
      * @return A MarkTag element
      */
     public static MarkTag mark(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new MarkTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new MarkTag().withText(text), shortAttr);
     }
 
     /**
@@ -3832,7 +3837,7 @@ public final class TagCreator {
      * @return A MarkTag element
      */
     public static MarkTag mark(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new MarkTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new MarkTag().with(dc), shortAttr);
     }
 
     /**
@@ -3871,7 +3876,7 @@ public final class TagCreator {
      * @return A MenuTag element
      */
     public static MenuTag menu(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new MenuTag(), shortAttr);
+        return Attr.ShortForm.addTo(new MenuTag(), shortAttr);
     }
 
     /**
@@ -3882,7 +3887,7 @@ public final class TagCreator {
      * @return A MenuTag element
      */
     public static MenuTag menu(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new MenuTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new MenuTag().withText(text), shortAttr);
     }
 
     /**
@@ -3893,7 +3898,7 @@ public final class TagCreator {
      * @return A MenuTag element
      */
     public static MenuTag menu(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new MenuTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new MenuTag().with(dc), shortAttr);
     }
 
     /**
@@ -3932,7 +3937,7 @@ public final class TagCreator {
      * @return A MenuitemTag element
      */
     public static MenuitemTag menuitem(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new MenuitemTag(), shortAttr);
+        return Attr.ShortForm.addTo(new MenuitemTag(), shortAttr);
     }
 
     /**
@@ -3943,7 +3948,7 @@ public final class TagCreator {
      * @return A MenuitemTag element
      */
     public static MenuitemTag menuitem(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new MenuitemTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new MenuitemTag().withText(text), shortAttr);
     }
 
     /**
@@ -3954,7 +3959,7 @@ public final class TagCreator {
      * @return A MenuitemTag element
      */
     public static MenuitemTag menuitem(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new MenuitemTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new MenuitemTag().with(dc), shortAttr);
     }
 
     /**
@@ -3993,7 +3998,7 @@ public final class TagCreator {
      * @return A MeterTag element
      */
     public static MeterTag meter(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new MeterTag(), shortAttr);
+        return Attr.ShortForm.addTo(new MeterTag(), shortAttr);
     }
 
     /**
@@ -4004,7 +4009,7 @@ public final class TagCreator {
      * @return A MeterTag element
      */
     public static MeterTag meter(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new MeterTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new MeterTag().withText(text), shortAttr);
     }
 
     /**
@@ -4015,7 +4020,7 @@ public final class TagCreator {
      * @return A MeterTag element
      */
     public static MeterTag meter(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new MeterTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new MeterTag().with(dc), shortAttr);
     }
 
     /**
@@ -4054,7 +4059,7 @@ public final class TagCreator {
      * @return A NavTag element
      */
     public static NavTag nav(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new NavTag(), shortAttr);
+        return Attr.ShortForm.addTo(new NavTag(), shortAttr);
     }
 
     /**
@@ -4065,7 +4070,7 @@ public final class TagCreator {
      * @return A NavTag element
      */
     public static NavTag nav(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new NavTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new NavTag().withText(text), shortAttr);
     }
 
     /**
@@ -4076,7 +4081,7 @@ public final class TagCreator {
      * @return A NavTag element
      */
     public static NavTag nav(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new NavTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new NavTag().with(dc), shortAttr);
     }
 
     /**
@@ -4115,7 +4120,7 @@ public final class TagCreator {
      * @return A NoscriptTag element
      */
     public static NoscriptTag noscript(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new NoscriptTag(), shortAttr);
+        return Attr.ShortForm.addTo(new NoscriptTag(), shortAttr);
     }
 
     /**
@@ -4126,7 +4131,7 @@ public final class TagCreator {
      * @return A NoscriptTag element
      */
     public static NoscriptTag noscript(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new NoscriptTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new NoscriptTag().withText(text), shortAttr);
     }
 
     /**
@@ -4137,7 +4142,7 @@ public final class TagCreator {
      * @return A NoscriptTag element
      */
     public static NoscriptTag noscript(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new NoscriptTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new NoscriptTag().with(dc), shortAttr);
     }
 
     /**
@@ -4176,7 +4181,7 @@ public final class TagCreator {
      * @return A ObjectTag element
      */
     public static ObjectTag object(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new ObjectTag(), shortAttr);
+        return Attr.ShortForm.addTo(new ObjectTag(), shortAttr);
     }
 
     /**
@@ -4187,7 +4192,7 @@ public final class TagCreator {
      * @return A ObjectTag element
      */
     public static ObjectTag object(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new ObjectTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new ObjectTag().withText(text), shortAttr);
     }
 
     /**
@@ -4198,7 +4203,7 @@ public final class TagCreator {
      * @return A ObjectTag element
      */
     public static ObjectTag object(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new ObjectTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new ObjectTag().with(dc), shortAttr);
     }
 
     /**
@@ -4237,7 +4242,7 @@ public final class TagCreator {
      * @return A OlTag element
      */
     public static OlTag ol(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new OlTag(), shortAttr);
+        return Attr.ShortForm.addTo(new OlTag(), shortAttr);
     }
 
     /**
@@ -4248,7 +4253,7 @@ public final class TagCreator {
      * @return A OlTag element
      */
     public static OlTag ol(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new OlTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new OlTag().withText(text), shortAttr);
     }
 
     /**
@@ -4259,7 +4264,7 @@ public final class TagCreator {
      * @return A OlTag element
      */
     public static OlTag ol(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new OlTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new OlTag().with(dc), shortAttr);
     }
 
     /**
@@ -4298,7 +4303,7 @@ public final class TagCreator {
      * @return A OptgroupTag element
      */
     public static OptgroupTag optgroup(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new OptgroupTag(), shortAttr);
+        return Attr.ShortForm.addTo(new OptgroupTag(), shortAttr);
     }
 
     /**
@@ -4309,7 +4314,7 @@ public final class TagCreator {
      * @return A OptgroupTag element
      */
     public static OptgroupTag optgroup(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new OptgroupTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new OptgroupTag().withText(text), shortAttr);
     }
 
     /**
@@ -4320,7 +4325,7 @@ public final class TagCreator {
      * @return A OptgroupTag element
      */
     public static OptgroupTag optgroup(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new OptgroupTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new OptgroupTag().with(dc), shortAttr);
     }
 
     /**
@@ -4359,7 +4364,7 @@ public final class TagCreator {
      * @return A OptionTag element
      */
     public static OptionTag option(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new OptionTag(), shortAttr);
+        return Attr.ShortForm.addTo(new OptionTag(), shortAttr);
     }
 
     /**
@@ -4370,7 +4375,7 @@ public final class TagCreator {
      * @return A OptionTag element
      */
     public static OptionTag option(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new OptionTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new OptionTag().withText(text), shortAttr);
     }
 
     /**
@@ -4381,7 +4386,7 @@ public final class TagCreator {
      * @return A OptionTag element
      */
     public static OptionTag option(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new OptionTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new OptionTag().with(dc), shortAttr);
     }
 
     /**
@@ -4420,7 +4425,7 @@ public final class TagCreator {
      * @return A OutputTag element
      */
     public static OutputTag output(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new OutputTag(), shortAttr);
+        return Attr.ShortForm.addTo(new OutputTag(), shortAttr);
     }
 
     /**
@@ -4431,7 +4436,7 @@ public final class TagCreator {
      * @return A OutputTag element
      */
     public static OutputTag output(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new OutputTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new OutputTag().withText(text), shortAttr);
     }
 
     /**
@@ -4442,7 +4447,7 @@ public final class TagCreator {
      * @return A OutputTag element
      */
     public static OutputTag output(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new OutputTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new OutputTag().with(dc), shortAttr);
     }
 
     /**
@@ -4481,7 +4486,7 @@ public final class TagCreator {
      * @return A PTag element
      */
     public static PTag p(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new PTag(), shortAttr);
+        return Attr.ShortForm.addTo(new PTag(), shortAttr);
     }
 
     /**
@@ -4492,7 +4497,7 @@ public final class TagCreator {
      * @return A PTag element
      */
     public static PTag p(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new PTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new PTag().withText(text), shortAttr);
     }
 
     /**
@@ -4503,7 +4508,7 @@ public final class TagCreator {
      * @return A PTag element
      */
     public static PTag p(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new PTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new PTag().with(dc), shortAttr);
     }
 
     /**
@@ -4542,7 +4547,7 @@ public final class TagCreator {
      * @return A PictureTag element
      */
     public static PictureTag picture(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new PictureTag(), shortAttr);
+        return Attr.ShortForm.addTo(new PictureTag(), shortAttr);
     }
 
     /**
@@ -4553,7 +4558,7 @@ public final class TagCreator {
      * @return A PictureTag element
      */
     public static PictureTag picture(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new PictureTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new PictureTag().withText(text), shortAttr);
     }
 
     /**
@@ -4564,7 +4569,7 @@ public final class TagCreator {
      * @return A PictureTag element
      */
     public static PictureTag picture(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new PictureTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new PictureTag().with(dc), shortAttr);
     }
 
     /**
@@ -4603,7 +4608,7 @@ public final class TagCreator {
      * @return A PreTag element
      */
     public static PreTag pre(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new PreTag(), shortAttr);
+        return Attr.ShortForm.addTo(new PreTag(), shortAttr);
     }
 
     /**
@@ -4614,7 +4619,7 @@ public final class TagCreator {
      * @return A PreTag element
      */
     public static PreTag pre(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new PreTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new PreTag().withText(text), shortAttr);
     }
 
     /**
@@ -4625,7 +4630,7 @@ public final class TagCreator {
      * @return A PreTag element
      */
     public static PreTag pre(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new PreTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new PreTag().with(dc), shortAttr);
     }
 
     /**
@@ -4664,7 +4669,7 @@ public final class TagCreator {
      * @return A ProgressTag element
      */
     public static ProgressTag progress(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new ProgressTag(), shortAttr);
+        return Attr.ShortForm.addTo(new ProgressTag(), shortAttr);
     }
 
     /**
@@ -4675,7 +4680,7 @@ public final class TagCreator {
      * @return A ProgressTag element
      */
     public static ProgressTag progress(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new ProgressTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new ProgressTag().withText(text), shortAttr);
     }
 
     /**
@@ -4686,7 +4691,7 @@ public final class TagCreator {
      * @return A ProgressTag element
      */
     public static ProgressTag progress(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new ProgressTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new ProgressTag().with(dc), shortAttr);
     }
 
     /**
@@ -4725,7 +4730,7 @@ public final class TagCreator {
      * @return A QTag element
      */
     public static QTag q(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new QTag(), shortAttr);
+        return Attr.ShortForm.addTo(new QTag(), shortAttr);
     }
 
     /**
@@ -4736,7 +4741,7 @@ public final class TagCreator {
      * @return A QTag element
      */
     public static QTag q(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new QTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new QTag().withText(text), shortAttr);
     }
 
     /**
@@ -4747,7 +4752,7 @@ public final class TagCreator {
      * @return A QTag element
      */
     public static QTag q(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new QTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new QTag().with(dc), shortAttr);
     }
 
     /**
@@ -4786,7 +4791,7 @@ public final class TagCreator {
      * @return A RpTag element
      */
     public static RpTag rp(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new RpTag(), shortAttr);
+        return Attr.ShortForm.addTo(new RpTag(), shortAttr);
     }
 
     /**
@@ -4797,7 +4802,7 @@ public final class TagCreator {
      * @return A RpTag element
      */
     public static RpTag rp(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new RpTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new RpTag().withText(text), shortAttr);
     }
 
     /**
@@ -4808,7 +4813,7 @@ public final class TagCreator {
      * @return A RpTag element
      */
     public static RpTag rp(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new RpTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new RpTag().with(dc), shortAttr);
     }
 
     /**
@@ -4847,7 +4852,7 @@ public final class TagCreator {
      * @return A RtTag element
      */
     public static RtTag rt(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new RtTag(), shortAttr);
+        return Attr.ShortForm.addTo(new RtTag(), shortAttr);
     }
 
     /**
@@ -4858,7 +4863,7 @@ public final class TagCreator {
      * @return A RtTag element
      */
     public static RtTag rt(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new RtTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new RtTag().withText(text), shortAttr);
     }
 
     /**
@@ -4869,7 +4874,7 @@ public final class TagCreator {
      * @return A RtTag element
      */
     public static RtTag rt(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new RtTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new RtTag().with(dc), shortAttr);
     }
 
     /**
@@ -4908,7 +4913,7 @@ public final class TagCreator {
      * @return A RubyTag element
      */
     public static RubyTag ruby(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new RubyTag(), shortAttr);
+        return Attr.ShortForm.addTo(new RubyTag(), shortAttr);
     }
 
     /**
@@ -4919,7 +4924,7 @@ public final class TagCreator {
      * @return A RubyTag element
      */
     public static RubyTag ruby(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new RubyTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new RubyTag().withText(text), shortAttr);
     }
 
     /**
@@ -4930,7 +4935,7 @@ public final class TagCreator {
      * @return A RubyTag element
      */
     public static RubyTag ruby(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new RubyTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new RubyTag().with(dc), shortAttr);
     }
 
     /**
@@ -4969,7 +4974,7 @@ public final class TagCreator {
      * @return A STag element
      */
     public static STag s(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new STag(), shortAttr);
+        return Attr.ShortForm.addTo(new STag(), shortAttr);
     }
 
     /**
@@ -4980,7 +4985,7 @@ public final class TagCreator {
      * @return A STag element
      */
     public static STag s(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new STag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new STag().withText(text), shortAttr);
     }
 
     /**
@@ -4991,7 +4996,7 @@ public final class TagCreator {
      * @return A STag element
      */
     public static STag s(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new STag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new STag().with(dc), shortAttr);
     }
 
     /**
@@ -5030,7 +5035,7 @@ public final class TagCreator {
      * @return A SampTag element
      */
     public static SampTag samp(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new SampTag(), shortAttr);
+        return Attr.ShortForm.addTo(new SampTag(), shortAttr);
     }
 
     /**
@@ -5041,7 +5046,7 @@ public final class TagCreator {
      * @return A SampTag element
      */
     public static SampTag samp(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new SampTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new SampTag().withText(text), shortAttr);
     }
 
     /**
@@ -5052,7 +5057,7 @@ public final class TagCreator {
      * @return A SampTag element
      */
     public static SampTag samp(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new SampTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new SampTag().with(dc), shortAttr);
     }
 
     /**
@@ -5091,7 +5096,7 @@ public final class TagCreator {
      * @return A ScriptTag element
      */
     public static ScriptTag script(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new ScriptTag(), shortAttr);
+        return Attr.ShortForm.addTo(new ScriptTag(), shortAttr);
     }
 
     /**
@@ -5102,7 +5107,7 @@ public final class TagCreator {
      * @return A ScriptTag element
      */
     public static ScriptTag script(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new ScriptTag().with(new UnescapedText(text)), shortAttr);
+        return Attr.ShortForm.addTo(new ScriptTag().with(new UnescapedText(text)), shortAttr);
     }
 
     /**
@@ -5113,7 +5118,7 @@ public final class TagCreator {
      * @return A ScriptTag element
      */
     public static ScriptTag script(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new ScriptTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new ScriptTag().with(dc), shortAttr);
     }
 
     /**
@@ -5152,7 +5157,7 @@ public final class TagCreator {
      * @return A SectionTag element
      */
     public static SectionTag section(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new SectionTag(), shortAttr);
+        return Attr.ShortForm.addTo(new SectionTag(), shortAttr);
     }
 
     /**
@@ -5163,7 +5168,7 @@ public final class TagCreator {
      * @return A SectionTag element
      */
     public static SectionTag section(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new SectionTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new SectionTag().withText(text), shortAttr);
     }
 
     /**
@@ -5174,7 +5179,7 @@ public final class TagCreator {
      * @return A SectionTag element
      */
     public static SectionTag section(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new SectionTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new SectionTag().with(dc), shortAttr);
     }
 
     /**
@@ -5213,7 +5218,7 @@ public final class TagCreator {
      * @return A SelectTag element
      */
     public static SelectTag select(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new SelectTag(), shortAttr);
+        return Attr.ShortForm.addTo(new SelectTag(), shortAttr);
     }
 
     /**
@@ -5224,7 +5229,7 @@ public final class TagCreator {
      * @return A SelectTag element
      */
     public static SelectTag select(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new SelectTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new SelectTag().withText(text), shortAttr);
     }
 
     /**
@@ -5235,7 +5240,7 @@ public final class TagCreator {
      * @return A SelectTag element
      */
     public static SelectTag select(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new SelectTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new SelectTag().with(dc), shortAttr);
     }
 
     /**
@@ -5274,7 +5279,7 @@ public final class TagCreator {
      * @return A SlotTag element
      */
     public static SlotTag slot(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new SlotTag(), shortAttr);
+        return Attr.ShortForm.addTo(new SlotTag(), shortAttr);
     }
 
     /**
@@ -5285,7 +5290,7 @@ public final class TagCreator {
      * @return A SlotTag element
      */
     public static SlotTag slot(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new SlotTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new SlotTag().withText(text), shortAttr);
     }
 
     /**
@@ -5296,7 +5301,7 @@ public final class TagCreator {
      * @return A SlotTag element
      */
     public static SlotTag slot(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new SlotTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new SlotTag().with(dc), shortAttr);
     }
 
     /**
@@ -5335,7 +5340,7 @@ public final class TagCreator {
      * @return A SmallTag element
      */
     public static SmallTag small(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new SmallTag(), shortAttr);
+        return Attr.ShortForm.addTo(new SmallTag(), shortAttr);
     }
 
     /**
@@ -5346,7 +5351,7 @@ public final class TagCreator {
      * @return A SmallTag element
      */
     public static SmallTag small(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new SmallTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new SmallTag().withText(text), shortAttr);
     }
 
     /**
@@ -5357,7 +5362,7 @@ public final class TagCreator {
      * @return A SmallTag element
      */
     public static SmallTag small(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new SmallTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new SmallTag().with(dc), shortAttr);
     }
 
     /**
@@ -5396,7 +5401,7 @@ public final class TagCreator {
      * @return A SpanTag element
      */
     public static SpanTag span(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new SpanTag(), shortAttr);
+        return Attr.ShortForm.addTo(new SpanTag(), shortAttr);
     }
 
     /**
@@ -5407,7 +5412,7 @@ public final class TagCreator {
      * @return A SpanTag element
      */
     public static SpanTag span(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new SpanTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new SpanTag().withText(text), shortAttr);
     }
 
     /**
@@ -5418,7 +5423,7 @@ public final class TagCreator {
      * @return A SpanTag element
      */
     public static SpanTag span(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new SpanTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new SpanTag().with(dc), shortAttr);
     }
 
     /**
@@ -5457,7 +5462,7 @@ public final class TagCreator {
      * @return A StrongTag element
      */
     public static StrongTag strong(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new StrongTag(), shortAttr);
+        return Attr.ShortForm.addTo(new StrongTag(), shortAttr);
     }
 
     /**
@@ -5468,7 +5473,7 @@ public final class TagCreator {
      * @return A StrongTag element
      */
     public static StrongTag strong(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new StrongTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new StrongTag().withText(text), shortAttr);
     }
 
     /**
@@ -5479,7 +5484,7 @@ public final class TagCreator {
      * @return A StrongTag element
      */
     public static StrongTag strong(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new StrongTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new StrongTag().with(dc), shortAttr);
     }
 
     /**
@@ -5518,7 +5523,7 @@ public final class TagCreator {
      * @return A StyleTag element
      */
     public static StyleTag style(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new StyleTag(), shortAttr);
+        return Attr.ShortForm.addTo(new StyleTag(), shortAttr);
     }
 
     /**
@@ -5529,7 +5534,7 @@ public final class TagCreator {
      * @return A StyleTag element
      */
     public static StyleTag style(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new StyleTag().with(new UnescapedText(text)), shortAttr);
+        return Attr.ShortForm.addTo(new StyleTag().with(new UnescapedText(text)), shortAttr);
     }
 
     /**
@@ -5540,7 +5545,7 @@ public final class TagCreator {
      * @return A StyleTag element
      */
     public static StyleTag style(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new StyleTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new StyleTag().with(dc), shortAttr);
     }
 
     /**
@@ -5579,7 +5584,7 @@ public final class TagCreator {
      * @return A SubTag element
      */
     public static SubTag sub(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new SubTag(), shortAttr);
+        return Attr.ShortForm.addTo(new SubTag(), shortAttr);
     }
 
     /**
@@ -5590,7 +5595,7 @@ public final class TagCreator {
      * @return A SubTag element
      */
     public static SubTag sub(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new SubTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new SubTag().withText(text), shortAttr);
     }
 
     /**
@@ -5601,7 +5606,7 @@ public final class TagCreator {
      * @return A SubTag element
      */
     public static SubTag sub(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new SubTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new SubTag().with(dc), shortAttr);
     }
 
     /**
@@ -5640,7 +5645,7 @@ public final class TagCreator {
      * @return A SummaryTag element
      */
     public static SummaryTag summary(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new SummaryTag(), shortAttr);
+        return Attr.ShortForm.addTo(new SummaryTag(), shortAttr);
     }
 
     /**
@@ -5651,7 +5656,7 @@ public final class TagCreator {
      * @return A SummaryTag element
      */
     public static SummaryTag summary(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new SummaryTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new SummaryTag().withText(text), shortAttr);
     }
 
     /**
@@ -5662,7 +5667,7 @@ public final class TagCreator {
      * @return A SummaryTag element
      */
     public static SummaryTag summary(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new SummaryTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new SummaryTag().with(dc), shortAttr);
     }
 
     /**
@@ -5701,7 +5706,7 @@ public final class TagCreator {
      * @return A SupTag element
      */
     public static SupTag sup(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new SupTag(), shortAttr);
+        return Attr.ShortForm.addTo(new SupTag(), shortAttr);
     }
 
     /**
@@ -5712,7 +5717,7 @@ public final class TagCreator {
      * @return A SupTag element
      */
     public static SupTag sup(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new SupTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new SupTag().withText(text), shortAttr);
     }
 
     /**
@@ -5723,7 +5728,7 @@ public final class TagCreator {
      * @return A SupTag element
      */
     public static SupTag sup(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new SupTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new SupTag().with(dc), shortAttr);
     }
 
     /**
@@ -5762,7 +5767,7 @@ public final class TagCreator {
      * @return A TableTag element
      */
     public static TableTag table(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new TableTag(), shortAttr);
+        return Attr.ShortForm.addTo(new TableTag(), shortAttr);
     }
 
     /**
@@ -5773,7 +5778,7 @@ public final class TagCreator {
      * @return A TableTag element
      */
     public static TableTag table(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new TableTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new TableTag().withText(text), shortAttr);
     }
 
     /**
@@ -5784,7 +5789,7 @@ public final class TagCreator {
      * @return A TableTag element
      */
     public static TableTag table(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new TableTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new TableTag().with(dc), shortAttr);
     }
 
     /**
@@ -5823,7 +5828,7 @@ public final class TagCreator {
      * @return A TbodyTag element
      */
     public static TbodyTag tbody(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new TbodyTag(), shortAttr);
+        return Attr.ShortForm.addTo(new TbodyTag(), shortAttr);
     }
 
     /**
@@ -5834,7 +5839,7 @@ public final class TagCreator {
      * @return A TbodyTag element
      */
     public static TbodyTag tbody(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new TbodyTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new TbodyTag().withText(text), shortAttr);
     }
 
     /**
@@ -5845,7 +5850,7 @@ public final class TagCreator {
      * @return A TbodyTag element
      */
     public static TbodyTag tbody(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new TbodyTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new TbodyTag().with(dc), shortAttr);
     }
 
     /**
@@ -5884,7 +5889,7 @@ public final class TagCreator {
      * @return A TdTag element
      */
     public static TdTag td(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new TdTag(), shortAttr);
+        return Attr.ShortForm.addTo(new TdTag(), shortAttr);
     }
 
     /**
@@ -5895,7 +5900,7 @@ public final class TagCreator {
      * @return A TdTag element
      */
     public static TdTag td(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new TdTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new TdTag().withText(text), shortAttr);
     }
 
     /**
@@ -5906,7 +5911,7 @@ public final class TagCreator {
      * @return A TdTag element
      */
     public static TdTag td(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new TdTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new TdTag().with(dc), shortAttr);
     }
 
     /**
@@ -5945,7 +5950,7 @@ public final class TagCreator {
      * @return A TemplateTag element
      */
     public static TemplateTag template(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new TemplateTag(), shortAttr);
+        return Attr.ShortForm.addTo(new TemplateTag(), shortAttr);
     }
 
     /**
@@ -5956,7 +5961,7 @@ public final class TagCreator {
      * @return A TemplateTag element
      */
     public static TemplateTag template(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new TemplateTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new TemplateTag().withText(text), shortAttr);
     }
 
     /**
@@ -5967,7 +5972,7 @@ public final class TagCreator {
      * @return A TemplateTag element
      */
     public static TemplateTag template(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new TemplateTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new TemplateTag().with(dc), shortAttr);
     }
 
     /**
@@ -6006,7 +6011,7 @@ public final class TagCreator {
      * @return A TextareaTag element
      */
     public static TextareaTag textarea(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new TextareaTag(), shortAttr);
+        return Attr.ShortForm.addTo(new TextareaTag(), shortAttr);
     }
 
     /**
@@ -6017,7 +6022,7 @@ public final class TagCreator {
      * @return A TextareaTag element
      */
     public static TextareaTag textarea(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new TextareaTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new TextareaTag().withText(text), shortAttr);
     }
 
     /**
@@ -6028,7 +6033,7 @@ public final class TagCreator {
      * @return A TextareaTag element
      */
     public static TextareaTag textarea(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new TextareaTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new TextareaTag().with(dc), shortAttr);
     }
 
     /**
@@ -6067,7 +6072,7 @@ public final class TagCreator {
      * @return A TfootTag element
      */
     public static TfootTag tfoot(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new TfootTag(), shortAttr);
+        return Attr.ShortForm.addTo(new TfootTag(), shortAttr);
     }
 
     /**
@@ -6078,7 +6083,7 @@ public final class TagCreator {
      * @return A TfootTag element
      */
     public static TfootTag tfoot(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new TfootTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new TfootTag().withText(text), shortAttr);
     }
 
     /**
@@ -6089,7 +6094,7 @@ public final class TagCreator {
      * @return A TfootTag element
      */
     public static TfootTag tfoot(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new TfootTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new TfootTag().with(dc), shortAttr);
     }
 
     /**
@@ -6128,7 +6133,7 @@ public final class TagCreator {
      * @return A ThTag element
      */
     public static ThTag th(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new ThTag(), shortAttr);
+        return Attr.ShortForm.addTo(new ThTag(), shortAttr);
     }
 
     /**
@@ -6139,7 +6144,7 @@ public final class TagCreator {
      * @return A ThTag element
      */
     public static ThTag th(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new ThTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new ThTag().withText(text), shortAttr);
     }
 
     /**
@@ -6150,7 +6155,7 @@ public final class TagCreator {
      * @return A ThTag element
      */
     public static ThTag th(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new ThTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new ThTag().with(dc), shortAttr);
     }
 
     /**
@@ -6189,7 +6194,7 @@ public final class TagCreator {
      * @return A TheadTag element
      */
     public static TheadTag thead(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new TheadTag(), shortAttr);
+        return Attr.ShortForm.addTo(new TheadTag(), shortAttr);
     }
 
     /**
@@ -6200,7 +6205,7 @@ public final class TagCreator {
      * @return A TheadTag element
      */
     public static TheadTag thead(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new TheadTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new TheadTag().withText(text), shortAttr);
     }
 
     /**
@@ -6211,7 +6216,7 @@ public final class TagCreator {
      * @return A TheadTag element
      */
     public static TheadTag thead(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new TheadTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new TheadTag().with(dc), shortAttr);
     }
 
     /**
@@ -6250,7 +6255,7 @@ public final class TagCreator {
      * @return A TimeTag element
      */
     public static TimeTag time(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new TimeTag(), shortAttr);
+        return Attr.ShortForm.addTo(new TimeTag(), shortAttr);
     }
 
     /**
@@ -6261,7 +6266,7 @@ public final class TagCreator {
      * @return A TimeTag element
      */
     public static TimeTag time(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new TimeTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new TimeTag().withText(text), shortAttr);
     }
 
     /**
@@ -6272,7 +6277,7 @@ public final class TagCreator {
      * @return A TimeTag element
      */
     public static TimeTag time(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new TimeTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new TimeTag().with(dc), shortAttr);
     }
 
     /**
@@ -6311,7 +6316,7 @@ public final class TagCreator {
      * @return A TitleTag element
      */
     public static TitleTag title(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new TitleTag(), shortAttr);
+        return Attr.ShortForm.addTo(new TitleTag(), shortAttr);
     }
 
     /**
@@ -6322,7 +6327,7 @@ public final class TagCreator {
      * @return A TitleTag element
      */
     public static TitleTag title(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new TitleTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new TitleTag().withText(text), shortAttr);
     }
 
     /**
@@ -6333,7 +6338,7 @@ public final class TagCreator {
      * @return A TitleTag element
      */
     public static TitleTag title(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new TitleTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new TitleTag().with(dc), shortAttr);
     }
 
     /**
@@ -6372,7 +6377,7 @@ public final class TagCreator {
      * @return A TrTag element
      */
     public static TrTag tr(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new TrTag(), shortAttr);
+        return Attr.ShortForm.addTo(new TrTag(), shortAttr);
     }
 
     /**
@@ -6383,7 +6388,7 @@ public final class TagCreator {
      * @return A TrTag element
      */
     public static TrTag tr(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new TrTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new TrTag().withText(text), shortAttr);
     }
 
     /**
@@ -6394,7 +6399,7 @@ public final class TagCreator {
      * @return A TrTag element
      */
     public static TrTag tr(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new TrTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new TrTag().with(dc), shortAttr);
     }
 
     /**
@@ -6433,7 +6438,7 @@ public final class TagCreator {
      * @return A UTag element
      */
     public static UTag u(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new UTag(), shortAttr);
+        return Attr.ShortForm.addTo(new UTag(), shortAttr);
     }
 
     /**
@@ -6444,7 +6449,7 @@ public final class TagCreator {
      * @return A UTag element
      */
     public static UTag u(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new UTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new UTag().withText(text), shortAttr);
     }
 
     /**
@@ -6455,7 +6460,7 @@ public final class TagCreator {
      * @return A UTag element
      */
     public static UTag u(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new UTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new UTag().with(dc), shortAttr);
     }
 
     /**
@@ -6494,7 +6499,7 @@ public final class TagCreator {
      * @return A UlTag element
      */
     public static UlTag ul(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new UlTag(), shortAttr);
+        return Attr.ShortForm.addTo(new UlTag(), shortAttr);
     }
 
     /**
@@ -6505,7 +6510,7 @@ public final class TagCreator {
      * @return A UlTag element
      */
     public static UlTag ul(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new UlTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new UlTag().withText(text), shortAttr);
     }
 
     /**
@@ -6516,7 +6521,7 @@ public final class TagCreator {
      * @return A UlTag element
      */
     public static UlTag ul(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new UlTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new UlTag().with(dc), shortAttr);
     }
 
     /**
@@ -6555,7 +6560,7 @@ public final class TagCreator {
      * @return A VarTag element
      */
     public static VarTag var(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new VarTag(), shortAttr);
+        return Attr.ShortForm.addTo(new VarTag(), shortAttr);
     }
 
     /**
@@ -6566,7 +6571,7 @@ public final class TagCreator {
      * @return A VarTag element
      */
     public static VarTag var(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new VarTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new VarTag().withText(text), shortAttr);
     }
 
     /**
@@ -6577,7 +6582,7 @@ public final class TagCreator {
      * @return A VarTag element
      */
     public static VarTag var(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new VarTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new VarTag().with(dc), shortAttr);
     }
 
     /**
@@ -6616,7 +6621,7 @@ public final class TagCreator {
      * @return A VideoTag element
      */
     public static VideoTag video(final Attr.ShortForm shortAttr) {
-        return Attr.addTo(new VideoTag(), shortAttr);
+        return Attr.ShortForm.addTo(new VideoTag(), shortAttr);
     }
 
     /**
@@ -6627,7 +6632,7 @@ public final class TagCreator {
      * @return A VideoTag element
      */
     public static VideoTag video(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.addTo(new VideoTag().withText(text), shortAttr);
+        return Attr.ShortForm.addTo(new VideoTag().withText(text), shortAttr);
     }
 
     /**
@@ -6638,7 +6643,7 @@ public final class TagCreator {
      * @return A VideoTag element
      */
     public static VideoTag video(final Attr.ShortForm shortAttr, final DomContent... dc) {
-        return Attr.addTo(new VideoTag().with(dc), shortAttr);
+        return Attr.ShortForm.addTo(new VideoTag().with(dc), shortAttr);
     }
 
     // pico.css convenience methods

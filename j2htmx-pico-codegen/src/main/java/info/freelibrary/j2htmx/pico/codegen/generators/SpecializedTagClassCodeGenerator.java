@@ -150,7 +150,9 @@ public final class SpecializedTagClassCodeGenerator {
             sb.append("import ").append(importName).append(";\n");
         }
 
-        sb.append("\npublic final class ")
+        sb.append("\n/**\n * Represents a &lt;{@code ")
+          .append(tag)
+          .append("}&gt; tag.\n */\npublic final class ")
           .append(className)
           .append(' ');
 
@@ -165,11 +167,11 @@ public final class SpecializedTagClassCodeGenerator {
         }
 
         //class contents
-        sb.append(" {\npublic ")
+        sb.append(" {\n\n    /**\n     * Constructs a {@code ").append(tag).append("} tag.\n     */\n    public ")
           .append(className)
-          .append("() {super(\"")
+          .append("() {\n        super(\"")
           .append(tag)
-          .append("\");}\n}\n");
+          .append("\");\n    }\n}\n");
 
         return sb.toString();
     }

@@ -5,6 +5,7 @@ import info.freelibrary.j2htmx.pico.attributes.Attribute;
 import info.freelibrary.j2htmx.pico.rendering.FlatHtml;
 import info.freelibrary.j2htmx.pico.rendering.HtmlBuilder;
 import info.freelibrary.j2htmx.pico.rendering.TagBuilder;
+import info.freelibrary.util.warnings.PMD;
 
 import java.io.IOException;
 
@@ -14,6 +15,7 @@ import java.io.IOException;
  *
  * @param <T> The concrete empty tag type
  */
+@SuppressWarnings(PMD.AVOID_LITERALS_IN_IF_CONDITION)
 public class EmptyTag<T extends EmptyTag<T>> extends Tag<T> {
 
     /**

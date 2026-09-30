@@ -42,7 +42,7 @@ public final class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
      * @return An HtmlBuilder for flat HTML.
      */
     public static final <T extends Appendable> FlatHtml<T> into(final T out) {
-        return new FlatHtml<>(out, Config.defaults());
+        return new FlatHtml<>(out, Config.getDefaults());
     }
 
     /**

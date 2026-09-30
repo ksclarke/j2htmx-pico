@@ -28,13 +28,13 @@ public class TagTest {
 
     @BeforeEach
     public void setUp() {
-        Config.closeEmptyTags = false;
+        Config.setGlobalEmptyTagsClosed(false);
     }
 
     @AfterEach
     public void tearDown() {
         // Restore Config defaults.
-        Config.closeEmptyTags = false;
+        Config.setGlobalEmptyTagsClosed(false);
     }
 
     // TODO Introduce a different concept for a sequence of tags, and require valid names for all Tags.
@@ -92,7 +92,7 @@ public class TagTest {
         // By default they will not be self-closing.
         assertThat(new EmptyTag<>("xyz").render(), is("<xyz>"));
 
-        Config.closeEmptyTags = true;
+        Config.setGlobalEmptyTagsClosed(true);
         assertThat(new EmptyTag<>("xyz").render(), is("<xyz/>"));
     }
 

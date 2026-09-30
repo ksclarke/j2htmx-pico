@@ -30,6 +30,7 @@ import static info.freelibrary.j2htmx.pico.mathml.MathML.munder;
 import static info.freelibrary.j2htmx.pico.mathml.MathML.munderover;
 import static info.freelibrary.j2htmx.pico.mathml.MathML.none;
 import static info.freelibrary.j2htmx.pico.mathml.MathML.semantics;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 

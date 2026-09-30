@@ -1,5 +1,7 @@
 package info.freelibrary.j2htmx.pico;
 
+import static info.freelibrary.util.Constants.EMPTY;
+
 import info.freelibrary.j2htmx.pico.utils.CSSMin;
 import info.freelibrary.j2htmx.pico.utils.EscapeUtil;
 import info.freelibrary.j2htmx.pico.utils.Indenter;
@@ -12,85 +14,75 @@ import java.util.Collections;
 /**
  * Configuration options for rendering HTML, including minification, indentation, and text escaping.
  */
-public class Config {
+public final class Config {
 
     /** Constant representing four space characters used for indentation. */
     private static final String FOUR_SPACES = "    ";
+
     /** Default configuration instance with standard settings. */
-    private static final Config DEFAULTS = new Config(
-      EscapeUtil::escape,
-      CSSMin::compressCss,
-      JSMin::compressJs,
-      false,
-      (level, text) -> String.join("", Collections.nCopies(level, FOUR_SPACES)) + text
-    );
-    /**
-     * Change this to configure text-escaping. For example, to disable escaping, do
-     * {@code Config.textEscaper = text -> text;}
-     */
-    public static volatile TextEscaper textEscaper = EscapeUtil::escape;
-    /**
-     * Change this to configure css-minification. The default minifier is https://github.com/barryvan/CSSMin
-     */
-    public static volatile Minifier cssMinifier = CSSMin::compressCss;
-    /**
-     * Change this to configure js-minification. The default minifier is a simple whitespace/newline stripper
-     */
-    public static volatile Minifier jsMinifier = JSMin::compressJs;
-    /**
-     * Change this to configure enable/disable closing empty tags. The default is to NOT close them.
-     */
-    public static volatile boolean closeEmptyTags = false;
-    /**
-     * Change this to configure indentation when rendering formatted html. The default is four spaces.
-     */
-    public static volatile Indenter indenter = (level, text) -> String.join("",
+    private static final Config DEFAULTS = new Config(EscapeUtil::escape, CSSMin::compressCss, JSMin::compressJs, false,
+      (level, text) -> String.join(EMPTY, Collections.nCopies(level, FOUR_SPACES)) + text);
+
+    /** The global text escaper. */
+    private static volatile TextEscaper myGlobalTextEscaper = EscapeUtil::escape;
+
+    /** The global CSS minifier. The default minifier is https://github.com/barryvan/CSSMin */
+    private static volatile Minifier myGlobalCssMinifier = CSSMin::compressCss;
+
+    /** The global JavaScript minifier. The default minifier is a simple whitespace/newline stripper. */
+    private static volatile Minifier myGlobalJsMinifier = JSMin::compressJs;
+
+    /** Whether global empty tags should be closed. The default is to NOT close them. */
+    private static volatile boolean myGlobalEmptyTagsAreClosed;
+
+    /** The global HTML indenter. The default is four spaces. */
+    private static volatile Indenter myGlobalIndenter = (level, text) -> String.join(EMPTY,
       Collections.nCopies(level, FOUR_SPACES)) + text;
+
     /** The configured text escaper. */
-    private TextEscaper _textEscaper;
+    private TextEscaper myLocalTextEscaper;
+
     /** The configured CSS minifier. */
-    private Minifier _cssMinifier;
+    private Minifier myLocalCssMinifier;
+
     /** The configured JavaScript minifier. */
-    private Minifier _jsMinifier;
+    private Minifier myLocalJsMinifier;
+
     /** Whether empty tags should be closed. */
-    private boolean _closeEmptyTags;
+    private boolean myLocalEmptyTagsAreClosed;
+
     /** The configured HTML indenter. */
-    private Indenter _indenter;
+    private Indenter myLocalIndenter;
 
     /**
      * Creates a new configuration instance with the specified settings.
      *
-     * @param _textEscaper The text escaper
-     * @param _cssMinifier The CSS minifier
-     * @param _jsMinifier The JavaScript minifier
-     * @param _closeEmptyTags Whether empty tags should be closed
-     * @param _indenter The HTML indenter
+     * @param aLocalTextEscaper The text escaper
+     * @param aLocalCssMinifier The CSS minifier
+     * @param aLocalJsMinifier The JavaScript minifier
+     * @param aLocalEmptyTagsAreClosed Whether empty tags should be closed
+     * @param aLocalIndenter The HTML indenter
      */
-    private Config(
-      final TextEscaper _textEscaper,
-      final Minifier _cssMinifier,
-      final Minifier _jsMinifier,
-      final boolean _closeEmptyTags,
-      final Indenter _indenter
-    ) {
-        this._textEscaper = _textEscaper;
-        this._cssMinifier = _cssMinifier;
-        this._jsMinifier = _jsMinifier;
-        this._closeEmptyTags = _closeEmptyTags;
-        this._indenter = _indenter;
+    private Config(final TextEscaper aLocalTextEscaper, final Minifier aLocalCssMinifier,
+      final Minifier aLocalJsMinifier, final boolean aLocalEmptyTagsAreClosed, final Indenter aLocalIndenter) {
+        myLocalTextEscaper = aLocalTextEscaper;
+        myLocalCssMinifier = aLocalCssMinifier;
+        myLocalJsMinifier = aLocalJsMinifier;
+        myLocalEmptyTagsAreClosed = aLocalEmptyTagsAreClosed;
+        myLocalIndenter = aLocalIndenter;
     }
 
     /**
      * A copy constructor.
      *
-     * @param original The Config to copy fields from.
+     * @param aConfig The Config to copy fields from.
      */
-    private Config(final Config original) {
-        this._textEscaper = original._textEscaper;
-        this._cssMinifier = original._cssMinifier;
-        this._jsMinifier = original._jsMinifier;
-        this._closeEmptyTags = original._closeEmptyTags;
-        this._indenter = original._indenter;
+    private Config(final Config aConfig) {
+        myLocalTextEscaper = aConfig.myLocalTextEscaper;
+        myLocalCssMinifier = aConfig.myLocalCssMinifier;
+        myLocalJsMinifier = aConfig.myLocalJsMinifier;
+        myLocalEmptyTagsAreClosed = aConfig.myLocalEmptyTagsAreClosed;
+        myLocalIndenter = aConfig.myLocalIndenter;
     }
 
     /**
@@ -98,8 +90,98 @@ public class Config {
      *
      * @return The default Config instance
      */
-    public static final Config defaults() {
+    public static Config getDefaults() {
         return DEFAULTS;
+    }
+
+    /**
+     * Gets the global text escaper.
+     *
+     * @return The global text escaper
+     */
+    public static TextEscaper getGlobalTextEscaper() {
+        return myGlobalTextEscaper;
+    }
+
+    /**
+     * Sets the global text-escaper.
+     *
+     * @param aTextEscaper The text-escaper to use globally
+     */
+    public static void setGlobalTextEscaper(final TextEscaper aTextEscaper) {
+        myGlobalTextEscaper = aTextEscaper;
+    }
+
+    /**
+     * Gets the global CSS minifier.
+     *
+     * @return The global CSS minifier
+     */
+    public static Minifier getGlobalCssMinifier() {
+        return myGlobalCssMinifier;
+    }
+
+    /**
+     * Sets the global CSS minifier.
+     *
+     * @param aCssMinifier The CSS minifier to use globally
+     */
+    public static void setGlobalCssMinifier(final Minifier aCssMinifier) {
+        myGlobalCssMinifier = aCssMinifier;
+    }
+
+    /**
+     * Gets the global JavaScript minifier.
+     *
+     * @return The global JavaScript minifier
+     */
+    public static Minifier getGlobalJsMinifier() {
+        return myGlobalJsMinifier;
+    }
+
+    /**
+     * Sets the global JavaScript minifier.
+     *
+     * @param aJsMinifier The JavaScript minifier to use globally
+     */
+    public static void setGlobalJsMinifier(final Minifier aJsMinifier) {
+        myGlobalJsMinifier = aJsMinifier;
+    }
+
+    /**
+     * Checks whether empty tags should be closed globally.
+     *
+     * @return True if empty tags are closed globally, false otherwise
+     */
+    public static boolean isGlobalEmptyTagsClosed() {
+        return myGlobalEmptyTagsAreClosed;
+    }
+
+    /**
+     * Sets whether empty tags should be closed globally.
+     *
+     * @param aCloseEmptyTags Whether empty tags should be closed globally
+     */
+    public static void setGlobalEmptyTagsClosed(final boolean aCloseEmptyTags) {
+        myGlobalEmptyTagsAreClosed = aCloseEmptyTags;
+    }
+
+    /**
+     * Gets the global HTML indenter.
+     *
+     * @return The global HTML indenter
+     */
+    public static Indenter getGlobalIndenter() {
+        return myGlobalIndenter;
+    }
+
+    /**
+     * Sets the global HTML indenter.
+     *
+     * @param anIndenter The HTML indenter to use globally
+     */
+    public static void setGlobalIndenter(final Indenter anIndenter) {
+        myGlobalIndenter = anIndenter;
     }
 
     /**
@@ -107,14 +189,9 @@ public class Config {
      *
      * @return A Config instance with global settings
      */
-    public static final Config global() {
-        return new Config(
-          textEscaper,
-          cssMinifier,
-          jsMinifier,
-          closeEmptyTags,
-          indenter
-        );
+    public static Config global() {
+        return new Config(myGlobalTextEscaper, myGlobalCssMinifier, myGlobalJsMinifier, myGlobalEmptyTagsAreClosed,
+          myGlobalIndenter);
     }
 
     /**
@@ -123,7 +200,7 @@ public class Config {
      * @return The text escaper
      */
     public TextEscaper textEscaper() {
-        return _textEscaper;
+        return myLocalTextEscaper;
     }
 
     /**
@@ -132,7 +209,7 @@ public class Config {
      * @return The CSS minifier
      */
     public Minifier cssMinifier() {
-        return _cssMinifier;
+        return myLocalCssMinifier;
     }
 
     /**
@@ -141,7 +218,7 @@ public class Config {
      * @return The JavaScript minifier
      */
     public Minifier jsMinifier() {
-        return _jsMinifier;
+        return myLocalJsMinifier;
     }
 
     /**
@@ -150,7 +227,7 @@ public class Config {
      * @return True if empty tags should be closed, false otherwise
      */
     public boolean closeEmptyTags() {
-        return _closeEmptyTags;
+        return myLocalEmptyTagsAreClosed;
     }
 
     /**
@@ -159,7 +236,7 @@ public class Config {
      * @return The indenter
      */
     public Indenter indenter() {
-        return _indenter;
+        return myLocalIndenter;
     }
 
     /**
@@ -170,7 +247,7 @@ public class Config {
      */
     public Config withTextEscaper(final TextEscaper textEscaper) {
         final Config copy = new Config(this);
-        copy._textEscaper = textEscaper;
+        copy.myLocalTextEscaper = textEscaper;
         return copy;
     }
 
@@ -182,7 +259,7 @@ public class Config {
      */
     public Config withCssMinifier(final Minifier cssMinifier) {
         final Config copy = new Config(this);
-        copy._cssMinifier = cssMinifier;
+        copy.myLocalCssMinifier = cssMinifier;
         return copy;
     }
 
@@ -194,7 +271,7 @@ public class Config {
      */
     public Config withJsMinifier(final Minifier jsMinifier) {
         final Config copy = new Config(this);
-        copy._jsMinifier = jsMinifier;
+        copy.myLocalJsMinifier = jsMinifier;
         return copy;
     }
 
@@ -206,7 +283,7 @@ public class Config {
      */
     public Config withEmptyTagsClosed(final boolean closeEmptyTags) {
         final Config copy = new Config(this);
-        copy._closeEmptyTags = closeEmptyTags;
+        copy.myLocalEmptyTagsAreClosed = closeEmptyTags;
         return copy;
     }
 
@@ -218,7 +295,7 @@ public class Config {
      */
     public Config withIndenter(final Indenter indenter) {
         final Config copy = new Config(this);
-        copy._indenter = indenter;
+        copy.myLocalIndenter = indenter;
         return copy;
     }
 

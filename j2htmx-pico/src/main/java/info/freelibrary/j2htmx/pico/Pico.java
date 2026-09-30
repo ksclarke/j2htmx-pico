@@ -10,6 +10,7 @@ import info.freelibrary.j2htmx.pico.tags.specialized.DivTag;
 import info.freelibrary.j2htmx.pico.tags.specialized.LinkTag;
 import info.freelibrary.j2htmx.pico.tags.specialized.MainTag;
 import info.freelibrary.j2htmx.pico.tags.specialized.SummaryTag;
+import info.freelibrary.util.warnings.PMD;
 
 import java.util.Locale;
 
@@ -18,24 +19,19 @@ import java.util.Locale;
  */
 public final class Pico {
 
-    /**
-     * Standard responsive container class.
-     */
+    /** Standard responsive container class. */
+    @SuppressWarnings(PMD.AVOID_FIELD_NAME_MATCHING_METHOD_NAME)
     public static final String CONTAINER = "container";
 
-    /**
-     * Fluid, full-width container class.
-     */
+    /** Fluid, full-width container class. */
     public static final String CONTAINER_FLUID = "container-fluid";
 
-    /**
-     * Responsive grid layout class.
-     */
+    /** Responsive grid layout class. */
+    @SuppressWarnings(PMD.AVOID_FIELD_NAME_MATCHING_METHOD_NAME)
     public static final String GRID = "grid";
 
-    /**
-     * Dropdown menu details class.
-     */
+    /** Dropdown menu details class. */
+    @SuppressWarnings(PMD.AVOID_FIELD_NAME_MATCHING_METHOD_NAME)
     public static final String DROPDOWN = "dropdown";
 
     /**
@@ -127,6 +123,7 @@ public final class Pico {
      * Constructs a new Pico instance.
      */
     private Pico() {
+        // This is intentionally left empty
     }
 
     /**
@@ -179,11 +176,13 @@ public final class Pico {
     public static LinkTag css(final String version, final String colorScheme) {
         final String ver = (version == null || version.isEmpty()) ? DEFAULT_VERSION : version;
         final String href;
-        if (colorScheme != null && !colorScheme.trim().isEmpty()) {
+
+        if (colorScheme != null && !colorScheme.isBlank()) {
             href = CDN_URL_PREFIX + ver + "/css/pico." + colorScheme.trim().toLowerCase(Locale.ROOT) + ".min.css";
         } else {
             href = CDN_URL_PREFIX + ver + "/css/pico.min.css";
         }
+
         return TagCreator.link().withRel("stylesheet").withHref(href);
     }
 

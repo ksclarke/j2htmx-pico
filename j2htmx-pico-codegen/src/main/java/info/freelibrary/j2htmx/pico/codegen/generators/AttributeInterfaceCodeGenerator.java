@@ -87,17 +87,18 @@ public final class AttributeInterfaceCodeGenerator {
             sb.append("import ").append(importName).append(";\n");
         }
 
-        sb.append("\npublic interface ")
+        sb.append("\n/**\n * Defines the {@code ")
+          .append(attrD.attr)
+          .append("} attribute for HTML tags.\n *\n * @param <T> The tag type\n */\npublic interface ")
           .append(interfaceName);
 
         optExtends.ifPresent(ext -> sb.append(" extends ").append(ext).append(' '));
 
         sb.append(" {\n");
 
-        //IMPORTANT: '_' added as suffix to mitigate problems
-        //where attributes are java keywords. Just to make it consistent and avoid special cases.
+        // Method parameter uses the aName convention to avoid Java keywords and satisfy PMD rules.
         final String attrName = interfaceNameSimple.toLowerCase(Locale.US);
-        final String paramName = attrName + "_";
+        final String paramName = "a" + interfaceNameSimple;
 
         //depending on if the attribute has an argument or not,
         //generate methods according to the convention in Tag.java
@@ -125,6 +126,15 @@ public final class AttributeInterfaceCodeGenerator {
     private static void writeAttributeMethodCond(final String interfaceNameSimple, final AttrD attrD,
       final StringBuilder sb, final String attrName, final String paramName) {
 
+        sb.append("\n    /**\n     * Conditionally sets the {@code ").append(attrName).append("} attribute");
+        if (attrD.hasArgument) {
+            sb.append(" with the specified value.\n     *\n     * @param enable Whether to set the attribute\n"
+              + "     * @param ").append(paramName).append(" The attribute value\n     * @return The tag instance\n"
+              + "     */\n    ");
+        } else {
+            sb.append(".\n     *\n     * @param enable Whether to set the attribute\n"
+              + "     * @return The tag instance\n     */\n    ");
+        }
         sb.append(makeReturnTypeAndMethodName("withCond" + interfaceNameSimple));
 
         if (attrD.hasArgument) {
@@ -147,6 +157,13 @@ public final class AttributeInterfaceCodeGenerator {
     private static void writeAttributeMethod(final String interfaceNameSimple, final AttrD attrD,
       final StringBuilder sb, final String attrName, final String paramName) {
 
+        sb.append("\n    /**\n     * Sets the {@code ").append(attrName).append("} attribute");
+        if (attrD.hasArgument) {
+            sb.append(" with the specified value.\n     *\n     * @param ").append(paramName)
+              .append(" The attribute value\n     * @return The tag instance\n     */\n    ");
+        } else {
+            sb.append(".\n     *\n     * @return The tag instance\n     */\n    ");
+        }
         sb.append(makeReturnTypeAndMethodName(
           (attrD.hasArgument ? "with" : "has") + interfaceNameSimple)
         );

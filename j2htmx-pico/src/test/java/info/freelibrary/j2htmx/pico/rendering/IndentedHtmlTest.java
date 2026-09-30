@@ -174,12 +174,12 @@ public class IndentedHtmlTest {
     @Test
     public void empty_tags_are_closed_when_configured() throws IOException {
         assertThat(
-          input().render(IndentedHtml.inMemory(Config.defaults().withEmptyTagsClosed(false))).toString(),
+          input().render(IndentedHtml.inMemory(Config.getDefaults().withEmptyTagsClosed(false))).toString(),
           is("<input>\n")
         );
 
         assertThat(
-          input().render(IndentedHtml.inMemory(Config.defaults().withEmptyTagsClosed(true))).toString(),
+          input().render(IndentedHtml.inMemory(Config.getDefaults().withEmptyTagsClosed(true))).toString(),
           is("<input/>\n")
         );
     }
@@ -187,12 +187,12 @@ public class IndentedHtmlTest {
     @Test
     public void end_tags_are_never_closed() throws IOException {
         assertThat(
-          div().render(IndentedHtml.inMemory(Config.defaults().withEmptyTagsClosed(false))).toString(),
+          div().render(IndentedHtml.inMemory(Config.getDefaults().withEmptyTagsClosed(false))).toString(),
           is("<div>\n</div>\n")
         );
 
         assertThat(
-          div().render(IndentedHtml.inMemory(Config.defaults().withEmptyTagsClosed(true))).toString(),
+          div().render(IndentedHtml.inMemory(Config.getDefaults().withEmptyTagsClosed(true))).toString(),
           is("<div>\n</div>\n")
         );
     }

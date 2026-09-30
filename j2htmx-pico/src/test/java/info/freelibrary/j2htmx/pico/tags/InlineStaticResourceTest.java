@@ -2,8 +2,8 @@ package info.freelibrary.j2htmx.pico.tags;
 
 import static info.freelibrary.j2htmx.pico.TagCreator.fileAsEscapedString;
 import static info.freelibrary.j2htmx.pico.TagCreator.fileAsString;
-import static info.freelibrary.j2htmx.pico.TagCreator.scriptWithInlineFile_min;
-import static info.freelibrary.j2htmx.pico.TagCreator.styleWithInlineFile_min;
+import static info.freelibrary.j2htmx.pico.TagCreator.scriptWithInlineFileMinimized;
+import static info.freelibrary.j2htmx.pico.TagCreator.styleWithInlineFileMinimized;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -26,16 +26,16 @@ public class InlineStaticResourceTest {
         final String expectedAnyContent = "public class AnyContent {" + EOL + "}" + EOL;
 
         // classpath files
-        assertThat(styleWithInlineFile_min("/test.css").render(), is(expectedCss));
-        assertThat(styleWithInlineFile_min("/test-without-trailing-semis.css").render(), is(expectedCss));
-        assertThat(scriptWithInlineFile_min("/test.js").render(), is(expectedJs));
+        assertThat(styleWithInlineFileMinimized("/test.css").render(), is(expectedCss));
+        assertThat(styleWithInlineFileMinimized("/test-without-trailing-semis.css").render(), is(expectedCss));
+        assertThat(scriptWithInlineFileMinimized("/test.js").render(), is(expectedJs));
         assertThat(fileAsString("/test.html").render(), is(expectedHtml));
         assertThat(fileAsEscapedString("/test.html").render(), is(expectedEscapedHtml));
         assertThat(fileAsString("/AnyContent.java").render(), is(expectedAnyContent));
 
         // files outside classpath
-        assertThat(styleWithInlineFile_min("src/test/files/test.css").render(), is(expectedCss));
-        assertThat(scriptWithInlineFile_min("src/test/files/test.js").render(), is(expectedJs));
+        assertThat(styleWithInlineFileMinimized("src/test/files/test.css").render(), is(expectedCss));
+        assertThat(scriptWithInlineFileMinimized("src/test/files/test.js").render(), is(expectedJs));
         assertThat(fileAsString("src/test/files/test.html").render(), is(expectedHtml));
         assertThat(fileAsEscapedString("src/test/files/test.html").render(), is(expectedEscapedHtml));
         assertThat(fileAsString("src/test/files/AnyContent.java").render(), is(expectedAnyContent));
@@ -43,7 +43,7 @@ public class InlineStaticResourceTest {
 
     @Test
     public void testExceptionForBadPath() throws Exception {
-        assertThrows(RuntimeException.class, () -> styleWithInlineFile_min("NOT A FILE"));
+        assertThrows(RuntimeException.class, () -> styleWithInlineFileMinimized("NOT A FILE"));
     }
 
 }

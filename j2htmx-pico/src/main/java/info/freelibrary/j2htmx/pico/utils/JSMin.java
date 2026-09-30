@@ -10,9 +10,6 @@ package info.freelibrary.j2htmx.pico.utils;
  * version under the same conditions as the jsmin.c on which it is
  * based.
  *
- *
- *
- *
  * jsmin.c 2003-04-21
  *
  * Copyright (c) 2002 Douglas Crockford (www.crockford.com)
@@ -38,100 +35,132 @@ package info.freelibrary.j2htmx.pico.utils;
  * SOFTWARE.
  */
 
+import static info.freelibrary.util.Constants.EMPTY;
+
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.MessageCodes;
+import info.freelibrary.util.warnings.PMD;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PushbackInputStream;
+import java.io.Serial;
+import java.nio.charset.StandardCharsets;
 
 /**
  * JavaScript minifier based on Douglas Crockford's JSMin.
  */
+@SuppressWarnings({PMD.AVOID_LITERALS_IN_IF_CONDITION, PMD.COMMENT_SIZE})
 public final class JSMin {
+
+    /** The minifier's logger. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(JSMin.class, MessageCodes.BUNDLE);
 
     /** End-of-file indicator constant. */
     private static final int EOF = -1;
 
     /** Input stream providing JavaScript source bytes. */
-    private final PushbackInputStream in;
+    private final PushbackInputStream myInStream;
 
     /** Output stream receiving minified JavaScript bytes. */
-    private final OutputStream out;
+    private final OutputStream myOutStream;
 
     /** Lookahead character buffer A. */
-    private int theA;
+    private int myACharBuf;
 
     /** Lookahead character buffer B. */
-    private int theB;
+    private int myBCharBuf;
 
     /**
      * Constructs a JSMin compressor wrapping the given input and output streams.
      *
-     * @param in The input stream to read JavaScript from
-     * @param out The output stream to write minified JavaScript to
+     * @param aInStream The input stream to read JavaScript from
+     * @param aOutStream The output stream to write minified JavaScript to
      */
-    private JSMin(final InputStream in, final OutputStream out) {
-        this.in = new PushbackInputStream(in);
-        this.out = out;
+    private JSMin(final InputStream aInStream, final OutputStream aOutStream) {
+        myInStream = new PushbackInputStream(aInStream);
+        myOutStream = aOutStream;
     }
 
     /**
-     * Compress a JS-string.
+     * Compress a JS string.
      *
-     * @param code the js-code you want to compress
-     * @return the compressed code
+     * @param aJsCodeBlock The js-code you want to compress
+     * @return The compressed code
      */
-    public static String compressJs(final String code) {
-        final InputStream inStream = new ByteArrayInputStream(code.getBytes());
+    public static String compressJs(final String aJsCodeBlock) {
+        final InputStream inStream = new ByteArrayInputStream(aJsCodeBlock.getBytes(StandardCharsets.UTF_8));
         final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
         final JSMin jsmin = new JSMin(inStream, outStream);
+
         try {
             jsmin.jsmin();
-            return outStream.toString().trim();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
+            return outStream.toString(StandardCharsets.UTF_8).trim();
+        } catch (@SuppressWarnings(PMD.AVOID_CATCHING_GENERIC_EXCEPTION) final Exception details) {
+            LOGGER.error(details, details.getMessage());
+            return EMPTY;
         }
     }
 
     /**
      * Return true if the character is a letter, digit, underscore, dollar sign, or non-ASCII character.
      *
-     * @param c The character code to check
+     * @param aCharCode The character code to check
      * @return True if alphanumeric, false otherwise
      */
-    private static boolean isAlphanum(final int c) {
-        return ((c >= 'a' && c <= 'z') ||
-                (c >= '0' && c <= '9') ||
-                (c >= 'A' && c <= 'Z') ||
-                c == '_' ||
-                c == '$' ||
-                c == '\\' ||
-                c > 126);
+    private static boolean isAlphanum(final int aCharCode) {
+        return (aCharCode >= 'a' && aCharCode <= 'z') || (aCharCode >= '0' && aCharCode <= '9') ||
+               (aCharCode >= 'A' && aCharCode <= 'Z') ||
+               aCharCode == '_' || aCharCode == '$' || aCharCode == '\\' || aCharCode > 126;
     }
 
     /**
-     * Return the next character from stdin. Watch out for lookahead. If the character is a control character,
-     * translate it to a space or linefeed.
+     * Determines whether the minifier treats the given character code as a prefix operator. The recognized characters
+     * are: closing brace, closing bracket, closing parenthesis, plus sign, minus sign, double quote, and single quote.
+     *
+     * @param aCharCode The character code to check
+     * @return True if the character is a prefix operator; else, false
+     */
+    private static boolean isPrefixOp(final int aCharCode) {
+        return aCharCode == '}' || aCharCode == ']' || aCharCode == ')' || aCharCode == '+' || aCharCode == '-' ||
+               aCharCode == '"' || aCharCode == '\'';
+    }
+
+    /**
+     * Determines whether the minifier treats the given character code as a postfix operator. The recognized characters
+     * are: opening brace, opening bracket, opening parenthesis, plus sign, and minus sign.
+     *
+     * @param aCharCode The character code to check
+     * @return True if the character is a postfix operator; else, false
+     */
+    private static boolean isPostfixOp(final int aCharCode) {
+        return aCharCode == '{' || aCharCode == '[' || aCharCode == '(' || aCharCode == '+' || aCharCode == '-';
+    }
+
+    /**
+     * Return the next character from stdin. Watch out for lookahead. If the character is a control character, translate
+     * it to a space or linefeed.
      *
      * @return The next character code
      * @throws IOException If an I/O error occurs
      */
     private int get() throws IOException {
-        final int c = in.read();
+        final int charCode = myInStream.read();
 
-        if (c >= ' ' || c == '\n' || c == EOF) {
-            return c;
+        if (charCode >= ' ' || charCode == '\n' || charCode == EOF) {
+            return charCode;
         }
 
-        if (c == '\r') {
+        if (charCode == '\r') {
             return '\n';
         }
 
         return ' ';
     }
-
 
     /**
      * Get the next character without getting it.
@@ -140,8 +169,8 @@ public final class JSMin {
      * @throws IOException If an I/O error occurs
      */
     private int peek() throws IOException {
-        final int lookaheadChar = in.read();
-        in.unread(lookaheadChar);
+        final int lookaheadChar = myInStream.read();
+        myInStream.unread(lookaheadChar);
         return lookaheadChar;
     }
 
@@ -152,20 +181,24 @@ public final class JSMin {
      * @throws IOException If an I/O error occurs
      * @throws UnterminatedCommentException If a comment is not terminated
      */
+    @SuppressWarnings({PMD.IMPLICIT_SWITCH_FALL_THROUGH, PMD.NON_EXHAUSTIVE_SWITCH, PMD.COGNITIVE_COMPLEXITY,
+      PMD.CYCLOMATIC_COMPLEXITY, PMD.TOO_FEW_BRANCHES_FOR_SWITCH})
     private int next() throws IOException, UnterminatedCommentException {
-        int c = get();
-        if (c == '/') {
+        int charCode = get();
+
+        if (charCode == '/') {
             switch (peek()) {
                 case '/':
                     for (; ; ) {
-                        c = get();
-                        if (c <= '\n') {
-                            return c;
+                        charCode = get();
+
+                        if (charCode <= '\n') {
+                            return charCode;
                         }
                     }
-
                 case '*':
                     get();
+
                     for (; ; ) {
                         switch (get()) {
                             case '*':
@@ -173,6 +206,7 @@ public final class JSMin {
                                     get();
                                     return ' ';
                                 }
+
                                 break;
                             case EOF:
                                 throw new UnterminatedCommentException();
@@ -180,11 +214,11 @@ public final class JSMin {
                     }
 
                 default:
-                    return c;
+                    return charCode;
             }
-
         }
-        return c;
+
+        return charCode;
     }
 
     /**
@@ -192,63 +226,73 @@ public final class JSMin {
      * Copy B to A. Get the next B. (Delete A). 3 Get the next B. (Delete B). action treats a string as a single
      * character. Wow! action recognizes a regular expression if it is preceded by ( or , or =.
      *
-     * @param d The action to perform (1, 2, or 3)
+     * @param aAction The action to perform (1, 2, or 3)
      * @throws IOException If an I/O error occurs
      * @throws UnterminatedRegExpLiteralException If a regular expression is not closed
      * @throws UnterminatedCommentException If a comment is not closed
      * @throws UnterminatedStringLiteralException If a string literal is not closed
      */
-    private void action(final int d) throws IOException, UnterminatedRegExpLiteralException,
-                                            UnterminatedCommentException, UnterminatedStringLiteralException {
-        switch (d) {
+    @SuppressWarnings({PMD.IMPLICIT_SWITCH_FALL_THROUGH, PMD.N_PATH_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY,
+      PMD.SWITCH_DENSITY, PMD.NON_EXHAUSTIVE_SWITCH, PMD.COGNITIVE_COMPLEXITY})
+    private void action(final int aAction)
+    throws IOException, UnterminatedRegExpLiteralException, UnterminatedCommentException,
+           UnterminatedStringLiteralException {
+        switch (aAction) {
             case 1:
-                out.write(theA);
+                myOutStream.write(myACharBuf);
             case 2:
-                theA = theB;
+                myACharBuf = myBCharBuf;
 
-                if (theA == '\'' || theA == '"') {
+                if (myACharBuf == '\'' || myACharBuf == '"') {
                     for (; ; ) {
-                        out.write(theA);
-                        theA = get();
-                        if (theA == theB) {
+                        myOutStream.write(myACharBuf);
+                        myACharBuf = get();
+
+                        if (myACharBuf == myBCharBuf) {
                             break;
                         }
-                        if (theA <= '\n') {
+
+                        if (myACharBuf <= '\n') {
                             throw new UnterminatedStringLiteralException();
                         }
-                        if (theA == '\\') {
-                            out.write(theA);
-                            theA = get();
+
+                        if (myACharBuf == '\\') {
+                            myOutStream.write(myACharBuf);
+                            myACharBuf = get();
                         }
                     }
                 }
-
             case 3:
-                theB = next();
-                if (theB == '/' && (theA == '(' || theA == ',' || theA == '=')) {
-                    out.write(theA);
-                    out.write(theB);
+                myBCharBuf = next();
+
+                if (myBCharBuf == '/' && (myACharBuf == '(' || myACharBuf == ',' || myACharBuf == '=')) {
+                    myOutStream.write(myACharBuf);
+                    myOutStream.write(myBCharBuf);
+
                     for (; ; ) {
-                        theA = get();
-                        if (theA == '/') {
+                        myACharBuf = get();
+
+                        if (myACharBuf == '/') {
                             break;
-                        } else if (theA == '\\') {
-                            out.write(theA);
-                            theA = get();
-                        } else if (theA <= '\n') {
+                        } else if (myACharBuf == '\\') {
+                            myOutStream.write(myACharBuf);
+                            myACharBuf = get();
+                        } else if (myACharBuf <= '\n') {
                             throw new UnterminatedRegExpLiteralException();
                         }
-                        out.write(theA);
+
+                        myOutStream.write(myACharBuf);
                     }
-                    theB = next();
+
+                    myBCharBuf = next();
                 }
         }
     }
 
     /**
-     * Copy the input to the output, deleting the characters which are insignificant to JavaScript. Comments
-     * will be removed. Tabs will be replaced with spaces. Carriage returns will be replaced with linefeeds. Most spaces
-     * and linefeeds will be removed.
+     * Copy the input to the output, deleting the characters which are insignificant to JavaScript. Comments will be
+     * removed. Tabs will be replaced with spaces. Carriage returns will be replaced with line feeds. Most spaces and
+     * line feeds will be removed.
      *
      * @throws IOException If an I/O error occurs
      * @throws UnterminatedRegExpLiteralException If a regular expression is not closed
@@ -257,72 +301,51 @@ public final class JSMin {
      */
     public void jsmin() throws IOException, UnterminatedRegExpLiteralException, UnterminatedCommentException,
                                UnterminatedStringLiteralException {
-        theA = '\n';
+        myACharBuf = '\n';
         action(3);
-        while (theA != EOF) {
-            switch (theA) {
-                case ' ':
-                    if (isAlphanum(theB)) {
-                        action(1);
-                    } else {
-                        action(2);
-                    }
-                    break;
-                case '\n':
-                    switch (theB) {
-                        case '{':
-                        case '[':
-                        case '(':
-                        case '+':
-                        case '-':
-                            action(1);
-                            break;
-                        case ' ':
-                            action(3);
-                            break;
-                        default:
-                            if (isAlphanum(theB)) {
-                                action(1);
-                            } else {
-                                action(2);
-                            }
-                    }
-                    break;
-                default:
-                    switch (theB) {
-                        case ' ':
-                            if (isAlphanum(theA)) {
-                                action(1);
-                                break;
-                            }
-                            action(3);
-                            break;
-                        case '\n':
-                            switch (theA) {
-                                case '}':
-                                case ']':
-                                case ')':
-                                case '+':
-                                case '-':
-                                case '"':
-                                case '\'':
-                                    action(1);
-                                    break;
-                                default:
-                                    if (isAlphanum(theA)) {
-                                        action(1);
-                                    } else {
-                                        action(3);
-                                    }
-                            }
-                            break;
-                        default:
-                            action(1);
-                            break;
-                    }
-            }
+
+        while (myACharBuf != EOF) {
+            action(determineAction(myACharBuf, myBCharBuf));
         }
-        out.flush();
+
+        myOutStream.flush();
+    }
+
+    /**
+     * Determines the action to take based on the current and next characters.
+     *
+     * @param anACharCode The current character
+     * @param aBCharCode The next character
+     * @return The action to take
+     */
+    @SuppressWarnings({PMD.COGNITIVE_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY})
+    private int determineAction(final int anACharCode, final int aBCharCode) {
+        if (anACharCode == ' ') {
+            return isAlphanum(aBCharCode) ? 1 : 2;
+        }
+
+        if (anACharCode == '\n') {
+            if (aBCharCode == ' ') {
+                return 3;
+            }
+
+            if (isPostfixOp(aBCharCode) || isAlphanum(aBCharCode)) {
+                return 1;
+            }
+
+            return 2;
+        }
+
+        // Default branch (anACharCode is any character other than ' ' or '\n')
+        if (aBCharCode == ' ') {
+            return isAlphanum(anACharCode) ? 1 : 3;
+        }
+
+        if (aBCharCode == '\n') {
+            return (isPrefixOp(anACharCode) || isAlphanum(anACharCode)) ? 1 : 3;
+        }
+
+        return 1;
     }
 
     /**
@@ -330,6 +353,7 @@ public final class JSMin {
      */
     public class UnterminatedCommentException extends Exception {
 
+        @Serial
         private static final long serialVersionUID = -6843493496391588799L;
     }
 
@@ -338,6 +362,7 @@ public final class JSMin {
      */
     public class UnterminatedStringLiteralException extends Exception {
 
+        @Serial
         private static final long serialVersionUID = 7919153854243389391L;
     }
 
@@ -346,6 +371,7 @@ public final class JSMin {
      */
     public class UnterminatedRegExpLiteralException extends Exception {
 
+        @Serial
         private static final long serialVersionUID = 3904862912673589752L;
     }
 

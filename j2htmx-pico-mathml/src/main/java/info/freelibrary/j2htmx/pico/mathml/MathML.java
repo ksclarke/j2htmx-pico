@@ -8,6 +8,9 @@ import info.freelibrary.j2htmx.pico.tags.DomContent;
  */
 public final class MathML {
 
+    /**
+     * Private constructor to prevent instantiation of utility class.
+     */
     private MathML() {
     }
 

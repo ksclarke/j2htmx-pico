@@ -27,7 +27,7 @@ public class TagCreatorTest {
 
     @BeforeEach
     public void setUp() {
-        Config.closeEmptyTags = false;
+        Config.setGlobalEmptyTagsClosed(false);
 
         employeeMap.put(1, new Employee(1, "Name 1", "Title 1"));
         employeeMap.put(2, new Employee(2, "Name 2", "Title 2"));
@@ -36,10 +36,10 @@ public class TagCreatorTest {
 
     @Test
     public void testDocument() throws Exception {
-        Config.closeEmptyTags = true;
+        Config.setGlobalEmptyTagsClosed(true);
         assertEquals("<!DOCTYPE html>", document().render());
         assertEquals("<!DOCTYPE html><html></html>", document(html()));
-        Config.closeEmptyTags = false;
+        Config.setGlobalEmptyTagsClosed(false);
         assertEquals("<!DOCTYPE html>", document().render());
         assertEquals("<!DOCTYPE html><html></html>", document(html()));
     }

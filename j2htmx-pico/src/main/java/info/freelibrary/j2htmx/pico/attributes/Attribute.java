@@ -10,53 +10,55 @@ import java.io.IOException;
  * Represents an HTML element attribute key-value pair or boolean attribute.
  */
 public class Attribute implements Renderable {
+
     /** The attribute name. */
-    private final String name;
+    private final String myName;
 
     /** The attribute value, or null for a boolean attribute. */
-    private String value;
+    private String myValue;
 
     /**
      * Constructs an attribute with the given name and value.
      *
-     * @param name The attribute name
-     * @param value The attribute value
+     * @param aName The attribute name
+     * @param aValue The attribute value
      */
-    public Attribute(final String name, final String value) {
-        this.name = name;
-        this.value = value;
+    public Attribute(final String aName, final String aValue) {
+        myName = aName;
+        myValue = aValue;
     }
 
     /**
      * Constructs a boolean attribute with the given name.
      *
-     * @param name The attribute name
+     * @param aName The attribute name
      */
-    public Attribute(final String name) {
-        this.name = name;
-        this.value = null;
+    public Attribute(final String aName) {
+        myName = aName;
     }
 
     @Override
     @Deprecated
     public void renderModel(final Appendable writer, final Object model) throws IOException {
         if (writer instanceof TagBuilder) {
-            if (name != null) {
-                if (value != null) {
-                    ((TagBuilder) writer).appendAttribute(name, value);
+            if (myName != null) {
+                if (myValue != null) {
+                    ((TagBuilder) writer).appendAttribute(myName, myValue);
                 } else {
-                    ((TagBuilder) writer).appendBooleanAttribute(name);
+                    ((TagBuilder) writer).appendBooleanAttribute(myName);
                 }
             }
         } else {
-            if (name == null) {
+            if (myName == null) {
                 return;
             }
+
             writer.append(' ');
-            writer.append(name);
-            if (value != null) {
+            writer.append(myName);
+
+            if (myValue != null) {
                 writer.append("=\"");
-                writer.append(Config.textEscaper.escape(value));
+                writer.append(Config.getGlobalTextEscaper().escape(myValue));
                 writer.append('"');
             }
         }
@@ -70,7 +72,7 @@ public class Attribute implements Renderable {
      * @throws IOException If an I/O error occurs
      */
     public void render(final TagBuilder builder, final Object model) throws IOException {
-        // Maintain compatibility with classes that extend Attribute, for now...
+        // Maintain compatibility with myClasses that extend Attribute, for now...
         renderModel(builder, model);
     }
 
@@ -80,7 +82,7 @@ public class Attribute implements Renderable {
      * @return The attribute name
      */
     public String getName() {
-        return name;
+        return myName;
     }
 
     /**
@@ -89,7 +91,7 @@ public class Attribute implements Renderable {
      * @return The attribute value, or null if boolean
      */
     public String getValue() {
-        return value;
+        return myValue;
     }
 
     /**
@@ -98,6 +100,6 @@ public class Attribute implements Renderable {
      * @param value The attribute value
      */
     public void setValue(final String value) {
-        this.value = value;
+        this.myValue = value;
     }
 }
