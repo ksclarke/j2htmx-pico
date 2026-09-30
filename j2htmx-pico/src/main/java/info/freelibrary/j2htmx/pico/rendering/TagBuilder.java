@@ -5,12 +5,8 @@ import java.io.IOException;
 /**
  * Implementations of TagBuilder are used to append HTML tag attributes to an Appendable.  TagBuilders are scoped to the
  * creation and completion of a specific tag, and should not be used outside of that tag.
- *
- * <p>
- * Note:  TagBuilder extends Appendable for compatibility with previous version of this library.  This extension will
- * probably be removed in the future, so avoid relying on the deprecated methods of this interface.
  */
-public interface TagBuilder extends Appendable {
+public interface TagBuilder {
 
     /**
      * Appends an key/value pair as an HTML attribute to the current tag.
@@ -40,15 +36,4 @@ public interface TagBuilder extends Appendable {
      */
     HtmlBuilder<? extends Appendable> completeTag() throws IOException;
 
-    @Override
-    @Deprecated
-    TagBuilder append(CharSequence csq) throws IOException;
-
-    @Override
-    @Deprecated
-    TagBuilder append(CharSequence csq, int start, int end) throws IOException;
-
-    @Override
-    @Deprecated
-    TagBuilder append(char c) throws IOException;
 }

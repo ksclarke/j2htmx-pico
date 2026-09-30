@@ -41,7 +41,7 @@ public final class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
      * @param <T> The type of the Appendable to which HTML will be appended.
      * @return An HtmlBuilder for flat HTML.
      */
-    public static final <T extends Appendable> FlatHtml<T> into(final T out) {
+    public static <T extends Appendable> FlatHtml<T> into(final T out) {
         return new FlatHtml<>(out, Config.getDefaults());
     }
 
@@ -53,7 +53,7 @@ public final class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
      * @param <T> The type of the Appendable to which HTML will be appended.
      * @return An HtmlBuilder for flat HTML.
      */
-    public static final <T extends Appendable> FlatHtml<T> into(final T out, final Config config) {
+    public static <T extends Appendable> FlatHtml<T> into(final T out, final Config config) {
         return new FlatHtml<>(out, config);
     }
 
@@ -62,7 +62,7 @@ public final class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
      *
      * @return An HtmlBuilder for flat HTML.
      */
-    public static final FlatHtml<StringBuilder> inMemory() {
+    public static FlatHtml<StringBuilder> inMemory() {
         return into(new StringBuilder());
     }
 
@@ -72,7 +72,7 @@ public final class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
      * @param config The Config which will specify text escapement, tag closing, etc.
      * @return An HtmlBuilder for flat HTML.
      */
-    public static final FlatHtml<StringBuilder> inMemory(final Config config) {
+    public static FlatHtml<StringBuilder> inMemory(final Config config) {
         return into(new StringBuilder(), config);
     }
 
@@ -81,29 +81,9 @@ public final class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
      *
      * @return The Appendable output destination
      */
+    @Override
     public T output() {
         return out;
-    }
-
-    @Override
-    @Deprecated
-    public HtmlBuilder<T> append(final CharSequence csq) throws IOException {
-        out.append(csq);
-        return this;
-    }
-
-    @Override
-    @Deprecated
-    public HtmlBuilder<T> append(final CharSequence csq, final int start, final int end) throws IOException {
-        out.append(csq, start, end);
-        return this;
-    }
-
-    @Override
-    @Deprecated
-    public HtmlBuilder<T> append(final char c) throws IOException {
-        out.append(c);
-        return this;
     }
 
     @Override
@@ -179,25 +159,5 @@ public final class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
             return FlatHtml.this;
         }
 
-        @Override
-        @Deprecated
-        public TagBuilder append(final CharSequence csq) throws IOException {
-            out.append(csq);
-            return this;
-        }
-
-        @Override
-        @Deprecated
-        public TagBuilder append(final CharSequence csq, final int start, final int end) throws IOException {
-            out.append(csq, start, end);
-            return this;
-        }
-
-        @Override
-        @Deprecated
-        public TagBuilder append(final char c) throws IOException {
-            out.append(c);
-            return this;
-        }
     }
 }

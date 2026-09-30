@@ -6,14 +6,10 @@ import java.io.IOException;
  * Implementations of HtmlBuilder are wrappers around an Appendable, and support appending HTML-specific character
  * sequences to that Appendable.
  *
- * <p>
- * Note:  HtmlBuilder extends Appendable for compatibility with previous version of this library.  This extension will
- * probably be removed in the future, so avoid relying on the deprecated methods of this interface.
- *
  * @param <T> The type of the Appendable.  Used so that the same type can be returned to the caller, allowing for
  *     additional work to be done on the Appendable without the need for manual casting.
  */
-public interface HtmlBuilder<T extends Appendable> extends Appendable {
+public interface HtmlBuilder<T extends Appendable> {
 
     /**
      * Appends a start tag with the given name to the output. The returned TagBuilder is then used to append attributes
@@ -69,15 +65,4 @@ public interface HtmlBuilder<T extends Appendable> extends Appendable {
      */
     T output();
 
-    @Override
-    @Deprecated
-    HtmlBuilder<T> append(CharSequence csq) throws IOException;
-
-    @Override
-    @Deprecated
-    HtmlBuilder<T> append(CharSequence csq, int start, int end) throws IOException;
-
-    @Override
-    @Deprecated
-    HtmlBuilder<T> append(char c) throws IOException;
 }

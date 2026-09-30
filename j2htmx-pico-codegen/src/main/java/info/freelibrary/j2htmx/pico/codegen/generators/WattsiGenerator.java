@@ -55,6 +55,10 @@ public final class WattsiGenerator {
         //        }
 
         for (final ElementDefinition element : elements) {
+            if (element.isObsolete()) {
+                continue;
+            }
+
             final ClassName className = ClassName.get(
               "info.freelibrary.j2htmx.pico.", capitalize(element.name()) + "Tag"
             );
@@ -62,21 +66,13 @@ public final class WattsiGenerator {
             final TypeSpec.Builder type = TypeSpec.classBuilder(className)
               .addModifiers(Modifier.PUBLIC);
 
-            if (element.isObsolete()) {
-                type.addAnnotation(Deprecated.class);
-            }
-
             for (final AttributeDefinition attribute : attributes) {
-                if (attribute.appliesTo(element)) {
+                if (!attribute.isObsolete() && attribute.appliesTo(element)) {
                     final String name = methodName("with", attribute.name().split("-"));
                     final MethodSpec.Builder setter = MethodSpec.methodBuilder(name)
                       .addModifiers(Modifier.PUBLIC)
                       .returns(className)
                       .addStatement("return this");
-
-                    if (attribute.isObsolete()) {
-                        setter.addAnnotation(Deprecated.class);
-                    }
 
                     type.addMethod(setter.build());
                 }

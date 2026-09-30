@@ -16,6 +16,7 @@ import info.freelibrary.j2htmx.pico.model.Button;
 import info.freelibrary.j2htmx.pico.model.ButtonModel;
 import info.freelibrary.j2htmx.pico.model.PageModel;
 import info.freelibrary.j2htmx.pico.model.TextTemplate;
+import info.freelibrary.j2htmx.pico.rendering.FlatHtml;
 import info.freelibrary.j2htmx.pico.tags.DomContent;
 import org.junit.jupiter.api.Test;
 
@@ -145,7 +146,7 @@ public class RenderPerformanceTest {
     public void templatePerfomanceTest() throws Exception {
         final PageModel pageModel = new PageModel("Browsertitle", "Hello World!", new ButtonModel("Action!"));
         final StringBuilder stringBuilder = new StringBuilder();
-        template.renderModel(stringBuilder, pageModel);
+        template.render(FlatHtml.into(stringBuilder), pageModel);
         assertEquals(expected, stringBuilder.toString());
     }
 

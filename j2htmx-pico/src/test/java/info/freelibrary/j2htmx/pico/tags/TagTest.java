@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import info.freelibrary.j2htmx.pico.Config;
 import info.freelibrary.j2htmx.pico.attributes.Attribute;
 import info.freelibrary.j2htmx.pico.model.DynamicHrefAttribute;
+import info.freelibrary.j2htmx.pico.rendering.FlatHtml;
 import info.freelibrary.j2htmx.pico.tags.specialized.HtmlTag;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -188,7 +189,7 @@ public class TagTest {
     @Test
     public void renderToFile() throws Exception {
         final FileWriter fileWriter = new FileWriter("file.txt");
-        div("Test").render(fileWriter);
+        div("Test").render(FlatHtml.into(fileWriter, Config.global()), null);
         fileWriter.close();
         new File("file.txt").delete();
     }

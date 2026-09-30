@@ -3,6 +3,7 @@ package info.freelibrary.j2htmx.pico.rendering;
 import info.freelibrary.j2htmx.pico.Config;
 import info.freelibrary.j2htmx.pico.utils.Indenter;
 import info.freelibrary.j2htmx.pico.utils.TextEscaper;
+import info.freelibrary.util.warnings.PMD;
 
 import java.io.IOException;
 import java.util.ArrayDeque;
@@ -17,14 +18,19 @@ public final class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> 
 
     /** The Appendable output destination. */
     private final T out;
+
     /** The indenter specifying indentation rules. */
     private final Indenter indenter;
+
     /** The text escaper for escaping text and attribute values. */
     private final TextEscaper textEscaper;
+
     /** TagBuilder used for appending attributes to enclosing tags. */
     private final TagBuilder enclosingElementAttributes;
+
     /** TagBuilder used for appending attributes to empty/void tags. */
     private final TagBuilder emptyElementAttributes;
+
     /**
      * Stack tracking currently open element tags to handle indentation and preformatted blocks.
      */
@@ -51,7 +57,7 @@ public final class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> 
      * @param <T> The type of the Appendable to which HTML will be appended.
      * @return An HtmlBuilder for indented HTML.
      */
-    public static final <T extends Appendable> IndentedHtml<T> into(final T out) {
+    public static <T extends Appendable> IndentedHtml<T> into(final T out) {
         return new IndentedHtml<>(out, Config.getDefaults());
     }
 
@@ -63,7 +69,7 @@ public final class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> 
      * @param <T> The type of the Appendable to which HTML will be appended.
      * @return An HtmlBuilder for indented HTML.
      */
-    public static final <T extends Appendable> IndentedHtml<T> into(final T out, final Config config) {
+    public static <T extends Appendable> IndentedHtml<T> into(final T out, final Config config) {
         return new IndentedHtml<>(out, config);
     }
 
@@ -79,7 +85,7 @@ public final class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> 
      *
      * @return An HtmlBuilder for indented HTML.
      */
-    public static final IndentedHtml<StringBuilder> inMemory() {
+    public static IndentedHtml<StringBuilder> inMemory() {
         return into(new StringBuilder());
     }
 
@@ -89,7 +95,7 @@ public final class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> 
      * @param config The Config which will specify indentation, text escapement, tag closing, etc.
      * @return An HtmlBuilder for indented HTML.
      */
-    public static final IndentedHtml<StringBuilder> inMemory(final Config config) {
+    public static IndentedHtml<StringBuilder> inMemory(final Config config) {
         return into(new StringBuilder(), config);
     }
 
@@ -124,6 +130,7 @@ public final class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> 
     }
 
     @Override
+    @SuppressWarnings(PMD.AVOID_THROWING_RAW_EXCEPTION_TYPES)
     public HtmlBuilder<T> appendEndTag(final String name) throws IOException {
         if (!name.equals(trace.peek())) {
             throw new RuntimeException("Incorrect element closed: " + name + ".  Expected: " + trace.peek());
@@ -193,28 +200,6 @@ public final class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> 
         return out;
     }
 
-    @Override
-    @Deprecated
-    public HtmlBuilder<T> append(final CharSequence csq) throws IOException {
-        out.append(csq);
-        return this;
-    }
-
-    @Override
-    @Deprecated
-    public HtmlBuilder<T> append(final CharSequence csq, final int start, final int end) throws IOException {
-        out.append(csq, start, end);
-        return this;
-    }
-
-    @Override
-    @Deprecated
-    public HtmlBuilder<T> append(final char c) throws IOException {
-        out.append(c);
-        return this;
-    }
-
-
     /**
      * TagBuilder implementation for formatted, indented HTML rendering.
      */
@@ -262,25 +247,5 @@ public final class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> 
             return IndentedHtml.this;
         }
 
-        @Override
-        @Deprecated
-        public TagBuilder append(final CharSequence csq) throws IOException {
-            out.append(csq);
-            return this;
-        }
-
-        @Override
-        @Deprecated
-        public TagBuilder append(final CharSequence csq, final int start, final int end) throws IOException {
-            out.append(csq, start, end);
-            return this;
-        }
-
-        @Override
-        @Deprecated
-        public TagBuilder append(final char c) throws IOException {
-            out.append(c);
-            return this;
-        }
     }
 }

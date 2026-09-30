@@ -60,8 +60,8 @@ import java.io.Serial;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
-import java.util.Vector;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -91,6 +91,7 @@ public final class CSSMin {
      * @param input the CSS
      * @return the compressed version
      */
+    @SuppressWarnings({PMD.COGNITIVE_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY})
     public static String compressCss(final String input) {
         try {
             int k, j, // Number of open braces
@@ -135,7 +136,7 @@ public final class CSSMin {
             if (debugLogging) {
                 LOG.info("Parsing and processing selectors...");
             }
-            final Vector<Selector> selectors = new Vector<>();
+            final List<Selector> selectors = new ArrayList<>();
             n = 0;
             j = 0;
             for (int i = 0; i < sb.length(); i++) {
@@ -149,7 +150,7 @@ public final class CSSMin {
                     j--;
                     if (j == 0) {
                         try {
-                            selectors.addElement(new Selector(sb.substring(n, i + 1)));
+                            selectors.add(new Selector(sb.substring(n, i + 1)));
                         } catch (UnterminatedSelectorException usex) {
                             LOG.warning("Unterminated selector: " + usex.getMessage());
                         } catch (EmptySelectorBodyException ebex) {
@@ -200,7 +201,7 @@ class Selector {
     private Property[] properties = null;
 
     /** Nested sub-selectors. */
-    private Vector<Selector> subSelectors = null;
+    private List<Selector> subSelectors = null;
 
     /** The selector text. */
     private String selector;
@@ -213,6 +214,7 @@ class Selector {
      * @throws UnterminatedSelectorException If the selector is not closed with a brace
      * @throws EmptySelectorBodyException If the selector has an empty body
      */
+    @SuppressWarnings({PMD.COGNITIVE_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY})
     Selector(final String selector)
     throws IncompleteSelectorException, UnterminatedSelectorException, EmptySelectorBodyException {
         String[] parts = selector.split(
@@ -229,13 +231,13 @@ class Selector {
 
         // We're dealing with a nested property, eg @-webkit-keyframes
         if (parts.length > 2) {
-            this.subSelectors = new Vector<>();
+            this.subSelectors = new ArrayList<>();
             parts = selector.split("(\\s*\\{\\s*)|(\\s*\\}\\s*)");
             for (int i = 1; i < parts.length; i += 2) {
                 parts[i] = parts[i].trim();
                 parts[i + 1] = parts[i + 1].trim();
-                if (!("".equals(parts[i]) || ("".equals(parts[i + 1])))) {
-                    this.subSelectors.addElement(new Selector(parts[i] + "{" + parts[i + 1] + "}"));
+                if (!("".equals(parts[i]) || "".equals(parts[i + 1]))) {
+                    this.subSelectors.add(new Selector(parts[i] + "{" + parts[i + 1] + "}"));
                 }
             }
         } else {
@@ -264,6 +266,7 @@ class Selector {
      *
      * @return A string representing this selector, minified.
      */
+    @SuppressWarnings({PMD.MISSING_OVERRIDE})
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append(this.selector).append('{');
@@ -290,6 +293,7 @@ class Selector {
      * @param contents The body; for example, "border: solid 1px red; color: blue;"
      * @return An array of properties parsed from this selector.
      */
+    @SuppressWarnings({PMD.COGNITIVE_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY})
     private ArrayList<Property> parseProperties(final String contents) {
         final ArrayList<String> parts = new ArrayList<>();
         boolean bInsideString = false, bInsideURL = false;
@@ -308,14 +312,14 @@ class Selector {
                 }
             } else if (contents.charAt(i) == ';') {
                 substr = contents.substring(j, i);
-                if (!("".equals(substr.trim()))) {
+                if (!"".equals(substr.trim())) {
                     parts.add(substr);
                 }
                 j = i + 1;
             }
         }
         substr = contents.substring(j, contents.length());
-        if (!("".equals(substr.trim()))) {
+        if (!"".equals(substr.trim())) {
             parts.add(substr);
         }
 
@@ -363,6 +367,7 @@ class Property implements Comparable<Property> {
      *   255, 0, 0.5);".
      * @throws IncompletePropertyException If the property is incomplete and cannot be parsed.
      */
+    @SuppressWarnings({PMD.COGNITIVE_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY})
     Property(final String property) throws IncompletePropertyException {
         try {
             // Parse the property.
@@ -375,19 +380,19 @@ class Property implements Comparable<Property> {
             }
             for (int i = 0; i < property.length(); i++) {
                 if (!bCanSplit) { // If we're inside a string
-                    bCanSplit = (property.charAt(i) == '"');
+                    bCanSplit = property.charAt(i) == '"';
                 } else if (property.charAt(i) == '"') {
                     bCanSplit = false;
                 } else if (property.charAt(i) == ':' && parts.isEmpty()) {
                     substr = property.substring(j, i);
-                    if (!("".equals(substr.trim()))) {
+                    if (!"".equals(substr.trim())) {
                         parts.add(substr);
                     }
                     j = i + 1;
                 }
             }
             substr = property.substring(j, property.length());
-            if (!("".equals(substr.trim()))) {
+            if (!"".equals(substr.trim())) {
                 parts.add(substr);
             }
             if (parts.size() < 2) {
@@ -412,6 +417,7 @@ class Property implements Comparable<Property> {
      *
      * @return A string representing this property, minified.
      */
+    @SuppressWarnings({PMD.MISSING_OVERRIDE})
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append(this.property).append(':');
@@ -433,6 +439,7 @@ class Property implements Comparable<Property> {
      * @return A negative integer, zero, or a positive integer as this property is less than, equal to, or greater than
      *   the specified property
      */
+    @SuppressWarnings({PMD.MISSING_OVERRIDE})
     public int compareTo(final Property other) {
         // We can't just use String.compareTo(), because we need to sort properties that have hack prefixes last --
         // eg, *display should come after display.
@@ -658,7 +665,7 @@ class Part {
      * Normalizes contents by stripping quotes from URLs, removing whitespace from var(), and converting keywords to
      * lowercase.
      */
-    private String normalizeContents(String contents, String property) {
+    private String normalizeContents(String contents, final String property) {
         if (contents.regionMatches(true, 0, "url(", 0, 4)) {
             return contents.replaceAll("(?i)url\\(('|\")?(.*?)\\1\\)", "url($2)");
         }
@@ -727,6 +734,7 @@ class Part {
      *
      * @return this part's string representation.
      */
+    @SuppressWarnings({PMD.MISSING_OVERRIDE})
     public String toString() {
         return this.contents;
     }

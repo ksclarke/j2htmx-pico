@@ -2,10 +2,10 @@ package info.freelibrary.j2htmx.pico.tags;
 
 import info.freelibrary.j2htmx.pico.Config;
 import info.freelibrary.j2htmx.pico.attributes.Attribute;
-import info.freelibrary.j2htmx.pico.rendering.FlatHtml;
 import info.freelibrary.j2htmx.pico.rendering.HtmlBuilder;
 import info.freelibrary.j2htmx.pico.rendering.IndentedHtml;
 import info.freelibrary.j2htmx.pico.rendering.TagBuilder;
+import info.freelibrary.util.warnings.PMD;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,18 +36,21 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
     /**
      * Appends a DomContent-object to the end of this element.
      *
-     * @param child DomContent-object to be appended
+     * @param aChild DomContent-object to be appended
      * @return itself for easy chaining
      * @throws RuntimeException If trying to append a tag to itself
      */
-    public T with(final DomContent child) {
-        if (this == child) {
+    @SuppressWarnings({PMD.AVOID_THROWING_RAW_EXCEPTION_TYPES, PMD.COMPARE_OBJECTS_WITH_EQUALS})
+    public T with(final DomContent aChild) {
+        if (this == aChild) {
             throw new RuntimeException("Cannot append a tag to itself.");
         }
-        if (child != null) {
+
+        if (aChild != null) {
             // in some cases, like when using iff(), we ignore null children
-            children.add(child);
+            children.add(aChild);
         }
+
         return self();
     }
 
@@ -156,6 +159,7 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
      * @return the rendered and formatted string
      * @throws RuntimeException If rendering fails with an IOException
      */
+    @SuppressWarnings({PMD.AVOID_THROWING_RAW_EXCEPTION_TYPES})
     public String renderFormatted() {
         try {
             return render(IndentedHtml.into(new StringBuilder(), Config.global())).toString();
@@ -185,13 +189,4 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
         return builder.output();
     }
 
-    @Override
-    @Deprecated
-    public void renderModel(final Appendable writer, final Object model) throws IOException {
-        final HtmlBuilder<?> builder = (writer instanceof HtmlBuilder)
-          ? (HtmlBuilder<?>) writer
-          : FlatHtml.into(writer, Config.global());
-
-        render(builder, model);
-    }
 }

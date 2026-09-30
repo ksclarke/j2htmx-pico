@@ -1,5 +1,7 @@
 package info.freelibrary.j2htmx.pico.tags;
 
+import info.freelibrary.util.warnings.PMD;
+
 /**
  * Utility for joining strings and {@link DomContent} objects with a delimiter.
  */
@@ -20,6 +22,7 @@ public final class DomContentJoiner {
      * @return An UnescapedText instance containing the joined content
      * @throws RuntimeException If an object is not a String or DomContent
      */
+    @SuppressWarnings({PMD.AVOID_THROWING_RAW_EXCEPTION_TYPES})
     public static UnescapedText join(final CharSequence delimiter, final boolean fixPeriodAndCommaSpacing,
       final Object... stringOrDomObjects) {
         final StringBuilder sb = new StringBuilder();

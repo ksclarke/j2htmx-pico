@@ -1,15 +1,13 @@
 package info.freelibrary.j2htmx.pico.attributes;
 
-import info.freelibrary.j2htmx.pico.Config;
 import info.freelibrary.j2htmx.pico.rendering.TagBuilder;
-import info.freelibrary.j2htmx.pico.tags.Renderable;
 
 import java.io.IOException;
 
 /**
  * Represents an HTML element attribute key-value pair or boolean attribute.
  */
-public class Attribute implements Renderable {
+public class Attribute {
 
     /** The attribute name. */
     private final String myName;
@@ -37,33 +35,6 @@ public class Attribute implements Renderable {
         myName = aName;
     }
 
-    @Override
-    @Deprecated
-    public void renderModel(final Appendable writer, final Object model) throws IOException {
-        if (writer instanceof TagBuilder) {
-            if (myName != null) {
-                if (myValue != null) {
-                    ((TagBuilder) writer).appendAttribute(myName, myValue);
-                } else {
-                    ((TagBuilder) writer).appendBooleanAttribute(myName);
-                }
-            }
-        } else {
-            if (myName == null) {
-                return;
-            }
-
-            writer.append(' ');
-            writer.append(myName);
-
-            if (myValue != null) {
-                writer.append("=\"");
-                writer.append(Config.getGlobalTextEscaper().escape(myValue));
-                writer.append('"');
-            }
-        }
-    }
-
     /**
      * Renders this attribute using the supplied TagBuilder.
      *
@@ -72,8 +43,13 @@ public class Attribute implements Renderable {
      * @throws IOException If an I/O error occurs
      */
     public void render(final TagBuilder builder, final Object model) throws IOException {
-        // Maintain compatibility with myClasses that extend Attribute, for now...
-        renderModel(builder, model);
+        if (myName != null) {
+            if (myValue != null) {
+                builder.appendAttribute(myName, myValue);
+            } else {
+                builder.appendBooleanAttribute(myName);
+            }
+        }
     }
 
     /**

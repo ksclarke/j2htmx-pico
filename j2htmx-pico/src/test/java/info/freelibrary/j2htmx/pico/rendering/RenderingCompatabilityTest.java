@@ -2,8 +2,6 @@ package info.freelibrary.j2htmx.pico.rendering;
 
 import static info.freelibrary.j2htmx.pico.TagCreator.div;
 import static info.freelibrary.j2htmx.pico.TagCreator.input;
-import static info.freelibrary.j2htmx.pico.TagCreator.rawHtml;
-import static info.freelibrary.j2htmx.pico.TagCreator.text;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -16,43 +14,14 @@ import java.io.IOException;
 public class RenderingCompatabilityTest {
 
     @Test
-    public void container_tags_continue_to_support_original_model_rendering_methods() throws IOException {
-        final StringBuilder stringBuilder = new StringBuilder();
-        div(div()).renderModel(stringBuilder, null);
-        assertThat(stringBuilder.toString(), is("<div><div></div></div>"));
-    }
-
-    @Test
-    public void empty_tags_continue_to_support_original_model_rendering_methods() throws IOException {
-        final StringBuilder stringBuilder = new StringBuilder();
-        input().withId("X").renderModel(stringBuilder, null);
-        assertThat(stringBuilder.toString(), is("<input id=\"X\">"));
-    }
-
-    @Test
-    public void text_continues_to_support_original_model_rendering_methods() throws IOException {
-        final StringBuilder stringBuilder = new StringBuilder();
-        text("abc").renderModel(stringBuilder, null);
-        assertThat(stringBuilder.toString(), is("abc"));
-    }
-
-    @Test
-    public void unescaped_text_continues_to_support_original_model_rendering_methods() throws IOException {
-        final StringBuilder stringBuilder = new StringBuilder();
-        rawHtml("abc").renderModel(stringBuilder, null);
-        assertThat(stringBuilder.toString(), is("abc"));
-    }
-
-    @Test
     public void client_classes_which_implement_dom_rendering_continue_to_work_with_html_builder() throws IOException {
-        // Simulate a client class which can be injected into ContainerTags as
-        // regular DomContent.  Those client classes should continue to work
-        // even though HtmlBuilders are the newer approach to rendering.
         final DomContent dom = div(
           new DomContent() {
               @Override
-              public void renderModel(final Appendable writer, final Object model) throws IOException {
-                  writer.append(String.valueOf(model));
+              public <T extends Appendable> T render(final HtmlBuilder<T> writer, final Object model)
+                throws IOException {
+                  writer.appendEscapedText(String.valueOf(model));
+                  return writer.output();
               }
           }
         );
@@ -61,15 +30,10 @@ public class RenderingCompatabilityTest {
         // convenience methods continue to work.
         assertThat(dom.render(), is("<div>null</div>"));
 
-        StringBuilder stringBuilder = new StringBuilder();
-        dom.render(stringBuilder);
-        assertThat(stringBuilder.toString(), is("<div>null</div>"));
-
-        stringBuilder = new StringBuilder();
-        dom.renderModel(stringBuilder, "victory");
+        final StringBuilder stringBuilder = new StringBuilder();
+        dom.render(FlatHtml.into(stringBuilder), "victory");
         assertThat(stringBuilder.toString(), is("<div>victory</div>"));
 
-        // Rendering with an HtmlBuilder defers to the original methods.
         assertThat(
           dom.render(FlatHtml.inMemory(), "success").toString(),
           is("<div>success</div>")
@@ -81,17 +45,13 @@ public class RenderingCompatabilityTest {
     throws IOException {
         final Attribute mock = new MockAttribute("XXX", "fail");
 
-        // Stand-alone rendering.
-        assertThat(mock.render(), is(" mock=\"null\""));
+        final TagBuilder nullBuilder = FlatHtml.inMemory().appendStartTag("input");
+        mock.render(nullBuilder, null);
+        assertThat(nullBuilder.completeTag().output().toString(), is("<input mock=\"null\">"));
 
-        final StringBuilder stringBuilder = new StringBuilder();
-        mock.render(stringBuilder);
-        assertThat(stringBuilder.toString(), is(" mock=\"null\""));
-
-        assertThat(
-          mock.render(FlatHtml.inMemory(), "success").toString(),
-          is(" mock=\"success\"")
-        );
+        final TagBuilder modelBuilder = FlatHtml.inMemory().appendStartTag("input");
+        mock.render(modelBuilder, "success");
+        assertThat(modelBuilder.completeTag().output().toString(), is("<input mock=\"success\">"));
 
         // In empty tags.
         assertThat(
@@ -113,8 +73,8 @@ public class RenderingCompatabilityTest {
         }
 
         @Override
-        public void renderModel(final Appendable writer, final Object model) throws IOException {
-            writer.append(" mock=\"").append(String.valueOf(model)).append("\"");
+        public void render(final TagBuilder writer, final Object model) throws IOException {
+            writer.appendAttribute("mock", String.valueOf(model));
         }
     }
 }

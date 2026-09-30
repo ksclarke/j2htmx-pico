@@ -5,6 +5,7 @@ import static info.freelibrary.j2htmx.pico.TagCreator.script;
 import static info.freelibrary.j2htmx.pico.TagCreator.style;
 
 import info.freelibrary.j2htmx.pico.Config;
+import info.freelibrary.util.warnings.PMD;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -29,13 +30,14 @@ public final class InlineStaticResource {
      * @return A ContainerTag representing the inline style or script element
      * @throws RuntimeException If an invalid target format is specified
      */
+    @SuppressWarnings({PMD.AVOID_THROWING_RAW_EXCEPTION_TYPES})
     public static ContainerTag<? extends Tag<?>> get(final String path, final TargetFormat format) {
         final String fileString = getFileAsString(path);
         switch (format) {
             case CSS_MIN:
                 return style().with(rawHtml(Config.getGlobalCssMinifier().minify(fileString)));
             case JS_MIN:
-                return script().with(rawHtml(Config.getGlobalJsMinifier().minify((fileString))));
+                return script().with(rawHtml(Config.getGlobalJsMinifier().minify(fileString)));
             case CSS:
                 return style().with(rawHtml(fileString));
             case JS:
@@ -52,6 +54,7 @@ public final class InlineStaticResource {
      * @return The file contents as a string
      * @throws RuntimeException If the file cannot be found on the classpath or filesystem
      */
+    @SuppressWarnings({PMD.AVOID_THROWING_RAW_EXCEPTION_TYPES})
     public static String getFileAsString(final String path) {
         try {
             return streamToString(InlineStaticResource.class.getResourceAsStream(path));

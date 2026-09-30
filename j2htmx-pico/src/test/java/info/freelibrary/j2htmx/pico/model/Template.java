@@ -7,17 +7,13 @@ import java.io.IOException;
 
 public abstract class Template<T> extends DomContent {
 
+    public abstract <U extends Appendable> void renderTemplate(final HtmlBuilder<U> writer, final T model)
+      throws IOException;
+
     @Override
     @SuppressWarnings("unchecked")
-    public final void renderModel(final Appendable writer, final Object model) throws IOException {
-        renderTemplate(writer, (T) model);
-    }
-
-    public abstract void renderTemplate(final Appendable writer, final T model) throws IOException;
-
-    @Override
-    public <T extends Appendable> T render(final HtmlBuilder<T> builder, final Object model) throws IOException {
-        renderModel(builder.output(), model);
+    public final <U extends Appendable> U render(final HtmlBuilder<U> builder, final Object model) throws IOException {
+        renderTemplate(builder, (T) model);
         return builder.output();
     }
 }

@@ -1,11 +1,14 @@
 package info.freelibrary.j2htmx.pico.model;
 
+import info.freelibrary.j2htmx.pico.rendering.HtmlBuilder;
+
 import java.io.IOException;
 
 public class TextTemplate extends Template<PageModel> {
 
     @Override
-    public void renderTemplate(final Appendable writer, final PageModel pageModel) throws IOException {
-        writer.append(pageModel.getText());
+    public <T extends Appendable> void renderTemplate(final HtmlBuilder<T> writer, final PageModel pageModel)
+      throws IOException {
+        writer.appendEscapedText(pageModel.getText());
     }
 }
