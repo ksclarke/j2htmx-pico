@@ -3,6 +3,7 @@ package info.freelibrary.j2htmx.pico.codegen;
 import static info.freelibrary.j2htmx.pico.codegen.Model.Metadata.ON_OFF;
 import static info.freelibrary.j2htmx.pico.codegen.Model.Metadata.SELF_CLOSING;
 
+import com.palantir.javapoet.AnnotationSpec;
 import com.palantir.javapoet.ClassName;
 import com.palantir.javapoet.JavaFile;
 import com.palantir.javapoet.MethodSpec;
@@ -14,7 +15,7 @@ import info.freelibrary.j2htmx.pico.codegen.Model.Node;
 import info.freelibrary.j2htmx.pico.tags.ContainerTag;
 import info.freelibrary.j2htmx.pico.tags.EmptyTag;
 import info.freelibrary.j2htmx.pico.tags.Instance;
-import info.freelibrary.j2htmx.pico.tags.Tag;
+import info.freelibrary.util.warnings.PMD;
 
 import javax.lang.model.element.Modifier;
 import java.io.IOException;
@@ -133,6 +134,8 @@ public final class Generator {
 
         return TypeSpec.classBuilder(className)
           .addJavadoc("Represents a &lt;{@code $L}&gt; tag.\n", element.name)
+          .addAnnotation(AnnotationSpec.builder(SuppressWarnings.class)
+            .addMember("value", "$T.EXCESSIVE_IMPORTS", PMD.class).build())
           .addModifiers(Modifier.PUBLIC)
           .superclass(ParameterizedTypeName.get(
             element.has(SELF_CLOSING) ? ClassName.get(EmptyTag.class) : ClassName.get(ContainerTag.class), className))
@@ -146,7 +149,8 @@ public final class Generator {
             attribute.name)
           .addSuperinterface(
             ParameterizedTypeName.get(ClassName.get(Instance.class), TypeVariableName.get("T"))).addTypeVariable(
-            TypeVariableName.get("T", ParameterizedTypeName.get(ClassName.get(Tag.class), TypeVariableName.get("T"))))
+            TypeVariableName.get("T", ParameterizedTypeName.get(
+              ClassName.get("info.freelibrary.j2htmx.pico.tags", "AbstractTag"), TypeVariableName.get("T"))))
           .addModifiers(Modifier.PUBLIC);
     }
 

@@ -59,7 +59,7 @@ public final class TagCreatorCodeGenerator {
             final String containerB1 = publicstaticTypeMethod + "(String text)";
             final String containerB2 = "{ " + castReturn + construct + ".withText(text); }";
 
-            final String containerC1 = publicstaticTypeMethod + "(DomContent... dc)";
+            final String containerC1 = publicstaticTypeMethod + "(AbstractDomContent... dc)";
             final String containerC2 = "{ " + castReturn + construct + ".with(dc); }";
             // Attr shorthands
             final String containerD1 = publicstaticTypeMethod + "(Attr.ShortForm shortAttr)";
@@ -69,7 +69,7 @@ public final class TagCreatorCodeGenerator {
             final String containerE2 =
               "{ " + castReturn + ATTR_ADD_TO_METHOD + construct + ".withText(text), shortAttr); }";
 
-            final String containerF1 = publicstaticTypeMethod + "(Attr.ShortForm shortAttr, DomContent... dc)";
+            final String containerF1 = publicstaticTypeMethod + "(Attr.ShortForm shortAttr, AbstractDomContent... dc)";
             final String containerF2 = "{ " + castReturn + ATTR_ADD_TO_METHOD + construct + ".with(dc), shortAttr); }";
             // Print
             System.out.printf(LINE_FORMAT, containerA1, containerA2);

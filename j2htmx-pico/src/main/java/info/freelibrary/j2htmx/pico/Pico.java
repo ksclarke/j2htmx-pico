@@ -1,7 +1,7 @@
 package info.freelibrary.j2htmx.pico;
 
+import info.freelibrary.j2htmx.pico.tags.AbstractDomContent;
 import info.freelibrary.j2htmx.pico.tags.ContainerTag;
-import info.freelibrary.j2htmx.pico.tags.DomContent;
 import info.freelibrary.j2htmx.pico.tags.InlineStaticResource;
 import info.freelibrary.j2htmx.pico.tags.specialized.ArticleTag;
 import info.freelibrary.j2htmx.pico.tags.specialized.DetailsTag;
@@ -201,7 +201,7 @@ public final class Pico {
      * @param content Elements inside the container
      * @return A MainTag with the container class
      */
-    public static MainTag container(final DomContent... content) {
+    public static MainTag container(final AbstractDomContent... content) {
         return TagCreator.main().withClass(CONTAINER).with(content);
     }
 
@@ -221,7 +221,7 @@ public final class Pico {
      * @param content Elements inside the fluid container
      * @return A MainTag with the container-fluid class
      */
-    public static MainTag containerFluid(final DomContent... content) {
+    public static MainTag containerFluid(final AbstractDomContent... content) {
         return TagCreator.main().withClass(CONTAINER_FLUID).with(content);
     }
 
@@ -241,7 +241,7 @@ public final class Pico {
      * @param content Elements inside the grid
      * @return A DivTag with the grid class
      */
-    public static DivTag grid(final DomContent... content) {
+    public static DivTag grid(final AbstractDomContent... content) {
         return TagCreator.div().withClass(GRID).with(content);
     }
 
@@ -262,8 +262,8 @@ public final class Pico {
      * @param content Dropdown items/menu content
      * @return A DetailsTag with the dropdown class
      */
-    public static DetailsTag dropdown(final DomContent summary, final DomContent... content) {
-        final DomContent summaryTag = (summary instanceof SummaryTag) ? summary : TagCreator.summary(summary);
+    public static DetailsTag dropdown(final AbstractDomContent summary, final AbstractDomContent... content) {
+        final AbstractDomContent summaryTag = (summary instanceof SummaryTag) ? summary : TagCreator.summary(summary);
         return TagCreator.details().withClass(DROPDOWN).with(summaryTag).with(content);
     }
 
@@ -274,7 +274,7 @@ public final class Pico {
      * @param content Dropdown items/menu content
      * @return A DetailsTag with the dropdown class
      */
-    public static DetailsTag dropdown(final String summaryText, final DomContent... content) {
+    public static DetailsTag dropdown(final String summaryText, final AbstractDomContent... content) {
         return dropdown(TagCreator.summary(summaryText), content);
     }
 
@@ -284,7 +284,7 @@ public final class Pico {
      * @param content Content of the card
      * @return An ArticleTag element
      */
-    public static ArticleTag card(final DomContent... content) {
+    public static ArticleTag card(final AbstractDomContent... content) {
         return TagCreator.article(content);
     }
 
@@ -305,7 +305,7 @@ public final class Pico {
      * @param content Elements inside the modal
      * @return A DialogTag element
      */
-    public static DialogTag modal(final String id, final DomContent... content) {
+    public static DialogTag modal(final String id, final AbstractDomContent... content) {
         final DialogTag dialog = TagCreator.dialog().with(content);
         return (id != null && !id.isEmpty()) ? dialog.withId(id) : dialog;
     }
@@ -316,7 +316,7 @@ public final class Pico {
      * @param content Elements inside the modal
      * @return A DialogTag element
      */
-    public static DialogTag modal(final DomContent... content) {
+    public static DialogTag modal(final AbstractDomContent... content) {
         return TagCreator.dialog().with(content);
     }
 

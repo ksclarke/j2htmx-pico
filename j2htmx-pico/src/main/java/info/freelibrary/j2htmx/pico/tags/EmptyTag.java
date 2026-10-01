@@ -14,7 +14,7 @@ import java.io.IOException;
  * @param <T> The concrete empty tag type
  */
 @SuppressWarnings(PMD.AVOID_LITERALS_IN_IF_CONDITION)
-public class EmptyTag<T extends EmptyTag<T>> extends Tag<T> {
+public class EmptyTag<T extends EmptyTag<T>> extends AbstractTag<T> {
 
     /**
      * Constructs an EmptyTag with the given tag name.
@@ -33,13 +33,13 @@ public class EmptyTag<T extends EmptyTag<T>> extends Tag<T> {
     }
 
     @Override
-    public <A extends Appendable> A render(final HtmlBuilder<A> builder, final Object model) throws IOException {
-        final TagBuilder attrs = builder.appendEmptyTag(getTagName());
+    public <A extends Appendable> A render(final HtmlBuilder<A> aHtmlBuilder, final Object model) throws IOException {
+        final TagBuilder attrs = aHtmlBuilder.appendEmptyTag(getTagName());
         for (final Attribute attr : getAttributes()) {
             attr.render(attrs, model);
         }
         attrs.completeTag();
-        return builder.output();
+        return aHtmlBuilder.output();
     }
 
 }

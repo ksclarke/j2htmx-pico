@@ -22,7 +22,7 @@ import static org.hamcrest.Matchers.is;
 
 import org.junit.jupiter.api.Test;
 
-public final class AttributesPerTagTest {
+public final class AttributesPerAbstractTagTest {
 
     //This class should contain Tests that check
     //if the generated Interface Methods indeed produce the correct HTML for

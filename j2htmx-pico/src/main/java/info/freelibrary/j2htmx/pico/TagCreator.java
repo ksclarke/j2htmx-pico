@@ -1,12 +1,12 @@
 package info.freelibrary.j2htmx.pico;
 
 import info.freelibrary.j2htmx.pico.attributes.Attr;
+import info.freelibrary.j2htmx.pico.tags.AbstractDomContent;
+import info.freelibrary.j2htmx.pico.tags.AbstractTag;
 import info.freelibrary.j2htmx.pico.tags.ContainerTag;
-import info.freelibrary.j2htmx.pico.tags.DomContent;
 import info.freelibrary.j2htmx.pico.tags.DomContentJoiner;
 import info.freelibrary.j2htmx.pico.tags.EmptyTag;
 import info.freelibrary.j2htmx.pico.tags.InlineStaticResource;
-import info.freelibrary.j2htmx.pico.tags.Tag;
 import info.freelibrary.j2htmx.pico.tags.Text;
 import info.freelibrary.j2htmx.pico.tags.UnescapedText;
 import info.freelibrary.j2htmx.pico.tags.specialized.*;
@@ -104,51 +104,51 @@ public final class TagCreator {
     }
 
     /**
-     * Creates a group of DomContent objects (that may be used with {@link #iff(boolean, Object)} or returned from a
+     * Creates a group of AbstractDomContent objects (that may be used with {@link #iff(boolean, Object)} or returned from a
      * method call).
      *
-     * @param contents the DomContent elements
-     * @return DomContent containing the given elements
+     * @param contents the AbstractDomContent elements
+     * @return AbstractDomContent containing the given elements
      */
-    public static DomContent each(final DomContent... contents) {
+    public static AbstractDomContent each(final AbstractDomContent... contents) {
         return new ContainerTag<>(null).with(contents);
     }
 
     /**
-     * Creates a DomContent object containing HTML elements from a stream. Intended usage:
+     * Creates a AbstractDomContent object containing HTML elements from a stream. Intended usage:
      * {@literal each(numbers.stream().map(n -> li(n.toString())))}
      *
-     * @param stream the stream of DomContent elements
-     * @return DomContent containing elements from the stream
+     * @param stream the stream of AbstractDomContent elements
+     * @return AbstractDomContent containing elements from the stream
      */
-    public static DomContent each(final Stream<DomContent> stream) {
+    public static AbstractDomContent each(final Stream<AbstractDomContent> stream) {
         return new ContainerTag<>(null).with(stream);
     }
 
     /**
-     * Creates a DomContent object containing HTML using a mapping function on a collection. Intended usage:
+     * Creates a AbstractDomContent object containing HTML using a mapping function on a collection. Intended usage:
      * {@literal each(numbers, n -> li(n.toString()))}
      *
      * @param <T> The derived generic parameter type
      * @param collection the collection to iterate over, ex: a list of values "1, 2, 3"
      * @param mapper the mapping function, ex: {@literal "n -> li(n.toString())"}
-     * @return DomContent containing mapped data {@literal (ex. docs: [li(1), li(2), li(3)])}
+     * @return AbstractDomContent containing mapped data {@literal (ex. docs: [li(1), li(2), li(3)])}
      */
-    public static <T> DomContent each(final Collection<T> collection, final Function<? super T, DomContent> mapper) {
+    public static <T> AbstractDomContent each(final Collection<T> collection, final Function<? super T, AbstractDomContent> mapper) {
         return tag(null).with(collection.stream().map(mapper));
     }
 
     /**
-     * Creates a DomContent object containing HTML using a mapping BiFunction on a collection. Intended usage:
+     * Creates a AbstractDomContent object containing HTML using a mapping BiFunction on a collection. Intended usage:
      * {@literal each(names, (index, name) -> li(index + " " + name))}
      *
      * @param <T> The derived generic parameter type
      * @param collection the collection to iterate over, ex: a list of values [ "Tom", "Dick", "Harry" ]
      * @param mapper the mapping BiFunction, ex: {@literal "(index, name) -> li(index + " " + name)"}
-     * @return DomContent containing mapped data {@literal (ex. docs: [li(0 Tom), li(1 Dick), li(2 Harry)])}
+     * @return AbstractDomContent containing mapped data {@literal (ex. docs: [li(0 Tom), li(1 Dick), li(2 Harry)])}
      */
-    public static <T> DomContent each(final Collection<T> collection,
-      final BiFunction<Integer, ? super T, DomContent> mapper) {
+    public static <T> AbstractDomContent each(final Collection<T> collection,
+      final BiFunction<Integer, ? super T, AbstractDomContent> mapper) {
         final ContainerTag<?> dom = tag(null);
         int i = 0;
         for (final T t : collection) {
@@ -158,29 +158,29 @@ public final class TagCreator {
     }
 
     /**
-     * Creates a DomContent object containing HTML using a mapping function on map entries.
+     * Creates a AbstractDomContent object containing HTML using a mapping function on map entries.
      *
      * @param <I> The type of the keys
      * @param <T> The type of the values
      * @param map The map to iterate over
      * @param mapper The mapping function applied to each map entry
-     * @return DomContent containing the mapped elements
+     * @return AbstractDomContent containing the mapped elements
      */
-    public static <I, T> DomContent each(final Map<I, T> map, final Function<Entry<I, T>, DomContent> mapper) {
+    public static <I, T> AbstractDomContent each(final Map<I, T> map, final Function<Entry<I, T>, AbstractDomContent> mapper) {
         return each(map.entrySet().stream().map(mapper));
     }
 
     /**
-     * Creates a DomContent object containing HTML using a mapping function on a map. Intended usage:
+     * Creates a AbstractDomContent object containing HTML using a mapping function on a map. Intended usage:
      * {@literal each(idsToNames, (id, name) -> li(id + " " + name))}
      *
      * @param <I> The type of the keys
      * @param <T> The type of the values
      * @param map the map to iterate over, ex: a map of values { 1: "Tom", 2: "Dick", 3: "Harry" }
      * @param mapper the mapping function, ex: {@literal "(id, name) -> li(id + " " + name)"}
-     * @return DomContent containing mapped data {@literal (ex. docs: [li(1 Tom), li(2 Dick), li(3 Harry)])}
+     * @return AbstractDomContent containing mapped data {@literal (ex. docs: [li(1 Tom), li(2 Dick), li(3 Harry)])}
      */
-    public static <I, T> DomContent each(final Map<I, T> map, final BiFunction<I, T, DomContent> mapper) {
+    public static <I, T> AbstractDomContent each(final Map<I, T> map, final BiFunction<I, T, AbstractDomContent> mapper) {
         return each(map.entrySet().stream().map(entry -> mapper.apply(entry.getKey(), entry.getValue())));
     }
 
@@ -235,7 +235,7 @@ public final class TagCreator {
      * @param tagName The tag name
      * @return A new ContainerTag
      */
-    public static ContainerTag<? extends Tag<?>> tag(final String tagName) {
+    public static ContainerTag<? extends AbstractTag<?>> tag(final String tagName) {
         return new ContainerTag<>(tagName);
     }
 
@@ -245,7 +245,7 @@ public final class TagCreator {
      * @param tagName The tag name
      * @return A new EmptyTag
      */
-    public static EmptyTag<? extends Tag<?>> emptyTag(final String tagName) {
+    public static EmptyTag<? extends AbstractTag<?>> emptyTag(final String tagName) {
         return new EmptyTag<>(tagName);
     }
 
@@ -312,9 +312,9 @@ public final class TagCreator {
     /**
      * Creates an HTML5 doctype declaration {@code <!DOCTYPE html>}.
      *
-     * @return DomContent representing the doctype declaration
+     * @return AbstractDomContent representing the doctype declaration
      */
-    public static DomContent document() {
+    public static AbstractDomContent document() {
         return rawHtml("<!DOCTYPE html>");
     }
 
@@ -343,7 +343,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A HtmlTag element
      */
-    public static HtmlTag html(final DomContent... dc) {
+    public static HtmlTag html(final AbstractDomContent... dc) {
         return html().with(dc);
     }
 
@@ -375,7 +375,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A HtmlTag element
      */
-    public static HtmlTag html(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static HtmlTag html(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(html(dc), shortAttr);
     }
 
@@ -404,7 +404,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A HxPartialTag element
      */
-    public static HxPartialTag hxPartial(final DomContent... dc) {
+    public static HxPartialTag hxPartial(final AbstractDomContent... dc) {
         return hxPartial().with(dc);
     }
 
@@ -436,7 +436,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A HxPartialTag element
      */
-    public static HxPartialTag hxPartial(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static HxPartialTag hxPartial(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(hxPartial(dc), shortAttr);
     }
 
@@ -465,7 +465,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A BodyTag element
      */
-    public static BodyTag body(final DomContent... dc) {
+    public static BodyTag body(final AbstractDomContent... dc) {
         return new BodyTag().with(dc);
     }
 
@@ -497,7 +497,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A BodyTag element
      */
-    public static BodyTag body(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static BodyTag body(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new BodyTag().with(dc), shortAttr);
     }
 
@@ -526,7 +526,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A HeadTag element
      */
-    public static HeadTag head(final DomContent... dc) {
+    public static HeadTag head(final AbstractDomContent... dc) {
         return new HeadTag().with(dc);
     }
 
@@ -558,7 +558,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A HeadTag element
      */
-    public static HeadTag head(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static HeadTag head(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new HeadTag().with(dc), shortAttr);
     }
 
@@ -876,7 +876,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A ATag element
      */
-    public static ATag a(final DomContent... dc) {
+    public static ATag a(final AbstractDomContent... dc) {
         return new ATag().with(dc);
     }
 
@@ -908,7 +908,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A ATag element
      */
-    public static ATag a(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static ATag a(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new ATag().with(dc), shortAttr);
     }
 
@@ -937,7 +937,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A AbbrTag element
      */
-    public static AbbrTag abbr(final DomContent... dc) {
+    public static AbbrTag abbr(final AbstractDomContent... dc) {
         return new AbbrTag().with(dc);
     }
 
@@ -969,7 +969,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A AbbrTag element
      */
-    public static AbbrTag abbr(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static AbbrTag abbr(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new AbbrTag().with(dc), shortAttr);
     }
 
@@ -998,7 +998,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A AddressTag element
      */
-    public static AddressTag address(final DomContent... dc) {
+    public static AddressTag address(final AbstractDomContent... dc) {
         return new AddressTag().with(dc);
     }
 
@@ -1030,7 +1030,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A AddressTag element
      */
-    public static AddressTag address(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static AddressTag address(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new AddressTag().with(dc), shortAttr);
     }
 
@@ -1059,7 +1059,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A ArticleTag element
      */
-    public static ArticleTag article(final DomContent... dc) {
+    public static ArticleTag article(final AbstractDomContent... dc) {
         return new ArticleTag().with(dc);
     }
 
@@ -1091,7 +1091,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A ArticleTag element
      */
-    public static ArticleTag article(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static ArticleTag article(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new ArticleTag().with(dc), shortAttr);
     }
 
@@ -1120,7 +1120,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A AsideTag element
      */
-    public static AsideTag aside(final DomContent... dc) {
+    public static AsideTag aside(final AbstractDomContent... dc) {
         return new AsideTag().with(dc);
     }
 
@@ -1152,7 +1152,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A AsideTag element
      */
-    public static AsideTag aside(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static AsideTag aside(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new AsideTag().with(dc), shortAttr);
     }
 
@@ -1181,7 +1181,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A AudioTag element
      */
-    public static AudioTag audio(final DomContent... dc) {
+    public static AudioTag audio(final AbstractDomContent... dc) {
         return new AudioTag().with(dc);
     }
 
@@ -1213,7 +1213,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A AudioTag element
      */
-    public static AudioTag audio(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static AudioTag audio(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new AudioTag().with(dc), shortAttr);
     }
 
@@ -1242,7 +1242,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A BTag element
      */
-    public static BTag b(final DomContent... dc) {
+    public static BTag b(final AbstractDomContent... dc) {
         return new BTag().with(dc);
     }
 
@@ -1274,7 +1274,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A BTag element
      */
-    public static BTag b(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static BTag b(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new BTag().with(dc), shortAttr);
     }
 
@@ -1303,7 +1303,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A BdiTag element
      */
-    public static BdiTag bdi(final DomContent... dc) {
+    public static BdiTag bdi(final AbstractDomContent... dc) {
         return new BdiTag().with(dc);
     }
 
@@ -1335,7 +1335,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A BdiTag element
      */
-    public static BdiTag bdi(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static BdiTag bdi(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new BdiTag().with(dc), shortAttr);
     }
 
@@ -1364,7 +1364,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A BdoTag element
      */
-    public static BdoTag bdo(final DomContent... dc) {
+    public static BdoTag bdo(final AbstractDomContent... dc) {
         return new BdoTag().with(dc);
     }
 
@@ -1396,7 +1396,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A BdoTag element
      */
-    public static BdoTag bdo(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static BdoTag bdo(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new BdoTag().with(dc), shortAttr);
     }
 
@@ -1425,7 +1425,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A BlockquoteTag element
      */
-    public static BlockquoteTag blockquote(final DomContent... dc) {
+    public static BlockquoteTag blockquote(final AbstractDomContent... dc) {
         return new BlockquoteTag().with(dc);
     }
 
@@ -1457,7 +1457,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A BlockquoteTag element
      */
-    public static BlockquoteTag blockquote(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static BlockquoteTag blockquote(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new BlockquoteTag().with(dc), shortAttr);
     }
 
@@ -1486,7 +1486,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A ButtonTag element
      */
-    public static ButtonTag button(final DomContent... dc) {
+    public static ButtonTag button(final AbstractDomContent... dc) {
         return new ButtonTag().with(dc);
     }
 
@@ -1518,7 +1518,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A ButtonTag element
      */
-    public static ButtonTag button(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static ButtonTag button(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new ButtonTag().with(dc), shortAttr);
     }
 
@@ -1547,7 +1547,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A CanvasTag element
      */
-    public static CanvasTag canvas(final DomContent... dc) {
+    public static CanvasTag canvas(final AbstractDomContent... dc) {
         return new CanvasTag().with(dc);
     }
 
@@ -1579,7 +1579,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A CanvasTag element
      */
-    public static CanvasTag canvas(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static CanvasTag canvas(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new CanvasTag().with(dc), shortAttr);
     }
 
@@ -1608,7 +1608,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A CaptionTag element
      */
-    public static CaptionTag caption(final DomContent... dc) {
+    public static CaptionTag caption(final AbstractDomContent... dc) {
         return new CaptionTag().with(dc);
     }
 
@@ -1640,7 +1640,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A CaptionTag element
      */
-    public static CaptionTag caption(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static CaptionTag caption(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new CaptionTag().with(dc), shortAttr);
     }
 
@@ -1669,7 +1669,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A CiteTag element
      */
-    public static CiteTag cite(final DomContent... dc) {
+    public static CiteTag cite(final AbstractDomContent... dc) {
         return new CiteTag().with(dc);
     }
 
@@ -1701,7 +1701,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A CiteTag element
      */
-    public static CiteTag cite(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static CiteTag cite(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new CiteTag().with(dc), shortAttr);
     }
 
@@ -1730,7 +1730,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A CodeTag element
      */
-    public static CodeTag code(final DomContent... dc) {
+    public static CodeTag code(final AbstractDomContent... dc) {
         return new CodeTag().with(dc);
     }
 
@@ -1762,7 +1762,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A CodeTag element
      */
-    public static CodeTag code(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static CodeTag code(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new CodeTag().with(dc), shortAttr);
     }
 
@@ -1791,7 +1791,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A ColgroupTag element
      */
-    public static ColgroupTag colgroup(final DomContent... dc) {
+    public static ColgroupTag colgroup(final AbstractDomContent... dc) {
         return new ColgroupTag().with(dc);
     }
 
@@ -1823,7 +1823,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A ColgroupTag element
      */
-    public static ColgroupTag colgroup(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static ColgroupTag colgroup(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new ColgroupTag().with(dc), shortAttr);
     }
 
@@ -1852,7 +1852,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A DataTag element
      */
-    public static DataTag data(final DomContent... dc) {
+    public static DataTag data(final AbstractDomContent... dc) {
         return new DataTag().with(dc);
     }
 
@@ -1884,7 +1884,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A DataTag element
      */
-    public static DataTag data(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static DataTag data(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new DataTag().with(dc), shortAttr);
     }
 
@@ -1913,7 +1913,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A DatalistTag element
      */
-    public static DatalistTag datalist(final DomContent... dc) {
+    public static DatalistTag datalist(final AbstractDomContent... dc) {
         return new DatalistTag().with(dc);
     }
 
@@ -1945,7 +1945,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A DatalistTag element
      */
-    public static DatalistTag datalist(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static DatalistTag datalist(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new DatalistTag().with(dc), shortAttr);
     }
 
@@ -1974,7 +1974,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A DdTag element
      */
-    public static DdTag dd(final DomContent... dc) {
+    public static DdTag dd(final AbstractDomContent... dc) {
         return new DdTag().with(dc);
     }
 
@@ -2006,7 +2006,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A DdTag element
      */
-    public static DdTag dd(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static DdTag dd(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new DdTag().with(dc), shortAttr);
     }
 
@@ -2035,7 +2035,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A DelTag element
      */
-    public static DelTag del(final DomContent... dc) {
+    public static DelTag del(final AbstractDomContent... dc) {
         return new DelTag().with(dc);
     }
 
@@ -2067,7 +2067,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A DelTag element
      */
-    public static DelTag del(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static DelTag del(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new DelTag().with(dc), shortAttr);
     }
 
@@ -2096,7 +2096,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A DetailsTag element
      */
-    public static DetailsTag details(final DomContent... dc) {
+    public static DetailsTag details(final AbstractDomContent... dc) {
         return new DetailsTag().with(dc);
     }
 
@@ -2128,7 +2128,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A DetailsTag element
      */
-    public static DetailsTag details(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static DetailsTag details(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new DetailsTag().with(dc), shortAttr);
     }
 
@@ -2157,7 +2157,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A DfnTag element
      */
-    public static DfnTag dfn(final DomContent... dc) {
+    public static DfnTag dfn(final AbstractDomContent... dc) {
         return new DfnTag().with(dc);
     }
 
@@ -2189,7 +2189,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A DfnTag element
      */
-    public static DfnTag dfn(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static DfnTag dfn(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new DfnTag().with(dc), shortAttr);
     }
 
@@ -2218,7 +2218,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A DialogTag element
      */
-    public static DialogTag dialog(final DomContent... dc) {
+    public static DialogTag dialog(final AbstractDomContent... dc) {
         return new DialogTag().with(dc);
     }
 
@@ -2250,7 +2250,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A DialogTag element
      */
-    public static DialogTag dialog(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static DialogTag dialog(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new DialogTag().with(dc), shortAttr);
     }
 
@@ -2279,7 +2279,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A DivTag element
      */
-    public static DivTag div(final DomContent... dc) {
+    public static DivTag div(final AbstractDomContent... dc) {
         return new DivTag().with(dc);
     }
 
@@ -2311,7 +2311,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A DivTag element
      */
-    public static DivTag div(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static DivTag div(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new DivTag().with(dc), shortAttr);
     }
 
@@ -2340,7 +2340,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A DlTag element
      */
-    public static DlTag dl(final DomContent... dc) {
+    public static DlTag dl(final AbstractDomContent... dc) {
         return new DlTag().with(dc);
     }
 
@@ -2372,7 +2372,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A DlTag element
      */
-    public static DlTag dl(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static DlTag dl(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new DlTag().with(dc), shortAttr);
     }
 
@@ -2401,7 +2401,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A DtTag element
      */
-    public static DtTag dt(final DomContent... dc) {
+    public static DtTag dt(final AbstractDomContent... dc) {
         return new DtTag().with(dc);
     }
 
@@ -2433,7 +2433,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A DtTag element
      */
-    public static DtTag dt(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static DtTag dt(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new DtTag().with(dc), shortAttr);
     }
 
@@ -2462,7 +2462,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A EmTag element
      */
-    public static EmTag em(final DomContent... dc) {
+    public static EmTag em(final AbstractDomContent... dc) {
         return new EmTag().with(dc);
     }
 
@@ -2494,7 +2494,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A EmTag element
      */
-    public static EmTag em(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static EmTag em(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new EmTag().with(dc), shortAttr);
     }
 
@@ -2523,7 +2523,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A FieldsetTag element
      */
-    public static FieldsetTag fieldset(final DomContent... dc) {
+    public static FieldsetTag fieldset(final AbstractDomContent... dc) {
         return new FieldsetTag().with(dc);
     }
 
@@ -2555,7 +2555,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A FieldsetTag element
      */
-    public static FieldsetTag fieldset(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static FieldsetTag fieldset(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new FieldsetTag().with(dc), shortAttr);
     }
 
@@ -2584,7 +2584,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A FigcaptionTag element
      */
-    public static FigcaptionTag figcaption(final DomContent... dc) {
+    public static FigcaptionTag figcaption(final AbstractDomContent... dc) {
         return new FigcaptionTag().with(dc);
     }
 
@@ -2616,7 +2616,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A FigcaptionTag element
      */
-    public static FigcaptionTag figcaption(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static FigcaptionTag figcaption(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new FigcaptionTag().with(dc), shortAttr);
     }
 
@@ -2645,7 +2645,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A FigureTag element
      */
-    public static FigureTag figure(final DomContent... dc) {
+    public static FigureTag figure(final AbstractDomContent... dc) {
         return new FigureTag().with(dc);
     }
 
@@ -2677,7 +2677,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A FigureTag element
      */
-    public static FigureTag figure(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static FigureTag figure(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new FigureTag().with(dc), shortAttr);
     }
 
@@ -2706,7 +2706,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A FooterTag element
      */
-    public static FooterTag footer(final DomContent... dc) {
+    public static FooterTag footer(final AbstractDomContent... dc) {
         return new FooterTag().with(dc);
     }
 
@@ -2738,7 +2738,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A FooterTag element
      */
-    public static FooterTag footer(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static FooterTag footer(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new FooterTag().with(dc), shortAttr);
     }
 
@@ -2767,7 +2767,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A FormTag element
      */
-    public static FormTag form(final DomContent... dc) {
+    public static FormTag form(final AbstractDomContent... dc) {
         return new FormTag().with(dc);
     }
 
@@ -2799,7 +2799,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A FormTag element
      */
-    public static FormTag form(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static FormTag form(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new FormTag().with(dc), shortAttr);
     }
 
@@ -2828,7 +2828,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A H1Tag element
      */
-    public static H1Tag h1(final DomContent... dc) {
+    public static H1Tag h1(final AbstractDomContent... dc) {
         return new H1Tag().with(dc);
     }
 
@@ -2860,7 +2860,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A H1Tag element
      */
-    public static H1Tag h1(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static H1Tag h1(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new H1Tag().with(dc), shortAttr);
     }
 
@@ -2889,7 +2889,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A H2Tag element
      */
-    public static H2Tag h2(final DomContent... dc) {
+    public static H2Tag h2(final AbstractDomContent... dc) {
         return new H2Tag().with(dc);
     }
 
@@ -2921,7 +2921,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A H2Tag element
      */
-    public static H2Tag h2(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static H2Tag h2(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new H2Tag().with(dc), shortAttr);
     }
 
@@ -2950,7 +2950,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A H3Tag element
      */
-    public static H3Tag h3(final DomContent... dc) {
+    public static H3Tag h3(final AbstractDomContent... dc) {
         return new H3Tag().with(dc);
     }
 
@@ -2982,7 +2982,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A H3Tag element
      */
-    public static H3Tag h3(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static H3Tag h3(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new H3Tag().with(dc), shortAttr);
     }
 
@@ -3011,7 +3011,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A H4Tag element
      */
-    public static H4Tag h4(final DomContent... dc) {
+    public static H4Tag h4(final AbstractDomContent... dc) {
         return new H4Tag().with(dc);
     }
 
@@ -3043,7 +3043,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A H4Tag element
      */
-    public static H4Tag h4(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static H4Tag h4(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new H4Tag().with(dc), shortAttr);
     }
 
@@ -3072,7 +3072,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A H5Tag element
      */
-    public static H5Tag h5(final DomContent... dc) {
+    public static H5Tag h5(final AbstractDomContent... dc) {
         return new H5Tag().with(dc);
     }
 
@@ -3104,7 +3104,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A H5Tag element
      */
-    public static H5Tag h5(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static H5Tag h5(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new H5Tag().with(dc), shortAttr);
     }
 
@@ -3133,7 +3133,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A H6Tag element
      */
-    public static H6Tag h6(final DomContent... dc) {
+    public static H6Tag h6(final AbstractDomContent... dc) {
         return new H6Tag().with(dc);
     }
 
@@ -3165,7 +3165,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A H6Tag element
      */
-    public static H6Tag h6(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static H6Tag h6(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new H6Tag().with(dc), shortAttr);
     }
 
@@ -3194,7 +3194,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A HeaderTag element
      */
-    public static HeaderTag header(final DomContent... dc) {
+    public static HeaderTag header(final AbstractDomContent... dc) {
         return new HeaderTag().with(dc);
     }
 
@@ -3226,7 +3226,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A HeaderTag element
      */
-    public static HeaderTag header(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static HeaderTag header(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new HeaderTag().with(dc), shortAttr);
     }
 
@@ -3255,7 +3255,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A ITag element
      */
-    public static ITag i(final DomContent... dc) {
+    public static ITag i(final AbstractDomContent... dc) {
         return new ITag().with(dc);
     }
 
@@ -3287,7 +3287,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A ITag element
      */
-    public static ITag i(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static ITag i(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new ITag().with(dc), shortAttr);
     }
 
@@ -3316,7 +3316,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A IframeTag element
      */
-    public static IframeTag iframe(final DomContent... dc) {
+    public static IframeTag iframe(final AbstractDomContent... dc) {
         return new IframeTag().with(dc);
     }
 
@@ -3348,7 +3348,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A IframeTag element
      */
-    public static IframeTag iframe(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static IframeTag iframe(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new IframeTag().with(dc), shortAttr);
     }
 
@@ -3377,7 +3377,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A InsTag element
      */
-    public static InsTag ins(final DomContent... dc) {
+    public static InsTag ins(final AbstractDomContent... dc) {
         return new InsTag().with(dc);
     }
 
@@ -3409,7 +3409,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A InsTag element
      */
-    public static InsTag ins(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static InsTag ins(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new InsTag().with(dc), shortAttr);
     }
 
@@ -3438,7 +3438,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A KbdTag element
      */
-    public static KbdTag kbd(final DomContent... dc) {
+    public static KbdTag kbd(final AbstractDomContent... dc) {
         return new KbdTag().with(dc);
     }
 
@@ -3470,7 +3470,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A KbdTag element
      */
-    public static KbdTag kbd(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static KbdTag kbd(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new KbdTag().with(dc), shortAttr);
     }
 
@@ -3499,7 +3499,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A LabelTag element
      */
-    public static LabelTag label(final DomContent... dc) {
+    public static LabelTag label(final AbstractDomContent... dc) {
         return new LabelTag().with(dc);
     }
 
@@ -3531,7 +3531,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A LabelTag element
      */
-    public static LabelTag label(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static LabelTag label(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new LabelTag().with(dc), shortAttr);
     }
 
@@ -3560,7 +3560,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A LegendTag element
      */
-    public static LegendTag legend(final DomContent... dc) {
+    public static LegendTag legend(final AbstractDomContent... dc) {
         return new LegendTag().with(dc);
     }
 
@@ -3592,7 +3592,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A LegendTag element
      */
-    public static LegendTag legend(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static LegendTag legend(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new LegendTag().with(dc), shortAttr);
     }
 
@@ -3621,7 +3621,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A LiTag element
      */
-    public static LiTag li(final DomContent... dc) {
+    public static LiTag li(final AbstractDomContent... dc) {
         return new LiTag().with(dc);
     }
 
@@ -3653,7 +3653,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A LiTag element
      */
-    public static LiTag li(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static LiTag li(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new LiTag().with(dc), shortAttr);
     }
 
@@ -3682,7 +3682,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A MainTag element
      */
-    public static MainTag main(final DomContent... dc) {
+    public static MainTag main(final AbstractDomContent... dc) {
         return new MainTag().with(dc);
     }
 
@@ -3714,7 +3714,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A MainTag element
      */
-    public static MainTag main(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static MainTag main(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new MainTag().with(dc), shortAttr);
     }
 
@@ -3743,7 +3743,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A MapTag element
      */
-    public static MapTag map(final DomContent... dc) {
+    public static MapTag map(final AbstractDomContent... dc) {
         return new MapTag().with(dc);
     }
 
@@ -3775,7 +3775,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A MapTag element
      */
-    public static MapTag map(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static MapTag map(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new MapTag().with(dc), shortAttr);
     }
 
@@ -3804,7 +3804,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A MarkTag element
      */
-    public static MarkTag mark(final DomContent... dc) {
+    public static MarkTag mark(final AbstractDomContent... dc) {
         return new MarkTag().with(dc);
     }
 
@@ -3836,7 +3836,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A MarkTag element
      */
-    public static MarkTag mark(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static MarkTag mark(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new MarkTag().with(dc), shortAttr);
     }
 
@@ -3865,7 +3865,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A MenuTag element
      */
-    public static MenuTag menu(final DomContent... dc) {
+    public static MenuTag menu(final AbstractDomContent... dc) {
         return new MenuTag().with(dc);
     }
 
@@ -3897,7 +3897,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A MenuTag element
      */
-    public static MenuTag menu(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static MenuTag menu(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new MenuTag().with(dc), shortAttr);
     }
 
@@ -3926,7 +3926,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A MenuitemTag element
      */
-    public static MenuitemTag menuitem(final DomContent... dc) {
+    public static MenuitemTag menuitem(final AbstractDomContent... dc) {
         return new MenuitemTag().with(dc);
     }
 
@@ -3958,7 +3958,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A MenuitemTag element
      */
-    public static MenuitemTag menuitem(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static MenuitemTag menuitem(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new MenuitemTag().with(dc), shortAttr);
     }
 
@@ -3987,7 +3987,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A MeterTag element
      */
-    public static MeterTag meter(final DomContent... dc) {
+    public static MeterTag meter(final AbstractDomContent... dc) {
         return new MeterTag().with(dc);
     }
 
@@ -4019,7 +4019,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A MeterTag element
      */
-    public static MeterTag meter(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static MeterTag meter(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new MeterTag().with(dc), shortAttr);
     }
 
@@ -4048,7 +4048,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A NavTag element
      */
-    public static NavTag nav(final DomContent... dc) {
+    public static NavTag nav(final AbstractDomContent... dc) {
         return new NavTag().with(dc);
     }
 
@@ -4080,7 +4080,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A NavTag element
      */
-    public static NavTag nav(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static NavTag nav(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new NavTag().with(dc), shortAttr);
     }
 
@@ -4109,7 +4109,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A NoscriptTag element
      */
-    public static NoscriptTag noscript(final DomContent... dc) {
+    public static NoscriptTag noscript(final AbstractDomContent... dc) {
         return new NoscriptTag().with(dc);
     }
 
@@ -4141,7 +4141,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A NoscriptTag element
      */
-    public static NoscriptTag noscript(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static NoscriptTag noscript(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new NoscriptTag().with(dc), shortAttr);
     }
 
@@ -4170,7 +4170,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A ObjectTag element
      */
-    public static ObjectTag object(final DomContent... dc) {
+    public static ObjectTag object(final AbstractDomContent... dc) {
         return new ObjectTag().with(dc);
     }
 
@@ -4202,7 +4202,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A ObjectTag element
      */
-    public static ObjectTag object(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static ObjectTag object(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new ObjectTag().with(dc), shortAttr);
     }
 
@@ -4231,7 +4231,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A OlTag element
      */
-    public static OlTag ol(final DomContent... dc) {
+    public static OlTag ol(final AbstractDomContent... dc) {
         return new OlTag().with(dc);
     }
 
@@ -4263,7 +4263,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A OlTag element
      */
-    public static OlTag ol(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static OlTag ol(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new OlTag().with(dc), shortAttr);
     }
 
@@ -4292,7 +4292,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A OptgroupTag element
      */
-    public static OptgroupTag optgroup(final DomContent... dc) {
+    public static OptgroupTag optgroup(final AbstractDomContent... dc) {
         return new OptgroupTag().with(dc);
     }
 
@@ -4324,7 +4324,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A OptgroupTag element
      */
-    public static OptgroupTag optgroup(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static OptgroupTag optgroup(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new OptgroupTag().with(dc), shortAttr);
     }
 
@@ -4353,7 +4353,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A OptionTag element
      */
-    public static OptionTag option(final DomContent... dc) {
+    public static OptionTag option(final AbstractDomContent... dc) {
         return new OptionTag().with(dc);
     }
 
@@ -4385,7 +4385,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A OptionTag element
      */
-    public static OptionTag option(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static OptionTag option(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new OptionTag().with(dc), shortAttr);
     }
 
@@ -4414,7 +4414,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A OutputTag element
      */
-    public static OutputTag output(final DomContent... dc) {
+    public static OutputTag output(final AbstractDomContent... dc) {
         return new OutputTag().with(dc);
     }
 
@@ -4446,7 +4446,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A OutputTag element
      */
-    public static OutputTag output(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static OutputTag output(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new OutputTag().with(dc), shortAttr);
     }
 
@@ -4475,7 +4475,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A PTag element
      */
-    public static PTag p(final DomContent... dc) {
+    public static PTag p(final AbstractDomContent... dc) {
         return new PTag().with(dc);
     }
 
@@ -4507,7 +4507,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A PTag element
      */
-    public static PTag p(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static PTag p(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new PTag().with(dc), shortAttr);
     }
 
@@ -4536,7 +4536,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A PictureTag element
      */
-    public static PictureTag picture(final DomContent... dc) {
+    public static PictureTag picture(final AbstractDomContent... dc) {
         return new PictureTag().with(dc);
     }
 
@@ -4568,7 +4568,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A PictureTag element
      */
-    public static PictureTag picture(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static PictureTag picture(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new PictureTag().with(dc), shortAttr);
     }
 
@@ -4597,7 +4597,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A PreTag element
      */
-    public static PreTag pre(final DomContent... dc) {
+    public static PreTag pre(final AbstractDomContent... dc) {
         return new PreTag().with(dc);
     }
 
@@ -4629,7 +4629,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A PreTag element
      */
-    public static PreTag pre(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static PreTag pre(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new PreTag().with(dc), shortAttr);
     }
 
@@ -4658,7 +4658,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A ProgressTag element
      */
-    public static ProgressTag progress(final DomContent... dc) {
+    public static ProgressTag progress(final AbstractDomContent... dc) {
         return new ProgressTag().with(dc);
     }
 
@@ -4690,7 +4690,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A ProgressTag element
      */
-    public static ProgressTag progress(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static ProgressTag progress(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new ProgressTag().with(dc), shortAttr);
     }
 
@@ -4719,7 +4719,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A QTag element
      */
-    public static QTag q(final DomContent... dc) {
+    public static QTag q(final AbstractDomContent... dc) {
         return new QTag().with(dc);
     }
 
@@ -4751,7 +4751,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A QTag element
      */
-    public static QTag q(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static QTag q(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new QTag().with(dc), shortAttr);
     }
 
@@ -4780,7 +4780,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A RpTag element
      */
-    public static RpTag rp(final DomContent... dc) {
+    public static RpTag rp(final AbstractDomContent... dc) {
         return new RpTag().with(dc);
     }
 
@@ -4812,7 +4812,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A RpTag element
      */
-    public static RpTag rp(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static RpTag rp(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new RpTag().with(dc), shortAttr);
     }
 
@@ -4841,7 +4841,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A RtTag element
      */
-    public static RtTag rt(final DomContent... dc) {
+    public static RtTag rt(final AbstractDomContent... dc) {
         return new RtTag().with(dc);
     }
 
@@ -4873,7 +4873,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A RtTag element
      */
-    public static RtTag rt(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static RtTag rt(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new RtTag().with(dc), shortAttr);
     }
 
@@ -4902,7 +4902,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A RubyTag element
      */
-    public static RubyTag ruby(final DomContent... dc) {
+    public static RubyTag ruby(final AbstractDomContent... dc) {
         return new RubyTag().with(dc);
     }
 
@@ -4934,7 +4934,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A RubyTag element
      */
-    public static RubyTag ruby(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static RubyTag ruby(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new RubyTag().with(dc), shortAttr);
     }
 
@@ -4963,7 +4963,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A STag element
      */
-    public static STag s(final DomContent... dc) {
+    public static STag s(final AbstractDomContent... dc) {
         return new STag().with(dc);
     }
 
@@ -4995,7 +4995,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A STag element
      */
-    public static STag s(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static STag s(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new STag().with(dc), shortAttr);
     }
 
@@ -5024,7 +5024,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A SampTag element
      */
-    public static SampTag samp(final DomContent... dc) {
+    public static SampTag samp(final AbstractDomContent... dc) {
         return new SampTag().with(dc);
     }
 
@@ -5056,7 +5056,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A SampTag element
      */
-    public static SampTag samp(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static SampTag samp(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new SampTag().with(dc), shortAttr);
     }
 
@@ -5085,7 +5085,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A ScriptTag element
      */
-    public static ScriptTag script(final DomContent... dc) {
+    public static ScriptTag script(final AbstractDomContent... dc) {
         return new ScriptTag().with(dc);
     }
 
@@ -5117,7 +5117,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A ScriptTag element
      */
-    public static ScriptTag script(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static ScriptTag script(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new ScriptTag().with(dc), shortAttr);
     }
 
@@ -5146,7 +5146,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A SectionTag element
      */
-    public static SectionTag section(final DomContent... dc) {
+    public static SectionTag section(final AbstractDomContent... dc) {
         return new SectionTag().with(dc);
     }
 
@@ -5178,7 +5178,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A SectionTag element
      */
-    public static SectionTag section(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static SectionTag section(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new SectionTag().with(dc), shortAttr);
     }
 
@@ -5207,7 +5207,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A SelectTag element
      */
-    public static SelectTag select(final DomContent... dc) {
+    public static SelectTag select(final AbstractDomContent... dc) {
         return new SelectTag().with(dc);
     }
 
@@ -5239,7 +5239,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A SelectTag element
      */
-    public static SelectTag select(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static SelectTag select(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new SelectTag().with(dc), shortAttr);
     }
 
@@ -5268,7 +5268,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A SlotTag element
      */
-    public static SlotTag slot(final DomContent... dc) {
+    public static SlotTag slot(final AbstractDomContent... dc) {
         return new SlotTag().with(dc);
     }
 
@@ -5300,7 +5300,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A SlotTag element
      */
-    public static SlotTag slot(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static SlotTag slot(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new SlotTag().with(dc), shortAttr);
     }
 
@@ -5329,7 +5329,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A SmallTag element
      */
-    public static SmallTag small(final DomContent... dc) {
+    public static SmallTag small(final AbstractDomContent... dc) {
         return new SmallTag().with(dc);
     }
 
@@ -5361,7 +5361,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A SmallTag element
      */
-    public static SmallTag small(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static SmallTag small(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new SmallTag().with(dc), shortAttr);
     }
 
@@ -5390,7 +5390,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A SpanTag element
      */
-    public static SpanTag span(final DomContent... dc) {
+    public static SpanTag span(final AbstractDomContent... dc) {
         return new SpanTag().with(dc);
     }
 
@@ -5422,7 +5422,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A SpanTag element
      */
-    public static SpanTag span(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static SpanTag span(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new SpanTag().with(dc), shortAttr);
     }
 
@@ -5451,7 +5451,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A StrongTag element
      */
-    public static StrongTag strong(final DomContent... dc) {
+    public static StrongTag strong(final AbstractDomContent... dc) {
         return new StrongTag().with(dc);
     }
 
@@ -5483,7 +5483,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A StrongTag element
      */
-    public static StrongTag strong(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static StrongTag strong(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new StrongTag().with(dc), shortAttr);
     }
 
@@ -5512,7 +5512,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A StyleTag element
      */
-    public static StyleTag style(final DomContent... dc) {
+    public static StyleTag style(final AbstractDomContent... dc) {
         return new StyleTag().with(dc);
     }
 
@@ -5544,7 +5544,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A StyleTag element
      */
-    public static StyleTag style(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static StyleTag style(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new StyleTag().with(dc), shortAttr);
     }
 
@@ -5573,7 +5573,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A SubTag element
      */
-    public static SubTag sub(final DomContent... dc) {
+    public static SubTag sub(final AbstractDomContent... dc) {
         return new SubTag().with(dc);
     }
 
@@ -5605,7 +5605,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A SubTag element
      */
-    public static SubTag sub(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static SubTag sub(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new SubTag().with(dc), shortAttr);
     }
 
@@ -5634,7 +5634,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A SummaryTag element
      */
-    public static SummaryTag summary(final DomContent... dc) {
+    public static SummaryTag summary(final AbstractDomContent... dc) {
         return new SummaryTag().with(dc);
     }
 
@@ -5666,7 +5666,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A SummaryTag element
      */
-    public static SummaryTag summary(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static SummaryTag summary(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new SummaryTag().with(dc), shortAttr);
     }
 
@@ -5695,7 +5695,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A SupTag element
      */
-    public static SupTag sup(final DomContent... dc) {
+    public static SupTag sup(final AbstractDomContent... dc) {
         return new SupTag().with(dc);
     }
 
@@ -5727,7 +5727,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A SupTag element
      */
-    public static SupTag sup(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static SupTag sup(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new SupTag().with(dc), shortAttr);
     }
 
@@ -5756,7 +5756,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A TableTag element
      */
-    public static TableTag table(final DomContent... dc) {
+    public static TableTag table(final AbstractDomContent... dc) {
         return new TableTag().with(dc);
     }
 
@@ -5788,7 +5788,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A TableTag element
      */
-    public static TableTag table(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static TableTag table(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new TableTag().with(dc), shortAttr);
     }
 
@@ -5817,7 +5817,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A TbodyTag element
      */
-    public static TbodyTag tbody(final DomContent... dc) {
+    public static TbodyTag tbody(final AbstractDomContent... dc) {
         return new TbodyTag().with(dc);
     }
 
@@ -5849,7 +5849,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A TbodyTag element
      */
-    public static TbodyTag tbody(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static TbodyTag tbody(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new TbodyTag().with(dc), shortAttr);
     }
 
@@ -5878,7 +5878,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A TdTag element
      */
-    public static TdTag td(final DomContent... dc) {
+    public static TdTag td(final AbstractDomContent... dc) {
         return new TdTag().with(dc);
     }
 
@@ -5910,7 +5910,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A TdTag element
      */
-    public static TdTag td(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static TdTag td(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new TdTag().with(dc), shortAttr);
     }
 
@@ -5939,7 +5939,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A TemplateTag element
      */
-    public static TemplateTag template(final DomContent... dc) {
+    public static TemplateTag template(final AbstractDomContent... dc) {
         return new TemplateTag().with(dc);
     }
 
@@ -5971,7 +5971,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A TemplateTag element
      */
-    public static TemplateTag template(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static TemplateTag template(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new TemplateTag().with(dc), shortAttr);
     }
 
@@ -6000,7 +6000,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A TextareaTag element
      */
-    public static TextareaTag textarea(final DomContent... dc) {
+    public static TextareaTag textarea(final AbstractDomContent... dc) {
         return new TextareaTag().with(dc);
     }
 
@@ -6032,7 +6032,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A TextareaTag element
      */
-    public static TextareaTag textarea(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static TextareaTag textarea(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new TextareaTag().with(dc), shortAttr);
     }
 
@@ -6061,7 +6061,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A TfootTag element
      */
-    public static TfootTag tfoot(final DomContent... dc) {
+    public static TfootTag tfoot(final AbstractDomContent... dc) {
         return new TfootTag().with(dc);
     }
 
@@ -6093,7 +6093,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A TfootTag element
      */
-    public static TfootTag tfoot(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static TfootTag tfoot(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new TfootTag().with(dc), shortAttr);
     }
 
@@ -6122,7 +6122,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A ThTag element
      */
-    public static ThTag th(final DomContent... dc) {
+    public static ThTag th(final AbstractDomContent... dc) {
         return new ThTag().with(dc);
     }
 
@@ -6154,7 +6154,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A ThTag element
      */
-    public static ThTag th(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static ThTag th(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new ThTag().with(dc), shortAttr);
     }
 
@@ -6183,7 +6183,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A TheadTag element
      */
-    public static TheadTag thead(final DomContent... dc) {
+    public static TheadTag thead(final AbstractDomContent... dc) {
         return new TheadTag().with(dc);
     }
 
@@ -6215,7 +6215,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A TheadTag element
      */
-    public static TheadTag thead(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static TheadTag thead(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new TheadTag().with(dc), shortAttr);
     }
 
@@ -6244,7 +6244,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A TimeTag element
      */
-    public static TimeTag time(final DomContent... dc) {
+    public static TimeTag time(final AbstractDomContent... dc) {
         return new TimeTag().with(dc);
     }
 
@@ -6276,7 +6276,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A TimeTag element
      */
-    public static TimeTag time(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static TimeTag time(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new TimeTag().with(dc), shortAttr);
     }
 
@@ -6305,7 +6305,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A TitleTag element
      */
-    public static TitleTag title(final DomContent... dc) {
+    public static TitleTag title(final AbstractDomContent... dc) {
         return new TitleTag().with(dc);
     }
 
@@ -6337,7 +6337,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A TitleTag element
      */
-    public static TitleTag title(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static TitleTag title(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new TitleTag().with(dc), shortAttr);
     }
 
@@ -6366,7 +6366,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A TrTag element
      */
-    public static TrTag tr(final DomContent... dc) {
+    public static TrTag tr(final AbstractDomContent... dc) {
         return new TrTag().with(dc);
     }
 
@@ -6398,7 +6398,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A TrTag element
      */
-    public static TrTag tr(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static TrTag tr(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new TrTag().with(dc), shortAttr);
     }
 
@@ -6427,7 +6427,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A UTag element
      */
-    public static UTag u(final DomContent... dc) {
+    public static UTag u(final AbstractDomContent... dc) {
         return new UTag().with(dc);
     }
 
@@ -6459,7 +6459,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A UTag element
      */
-    public static UTag u(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static UTag u(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new UTag().with(dc), shortAttr);
     }
 
@@ -6488,7 +6488,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A UlTag element
      */
-    public static UlTag ul(final DomContent... dc) {
+    public static UlTag ul(final AbstractDomContent... dc) {
         return new UlTag().with(dc);
     }
 
@@ -6520,7 +6520,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A UlTag element
      */
-    public static UlTag ul(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static UlTag ul(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new UlTag().with(dc), shortAttr);
     }
 
@@ -6549,7 +6549,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A VarTag element
      */
-    public static VarTag var(final DomContent... dc) {
+    public static VarTag var(final AbstractDomContent... dc) {
         return new VarTag().with(dc);
     }
 
@@ -6581,7 +6581,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A VarTag element
      */
-    public static VarTag var(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static VarTag var(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new VarTag().with(dc), shortAttr);
     }
 
@@ -6610,7 +6610,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A VideoTag element
      */
-    public static VideoTag video(final DomContent... dc) {
+    public static VideoTag video(final AbstractDomContent... dc) {
         return new VideoTag().with(dc);
     }
 
@@ -6642,7 +6642,7 @@ public final class TagCreator {
      * @param dc The child DOM content nodes
      * @return A VideoTag element
      */
-    public static VideoTag video(final Attr.ShortForm shortAttr, final DomContent... dc) {
+    public static VideoTag video(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
         return Attr.ShortForm.addTo(new VideoTag().with(dc), shortAttr);
     }
 
@@ -6714,7 +6714,7 @@ public final class TagCreator {
      * @param content Elements inside the container
      * @return A MainTag with the container class
      */
-    public static MainTag container(final DomContent... content) {
+    public static MainTag container(final AbstractDomContent... content) {
         return Pico.container(content);
     }
 
@@ -6734,7 +6734,7 @@ public final class TagCreator {
      * @param content Elements inside the fluid container
      * @return A MainTag with the container-fluid class
      */
-    public static MainTag containerFluid(final DomContent... content) {
+    public static MainTag containerFluid(final AbstractDomContent... content) {
         return Pico.containerFluid(content);
     }
 
@@ -6754,7 +6754,7 @@ public final class TagCreator {
      * @param content Elements inside the grid
      * @return A DivTag with the grid class
      */
-    public static DivTag grid(final DomContent... content) {
+    public static DivTag grid(final AbstractDomContent... content) {
         return Pico.grid(content);
     }
 

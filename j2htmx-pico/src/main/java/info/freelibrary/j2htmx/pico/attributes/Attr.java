@@ -4,7 +4,7 @@ import static info.freelibrary.util.Constants.EMPTY;
 import static info.freelibrary.util.Constants.HASH;
 import static info.freelibrary.util.Constants.PERIOD;
 
-import info.freelibrary.j2htmx.pico.tags.Tag;
+import info.freelibrary.j2htmx.pico.tags.AbstractTag;
 import info.freelibrary.util.warnings.PMD;
 
 /**
@@ -575,7 +575,7 @@ public final class Attr {
          * @param aShortAttr the ShortForm attribute containing the ID and classes, possibly null
          * @return the same tag instance, with the ID and classes applied if {@code aShortAttr} was not null
          */
-        public static <T extends Tag<T>> T addTo(final T aTag, final ShortForm aShortAttr) {
+        public static <T extends AbstractTag<T>> T addTo(final T aTag, final ShortForm aShortAttr) {
             if (aShortAttr != null) {
                 aShortAttr.addTo(aTag);
             }
@@ -610,7 +610,7 @@ public final class Attr {
          * @param aTag the tag to which the ID and classes are to be added; must not be null
          * @return the same tag instance, with the ID and classes applied if present
          */
-        public <T extends Tag<T>> T addTo(final T aTag) {
+        public <T extends AbstractTag<T>> T addTo(final T aTag) {
             if (hasId() && hasClasses()) {
                 return aTag.withId(myID).withClass(myClasses);
             }

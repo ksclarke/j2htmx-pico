@@ -17,10 +17,10 @@ import java.util.stream.Stream;
  *
  * @param <T> The concrete container tag type
  */
-public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
+public class ContainerTag<T extends ContainerTag<T>> extends AbstractTag<T> {
 
     /** The child DOM content nodes of this container tag. */
-    protected final List<DomContent> children;
+    protected final List<AbstractDomContent> children;
 
     /**
      * Constructs a ContainerTag with the given tag name.
@@ -34,14 +34,14 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
 
 
     /**
-     * Appends a DomContent-object to the end of this element.
+     * Appends a AbstractDomContent-object to the end of this element.
      *
-     * @param aChild DomContent-object to be appended
+     * @param aChild AbstractDomContent-object to be appended
      * @return itself for easy chaining
      * @throws RuntimeException If trying to append a tag to itself
      */
     @SuppressWarnings({PMD.AVOID_THROWING_RAW_EXCEPTION_TYPES, PMD.COMPARE_OBJECTS_WITH_EQUALS})
-    public T with(final DomContent aChild) {
+    public T with(final AbstractDomContent aChild) {
         if (this == aChild) {
             throw new RuntimeException("Cannot append a tag to itself.");
         }
@@ -56,26 +56,26 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
 
 
     /**
-     * Call with-method based on condition {@link #with(DomContent)}.
+     * Call with-method based on condition {@link #with(AbstractDomContent)}.
      *
      * @param condition the condition to use
-     * @param child DomContent-object to be appended if condition met
+     * @param child AbstractDomContent-object to be appended if condition met
      * @return itself for easy chaining
      */
-    public T condWith(final boolean condition, final DomContent child) {
+    public T condWith(final boolean condition, final AbstractDomContent child) {
         return condition ? this.with(child) : self();
     }
 
 
     /**
-     * Appends a list of DomContent-objects to the end of this element.
+     * Appends a list of AbstractDomContent-objects to the end of this element.
      *
-     * @param children DomContent-objects to be appended
+     * @param children AbstractDomContent-objects to be appended
      * @return itself for easy chaining
      */
-    public T with(final Iterable<? extends DomContent> children) {
+    public T with(final Iterable<? extends AbstractDomContent> children) {
         if (children != null) {
-            for (final DomContent child : children) {
+            for (final AbstractDomContent child : children) {
                 this.with(child);
             }
         }
@@ -87,22 +87,22 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
      * Call with-method based on condition {@link #with(java.lang.Iterable)}.
      *
      * @param condition the condition to use
-     * @param children DomContent-objects to be appended if condition met
+     * @param children AbstractDomContent-objects to be appended if condition met
      * @return itself for easy chaining
      */
-    public T condWith(final boolean condition, final Iterable<? extends DomContent> children) {
+    public T condWith(final boolean condition, final Iterable<? extends AbstractDomContent> children) {
         return condition ? this.with(children) : self();
     }
 
 
     /**
-     * Appends the DomContent-objects to the end of this element.
+     * Appends the AbstractDomContent-objects to the end of this element.
      *
-     * @param children DomContent-objects to be appended
+     * @param children AbstractDomContent-objects to be appended
      * @return itself for easy chaining
      */
-    public T with(final DomContent... children) {
-        for (final DomContent child : children) {
+    public T with(final AbstractDomContent... children) {
+        for (final AbstractDomContent child : children) {
             with(child);
         }
         return self();
@@ -110,25 +110,25 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
 
 
     /**
-     * Appends the DomContent-objects in the stream to the end of this element.
+     * Appends the AbstractDomContent-objects in the stream to the end of this element.
      *
-     * @param children Stream of DomContent-objects to be appended
+     * @param children Stream of AbstractDomContent-objects to be appended
      * @return itself for easy chaining
      */
-    public T with(final Stream<DomContent> children) {
+    public T with(final Stream<AbstractDomContent> children) {
         children.forEach(this::with);
         return self();
     }
 
 
     /**
-     * Call with-method based on condition {@link #with(DomContent...)}.
+     * Call with-method based on condition {@link #with(AbstractDomContent...)}.
      *
      * @param condition the condition to use
-     * @param children DomContent-objects to be appended if condition met
+     * @param children AbstractDomContent-objects to be appended if condition met
      * @return itself for easy chaining
      */
-    public T condWith(final boolean condition, final DomContent... children) {
+    public T condWith(final boolean condition, final AbstractDomContent... children) {
         return condition ? this.with(children) : self();
     }
 
@@ -169,24 +169,24 @@ public class ContainerTag<T extends ContainerTag<T>> extends Tag<T> {
     }
 
     @Override
-    public <A extends Appendable> A render(final HtmlBuilder<A> builder, final Object model) throws IOException {
+    public <A extends Appendable> A render(final HtmlBuilder<A> aHtmlBuilder, final Object model) throws IOException {
         if (hasTagName()) {
-            final TagBuilder tagBuilder = builder.appendStartTag(getTagName());
+            final TagBuilder tagBuilder = aHtmlBuilder.appendStartTag(getTagName());
             for (final Attribute attribute : getAttributes()) {
                 attribute.render(tagBuilder, model);
             }
             tagBuilder.completeTag();
         }
 
-        for (final DomContent child : children) {
-            child.render(builder, model);
+        for (final AbstractDomContent child : children) {
+            child.render(aHtmlBuilder, model);
         }
 
         if (hasTagName()) {
-            builder.appendEndTag(getTagName());
+            aHtmlBuilder.appendEndTag(getTagName());
         }
 
-        return builder.output();
+        return aHtmlBuilder.output();
     }
 
 }

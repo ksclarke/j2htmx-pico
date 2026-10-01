@@ -1,11 +1,44 @@
 package info.freelibrary.j2htmx.pico.mathml;
 
-import info.freelibrary.j2htmx.pico.mathml.tags.*;
-import info.freelibrary.j2htmx.pico.tags.DomContent;
+import info.freelibrary.j2htmx.pico.mathml.tags.AnnotationTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MactionTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MathTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MerrorTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MfracTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MiTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MmultiscriptsTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MnTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MoTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MoverTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MpaddedTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MphantomTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MprescriptsTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MrootTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MrowTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MsTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MspaceTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MsqrtTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MstyleTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MsubTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MsubsupTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MsupTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MtableTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MtdTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MtextTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MtrTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MunderTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.MunderoverTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.NoneTag;
+import info.freelibrary.j2htmx.pico.mathml.tags.SemanticsTag;
+import info.freelibrary.j2htmx.pico.tags.AbstractDomContent;
+import info.freelibrary.util.warnings.PMD;
 
 /**
  * Factory class providing static builder methods for creating MathML elements.
  */
+@SuppressWarnings(
+  {PMD.SHORT_METHOD_NAME, PMD.TOO_MANY_METHODS, PMD.EXCESSIVE_PUBLIC_COUNT, PMD.COUPLING_BETWEEN_OBJECTS,
+    PMD.EXCESSIVE_IMPORTS})
 public final class MathML {
 
     /**
@@ -30,7 +63,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link AnnotationTag} instance
      */
-    public static AnnotationTag annotation(final DomContent... dc) {
+    public static AnnotationTag annotation(final AbstractDomContent... dc) {
         return new AnnotationTag().with(dc);
     }
 
@@ -50,7 +83,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MactionTag} instance
      */
-    public static MactionTag maction(final DomContent... dc) {
+    public static MactionTag maction(final AbstractDomContent... dc) {
         return new MactionTag().with(dc);
     }
 
@@ -70,7 +103,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MathTag} instance
      */
-    public static MathTag math(final DomContent... dc) {
+    public static MathTag math(final AbstractDomContent... dc) {
         return new MathTag().with(dc);
     }
 
@@ -90,7 +123,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MerrorTag} instance
      */
-    public static MerrorTag merror(final DomContent... dc) {
+    public static MerrorTag merror(final AbstractDomContent... dc) {
         return new MerrorTag().with(dc);
     }
 
@@ -110,7 +143,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MfracTag} instance
      */
-    public static MfracTag mfrac(final DomContent... dc) {
+    public static MfracTag mfrac(final AbstractDomContent... dc) {
         return new MfracTag().with(dc);
     }
 
@@ -130,7 +163,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MiTag} instance
      */
-    public static MiTag mi(final DomContent... dc) {
+    public static MiTag mi(final AbstractDomContent... dc) {
         return new MiTag().with(dc);
     }
 
@@ -150,7 +183,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MmultiscriptsTag} instance
      */
-    public static MmultiscriptsTag mmultiscripts(final DomContent... dc) {
+    public static MmultiscriptsTag mmultiscripts(final AbstractDomContent... dc) {
         return new MmultiscriptsTag().with(dc);
     }
 
@@ -170,7 +203,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MnTag} instance
      */
-    public static MnTag mn(final DomContent... dc) {
+    public static MnTag mn(final AbstractDomContent... dc) {
         return new MnTag().with(dc);
     }
 
@@ -190,7 +223,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MoTag} instance
      */
-    public static MoTag mo(final DomContent... dc) {
+    public static MoTag mo(final AbstractDomContent... dc) {
         return new MoTag().with(dc);
     }
 
@@ -210,7 +243,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MoverTag} instance
      */
-    public static MoverTag mover(final DomContent... dc) {
+    public static MoverTag mover(final AbstractDomContent... dc) {
         return new MoverTag().with(dc);
     }
 
@@ -230,7 +263,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MpaddedTag} instance
      */
-    public static MpaddedTag mpadded(final DomContent... dc) {
+    public static MpaddedTag mpadded(final AbstractDomContent... dc) {
         return new MpaddedTag().with(dc);
     }
 
@@ -250,7 +283,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MphantomTag} instance
      */
-    public static MphantomTag mphantom(final DomContent... dc) {
+    public static MphantomTag mphantom(final AbstractDomContent... dc) {
         return new MphantomTag().with(dc);
     }
 
@@ -270,7 +303,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MprescriptsTag} instance
      */
-    public static MprescriptsTag mprescripts(final DomContent... dc) {
+    public static MprescriptsTag mprescripts(final AbstractDomContent... dc) {
         return new MprescriptsTag().with(dc);
     }
 
@@ -290,7 +323,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MrootTag} instance
      */
-    public static MrootTag mroot(final DomContent... dc) {
+    public static MrootTag mroot(final AbstractDomContent... dc) {
         return new MrootTag().with(dc);
     }
 
@@ -310,7 +343,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MrowTag} instance
      */
-    public static MrowTag mrow(final DomContent... dc) {
+    public static MrowTag mrow(final AbstractDomContent... dc) {
         return new MrowTag().with(dc);
     }
 
@@ -330,7 +363,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MsTag} instance
      */
-    public static MsTag ms(final DomContent... dc) {
+    public static MsTag ms(final AbstractDomContent... dc) {
         return new MsTag().with(dc);
     }
 
@@ -350,7 +383,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MspaceTag} instance
      */
-    public static MspaceTag mspace(final DomContent... dc) {
+    public static MspaceTag mspace(final AbstractDomContent... dc) {
         return new MspaceTag().with(dc);
     }
 
@@ -370,7 +403,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MsqrtTag} instance
      */
-    public static MsqrtTag msqrt(final DomContent... dc) {
+    public static MsqrtTag msqrt(final AbstractDomContent... dc) {
         return new MsqrtTag().with(dc);
     }
 
@@ -390,7 +423,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MstyleTag} instance
      */
-    public static MstyleTag mstyle(final DomContent... dc) {
+    public static MstyleTag mstyle(final AbstractDomContent... dc) {
         return new MstyleTag().with(dc);
     }
 
@@ -410,7 +443,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MsubTag} instance
      */
-    public static MsubTag msub(final DomContent... dc) {
+    public static MsubTag msub(final AbstractDomContent... dc) {
         return new MsubTag().with(dc);
     }
 
@@ -430,7 +463,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MsubsupTag} instance
      */
-    public static MsubsupTag msubsup(final DomContent... dc) {
+    public static MsubsupTag msubsup(final AbstractDomContent... dc) {
         return new MsubsupTag().with(dc);
     }
 
@@ -450,7 +483,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MsupTag} instance
      */
-    public static MsupTag msup(final DomContent... dc) {
+    public static MsupTag msup(final AbstractDomContent... dc) {
         return new MsupTag().with(dc);
     }
 
@@ -470,7 +503,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MtableTag} instance
      */
-    public static MtableTag mtable(final DomContent... dc) {
+    public static MtableTag mtable(final AbstractDomContent... dc) {
         return new MtableTag().with(dc);
     }
 
@@ -490,7 +523,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MtdTag} instance
      */
-    public static MtdTag mtd(final DomContent... dc) {
+    public static MtdTag mtd(final AbstractDomContent... dc) {
         return new MtdTag().with(dc);
     }
 
@@ -510,7 +543,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MtextTag} instance
      */
-    public static MtextTag mtext(final DomContent... dc) {
+    public static MtextTag mtext(final AbstractDomContent... dc) {
         return new MtextTag().with(dc);
     }
 
@@ -530,7 +563,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MtrTag} instance
      */
-    public static MtrTag mtr(final DomContent... dc) {
+    public static MtrTag mtr(final AbstractDomContent... dc) {
         return new MtrTag().with(dc);
     }
 
@@ -550,7 +583,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MunderTag} instance
      */
-    public static MunderTag munder(final DomContent... dc) {
+    public static MunderTag munder(final AbstractDomContent... dc) {
         return new MunderTag().with(dc);
     }
 
@@ -570,7 +603,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link MunderoverTag} instance
      */
-    public static MunderoverTag munderover(final DomContent... dc) {
+    public static MunderoverTag munderover(final AbstractDomContent... dc) {
         return new MunderoverTag().with(dc);
     }
 
@@ -590,7 +623,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link NoneTag} instance
      */
-    public static NoneTag none(final DomContent... dc) {
+    public static NoneTag none(final AbstractDomContent... dc) {
         return new NoneTag().with(dc);
     }
 
@@ -610,7 +643,7 @@ public final class MathML {
      * @param dc The child DOM content nodes
      * @return The created {@link SemanticsTag} instance
      */
-    public static SemanticsTag semantics(final DomContent... dc) {
+    public static SemanticsTag semantics(final AbstractDomContent... dc) {
         return new SemanticsTag().with(dc);
     }
 }

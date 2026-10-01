@@ -53,6 +53,14 @@
 
 package info.freelibrary.j2htmx.pico.utils;
 
+import static info.freelibrary.util.Constants.COMMA;
+import static info.freelibrary.util.Constants.EMPTY;
+import static info.freelibrary.util.Constants.HASH;
+import static info.freelibrary.util.Constants.SPACE;
+
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.MessageCodes;
 import info.freelibrary.util.warnings.PMD;
 
 import java.io.BufferedReader;
@@ -62,7 +70,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -74,91 +81,90 @@ import java.util.regex.PatternSyntaxException;
 public final class CSSMin {
 
     /** Logger instance for CSSMin. */
-    private static final Logger LOG = Logger.getLogger(CSSMin.class.getName());
-
-    /** Flag indicating whether debug logging is enabled. */
-    static boolean debugLogging = false;
+    private static final Logger LOGGER = LoggerFactory.getLogger(CSSMin.class, MessageCodes.BUNDLE);
 
     /**
      * Constructs a new CSSMin utility.
      */
     private CSSMin() {
+        // This is intentionally left empty
     }
 
     /**
      * Minify supplied CSS.
      *
-     * @param input the CSS
+     * @param aInput the CSS
      * @return the compressed version
      */
-    @SuppressWarnings({PMD.COGNITIVE_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY})
-    public static String compressCss(final String input) {
-        try {
-            int k, j, // Number of open braces
-              n; // Current position in stream
-            char curr;
+    @SuppressWarnings({PMD.COGNITIVE_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY, PMD.EXCEPTION_AS_FLOW_CONTROL})
+    public static String compressCss(final String aInput) {
+        try (BufferedReader reader = new BufferedReader(new StringReader(aInput))) {
+            final List<Selector> selectors = new ArrayList<>();
+            final StringBuilder builder = new StringBuilder();
 
-            final BufferedReader br = new BufferedReader(new StringReader(input));
-            final StringBuilder sb = new StringBuilder();
+            int k; // Number of open braces
+            int n; // Current position in stream
+            String string;
 
-            if (debugLogging) {
-                LOG.info("Reading file into StringBuffer...");
-            }
-            String s;
-            while ((s = br.readLine()) != null) {
-                if ("".equals(s.trim())) {
+            LOGGER.debug("Reading file into StringBuffer...");
+
+            while ((string = reader.readLine()) != null) {
+                if (EMPTY.equals(string.trim())) {
                     continue;
                 }
-                sb.append(s);
+
+                builder.append(string);
             }
 
-            if (debugLogging) {
-                LOG.info("Removing comments...");
-            }
+            LOGGER.debug("Removing comments...");
+
             // Find the start of the comment
             n = 0;
-            while ((n = sb.indexOf("/*", n)) != -1) {
-                if (sb.charAt(n + 2) == '*') { // Retain special comments
+
+            while ((n = builder.indexOf("/*", n)) != -1) {
+                if (builder.charAt(n + 2) == '*') { // Retain special comments
                     n += 2;
                     continue;
                 }
-                k = sb.indexOf("*/", n + 2);
+
+                k = builder.indexOf("*/", n + 2);
+
                 if (k == -1) {
                     throw new UnterminatedCommentException();
                 }
-                sb.delete(n, k + 2);
-            }
-            if (debugLogging) {
-                LOG.info(sb.toString());
-                LOG.info("\n\n");
+
+                builder.delete(n, k + 2);
             }
 
-            if (debugLogging) {
-                LOG.info("Parsing and processing selectors...");
-            }
-            final List<Selector> selectors = new ArrayList<>();
-            n = 0;
-            j = 0;
-            for (int i = 0; i < sb.length(); i++) {
-                curr = sb.charAt(i);
+            LOGGER.debug(builder.toString() + "\n\n");
+            LOGGER.debug("Parsing and processing selectors...");
+
+            char current;
+            int j = 0;
+            int next = 0;
+
+            for (int index = 0; index < builder.length(); index++) {
+                current = builder.charAt(index);
+
                 if (j < 0) {
                     throw new UnbalancedBracesException();
                 }
-                if (curr == '{') {
+
+                if (current == '{') {
                     j++;
-                } else if (curr == '}') {
+                } else if (current == '}') {
                     j--;
+
                     if (j == 0) {
                         try {
-                            selectors.add(new Selector(sb.substring(n, i + 1)));
+                            selectors.add(new Selector(builder.substring(next, index + 1)));
                         } catch (UnterminatedSelectorException usex) {
-                            LOG.warning("Unterminated selector: " + usex.getMessage());
+                            LOGGER.warn("Unterminated selector: " + usex.getMessage());
                         } catch (EmptySelectorBodyException ebex) {
-                            if (debugLogging) {
-                                LOG.warning("Empty selector body: " + ebex.getMessage());
-                            }
+                            LOGGER.debug("Empty selector body: " + ebex.getMessage());
                         }
-                        n = i + 1;
+
+                        next = index + 1;
                     }
                 }
             }
@@ -169,42 +175,38 @@ public final class CSSMin {
                 result.append(selector);
             }
 
-            if (debugLogging) {
-                LOG.info("Process completed successfully.");
-            }
+            LOGGER.debug("Process completed successfully.");
 
             return result.toString();
-
-        } catch (UnterminatedCommentException ucex) {
-            LOG.warning("Unterminated comment.");
-        } catch (UnbalancedBracesException ubex) {
-            LOG.warning("Unbalanced braces.");
-        } catch (Exception ex) {
-            LOG.warning(ex.getMessage());
+        } catch (UnterminatedCommentException ucDetails) {
+            LOGGER.warn("Unterminated comment.");
+        } catch (UnbalancedBracesException ubDetails) {
+            LOGGER.warn("Unbalanced braces.");
+        } catch (@SuppressWarnings(PMD.AVOID_CATCHING_GENERIC_EXCEPTION) Exception details) {
+            LOGGER.warn(details.getMessage());
         }
 
         return null;
-
     }
 }
 
 /**
  * Represents a CSS selector and its associated style properties.
  */
-@SuppressWarnings(PMD.AVOID_LITERALS_IN_IF_CONDITION)
+@SuppressWarnings({PMD.AVOID_LITERALS_IN_IF_CONDITION})
 class Selector {
 
     /** Logger instance for Selector. */
-    private static final Logger LOG = Logger.getLogger(Selector.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(Selector.class.getName());
 
     /** Array of CSS properties belonging to this selector. */
-    private Property[] properties = null;
+    private Property[] myProperties;
 
     /** Nested sub-selectors. */
-    private List<Selector> subSelectors = null;
+    private List<Selector> mySubSelectors;
 
     /** The selector text. */
-    private String selector;
+    private String mySelector;
 
     /**
      * Creates a new Selector using the supplied strings.
@@ -217,47 +219,50 @@ class Selector {
     @SuppressWarnings({PMD.COGNITIVE_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY})
     Selector(final String selector)
     throws IncompleteSelectorException, UnterminatedSelectorException, EmptySelectorBodyException {
-        String[] parts = selector.split(
-          "\\{"); // We have to escape the { with a \ for the regex, which itself requires escaping for the string.
-        // Sigh.
+        String[] parts = selector.split("\\{"); // Escape the { with a \ for the regex, which itself requires escaping
+
         if (parts.length < 2) {
             throw new IncompleteSelectorException(selector);
         }
 
-        this.selector = parts[0].trim();
+        mySelector = parts[0].trim();
 
         // Simplify combinators
-        this.selector = this.selector.replaceAll("\\s?(\\+|~|,|=|~=|\\^=|\\$=|\\*=|\\|=|>)\\s?", "$1");
+        mySelector = mySelector.replaceAll("\\s?(\\+|~|,|=|~=|\\^=|\\$=|\\*=|\\|=|>)\\s?", "$1");
 
         // We're dealing with a nested property, eg @-webkit-keyframes
         if (parts.length > 2) {
-            this.subSelectors = new ArrayList<>();
+            mySubSelectors = new ArrayList<>();
             parts = selector.split("(\\s*\\{\\s*)|(\\s*\\}\\s*)");
-            for (int i = 1; i < parts.length; i += 2) {
-                parts[i] = parts[i].trim();
-                parts[i + 1] = parts[i + 1].trim();
-                if (!("".equals(parts[i]) || "".equals(parts[i + 1]))) {
-                    this.subSelectors.add(new Selector(parts[i] + "{" + parts[i + 1] + "}"));
+
+            for (int index = 1; index < parts.length; index += 2) {
+                parts[index] = parts[index].trim();
+                parts[index + 1] = parts[index + 1].trim();
+
+                if (!(EMPTY.equals(parts[index]) || EMPTY.equals(parts[index + 1]))) {
+                    mySubSelectors.add(new Selector(parts[index] + "{" + parts[index + 1] + "}"));
                 }
             }
         } else {
             String contents = parts[parts.length - 1].trim();
-            if (CSSMin.debugLogging) {
-                LOG.info("Parsing selector: " + this.selector);
-                LOG.info("\t" + contents);
-            }
+
+            LOGGER.debug("Parsing selector: " + mySelector);
+            LOGGER.debug("\t" + contents);
+
             if (contents.charAt(contents.length() - 1) != '}') { // Ensure that we have a leading and trailing brace.
                 throw new UnterminatedSelectorException(selector);
             }
+
             if (contents.length() == 1) {
                 throw new EmptySelectorBodyException(selector);
             }
+
             final int endIndex = contents.endsWith(";}") ? 2 : 1;
             contents = contents.substring(0, contents.length() - endIndex);
 
-            this.properties = new Property[0];
-            this.properties = parseProperties(contents).toArray(this.properties);
-            sortProperties(this.properties);
+            myProperties = new Property[0];
+            myProperties = parseProperties(contents).toArray(myProperties);
+            sortProperties(myProperties);
         }
     }
 
@@ -268,58 +273,68 @@ class Selector {
      */
     @SuppressWarnings({PMD.MISSING_OVERRIDE})
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append(this.selector).append('{');
-        if (this.subSelectors != null) {
-            for (final Selector s : this.subSelectors) {
-                sb.append(s.toString());
+        final StringBuilder builder = new StringBuilder().append(this.mySelector).append('{');
+
+        if (this.mySubSelectors != null) {
+            for (final Selector selector : this.mySubSelectors) {
+                builder.append(selector.toString());
             }
         }
-        if (this.properties != null) {
-            for (final Property p : this.properties) {
-                sb.append(p.toString());
+
+        if (this.myProperties != null) {
+            for (final Property property : this.myProperties) {
+                builder.append(property.toString());
             }
         }
-        if (sb.charAt(sb.length() - 1) == ';') {
-            sb.deleteCharAt(sb.length() - 1);
+
+        if (builder.charAt(builder.length() - 1) == ';') {
+            builder.deleteCharAt(builder.length() - 1);
         }
-        sb.append('}');
-        return sb.toString();
+
+        builder.append('}');
+        return builder.toString();
     }
 
     /**
      * Parses out the properties of a selector's body.
      *
-     * @param contents The body; for example, "border: solid 1px red; color: blue;"
+     * @param aContents The body; for example, "border: solid 1px red; color: blue;"
      * @return An array of properties parsed from this selector.
      */
     @SuppressWarnings({PMD.COGNITIVE_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY})
-    private ArrayList<Property> parseProperties(final String contents) {
+    private ArrayList<Property> parseProperties(final String aContents) {
         final ArrayList<String> parts = new ArrayList<>();
-        boolean bInsideString = false, bInsideURL = false;
+
+        boolean bInsideString = false;
+        boolean bInsideURL = false;
         int j = 0;
         String substr;
-        for (int i = 0; i < contents.length(); i++) {
+
+        for (int index = 0; index < aContents.length(); index++) {
             if (bInsideString) { // If we're inside a string
-                bInsideString = !(contents.charAt(i) == '"');
+                bInsideString = aContents.charAt(index) != '"';
             } else if (bInsideURL) { // If we're inside a URL
-                bInsideURL = !(contents.charAt(i) == ')');
-            } else if (contents.charAt(i) == '"') {
+                bInsideURL = aContents.charAt(index) != ')';
+            } else if (aContents.charAt(index) == '"') {
                 bInsideString = true;
-            } else if (contents.charAt(i) == '(') {
-                if ((i - 3) > 0 && "url".equals(contents.substring(i - 3, i))) {
+            } else if (aContents.charAt(index) == '(') {
+                if ((index - 3) > 0 && "url".equals(aContents.substring(index - 3, index))) {
                     bInsideURL = true;
                 }
-            } else if (contents.charAt(i) == ';') {
-                substr = contents.substring(j, i);
-                if (!"".equals(substr.trim())) {
+            } else if (aContents.charAt(index) == ';') {
+                substr = aContents.substring(j, index);
+
+                if (!EMPTY.equals(substr.trim())) {
                     parts.add(substr);
                 }
-                j = i + 1;
+
+                j = index + 1;
             }
         }
-        substr = contents.substring(j, contents.length());
-        if (!"".equals(substr.trim())) {
+
+        substr = aContents.substring(j, aContents.length());
+
+        if (!EMPTY.equals(substr.trim())) {
             parts.add(substr);
         }
 
@@ -328,7 +343,7 @@ class Selector {
             try {
                 results.add(new Property(part));
             } catch (IncompletePropertyException ipex) {
-                LOG.warning("Incomplete property in selector \"" + this.selector + "\": \"" + ipex.getMessage() + "\"");
+                LOGGER.warn("Incomplete property in selector \"" + mySelector + "\": \"" + ipex.getMessage() + "\"");
             }
         }
 
@@ -336,11 +351,11 @@ class Selector {
     }
 
     /**
-     * Sorts the properties array to enhance gzipping.
+     * Sorts the properties array to enhance gzip'ing.
      *
-     * @param properties The array to be sorted.
+     * @param properties The array to be sorted
      */
-    private void sortProperties(final Property[] properties) {
+    private void sortProperties(final Property... properties) {
         Arrays.sort(properties);
     }
 }
@@ -352,63 +367,68 @@ class Selector {
 class Property implements Comparable<Property> {
 
     /** Logger instance for Property. */
-    private static final Logger LOG = Logger.getLogger(Property.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(Property.class, MessageCodes.BUNDLE);
 
     /** The property name. */
-    private String property;
+    private final String myProperty;
 
     /** The parts comprising the property value. */
-    private Part[] parts;
+    private final Part[] myParts;
 
     /**
      * Creates a new Property using the supplied strings. Parses out the values of the property selector.
      *
-     * @param property The property; for example, "border: solid 1px red;" or "-moz-box-shadow: 3px 3px 3px rgba(255,
-     *   255, 0, 0.5);".
-     * @throws IncompletePropertyException If the property is incomplete and cannot be parsed.
+     * @param aProperty The property; for example, "border: solid 1px red;" or "-moz-box-shadow: 3px 3px 3px rgba(255,
+     *   255, 0, 0.5);"
+     * @throws IncompletePropertyException If the property is incomplete and cannot be parsed
      */
-    @SuppressWarnings({PMD.COGNITIVE_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY})
-    Property(final String property) throws IncompletePropertyException {
+    @SuppressWarnings({PMD.COGNITIVE_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY, PMD.AVOID_THROWING_RAW_EXCEPTION_TYPES})
+    Property(final String aProperty) throws IncompletePropertyException {
         try {
-            // Parse the property.
             final ArrayList<String> parts = new ArrayList<>();
+
             boolean bCanSplit = true;
             int j = 0;
             String substr;
-            if (CSSMin.debugLogging) {
-                LOG.info("\t\tExamining property: " + property);
-            }
-            for (int i = 0; i < property.length(); i++) {
+
+            LOGGER.debug("\t\tExamining property: " + aProperty);
+
+            for (int index = 0; index < aProperty.length(); index++) {
                 if (!bCanSplit) { // If we're inside a string
-                    bCanSplit = property.charAt(i) == '"';
-                } else if (property.charAt(i) == '"') {
+                    bCanSplit = aProperty.charAt(index) == '"';
+                } else if (aProperty.charAt(index) == '"') {
                     bCanSplit = false;
-                } else if (property.charAt(i) == ':' && parts.isEmpty()) {
-                    substr = property.substring(j, i);
-                    if (!"".equals(substr.trim())) {
+                } else if (aProperty.charAt(index) == ':' && parts.isEmpty()) {
+                    substr = aProperty.substring(j, index);
+
+                    if (!EMPTY.equals(substr.trim())) {
                         parts.add(substr);
                     }
-                    j = i + 1;
+
+                    j = index + 1;
                 }
             }
-            substr = property.substring(j, property.length());
-            if (!"".equals(substr.trim())) {
+
+            substr = aProperty.substring(j, aProperty.length());
+
+            if (!EMPTY.equals(substr.trim())) {
                 parts.add(substr);
             }
+
             if (parts.size() < 2) {
-                throw new IncompletePropertyException(property);
+                throw new IncompletePropertyException(aProperty);
             }
 
-            String prop = parts.get(0).trim();
-            if (!(prop.length() > 2 && "--".equals(prop.substring(0, 2)))) {
-                prop = prop.toLowerCase(Locale.US);
+            String property = parts.getFirst().trim();
+
+            if (!(property.length() > 2 && "--".equals(property.substring(0, 2)))) {
+                property = property.toLowerCase(Locale.US);
             }
-            this.property = prop;
 
-            this.parts = parseValues(simplifyColours(parts.get(1).trim().replaceAll(", ", ",")));
-
-        } catch (PatternSyntaxException e) {
-            // Invalid regular expression used.
+            myProperty = property;
+            myParts = parseValues(simplifyColours(parts.get(1).trim().replace(", ", COMMA)));
+        } catch (PatternSyntaxException details) {
+            throw new RuntimeException(details);
         }
     }
 
@@ -419,106 +439,140 @@ class Property implements Comparable<Property> {
      */
     @SuppressWarnings({PMD.MISSING_OVERRIDE})
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append(this.property).append(':');
-        for (final Part p : this.parts) {
-            sb.append(p.toString()).append(',');
+        final StringBuilder builder = new StringBuilder().append(myProperty).append(':');
+
+        for (final Part part : myParts) {
+            builder.append(part.toString()).append(',');
         }
-        sb.deleteCharAt(sb.length() - 1); // Delete the trailing comma.
-        sb.append(';');
-        if (CSSMin.debugLogging) {
-            LOG.info(sb.toString());
-        }
-        return sb.toString();
+
+        builder.deleteCharAt(builder.length() - 1); // Delete the trailing comma.
+        builder.append(';');
+
+        LOGGER.debug(builder.toString());
+
+        return builder.toString();
     }
 
     /**
      * Compare this property with another.
      *
-     * @param other The other Property to compare to
+     * @param aProperty The other Property to compare to
      * @return A negative integer, zero, or a positive integer as this property is less than, equal to, or greater than
      *   the specified property
      */
     @SuppressWarnings({PMD.MISSING_OVERRIDE})
-    public int compareTo(final Property other) {
+    public int compareTo(final Property aProperty) {
         // We can't just use String.compareTo(), because we need to sort properties that have hack prefixes last --
         // eg, *display should come after display.
-        return sort(this.property).compareTo(sort(other.property));
+        return sort(myProperty).compareTo(sort(aProperty.myProperty));
+    }
+
+    /**
+     * Compares this property with another object by its minified declaration.
+     *
+     * @param aObject The object to compare
+     * @return true if both properties have the same minified declaration
+     */
+    @Override
+    public boolean equals(final Object aObject) {
+        if (this == aObject) {
+            return true;
+        }
+
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        final Property property = (Property) aObject;
+        return toString().equals(property.toString());
+    }
+
+    /**
+     * Returns a hash code based on this property's minified declaration.
+     *
+     * @return The property's hash code
+     */
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
     }
 
     /**
      * Normalizes a property name for sorting purposes.
      *
-     * @param thisProp The property name to normalize
+     * @param aProperty The property name to normalize
      * @return The normalized property name for sorting
      */
-    private String sort(final String thisProp) {
-        String prop = thisProp;
-        if (prop.charAt(0) == '-') {
-            prop = prop.substring(1);
-            prop = prop.substring(prop.indexOf('-') + 1);
-        } else if (prop.charAt(0) < 65) {
-            prop = prop.substring(1);
+    private String sort(final String aProperty) {
+        String property = aProperty;
+
+        if (property.charAt(0) == '-') {
+            property = property.substring(1);
+            property = property.substring(property.indexOf('-') + 1);
+        } else if (property.charAt(0) < 65) {
+            property = property.substring(1);
         }
-        return prop;
+
+        return property;
     }
 
     /**
      * Parse the values out of a property.
      *
-     * @param contents The property to parse
-     * @return An array of Parts
+     * @param aContents The contents to parse
+     * @return An array of successfully parsed Parts
      */
-    private Part[] parseValues(final String contents) {
-        final String[] parts = contents.split(",");
-        final Part[] results = new Part[parts.length];
+    private Part[] parseValues(final String aContents) {
+        final String[] parts = aContents.split(COMMA);
+        final List<Part> results = new ArrayList<>(parts.length);
 
-        for (int i = 0; i < parts.length; i++) {
+        for (final String part : parts) {
             try {
-                results[i] = new Part(parts[i], property);
-            } catch (Exception e) {
-                LOG.warning(e.getMessage());
-                results[i] = null;
+                results.add(new Part(part, myProperty));
+            } catch (@SuppressWarnings(PMD.AVOID_CATCHING_GENERIC_EXCEPTION) final Exception details) {
+                LOGGER.warn(details.getMessage());
             }
         }
 
-        return results;
+        return results.toArray(Part[]::new);
     }
 
     /**
      * Simplifies color representations in property contents.
      *
-     * @param contents The property contents to simplify
+     * @param aContents The property contents to simplify
      * @return The simplified contents
      */
-    private String simplifyColours(final String contents) {
+    private String simplifyColours(final String aContents) {
         // This replacement, although it results in a smaller uncompressed file,
         // actually makes the gzipped file bigger -- people tend to use rgba(0,0,0,0.x)
         // quite a lot, which means that rgba(0,0,0,0) has its first eight or so characters
         // compressed really efficiently; much more so than "transparent".
         //contents = contents.replaceAll("rgba\\(0,0,0,0\\)", "transparent");
 
-        return simplifyRGBColours(contents);
+        return simplifyRGBColours(aContents);
     }
 
     /**
      * Converts rgb(r,g,b) color formats to hex #rrggbb notation.
      *
-     * @param contents The property contents to simplify
+     * @param aContents The property contents to simplify
      * @return The simplified contents with RGB colors converted to hex
      */
-    private String simplifyRGBColours(final String contents) {
+    private String simplifyRGBColours(final String aContents) {
         final StringBuffer newContents = new StringBuffer();
+
         StringBuffer hexColour;
         String[] rgbColours;
         int colourValue;
 
         final Pattern pattern = Pattern.compile("rgb\\s*\\(\\s*([0-9,\\s]+)\\s*\\)");
-        final Matcher matcher = pattern.matcher(contents);
+        final Matcher matcher = pattern.matcher(aContents);
 
         while (matcher.find()) {
-            hexColour = new StringBuffer("#");
-            rgbColours = matcher.group(1).split(",");
+            hexColour = new StringBuffer(HASH);
+            rgbColours = matcher.group(1).split(COMMA);
+
             for (final String rgbColour : rgbColours) {
                 colourValue = Integer.parseInt(rgbColour);
                 if (colourValue < 16) {
@@ -526,8 +580,10 @@ class Property implements Comparable<Property> {
                 }
                 hexColour.append(Integer.toHexString(colourValue));
             }
+
             matcher.appendReplacement(newContents, hexColour.toString());
         }
+
         matcher.appendTail(newContents);
 
         return newContents.toString();
@@ -540,25 +596,24 @@ class Property implements Comparable<Property> {
 @SuppressWarnings(PMD.AVOID_LITERALS_IN_IF_CONDITION)
 class Part {
 
+    /** A regular expression for matching strings. */
+    private static final String STRING_REGEX = "('|\")?(.*?)\\1";
+
     /** The property name to which this part belongs. */
-    private final String property;
+    private final String myProperty;
 
     /** The text content of this part. */
-    private String contents;
+    private String myContents;
 
     /**
      * Create a new property by parsing the given string.
      *
-     * @param contents The string to parse.
-     * @param property The property name to which this part belongs.
-     * @throws Exception If the part cannot be parsed.
+     * @param aContents The string to parse
+     * @param aProperty The property name to which this part belongs
      */
-    Part(final String contents, final String property) throws Exception {
-        // Many of these regular expressions are adapted from those used in the YUI CSS Compressor.
-
-        // For simpler regexes.
-        this.contents = " " + contents;
-        this.property = property;
+    Part(final String aContents, final String aProperty) {
+        myContents = SPACE + aContents;
+        myProperty = aProperty;
 
         simplify();
     }
@@ -569,22 +624,16 @@ class Part {
     private void simplify() {
 
         // !important doesn't need to be spaced
-        this.contents = this.contents.replaceAll(" !important", "!important");
+        myContents = myContents.replaceAll(" !important", "!important");
 
         // Replace 0in, 0cm, etc. with just 0
-        this.contents = this.contents.replaceAll("(\\s)(0)(px|em|%|in|cm|mm|pc|pt|ex)", "$1$2");
+        myContents = myContents.replaceAll("(\\s)(0)(px|em|%|in|cm|mm|pc|pt|ex)", "$1$2");
 
-        this.contents = this.contents.trim();
+        myContents = myContents.trim();
 
         // Simplify multiple zeroes
-        if ("0 0 0 0".equals(this.contents)) {
-            this.contents = "0";
-        }
-        if ("0 0 0".equals(this.contents)) {
-            this.contents = "0";
-        }
-        if ("0 0".equals(this.contents)) {
-            this.contents = "0";
+        if ("0 0".equals(myContents) || "0 0 0".equals(myContents) || "0 0 0 0".equals(myContents)) {
+            myContents = "0";
         }
 
         // Simplify multiple-parameter properties
@@ -605,50 +654,49 @@ class Part {
      * Simplifies multiple parameters (e.g. margin/padding values).
      */
     private void simplifyParameters() {
-        if ("background-size".equals(this.property)) {
+        if ("background-size".equals(myProperty)) {
             return;
         }
 
         final StringBuilder newContents = new StringBuilder();
 
-        String[] params = this.contents.split(" ");
+        String[] params = myContents.split(SPACE);
+
         if (params.length == 4 && params[1].equalsIgnoreCase(params[3])) {
             // We can drop off the fourth item if the second and fourth items match
             // ie turn 3px 0 3px 0 into 3px 0 3px
             params = Arrays.copyOf(params, 3);
         }
         if (params.length == 3 && params[0].equalsIgnoreCase(params[2])) {
-            // We can drop off the third item if the first and third items match
-            // ie turn 3px 0 3px into 3px 0
+            // We can drop off the third item if the first and third items match (i.e., turn 3px 0 3px into 3px 0)
             params = Arrays.copyOf(params, 2);
         }
         if (params.length == 2 && params[0].equalsIgnoreCase(params[1])) {
-            // We can drop off the second item if the first and second items match
-            // ie turn 3px 3px into 3px
+            // We can drop off the second item if the first and second items match (i.e., turn 3px 3px into 3px)
             params = Arrays.copyOf(params, 1);
         }
 
         for (final String param : params) {
             newContents.append(param).append(' ');
         }
-        newContents.deleteCharAt(newContents.length() - 1); // Delete the trailing space
 
-        this.contents = newContents.toString();
+        newContents.deleteCharAt(newContents.length() - 1); // Delete the trailing space
+        myContents = newContents.toString();
     }
 
     /**
      * Simplifies font weight names to numerical values where shorter.
      */
     private void simplifyFontWeights() {
-        if (!"font-weight".equals(this.property)) {
+        if (!"font-weight".equals(this.myProperty)) {
             return;
         }
 
-        final String lcContents = this.contents.toLowerCase(Locale.US);
+        final String lcContents = this.myContents.toLowerCase(Locale.US);
 
         for (int i = 0; i < Constants.FONT_WEIGHT_NAMES.length; i++) {
             if (lcContents.equals(Constants.FONT_WEIGHT_NAMES[i])) {
-                this.contents = Constants.FONT_WEIGHT_VALUES[i];
+                this.myContents = Constants.FONT_WEIGHT_VALUES[i];
                 break;
             }
         }
@@ -658,14 +706,14 @@ class Part {
      * Strips unnecessary quotes from URLs and converts keywords to lowercase.
      */
     private void simplifyQuotesAndCaps() {
-        this.contents = normalizeContents(this.contents, this.property);
+        this.myContents = normalizeContents(this.myContents, this.myProperty);
     }
 
     /**
      * Normalizes contents by stripping quotes from URLs, removing whitespace from var(), and converting keywords to
      * lowercase.
      */
-    private String normalizeContents(String contents, final String property) {
+    private String normalizeContents(final String contents, final String property) {
         if (contents.regionMatches(true, 0, "url(", 0, 4)) {
             return contents.replaceAll("(?i)url\\(('|\")?(.*?)\\1\\)", "url($2)");
         }
@@ -676,9 +724,10 @@ class Part {
 
         if (!contents.contains(" ")) { // or !contents.matches(".*\\s.*")
             if (!"animation-name".equalsIgnoreCase(property)) {
-                contents = contents.toLowerCase(Locale.US);
+                return contents.toLowerCase(Locale.US).replaceAll(STRING_REGEX, "$2");
             }
-            return contents.replaceAll("('|\")?(.*?)\\1", "$2");
+
+            return contents.replaceAll(STRING_REGEX, "$2");
         }
 
         return contents;
@@ -688,18 +737,18 @@ class Part {
      * Replaces HTML color names with hex values where shorter.
      */
     private void simplifyColourNames() {
-        final String lcContents = this.contents.toLowerCase(Locale.US);
+        final String lcContents = myContents.toLowerCase(Locale.US);
 
         for (int index = 0; index < Constants.HTML_COLOR_NAMES.length; index++) {
             if (lcContents.equals(Constants.HTML_COLOR_NAMES[index])) {
                 if (Constants.HTML_COLOR_VALUES[index].length() < Constants.HTML_COLOR_NAMES[index].length()) {
-                    this.contents = Constants.HTML_COLOR_VALUES[index];
+                    myContents = Constants.HTML_COLOR_VALUES[index];
                 }
+
                 break;
-            } else if (lcContents.equals(Constants.HTML_COLOR_VALUES[index])) {
-                if (Constants.HTML_COLOR_NAMES[index].length() < Constants.HTML_COLOR_VALUES[index].length()) {
-                    this.contents = Constants.HTML_COLOR_NAMES[index];
-                }
+            } else if (lcContents.equals(Constants.HTML_COLOR_VALUES[index]) &&
+                       Constants.HTML_COLOR_NAMES[index].length() < Constants.HTML_COLOR_VALUES[index].length()) {
+                myContents = Constants.HTML_COLOR_NAMES[index];
             }
         }
     }
@@ -712,7 +761,7 @@ class Part {
 
         final Pattern pattern = Pattern.compile(
           "#([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])");
-        final Matcher matcher = pattern.matcher(this.contents);
+        final Matcher matcher = pattern.matcher(this.myContents);
 
         while (matcher.find()) {
             if (matcher.group(1).equalsIgnoreCase(matcher.group(2)) && matcher.group(3).equalsIgnoreCase(
@@ -726,7 +775,7 @@ class Part {
         }
         matcher.appendTail(newContents);
 
-        this.contents = newContents.toString();
+        this.myContents = newContents.toString();
     }
 
     /**
@@ -736,7 +785,7 @@ class Part {
      */
     @SuppressWarnings({PMD.MISSING_OVERRIDE})
     public String toString() {
-        return this.contents;
+        return this.myContents;
     }
 }
 

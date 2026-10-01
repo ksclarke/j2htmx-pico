@@ -46,11 +46,11 @@ public final class AttributeInterfaceCodeGenerator {
 
         for (final AttrD attr : AttributesList.attributesDescriptive()) {
             final Path path = makePath(attr.attr, absPath);
-            final String interfaceName = interfaceNameFromAttribute(attr.attr) + "<T extends Tag<T>>";
+            final String interfaceName = interfaceNameFromAttribute(attr.attr) + "<T extends AbstractTag<T>>";
             final String interfaceStr = getInterfaceTemplate(
               interfaceName,
               Optional.of("Instance<T>"),
-              Arrays.asList("info.freelibrary.j2htmx.pico.tags.Tag", "info.freelibrary.j2htmx.pico.tags.Instance"),
+              Arrays.asList("info.freelibrary.j2htmx.pico.tags.AbstractTag", "info.freelibrary.j2htmx.pico.tags.Instance"),
               interfaceNameFromAttribute(attr.attr),
               attr
             );
@@ -101,7 +101,7 @@ public final class AttributeInterfaceCodeGenerator {
         final String paramName = "a" + interfaceNameSimple;
 
         //depending on if the attribute has an argument or not,
-        //generate methods according to the convention in Tag.java
+        //generate methods according to the convention in AbstractTag.java
         // arg -> with$ATTR(arg), withCond$ATTR(condition, arg)
         // no arg -> has$ATTR(), withCond$ATTR(condition)
 

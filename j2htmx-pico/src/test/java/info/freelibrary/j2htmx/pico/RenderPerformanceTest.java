@@ -17,7 +17,7 @@ import info.freelibrary.j2htmx.pico.model.ButtonModel;
 import info.freelibrary.j2htmx.pico.model.PageModel;
 import info.freelibrary.j2htmx.pico.model.TextTemplate;
 import info.freelibrary.j2htmx.pico.rendering.FlatHtml;
-import info.freelibrary.j2htmx.pico.tags.DomContent;
+import info.freelibrary.j2htmx.pico.tags.AbstractDomContent;
 import org.junit.jupiter.api.Test;
 
 public class RenderPerformanceTest {
@@ -65,7 +65,7 @@ public class RenderPerformanceTest {
                             "World!</p></div></div></div></div></div></div></div></div></div></div></div></div></div" +
                             "></div></div></div></div></div></div></div></div></div></div></div></div></div></body" +
                             "></html>";
-    private final DomContent template;
+    private final AbstractDomContent template;
 
     public RenderPerformanceTest() {
         this.template =
@@ -101,7 +101,7 @@ public class RenderPerformanceTest {
         // @formatter:on
     }
 
-    private DomContent getDomContent(final PageModel pageModel) throws Exception {
+    private AbstractDomContent getDomContent(final PageModel pageModel) throws Exception {
         return
           // @formatter:off
         html(

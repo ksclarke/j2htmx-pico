@@ -58,17 +58,9 @@ public final class SpecializedTagClassCodeGenerator {
 
             final List<String> interfaceNames = getInterfaceNamesForTag(tag);
 
-            final String classString =
-              getClassTemplate(
-                className,
-                Optional.of("EmptyTag<" + className + ">"),
-                Arrays.asList(
-                  "info.freelibrary.j2htmx.pico.tags.EmptyTag",
-                  "info.freelibrary.j2htmx.pico.tags.attributes.*"
-                ),
-                tag,
-                interfaceNames
-              );
+            final String classString = getClassTemplate(className, Optional.of("EmptyTag<" + className + ">"),
+              Arrays.asList("info.freelibrary.j2htmx.pico.tags.EmptyTag",
+                "info.freelibrary.j2htmx.pico.tags.attributes.*"), tag, interfaceNames);
 
             /*
             public InputTag() {
@@ -90,17 +82,9 @@ public final class SpecializedTagClassCodeGenerator {
 
             final List<String> interfaceNames = getInterfaceNamesForTag(tag);
 
-            final String classString =
-              getClassTemplate(
-                className,
-                Optional.of("ContainerTag<" + className + ">"),
-                Arrays.asList(
-                  "info.freelibrary.j2htmx.pico.tags.ContainerTag",
-                  "info.freelibrary.j2htmx.pico.tags.attributes.*"
-                ),
-                tag,
-                interfaceNames
-              );
+            final String classString = getClassTemplate(className, Optional.of("ContainerTag<" + className + ">"),
+              Arrays.asList("info.freelibrary.j2htmx.pico.tags.ContainerTag",
+                "info.freelibrary.j2htmx.pico.tags.attributes.*"), tag, interfaceNames);
 
             if (delete) {
                 if (Files.exists(path)) {
@@ -134,54 +118,48 @@ public final class SpecializedTagClassCodeGenerator {
         return "package info.freelibrary.j2htmx.pico.tags.specialized;\n";
     }
 
-    private static String getClassTemplate(
-      final String className,
-      final Optional<String> optExtends,
-      final List<String> imports,
-      final String tag,
-      final List<String> interfaces
-    ) {
+    @SuppressWarnings(PMD.AVOID_LITERALS_IN_IF_CONDITION)
+    private static String getClassTemplate(final String className, final Optional<String> optExtends,
+      final List<String> imports, final String tag, final List<String> interfaces) {
+        final StringBuilder builder = new StringBuilder(317);
 
-        final StringBuilder sb = new StringBuilder(256);
-
-        sb.append(getPackage()).append('\n');
+        builder.append(getPackage()).append('\n');
 
         for (final String importName : imports) {
-            sb.append("import ").append(importName).append(";\n");
+            builder.append("import ").append(importName).append(";\n");
         }
 
-        sb.append("\n/**\n * Represents a &lt;{@code ")
-          .append(tag)
-          .append("}&gt; tag.\n */\npublic final class ")
-          .append(className)
-          .append(' ');
+        if ("video".equals(tag)) {
+            builder.append("import info.freelibrary.util.warnings.PMD;\n");
+        }
 
-        optExtends.ifPresent(ext -> sb.append("extends ").append(ext).append(' '));
+        builder.append("\n/**\n * Represents a &lt;{@code ").append(tag).append("}&gt; tag.\n */\n");
+
+        if ("video".equals(tag)) {
+            builder.append("@SuppressWarnings(PMD.EXCESSIVE_IMPORTS)\n");
+        }
+
+        builder.append("public final class ").append(className).append(' ');
+
+        optExtends.ifPresent(ext -> builder.append("extends ").append(ext).append(' '));
 
         //add the 'implements' clause
         if (!interfaces.isEmpty()) {
-            final List<String> genericInterfaceNames
-              = interfaces.stream().map(iName -> iName + "<" + className + ">")
+            final List<String> genericInterfaceNames = interfaces.stream().map(iName -> iName + "<" + className + ">")
               .collect(Collectors.toList());
-            sb.append("\nimplements ").append(String.join(",", genericInterfaceNames));
+            builder.append("\nimplements ").append(String.join(",", genericInterfaceNames));
         }
 
         //class contents
-        sb.append(" {\n\n    /**\n     * Constructs a {@code ").append(tag).append("} tag.\n     */\n    public ")
-          .append(className)
-          .append("() {\n        super(\"")
-          .append(tag)
-          .append("\");\n    }\n}\n");
+        builder.append(" {\n\n    /**\n     * Constructs a {@code ").append(tag).append("} tag.\n     */\n    public ")
+          .append(className).append("() {\n        super(\"").append(tag).append("\");\n    }\n}\n");
 
-        return sb.toString();
+        return builder.toString();
     }
 
     private static List<String> getInterfaceNamesForTag(final String tagNameLowercase) {
-        return AttributesList.getCustomAttributesForHtmlTag(tagNameLowercase)
-          .stream()
-          .map(
-            AttributeInterfaceCodeGenerator::interfaceNameFromAttribute
-          ).collect(Collectors.toList());
+        return AttributesList.getCustomAttributesForHtmlTag(tagNameLowercase).stream().map(
+          AttributeInterfaceCodeGenerator::interfaceNameFromAttribute).collect(Collectors.toList());
     }
 
 }

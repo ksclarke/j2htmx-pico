@@ -1,19 +1,23 @@
 package info.freelibrary.j2htmx.pico.tags;
 
+import static info.freelibrary.util.Constants.EMPTY;
+import static info.freelibrary.util.Constants.SPACE;
+
 import info.freelibrary.j2htmx.pico.attributes.Attr;
 import info.freelibrary.j2htmx.pico.attributes.Attribute;
 import info.freelibrary.util.warnings.PMD;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.StringJoiner;
 
 /**
  * Base class for all HTML tags, providing fluent builder methods for global, HTMX, and Pico CSS attributes.
  *
  * @param <T> The concrete tag type implementing this class
  */
-@SuppressWarnings({PMD.CYCLOMATIC_COMPLEXITY})
-public abstract class Tag<T extends Tag<T>> extends DomContent implements Instance<T> {
+@SuppressWarnings({PMD.CYCLOMATIC_COMPLEXITY, PMD.EXCESSIVE_PUBLIC_COUNT, PMD.TOO_MANY_METHODS, PMD.GOD_CLASS})
+public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomContent implements Instance<T> {
 
     /** The HTML tag name. */
     private final String myTagName;
@@ -22,12 +26,12 @@ public abstract class Tag<T extends Tag<T>> extends DomContent implements Instan
     private final ArrayList<Attribute> myAttributes;
 
     /**
-     * Constructs a Tag with the specified tag name.
+     * Constructs a AbstractTag with the specified tag name.
      *
-     * @param aTagname The HTML tag name
+     * @param aTagName The HTML tag name
      */
-    protected Tag(final String aTagname) {
-        myTagName = aTagname;
+    protected AbstractTag(final String aTagName) {
+        myTagName = aTagName;
         myAttributes = new ArrayList<>();
     }
 
@@ -91,7 +95,7 @@ public abstract class Tag<T extends Tag<T>> extends DomContent implements Instan
     }
 
     /**
-     * Adds the specified attribute. If the Tag previously contained an attribute with the same name, the old attribute
+     * Adds the specified attribute. If the AbstractTag previously contained an attribute with the same name, the old attribute
      * is replaced by the specified attribute.
      *
      * @param attribute the attribute
@@ -118,7 +122,7 @@ public abstract class Tag<T extends Tag<T>> extends DomContent implements Instan
      *
      * @param attribute the attribute name
      * @return itself for easy chaining
-     * @see Tag#attr(String, Object)
+     * @see AbstractTag#attr(String, Object)
      */
     public T attr(final String attribute) {
         return attr(attribute, null);
@@ -138,10 +142,18 @@ public abstract class Tag<T extends Tag<T>> extends DomContent implements Instan
 
     @Override
     public boolean equals(final Object obj) {
-        if (!(obj instanceof Tag)) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof AbstractTag<?> other)) {
             return false;
         }
-        return ((Tag<?>) obj).render().equals(this.render());
+        return render().equals(other.render());
+    }
+
+    @Override
+    public int hashCode() {
+        return render().hashCode();
     }
 
     /**
@@ -151,15 +163,19 @@ public abstract class Tag<T extends Tag<T>> extends DomContent implements Instan
      * @return itself for easy chaining
      */
     public T withClasses(final String... classes) {
-        final StringBuilder sb = new StringBuilder();
-        for (final String s : classes) {
-            sb.append(s != null ? s : "").append(" ");
+        final StringJoiner joiner = new StringJoiner(SPACE);
+
+        for (final String className : classes) {
+            if (className != null && !className.isBlank()) {
+                joiner.add(className.trim());
+            }
         }
-        return attr(Attr.CLASS, sb.toString().trim());
+
+        return attr(Attr.CLASS, joiner.toString());
     }
 
     /*
-    Tag.java contains all Global Attributes, Attributes which are
+    AbstractTag.java contains all Global Attributes, Attributes which are
     valid on all HTML Tags. Reference:
     https://www.w3schools.com/tags/ref_standardattributes.asp
     Attributes:
@@ -206,7 +222,7 @@ public abstract class Tag<T extends Tag<T>> extends DomContent implements Instan
      * @return Itself for easy chaining
      */
     public T isContenteditable() {
-        return attr(Attr.CONTENTEDITABLE, "true");
+        return attr(Attr.CONTENTEDITABLE, Boolean.TRUE.toString());
     }
 
     /**
@@ -236,7 +252,7 @@ public abstract class Tag<T extends Tag<T>> extends DomContent implements Instan
      * @return Itself for easy chaining
      */
     public T isDraggable() {
-        return attr(Attr.DRAGGABLE, "true");
+        return attr(Attr.DRAGGABLE, Boolean.TRUE.toString());
     }
 
     /**
@@ -294,7 +310,7 @@ public abstract class Tag<T extends Tag<T>> extends DomContent implements Instan
      * @return Itself for easy chaining
      */
     public T isSpellcheck() {
-        return attr(Attr.SPELLCHECK, "true");
+        return attr(Attr.SPELLCHECK, Boolean.TRUE.toString());
     }
 
     /**
@@ -786,7 +802,7 @@ public abstract class Tag<T extends Tag<T>> extends DomContent implements Instan
      * @return Itself for easy chaining
      */
     public T isAriaBusy() {
-        return attr(Attr.ARIA_BUSY, "true");
+        return attr(Attr.ARIA_BUSY, Boolean.TRUE.toString());
     }
 
     /**
@@ -825,7 +841,7 @@ public abstract class Tag<T extends Tag<T>> extends DomContent implements Instan
      * @return Itself for easy chaining
      */
     public T isAriaInvalid() {
-        return attr(Attr.ARIA_INVALID, "true");
+        return attr(Attr.ARIA_INVALID, Boolean.TRUE.toString());
     }
 
     /**
@@ -896,7 +912,7 @@ public abstract class Tag<T extends Tag<T>> extends DomContent implements Instan
      * @return Itself for easy chaining
      */
     public T withCondContenteditable(final boolean condition) {
-        return attr(Attr.CONTENTEDITABLE, condition ? "true" : "false");
+        return attr(Attr.CONTENTEDITABLE, condition ? Boolean.TRUE.toString() : "false");
     }
 
     /**
@@ -929,7 +945,7 @@ public abstract class Tag<T extends Tag<T>> extends DomContent implements Instan
      * @return Itself for easy chaining
      */
     public T withCondDraggable(final boolean condition) {
-        return attr(Attr.DRAGGABLE, condition ? "true" : "false");
+        return attr(Attr.DRAGGABLE, condition ? Boolean.TRUE.toString() : "false");
     }
 
     /**
@@ -993,7 +1009,7 @@ public abstract class Tag<T extends Tag<T>> extends DomContent implements Instan
      * @return Itself for easy chaining
      */
     public T withCondSpellcheck(final boolean condition) {
-        return attr(Attr.SPELLCHECK, condition ? "true" : "false");
+        return attr(Attr.SPELLCHECK, condition ? Boolean.TRUE.toString() : "false");
     }
 
     /**
@@ -1015,7 +1031,7 @@ public abstract class Tag<T extends Tag<T>> extends DomContent implements Instan
      * @return Itself for easy chaining
      */
     public T withCondTabindex(final boolean condition, final int index) {
-        return condAttr(condition, Attr.TABINDEX, index + "");
+        return condAttr(condition, Attr.TABINDEX, index + EMPTY);
     }
 
     /**
@@ -1532,7 +1548,7 @@ public abstract class Tag<T extends Tag<T>> extends DomContent implements Instan
      * @return Itself for easy chaining
      */
     public T withCondAriaBusy(final boolean condition) {
-        return condAttr(condition, Attr.ARIA_BUSY, "true");
+        return condAttr(condition, Attr.ARIA_BUSY, Boolean.TRUE.toString());
     }
 
     /**
@@ -1553,7 +1569,7 @@ public abstract class Tag<T extends Tag<T>> extends DomContent implements Instan
      * @return Itself for easy chaining
      */
     public T withCondAriaInvalid(final boolean condition) {
-        return condAttr(condition, Attr.ARIA_INVALID, "true");
+        return condAttr(condition, Attr.ARIA_INVALID, Boolean.TRUE.toString());
     }
 
     /**

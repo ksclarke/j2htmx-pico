@@ -7,24 +7,23 @@ import java.io.IOException;
 /**
  * Represents escaped text content within the DOM.
  */
-public class Text extends DomContent {
+public class Text extends AbstractDomContent {
 
     /** The raw text content. */
-    private final String text;
+    private final String myText;
 
     /**
      * Constructs a Text element with the given text content.
      *
-     * @param text The text content to be escaped when rendered
+     * @param aText The text content to be escaped when rendered
      */
-    public Text(final String text) {
-        this.text = text;
+    public Text(final String aText) {
+        myText = aText;
     }
 
     @Override
-    public <T extends Appendable> T render(final HtmlBuilder<T> builder, final Object model) throws IOException {
-        builder.appendEscapedText(String.valueOf(text));
-        return builder.output();
+    public <T extends Appendable> T render(final HtmlBuilder<T> aHtmlBuilder, final Object aModel) throws IOException {
+        aHtmlBuilder.appendEscapedText(String.valueOf(myText));
+        return aHtmlBuilder.output();
     }
-
 }

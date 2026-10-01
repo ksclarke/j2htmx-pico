@@ -7,31 +7,33 @@ import java.io.IOException;
 /**
  * Represents raw, unescaped text content within the DOM.
  */
-public class UnescapedText extends DomContent {
+public class UnescapedText extends AbstractDomContent {
 
     /** The raw unescaped text content. */
-    private final String text;
+    private final String myText;
 
     /**
      * Constructs an UnescapedText element with the given raw text.
      *
-     * @param text The unescaped text content
+     * @param aText The unescaped text content
      */
-    public UnescapedText(final String text) {
-        this.text = text;
+    public UnescapedText(final String aText) {
+        myText = aText;
     }
 
     @Override
-    public <T extends Appendable> T render(final HtmlBuilder<T> builder, final Object model) throws IOException {
-        builder.appendUnescapedText(String.valueOf(text));
-        return builder.output();
+    public <T extends Appendable> T render(final HtmlBuilder<T> aHtmlBuilder, final Object aModel) throws IOException {
+        aHtmlBuilder.appendUnescapedText(String.valueOf(myText));
+        return aHtmlBuilder.output();
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (obj == null || !(obj instanceof UnescapedText)) {
-            return false;
-        }
-        return ((UnescapedText) obj).render().equals(this.render());
+    public boolean equals(final Object aObject) {
+        return aObject instanceof UnescapedText other && other.render().equals(render());
+    }
+
+    @Override
+    public int hashCode() {
+        return render().hashCode();
     }
 }

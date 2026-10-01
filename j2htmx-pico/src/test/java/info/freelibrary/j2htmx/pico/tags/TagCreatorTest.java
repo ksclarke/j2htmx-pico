@@ -104,7 +104,7 @@ public class TagCreatorTest {
           rawHtml(employees.stream().map(employee -> li(
             h2(employee.name),
             p(employee.title)
-          )).map(DomContent::render).collect(Collectors.joining()))
+          )).map(AbstractDomContent::render).collect(Collectors.joining()))
         ).render();
         assertThat(j2htmlMap, is(
           "<ul><li>Begin list</li><li><h2>Name 1</h2><p>Title 1</p></li><li><h2>Name 2</h2><p>Title " +
@@ -162,7 +162,7 @@ public class TagCreatorTest {
           rawHtml(employees.stream().filter(e -> e.id % 2 == 1).map(employee -> li(
             h2(employee.name),
             p(employee.title)
-          )).map(DomContent::render).collect(Collectors.joining()))
+          )).map(AbstractDomContent::render).collect(Collectors.joining()))
         ).render();
         assertThat(j2htmlFilter, is(
           "<ul><li>Begin list</li><li><h2>Name 1</h2><p>Title 1</p></li><li><h2>Name 3</h2><p>Title 3</p></li></ul>"));

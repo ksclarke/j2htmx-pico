@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.FileWriter;
 
-public class TagTest {
+public class AbstractTagTest {
 
     @BeforeEach
     public void setUp() {
@@ -42,7 +42,7 @@ public class TagTest {
 
     @Test
     public void unnamed_containers_do_not_render_tags_or_attributes() {
-        final Tag<?> tag = new ContainerTag<>(null).attr("xyz", "123");
+        final AbstractTag<?> tag = new ContainerTag<>(null).attr("xyz", "123");
         assertThat(tag.render(), is(""));
     }
 
@@ -57,13 +57,13 @@ public class TagTest {
 
     @Test
     public void named_containers_without_children_only_render_tags_and_attributes() {
-        final Tag<?> tag = new ContainerTag<>("abc").attr("xyz", "123");
+        final AbstractTag<?> tag = new ContainerTag<>("abc").attr("xyz", "123");
         assertThat(tag.render(), is("<abc xyz=\"123\"></abc>"));
     }
 
     @Test
     public void populated_named_containers_render_tags_attributes_and_children() {
-        final Tag<?> tag = new ContainerTag<>("abc")
+        final AbstractTag<?> tag = new ContainerTag<>("abc")
           .with(new EmptyTag<>("def"))
           .with(new ContainerTag<>("ghi"))
           .withText("jkl")
@@ -99,13 +99,13 @@ public class TagTest {
 
     @Test
     public void attributes_are_rendered_in_the_order_that_they_are_defined() {
-        final Tag<?> container = new ContainerTag<>("abc")
+        final AbstractTag<?> container = new ContainerTag<>("abc")
           .attr("a", "A")
           .attr(new Attribute("b", "B"))
           .attr("c");
         assertThat(container.render(), is("<abc a=\"A\" b=\"B\" c></abc>"));
 
-        final Tag<?> tag = new EmptyTag<>("abc")
+        final AbstractTag<?> tag = new EmptyTag<>("abc")
           .attr("c")
           .attr(new Attribute("b", "B"))
           .attr("a", "A");
@@ -137,20 +137,20 @@ public class TagTest {
 
     @Test
     public void testEquals() throws Exception {
-        final Tag<?> tagOne = tag("p").withText("Test").withClass("class");
-        final Tag<?> tagTwo = p("Test").withClass("class");
+        final AbstractTag<?> tagOne = tag("p").withText("Test").withClass("class");
+        final AbstractTag<?> tagTwo = p("Test").withClass("class");
         assertThat(tagOne.equals(tagTwo), is(true));
     }
 
     @Test
     public void attribute_values_are_converted_to_strings() throws Exception {
-        final Tag<?> container = new ContainerTag<>("abc")
+        final AbstractTag<?> container = new ContainerTag<>("abc")
           .attr("string", "value1")
           .attr("integer", 2)
           .attr("none", null);
         assertThat(container.render(), is("<abc string=\"value1\" integer=\"2\" none></abc>"));
 
-        final Tag<?> tag = new EmptyTag<>("abc")
+        final AbstractTag<?> tag = new EmptyTag<>("abc")
           .attr("string", "value1")
           .attr("integer", 2)
           .attr("none", null);
@@ -166,22 +166,22 @@ public class TagTest {
 
     @Test
     public void testEmptyAttribute() throws Exception {
-        final Tag<?> testTagWithAttrValueNull = new ContainerTag<>("a").attr("attribute", null);
+        final AbstractTag<?> testTagWithAttrValueNull = new ContainerTag<>("a").attr("attribute", null);
         assertThat(testTagWithAttrValueNull.render(), is("<a attribute></a>"));
 
-        final Tag<?> testTagAttrWithoutAttr = new ContainerTag<>("a").attr("attribute");
+        final AbstractTag<?> testTagAttrWithoutAttr = new ContainerTag<>("a").attr("attribute");
         assertThat(testTagAttrWithoutAttr.render(), is("<a attribute></a>"));
     }
 
     @Test
     public void testDynamicAttribute() throws Exception {
-        final Tag<?> testTagWithAttrValueNull = new ContainerTag<>("a").attr(new DynamicHrefAttribute());
+        final AbstractTag<?> testTagWithAttrValueNull = new ContainerTag<>("a").attr(new DynamicHrefAttribute());
         assertThat(testTagWithAttrValueNull.render(), is("<a href=\"/\"></a>"));
     }
 
     @Test
     public void testDynamicAttributeReplacement() throws Exception {
-        final Tag<?> testTagWithAttrValueNull = new ContainerTag<>("a").attr("href", "/link").attr(
+        final AbstractTag<?> testTagWithAttrValueNull = new ContainerTag<>("a").attr("href", "/link").attr(
           new DynamicHrefAttribute());
         assertThat(testTagWithAttrValueNull.render(), is("<a href=\"/\"></a>"));
     }

@@ -6,7 +6,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import info.freelibrary.j2htmx.pico.attributes.Attribute;
-import info.freelibrary.j2htmx.pico.tags.DomContent;
+import info.freelibrary.j2htmx.pico.tags.AbstractDomContent;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -15,13 +15,13 @@ public class RenderingCompatabilityTest {
 
     @Test
     public void client_classes_which_implement_dom_rendering_continue_to_work_with_html_builder() throws IOException {
-        final DomContent dom = div(
-          new DomContent() {
+        final AbstractDomContent dom = div(
+          new AbstractDomContent() {
               @Override
-              public <T extends Appendable> T render(final HtmlBuilder<T> writer, final Object model)
+              public <T extends Appendable> T render(final HtmlBuilder<T> aHtmlBuilder, final Object model)
                 throws IOException {
-                  writer.appendEscapedText(String.valueOf(model));
-                  return writer.output();
+                  aHtmlBuilder.appendEscapedText(String.valueOf(model));
+                  return aHtmlBuilder.output();
               }
           }
         );
