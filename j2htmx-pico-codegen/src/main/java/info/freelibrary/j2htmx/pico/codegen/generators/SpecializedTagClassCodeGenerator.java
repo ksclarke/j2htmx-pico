@@ -118,7 +118,6 @@ public final class SpecializedTagClassCodeGenerator {
         return "package info.freelibrary.j2htmx.pico.tags.specialized;\n";
     }
 
-    @SuppressWarnings(PMD.AVOID_LITERALS_IN_IF_CONDITION)
     private static String getClassTemplate(final String className, final Optional<String> optExtends,
       final List<String> imports, final String tag, final List<String> interfaces) {
         final StringBuilder builder = new StringBuilder(317);
@@ -129,18 +128,8 @@ public final class SpecializedTagClassCodeGenerator {
             builder.append("import ").append(importName).append(";\n");
         }
 
-        if ("video".equals(tag)) {
-            builder.append("import info.freelibrary.util.warnings.PMD;\n");
-        }
-
-        builder.append("\n/**\n * Represents a &lt;{@code ").append(tag).append("}&gt; tag.\n */\n");
-
-        if ("video".equals(tag)) {
-            builder.append("@SuppressWarnings(PMD.EXCESSIVE_IMPORTS)\n");
-        }
-
-        builder.append("public final class ").append(className).append(' ');
-
+        builder.append("\n/**\n * Represents a &lt;{@code ").append(tag)
+          .append("}&gt; tag.\n */\npublic final class ").append(className).append(' ');
         optExtends.ifPresent(ext -> builder.append("extends ").append(ext).append(' '));
 
         //add the 'implements' clause

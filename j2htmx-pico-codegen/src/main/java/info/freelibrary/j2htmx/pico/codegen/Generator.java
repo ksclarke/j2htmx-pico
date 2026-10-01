@@ -125,6 +125,7 @@ public final class Generator {
         return files;
     }
 
+    @SuppressWarnings(PMD.AVOID_LITERALS_IN_IF_CONDITION)
     private static TypeSpec.Builder defineElementClass(final Node element, final ClassName className) {
         final MethodSpec constructor = MethodSpec.constructorBuilder()
           .addJavadoc("Constructs a {@code $L} tag.\n", element.name)
@@ -132,14 +133,19 @@ public final class Generator {
           .addStatement("super(\"" + element.name + "\")")
           .build();
 
-        return TypeSpec.classBuilder(className)
+        final TypeSpec.Builder type = TypeSpec.classBuilder(className)
           .addJavadoc("Represents a &lt;{@code $L}&gt; tag.\n", element.name)
-          .addAnnotation(AnnotationSpec.builder(SuppressWarnings.class)
-            .addMember("value", "$T.EXCESSIVE_IMPORTS", PMD.class).build())
           .addModifiers(Modifier.PUBLIC)
           .superclass(ParameterizedTypeName.get(
             element.has(SELF_CLOSING) ? ClassName.get(EmptyTag.class) : ClassName.get(ContainerTag.class), className))
           .addMethod(constructor);
+
+        if ("video".equals(element.name)) {
+            type.addAnnotation(AnnotationSpec.builder(SuppressWarnings.class)
+              .addMember("value", "$T.EXCESSIVE_IMPORTS", PMD.class).build());
+        }
+
+        return type;
     }
 
     private static TypeSpec.Builder defineAttributeClass(final String pkg, final Node attribute) {
