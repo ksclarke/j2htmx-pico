@@ -4,10 +4,8 @@ import static info.freelibrary.j2htmx.pico.TagCreator.a;
 import static info.freelibrary.j2htmx.pico.TagCreator.article;
 import static info.freelibrary.j2htmx.pico.TagCreator.body;
 import static info.freelibrary.j2htmx.pico.TagCreator.button;
-import static info.freelibrary.j2htmx.pico.TagCreator.container;
 import static info.freelibrary.j2htmx.pico.TagCreator.div;
 import static info.freelibrary.j2htmx.pico.TagCreator.form;
-import static info.freelibrary.j2htmx.pico.TagCreator.grid;
 import static info.freelibrary.j2htmx.pico.TagCreator.h1;
 import static info.freelibrary.j2htmx.pico.TagCreator.h2;
 import static info.freelibrary.j2htmx.pico.TagCreator.head;
@@ -18,7 +16,6 @@ import static info.freelibrary.j2htmx.pico.TagCreator.input;
 import static info.freelibrary.j2htmx.pico.TagCreator.li;
 import static info.freelibrary.j2htmx.pico.TagCreator.main;
 import static info.freelibrary.j2htmx.pico.TagCreator.p;
-import static info.freelibrary.j2htmx.pico.TagCreator.picoCss;
 import static info.freelibrary.j2htmx.pico.TagCreator.summary;
 import static info.freelibrary.j2htmx.pico.TagCreator.title;
 import static info.freelibrary.j2htmx.pico.TagCreator.ul;
@@ -27,10 +24,30 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
 public class PicoTest {
+
+    @Test
+    public void testPicoCssAliases() {
+        assertEquals("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css\">",
+          Pico.picoCss().render());
+        assertEquals(
+          "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css\">",
+          Pico.picoCss("2.0.6").render());
+        assertEquals(
+          "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.amber.min.css\">",
+          Pico.picoCss("2.0.6", "amber").render());
+        assertEquals(
+          "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.azure.min.css\">",
+          Pico.picoCss(Pico.Color.AZURE).render());
+        assertEquals(
+          "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2.1.0/css/pico.zinc.min.css\">",
+          Pico.picoCss("2.1.0", Pico.Color.ZINC).render());
+        assertThat(Pico.picoInlineCss().render(), containsString("Pico CSS"));
+    }
 
     @Test
     public void testCssLinkDefault() {
@@ -197,14 +214,14 @@ public class PicoTest {
         final String page = html(
           head(
             title("Pico CSS Dashboard"),
-            picoCss()
+            Pico.css()
           ),
           body(
-            container(
+            Pico.container(
               h2("Interactive Form"),
               Pico.card(
                 form(
-                  grid(
+                  Pico.grid(
                     input().withType("text").withName("name").withPlaceholder("Name"),
                     input().withType("email").withName("email").withPlaceholder("Email")
                   ),

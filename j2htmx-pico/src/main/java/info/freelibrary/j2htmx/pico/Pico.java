@@ -17,6 +17,7 @@ import java.util.Locale;
 /**
  * Utility class and helpers for Pico.css v2 integration.
  */
+@SuppressWarnings(PMD.TOO_MANY_METHODS)
 public final class Pico {
 
     /** Standard responsive container class. */
@@ -193,6 +194,66 @@ public final class Pico {
      */
     public static ContainerTag<?> inlineCss() {
         return InlineStaticResource.get(BUNDLED_CSS_PATH, InlineStaticResource.TargetFormat.CSS);
+    }
+
+    /**
+     * Creates a {@code <link>} stylesheet pointing to the default CDN Pico CSS v2.
+     *
+     * @return A LinkTag referencing the Pico CSS stylesheet
+     */
+    public static LinkTag picoCss() {
+        return css();
+    }
+
+    /**
+     * Creates a {@code <link>} stylesheet pointing to the CDN Pico CSS with a specified version.
+     *
+     * @param version The Pico CSS version (e.g., "2", "2.0.6")
+     * @return A LinkTag referencing the versioned Pico CSS stylesheet
+     */
+    public static LinkTag picoCss(final String version) {
+        return css(version);
+    }
+
+    /**
+     * Creates a {@code <link>} stylesheet pointing to the CDN Pico CSS with a specified color scheme.
+     *
+     * @param colorScheme The color scheme palette
+     * @return A LinkTag referencing the themed Pico CSS stylesheet
+     */
+    public static LinkTag picoCss(final Color colorScheme) {
+        return css(colorScheme);
+    }
+
+    /**
+     * Creates a {@code <link>} stylesheet pointing to the CDN Pico CSS with a specified version and color scheme.
+     *
+     * @param version The Pico CSS version
+     * @param colorScheme The color scheme palette
+     * @return A LinkTag referencing the versioned and themed Pico CSS stylesheet
+     */
+    public static LinkTag picoCss(final String version, final Color colorScheme) {
+        return css(version, colorScheme);
+    }
+
+    /**
+     * Creates a {@code <link>} stylesheet pointing to the CDN Pico CSS with a specified version and color scheme name.
+     *
+     * @param version The Pico CSS version
+     * @param colorScheme The color scheme name (e.g., "amber", "zinc")
+     * @return A LinkTag referencing the themed Pico CSS stylesheet
+     */
+    public static LinkTag picoCss(final String version, final String colorScheme) {
+        return css(version, colorScheme);
+    }
+
+    /**
+     * Loads the bundled minified Pico CSS stylesheet from resources as an inline {@code <style>} element.
+     *
+     * @return A ContainerTag containing the inlined CSS
+     */
+    public static ContainerTag<?> picoInlineCss() {
+        return inlineCss();
     }
 
     /**

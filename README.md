@@ -184,22 +184,22 @@ import info.freelibrary.j2htmx.pico.Pico;
 
 // Official Pico v2 CDN link
 
-head(picoCss());
+head(Pico.css());
   // Output: <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
 
   // Specific version or color scheme (e.g. amber, azure, zinc)
-  head(picoCss(Pico.Color.AZURE));
+  head(Pico.css(Pico.Color.AZURE));
   // Output: <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.azure.min.css">
 
   // Bundled inline stylesheet for offline/standalone output
-  head(picoInlineCss());
+  head(Pico.inlineCss());
 // Output: <style>...bundled minified css...</style>
 ```
 
 ### Layout Components, Accessibility, and HTMX Synergy
 
-Pico uses semantic HTML elements, grid layouts, and ARIA attributes for state and interactivity. Helper methods such as
-`container()`, `containerFluid()`, and `grid()` simplify document hierarchy:
+Pico uses semantic HTML elements, grid layouts, and ARIA attributes for state and interactivity. Helper methods in `Pico` such as
+`Pico.container()`, `Pico.containerFluid()`, and `Pico.grid()` simplify document hierarchy:
 
 ```java
 import static info.freelibrary.j2htmx.pico.TagCreator.*;
@@ -209,14 +209,14 @@ import info.freelibrary.j2htmx.pico.Pico;
 String page = html(
   head(
     title("Pico CSS Dashboard"),
-    picoCss()
+    Pico.css()
   ),
   body(
-    container(
+    Pico.container(
       h2("Interactive Form"),
       Pico.card(
         form(
-          grid(
+          Pico.grid(
             input().withType("text").withName("name").withPlaceholder("Name"),
             input().withType("email").withName("email").withPlaceholder("Email")
           ),

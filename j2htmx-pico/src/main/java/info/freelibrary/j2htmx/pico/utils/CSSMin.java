@@ -197,7 +197,7 @@ public final class CSSMin {
 class Selector {
 
     /** Logger instance for Selector. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(Selector.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(Selector.class, MessageCodes.BUNDLE);
 
     /** Array of CSS properties belonging to this selector. */
     private Property[] myProperties;
