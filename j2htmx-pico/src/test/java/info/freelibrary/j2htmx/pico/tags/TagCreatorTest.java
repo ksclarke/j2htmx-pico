@@ -373,4 +373,44 @@ public class TagCreatorTest {
         );
     }
 
+    @Test
+    public void testStyleVarargs() {
+        assertEquals(
+          "<style>body { margin: 0; }\na { color: red; }</style>",
+          style("body { margin: 0; }", "a { color: red; }").render()
+        );
+        assertEquals(
+          "<style id=\"custom-style\">body { margin: 0; }\na { color: red; }</style>",
+          style(attrs("#custom-style"), "body { margin: 0; }", "a { color: red; }").render()
+        );
+        assertEquals(
+          "<style>[data-tooltip], a { text-decoration: none !important; }\na > span { color: blue; }</style>",
+          style("[data-tooltip], a { text-decoration: none !important; }", "a > span { color: blue; }").render()
+        );
+    }
+
+    @Test
+    public void testStyleVarargsSanitization() {
+        assertEquals(
+          "<style>body { margin: 0; }\na { color: red; }</style>",
+          style("  body { margin: 0; }  ", null, "", "   ", "\n  a { color: red; }  \n").render()
+        );
+        assertEquals(
+          "<style>a { color: red; }</style>",
+          style((String) null, "a { color: red; }").render()
+        );
+        assertEquals(
+          "<style>body { margin: 0; }</style>",
+          style("body { margin: 0; }", (String[]) null).render()
+        );
+        assertEquals(
+          "<style></style>",
+          style((String) null).render()
+        );
+        assertEquals(
+          "<style></style>",
+          style("", "", "   ").render()
+        );
+    }
+
 }

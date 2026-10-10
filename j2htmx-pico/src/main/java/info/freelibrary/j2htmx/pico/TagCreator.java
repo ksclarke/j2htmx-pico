@@ -1,5 +1,7 @@
 package info.freelibrary.j2htmx.pico;
 
+import static info.freelibrary.util.Constants.LF;
+
 import info.freelibrary.j2htmx.pico.attributes.Attr;
 import info.freelibrary.j2htmx.pico.tags.AbstractDomContent;
 import info.freelibrary.j2htmx.pico.tags.AbstractTag;
@@ -18,6 +20,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.StringJoiner;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -5497,13 +5500,14 @@ public final class TagCreator {
     }
 
     /**
-     * Creates an HTML {@code <style>} element with the specified text content.
+     * Creates an HTML {@code <style>} element with the specified CSS rules.
      *
-     * @param text The text content
+     * @param text The first CSS rule
+     * @param moreTexts Additional CSS rules
      * @return A StyleTag element
      */
-    public static StyleTag style(final String text) {
-        return new StyleTag().with(new UnescapedText(text));
+    public static StyleTag style(final String text, final String... moreTexts) {
+        return createStyleTag(null, text, moreTexts);
     }
 
     /**
@@ -5527,14 +5531,47 @@ public final class TagCreator {
     }
 
     /**
-     * Creates an HTML {@code <style>} element with the specified attributes and text content.
+     * Creates an HTML {@code <style>} element with the specified attributes and CSS rules.
      *
      * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param text The first CSS rule
+     * @param moreTexts Additional CSS rules
      * @return A StyleTag element
      */
-    public static StyleTag style(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new StyleTag().with(new UnescapedText(text)), shortAttr);
+    public static StyleTag style(final Attr.ShortForm shortAttr, final String text, final String... moreTexts) {
+        return createStyleTag(shortAttr, text, moreTexts);
+    }
+
+    /**
+     * Helper method to create a StyleTag with joined CSS rules.
+     *
+     * @param shortAttr The shorthand attribute containing ID and classes, or null
+     * @param text The first CSS rule
+     * @param moreTexts Additional CSS rules
+     * @return A StyleTag element
+     */
+    private static StyleTag createStyleTag(final Attr.ShortForm shortAttr, final String text,
+            final String... moreTexts) {
+        final StringJoiner joiner = new StringJoiner(LF);
+        final StyleTag style = new StyleTag();
+
+        if (text != null && !text.isBlank()) {
+            joiner.add(text.trim());
+        }
+
+        if (moreTexts != null) {
+            for (final String rule : moreTexts) {
+                if (rule != null && !rule.isBlank()) {
+                    joiner.add(rule.trim());
+                }
+            }
+        }
+
+        if (joiner.length() > 0) {
+            style.with(new UnescapedText(joiner.toString()));
+        }
+
+        return shortAttr != null ? Attr.ShortForm.addTo(style, shortAttr) : style;
     }
 
     /**

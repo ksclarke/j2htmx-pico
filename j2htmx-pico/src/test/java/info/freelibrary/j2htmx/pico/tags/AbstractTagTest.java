@@ -165,6 +165,25 @@ public class AbstractTagTest {
     }
 
     @Test
+    public void testWithStyles() throws Exception {
+        final String expected = "<div style=\"color: red; margin: 10px;\"></div>";
+        final String actual = div().withStyles("color: red", iff(1 == 1, "margin: 10px"), iff(1 == 2, "display: none")).render();
+        assertThat(actual, is(expected));
+
+        final String expectedWithSemicolons = "<div style=\"color: red; margin: 10px;\"></div>";
+        final String actualWithSemicolons = div().withStyles("color: red;", "margin: 10px;").render();
+        assertThat(actualWithSemicolons, is(expectedWithSemicolons));
+
+        final String expectedWithNullAndBlank = "<div style=\"color: red;\"></div>";
+        final String actualWithNullAndBlank = div().withStyles("color: red", null, "", "   ").render();
+        assertThat(actualWithNullAndBlank, is(expectedWithNullAndBlank));
+
+        final String expectedEmpty = "<div style=\"\"></div>";
+        assertThat(div().withStyles().render(), is(expectedEmpty));
+        assertThat(div().withStyles((String[]) null).render(), is(expectedEmpty));
+    }
+
+    @Test
     public void testEmptyAttribute() throws Exception {
         final AbstractTag<?> testTagWithAttrValueNull = new ContainerTag<>("a").attr("attribute", null);
         assertThat(testTagWithAttrValueNull.render(), is("<a attribute></a>"));

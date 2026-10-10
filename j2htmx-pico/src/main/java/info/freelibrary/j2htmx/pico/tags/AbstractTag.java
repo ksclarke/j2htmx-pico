@@ -1,7 +1,6 @@
 package info.freelibrary.j2htmx.pico.tags;
 
-import static info.freelibrary.util.Constants.EMPTY;
-import static info.freelibrary.util.Constants.SPACE;
+import static info.freelibrary.util.Constants.*;
 
 import info.freelibrary.j2htmx.pico.attributes.Attr;
 import info.freelibrary.j2htmx.pico.attributes.Attribute;
@@ -165,13 +164,36 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
     public T withClasses(final String... classes) {
         final StringJoiner joiner = new StringJoiner(SPACE);
 
-        for (final String className : classes) {
-            if (className != null && !className.isBlank()) {
-                joiner.add(className.trim());
+        if (classes != null) {
+            for (final String className : classes) {
+                if (className != null && !className.isBlank()) {
+                    joiner.add(className.trim());
+                }
             }
         }
 
         return attr(Attr.CLASS, joiner.toString());
+    }
+
+    /**
+     * Convenience method that calls attr with predefined attributes.
+     *
+     * @param styles The CSS styles to add
+     * @return Itself for easy chaining
+     */
+    public T withStyles(final String... styles) {
+        final StringJoiner joiner = new StringJoiner(SPACE);
+
+        if (styles != null) {
+            for (final String style : styles) {
+                if (style != null && !style.isBlank()) {
+                    final String trimmed = style.trim();
+                    joiner.add(trimmed.endsWith(SEMICOLON) ? trimmed : trimmed + SEMICOLON);
+                }
+            }
+        }
+
+        return attr(Attr.STYLE, joiner.toString());
     }
 
     /*
