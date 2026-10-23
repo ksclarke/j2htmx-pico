@@ -214,11 +214,212 @@ public final class Attr {
     /** The "multiple" attribute name. */
     public static final String MULTIPLE = "multiple";
 
+    /** The "muted" attribute name. */
+    public static final String MUTED = "muted";
+
     /** The "name" attribute name. */
     public static final String NAME = "name";
 
     /** The "novalidate" attribute name. */
     public static final String NOVALIDATE = "novalidate";
+
+    /** The "onabort" attribute name. */
+    public static final String ONABORT = "onabort";
+
+    /** The "onafterprint" attribute name. */
+    public static final String ONAFTERPRINT = "onafterprint";
+
+    /** The "onbeforeprint" attribute name. */
+    public static final String ONBEFOREPRINT = "onbeforeprint";
+
+    /** The "onbeforeunload" attribute name. */
+    public static final String ONBEFOREUNLOAD = "onbeforeunload";
+
+    /** The "onblur" attribute name. */
+    public static final String ONBLUR = "onblur";
+
+    /** The "oncanplay" attribute name. */
+    public static final String ONCANPLAY = "oncanplay";
+
+    /** The "oncanplaythrough" attribute name. */
+    public static final String ONCANPLAYTHROUGH = "oncanplaythrough";
+
+    /** The "onchange" attribute name. */
+    public static final String ONCHANGE = "onchange";
+
+    /** The "onclick" attribute name. */
+    public static final String ONCLICK = "onclick";
+
+    /** The "oncontextmenu" attribute name. */
+    public static final String ONCONTEXTMENU = "oncontextmenu";
+
+    /** The "oncopy" attribute name. */
+    public static final String ONCOPY = "oncopy";
+
+    /** The "oncuechange" attribute name. */
+    public static final String ONCUECHANGE = "oncuechange";
+
+    /** The "oncut" attribute name. */
+    public static final String ONCUT = "oncut";
+
+    /** The "ondrop" attribute name. */
+    public static final String ONDROP = "ondrop";
+
+    /** The "ondurationchange" attribute name. */
+    public static final String ONDURATIONCHANGE = "ondurationchange";
+
+    /** The "onemptied" attribute name. */
+    public static final String ONEMPTIED = "onemptied";
+
+    /** The "onended" attribute name. */
+    public static final String ONENDED = "onended";
+
+    /** The "onerror" attribute name. */
+    public static final String ONERROR = "onerror";
+
+    /** The "onfocus" attribute name. */
+    public static final String ONFOCUS = "onfocus";
+
+    /** The "onhashchange" attribute name. */
+    public static final String ONHASHCHANGE = "onhashchange";
+
+    /** The "oninput" attribute name. */
+    public static final String ONINPUT = "oninput";
+
+    /** The "oninvalid" attribute name. */
+    public static final String ONINVALID = "oninvalid";
+
+    /** The "onkeydown" attribute name. */
+    public static final String ONKEYDOWN = "onkeydown";
+
+    /** The "onkeypress" attribute name. */
+    public static final String ONKEYPRESS = "onkeypress";
+
+    /** The "onkeyup" attribute name. */
+    public static final String ONKEYUP = "onkeyup";
+
+    /** The "onload" attribute name. */
+    public static final String ONLOAD = "onload";
+
+    /** The "onloadeddata" attribute name. */
+    public static final String ONLOADEDDATA = "onloadeddata";
+
+    /** The "onloadedmetadata" attribute name. */
+    public static final String ONLOADEDMETADATA = "onloadedmetadata";
+
+    /** The "onloadstart" attribute name. */
+    public static final String ONLOADSTART = "onloadstart";
+
+    /** The "onmousedown" attribute name. */
+    public static final String ONMOUSEDOWN = "onmousedown";
+
+    /** The "onmouseenter" attribute name. */
+    public static final String ONMOUSEENTER = "onmouseenter";
+
+    /** The "onmouseleave" attribute name. */
+    public static final String ONMOUSELEAVE = "onmouseleave";
+
+    /** The "onmousemove" attribute name. */
+    public static final String ONMOUSEMOVE = "onmousemove";
+
+    /** The "onmouseout" attribute name. */
+    public static final String ONMOUSEOUT = "onmouseout";
+
+    /** The "onmouseover" attribute name. */
+    public static final String ONMOUSEOVER = "onmouseover";
+
+    /** The "onmouseup" attribute name. */
+    public static final String ONMOUSEUP = "onmouseup";
+
+    /** The "onmousewheel" attribute name. */
+    public static final String ONMOUSEWHEEL = "onmousewheel";
+
+    /** The "onoffline" attribute name. */
+    public static final String ONOFFLINE = "onoffline";
+
+    /** The "ononline" attribute name. */
+    public static final String ONONLINE = "ononline";
+
+    /** The "onpagehide" attribute name. */
+    public static final String ONPAGEHIDE = "onpagehide";
+
+    /** The "onpageshow" attribute name. */
+    public static final String ONPAGESHOW = "onpageshow";
+
+    /** The "onpaste" attribute name. */
+    public static final String ONPASTE = "onpaste";
+
+    /** The "onpause" attribute name. */
+    public static final String ONPAUSE = "onpause";
+
+    /** The "onplay" attribute name. */
+    public static final String ONPLAY = "onplay";
+
+    /** The "onplaying" attribute name. */
+    public static final String ONPLAYING = "onplaying";
+
+    /** The "onpopstate" attribute name. */
+    public static final String ONPOPSTATE = "onpopstate";
+
+    /** The "onprogress" attribute name. */
+    public static final String ONPROGRESS = "onprogress";
+
+    /** The "onratechange" attribute name. */
+    public static final String ONRATECHANGE = "onratechange";
+
+    /** The "onreset" attribute name. */
+    public static final String ONRESET = "onreset";
+
+    /** The "onresize" attribute name. */
+    public static final String ONRESIZE = "onresize";
+
+    /** The "onscroll" attribute name. */
+    public static final String ONSCROLL = "onscroll";
+
+    /** The "onsearch" attribute name. */
+    public static final String ONSEARCH = "onsearch";
+
+    /** The "onseeked" attribute name. */
+    public static final String ONSEEKED = "onseeked";
+
+    /** The "onseeking" attribute name. */
+    public static final String ONSEEKING = "onseeking";
+
+    /** The "onselect" attribute name. */
+    public static final String ONSELECT = "onselect";
+
+    /** The "onstalled" attribute name. */
+    public static final String ONSTALLED = "onstalled";
+
+    /** The "onstorage" attribute name. */
+    public static final String ONSTORAGE = "onstorage";
+
+    /** The "onsubmit" attribute name. */
+    public static final String ONSUBMIT = "onsubmit";
+
+    /** The "onsuspend" attribute name. */
+    public static final String ONSUSPEND = "onsuspend";
+
+    /** The "ontimeupdate" attribute name. */
+    public static final String ONTIMEUPDATE = "ontimeupdate";
+
+    /** The "ontoggle" attribute name. */
+    public static final String ONTOGGLE = "ontoggle";
+
+    /** The "onunload" attribute name. */
+    public static final String ONUNLOAD = "onunload";
+
+    /** The "onvolumechange" attribute name. */
+    public static final String ONVOLUMECHANGE = "onvolumechange";
+
+    /** The "onvolumechanged" attribute name. */
+    public static final String ONVOLUMECHANGED = "onvolumechanged";
+
+    /** The "onwaiting" attribute name. */
+    public static final String ONWAITING = "onwaiting";
+
+    /** The "onwheel" attribute name. */
+    public static final String ONWHEEL = "onwheel";
 
     /** The "open" attribute name. */
     public static final String OPEN = "open";
@@ -489,6 +690,9 @@ public final class Attr {
     /** The "aria-busy" attribute name. */
     public static final String ARIA_BUSY = "aria-busy";
 
+    /** The "aria-hidden" attribute name. */
+    public static final String ARIA_HIDDEN = "aria-hidden";
+
     /** The "aria-invalid" attribute name. */
     public static final String ARIA_INVALID = "aria-invalid";
 
@@ -567,8 +771,8 @@ public final class Attr {
         }
 
         /**
-         * Adds the ID and classes from the specified ShortForm attribute to the given tag, if the attribute is not {@code null}.
-         * If the attribute is {@code null}, the tag is returned unchanged.
+         * Adds the ID and classes from the specified ShortForm attribute to the given tag, if the attribute is not
+         * {@code null}. If the attribute is {@code null}, the tag is returned unchanged.
          *
          * @param <T> the type of the tag
          * @param aTag the tag to which the ID and classes are to be added; must not be null

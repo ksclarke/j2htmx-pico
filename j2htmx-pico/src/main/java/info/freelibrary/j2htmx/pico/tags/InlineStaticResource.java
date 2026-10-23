@@ -72,11 +72,11 @@ public final class InlineStaticResource {
     /**
      * Reads an input stream into a string.
      *
-     * @param inputStream The input stream to read
+     * @param anInputStream The input stream to read
      * @return The string content of the stream
      */
-    private static String streamToString(final InputStream inputStream) {
-        final Scanner scanner = new Scanner(inputStream, StandardCharsets.UTF_8).useDelimiter("\\A");
+    private static String streamToString(final InputStream anInputStream) {
+        final Scanner scanner = new Scanner(anInputStream, StandardCharsets.UTF_8).useDelimiter("\\A");
         return scanner.hasNext() ? scanner.next() : EMPTY;
     }
 

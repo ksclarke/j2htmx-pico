@@ -7,13 +7,20 @@ import info.freelibrary.j2htmx.pico.tags.ContainerTag;
 
 import java.io.IOException;
 
+/**
+ * Button template for testing.
+ */
 public class Button extends Template<PageModel> {
 
-    private final ContainerTag<?> template;
+    /** The container tag template for the button. */
+    private final ContainerTag<?> myTemplate;
 
+    /**
+     * Constructs a Button template.
+     */
     public Button() {
         // @formatter:off
-        template =
+        myTemplate =
                 div()
                 .withClass("button")
                 .with(
@@ -27,17 +34,20 @@ public class Button extends Template<PageModel> {
     }
 
     @Override
-    public <T extends Appendable> void renderTemplate(final HtmlBuilder<T> writer, final PageModel model)
+    public <T extends Appendable> void renderTemplate(final HtmlBuilder<T> aWriter, final PageModel aModel)
       throws IOException {
-        template.render(writer, model.getButtonModel().getText());
+        myTemplate.render(aWriter, aModel.getButtonModel().getText());
     }
 }
 
+/**
+ * Button text template for testing.
+ */
 class ButtonText extends Template<String> {
 
     @Override
-    public <T extends Appendable> void renderTemplate(final HtmlBuilder<T> writer, final String model)
+    public <T extends Appendable> void renderTemplate(final HtmlBuilder<T> aWriter, final String aModel)
       throws IOException {
-        writer.appendEscapedText(model);
+        aWriter.appendEscapedText(aModel);
     }
 }

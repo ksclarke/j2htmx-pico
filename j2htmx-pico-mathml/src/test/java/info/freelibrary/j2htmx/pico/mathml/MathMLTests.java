@@ -34,8 +34,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests for {@link MathML}.
+ */
 public class MathMLTests {
 
+    /**
+     * Tests that all MathML tags render as containers.
+     */
     @Test
     public void all_tags_render_containers() {
         assertEquals("<annotation></annotation>", annotation().render());

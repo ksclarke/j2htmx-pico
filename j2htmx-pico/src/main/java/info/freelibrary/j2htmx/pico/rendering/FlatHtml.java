@@ -2,6 +2,7 @@ package info.freelibrary.j2htmx.pico.rendering;
 
 import info.freelibrary.j2htmx.pico.Config;
 import info.freelibrary.j2htmx.pico.utils.TextEscaper;
+import info.freelibrary.util.warnings.Checkstyle;
 
 import java.io.IOException;
 
@@ -10,51 +11,55 @@ import java.io.IOException;
  *
  * @param <T> The type of the Appendable to which HTML will be appended.
  */
+@SuppressWarnings({Checkstyle.MULTIPLE_STRING_LITERALS, "MultipleStringLiterals"})
 public final class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
 
     /** The Appendable output destination. */
-    private final T out;
+    private final T myOut;
+
     /** The text escaper for escaping text and attribute values. */
-    private final TextEscaper textEscaper;
+    private final TextEscaper myTextEscaper;
+
     /** TagBuilder used for appending attributes to enclosing tags. */
-    private final TagBuilder enclosingElementAttributes;
+    private final TagBuilder myEnclosingElementAttributes;
+
     /** TagBuilder used for appending attributes to empty/void tags. */
-    private final TagBuilder emptyElementAttributes;
+    private final TagBuilder myEmptyElementAttributes;
 
     /**
      * Creates a new FlatHtml builder.
      *
-     * @param out The Appendable to which HTML will be appended
-     * @param config The configuration to use
+     * @param aOut The Appendable to which HTML will be appended
+     * @param aConfig The configuration to use
      */
-    private FlatHtml(final T out, final Config config) {
-        this.out = out;
-        this.textEscaper = config.textEscaper();
-        this.enclosingElementAttributes = new FlatTagBuilder(false);
-        this.emptyElementAttributes = new FlatTagBuilder(config.closeEmptyTags());
+    private FlatHtml(final T aOut, final Config aConfig) {
+        this.myOut = aOut;
+        this.myTextEscaper = aConfig.textEscaper();
+        this.myEnclosingElementAttributes = new FlatTagBuilder(false);
+        this.myEmptyElementAttributes = new FlatTagBuilder(aConfig.closeEmptyTags());
     }
 
     /**
      * Returns an HtmlBuilder that will generate flat HTML using Config defaults.
      *
-     * @param out The Appendable to which HTML will be appended.
+     * @param aOut The Appendable to which HTML will be appended.
      * @param <T> The type of the Appendable to which HTML will be appended.
      * @return An HtmlBuilder for flat HTML.
      */
-    public static <T extends Appendable> FlatHtml<T> into(final T out) {
-        return new FlatHtml<>(out, Config.getDefaults());
+    public static <T extends Appendable> FlatHtml<T> into(final T aOut) {
+        return new FlatHtml<>(aOut, Config.getDefaults());
     }
 
     /**
      * Returns an HtmlBuilder that will generate flat HTML using the given Config.
      *
-     * @param out The Appendable to which HTML will be appended.
-     * @param config The Config which will specify text escapement, tag closing, etc.
+     * @param aOut The Appendable to which HTML will be appended.
+     * @param aConfig The Config which will specify text escapement, tag closing, etc.
      * @param <T> The type of the Appendable to which HTML will be appended.
      * @return An HtmlBuilder for flat HTML.
      */
-    public static <T extends Appendable> FlatHtml<T> into(final T out, final Config config) {
-        return new FlatHtml<>(out, config);
+    public static <T extends Appendable> FlatHtml<T> into(final T aOut, final Config aConfig) {
+        return new FlatHtml<>(aOut, aConfig);
     }
 
     /**
@@ -69,11 +74,11 @@ public final class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
     /**
      * Returns an HtmlBuilder that will generate flat HTML in memory using the given Config.
      *
-     * @param config The Config which will specify text escapement, tag closing, etc.
+     * @param aConfig The Config which will specify text escapement, tag closing, etc.
      * @return An HtmlBuilder for flat HTML.
      */
-    public static FlatHtml<StringBuilder> inMemory(final Config config) {
-        return into(new StringBuilder(), config);
+    public static FlatHtml<StringBuilder> inMemory(final Config aConfig) {
+        return into(new StringBuilder(), aConfig);
     }
 
     /**
@@ -83,36 +88,36 @@ public final class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
      */
     @Override
     public T output() {
-        return out;
+        return myOut;
     }
 
     @Override
-    public TagBuilder appendStartTag(final String name) throws IOException {
-        out.append("<").append(name);
-        return enclosingElementAttributes;
+    public TagBuilder appendStartTag(final String aName) throws IOException {
+        myOut.append("<").append(aName);
+        return myEnclosingElementAttributes;
     }
 
     @Override
-    public HtmlBuilder<T> appendEndTag(final String name) throws IOException {
-        out.append("</").append(name).append(">");
+    public HtmlBuilder<T> appendEndTag(final String aName) throws IOException {
+        myOut.append("</").append(aName).append(">");
         return this;
     }
 
     @Override
-    public TagBuilder appendEmptyTag(final String name) throws IOException {
-        out.append("<").append(name);
-        return emptyElementAttributes;
+    public TagBuilder appendEmptyTag(final String aName) throws IOException {
+        myOut.append("<").append(aName);
+        return myEmptyElementAttributes;
     }
 
     @Override
-    public HtmlBuilder<T> appendEscapedText(final String txt) throws IOException {
-        out.append(textEscaper.escape(txt));
+    public HtmlBuilder<T> appendEscapedText(final String aTxt) throws IOException {
+        myOut.append(myTextEscaper.escape(aTxt));
         return this;
     }
 
     @Override
-    public HtmlBuilder<T> appendUnescapedText(final String txt) throws IOException {
-        out.append(txt);
+    public HtmlBuilder<T> appendUnescapedText(final String aTxt) throws IOException {
+        myOut.append(aTxt);
         return this;
     }
 
@@ -122,39 +127,39 @@ public final class FlatHtml<T extends Appendable> implements HtmlBuilder<T> {
     private final class FlatTagBuilder implements TagBuilder {
 
         /** Whether to append a trailing slash before closing the tag. */
-        private final boolean closeTag;
+        private final boolean isCloseTag;
 
         /**
          * Creates a new FlatTagBuilder.
          *
-         * @param closeTag Whether to close empty tags
+         * @param aCloseTag Whether to close empty tags
          */
-        private FlatTagBuilder(final boolean closeTag) {
-            this.closeTag = closeTag;
+        private FlatTagBuilder(final boolean aCloseTag) {
+            this.isCloseTag = aCloseTag;
         }
 
         @Override
-        public TagBuilder appendAttribute(final String name, final String value) throws IOException {
-            out.append(" ")
-              .append(name)
+        public TagBuilder appendAttribute(final String aName, final String aValue) throws IOException {
+            myOut.append(" ")
+              .append(aName)
               .append("=\"")
-              .append(textEscaper.escape(value))
+              .append(myTextEscaper.escape(aValue))
               .append("\"");
             return this;
         }
 
         @Override
-        public TagBuilder appendBooleanAttribute(final String name) throws IOException {
-            out.append(" ").append(name);
+        public TagBuilder appendBooleanAttribute(final String aName) throws IOException {
+            myOut.append(" ").append(aName);
             return this;
         }
 
         @Override
         public HtmlBuilder<T> completeTag() throws IOException {
-            if (closeTag) {
-                out.append("/");
+            if (isCloseTag) {
+                myOut.append("/");
             }
-            out.append(">");
+            myOut.append(">");
 
             return FlatHtml.this;
         }

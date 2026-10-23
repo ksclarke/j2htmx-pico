@@ -10,10 +10,20 @@ import static info.freelibrary.j2htmx.pico.TagCreator.meta;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import info.freelibrary.util.warnings.Checkstyle;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests for tag convenience methods.
+ */
+@SuppressWarnings({Checkstyle.MULTIPLE_STRING_LITERALS, "MultipleStringLiterals"})
 public class ConvenienceMethodTest {
 
+    /**
+     * Tests all tag convenience methods.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testAllConvenienceMethods() throws Exception {
         assertThat(input().isAutocomplete().render(), is("<input autocomplete=\"on\">"));

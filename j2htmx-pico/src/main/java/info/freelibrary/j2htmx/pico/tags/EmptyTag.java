@@ -19,24 +19,24 @@ public class EmptyTag<T extends EmptyTag<T>> extends AbstractTag<T> {
     /**
      * Constructs an EmptyTag with the given tag name.
      *
-     * @param tagName The HTML tag name
+     * @param aTagName The HTML tag name
      * @throws IllegalArgumentException If the tag name is null or empty
      */
-    public EmptyTag(final String tagName) {
-        super(tagName);
-        if (tagName == null) {
+    public EmptyTag(final String aTagName) {
+        super(aTagName);
+        if (aTagName == null) {
             throw new IllegalArgumentException("Illegal tag name: null");
         }
-        if ("".equals(tagName)) {
+        if ("".equals(aTagName)) {
             throw new IllegalArgumentException("Illegal tag name: \"\"");
         }
     }
 
     @Override
-    public <A extends Appendable> A render(final HtmlBuilder<A> aHtmlBuilder, final Object model) throws IOException {
+    public <A extends Appendable> A render(final HtmlBuilder<A> aHtmlBuilder, final Object aModel) throws IOException {
         final TagBuilder attrs = aHtmlBuilder.appendEmptyTag(getTagName());
         for (final Attribute attr : getAttributes()) {
-            attr.render(attrs, model);
+            attr.render(attrs, aModel);
         }
         attrs.completeTag();
         return aHtmlBuilder.output();

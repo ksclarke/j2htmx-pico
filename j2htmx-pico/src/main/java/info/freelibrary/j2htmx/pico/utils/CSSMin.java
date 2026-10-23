@@ -61,6 +61,7 @@ import static info.freelibrary.util.Constants.SPACE;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.MessageCodes;
+import info.freelibrary.util.warnings.Checkstyle;
 import info.freelibrary.util.warnings.PMD;
 
 import java.io.BufferedReader;
@@ -77,7 +78,7 @@ import java.util.regex.PatternSyntaxException;
 /**
  * CSS minifier that removes unnecessary whitespace and comments, and compresses CSS.
  */
-@SuppressWarnings(PMD.AVOID_LITERALS_IN_IF_CONDITION)
+@SuppressWarnings({PMD.AVOID_LITERALS_IN_IF_CONDITION, Checkstyle.MULTIPLE_STRING_LITERALS, "MultipleStringLiterals"})
 public final class CSSMin {
 
     /** Logger instance for CSSMin. */
@@ -106,7 +107,7 @@ public final class CSSMin {
             int n; // Current position in stream
             String string;
 
-            LOGGER.debug("Reading file into StringBuffer...");
+            LOGGER.debug("Reading file into StringBuilder...");
 
             while ((string = reader.readLine()) != null) {
                 if (EMPTY.equals(string.trim())) {
@@ -211,18 +212,18 @@ class Selector {
     /**
      * Creates a new Selector using the supplied strings.
      *
-     * @param selector The selector; for example, "div { border: solid 1px red; color: blue; }"
+     * @param aSelector The selector; for example, "div { border: solid 1px red; color: blue; }"
      * @throws IncompleteSelectorException If the selector is incomplete and cannot be parsed
      * @throws UnterminatedSelectorException If the selector is not closed with a brace
      * @throws EmptySelectorBodyException If the selector has an empty body
      */
     @SuppressWarnings({PMD.COGNITIVE_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY})
-    Selector(final String selector)
+    Selector(final String aSelector)
     throws IncompleteSelectorException, UnterminatedSelectorException, EmptySelectorBodyException {
-        String[] parts = selector.split("\\{"); // Escape the { with a \ for the regex, which itself requires escaping
+        String[] parts = aSelector.split("\\{"); // Escape the { with a \ for the regex, which itself requires escaping
 
         if (parts.length < 2) {
-            throw new IncompleteSelectorException(selector);
+            throw new IncompleteSelectorException(aSelector);
         }
 
         mySelector = parts[0].trim();
@@ -233,7 +234,7 @@ class Selector {
         // We're dealing with a nested property, eg @-webkit-keyframes
         if (parts.length > 2) {
             mySubSelectors = new ArrayList<>();
-            parts = selector.split("(\\s*\\{\\s*)|(\\s*\\}\\s*)");
+            parts = aSelector.split("(\\s*\\{\\s*)|(\\s*\\}\\s*)");
 
             for (int index = 1; index < parts.length; index += 2) {
                 parts[index] = parts[index].trim();
@@ -250,11 +251,11 @@ class Selector {
             LOGGER.debug("\t" + contents);
 
             if (contents.charAt(contents.length() - 1) != '}') { // Ensure that we have a leading and trailing brace.
-                throw new UnterminatedSelectorException(selector);
+                throw new UnterminatedSelectorException(aSelector);
             }
 
             if (contents.length() == 1) {
-                throw new EmptySelectorBodyException(selector);
+                throw new EmptySelectorBodyException(aSelector);
             }
 
             final int endIndex = contents.endsWith(";}") ? 2 : 1;
@@ -353,10 +354,10 @@ class Selector {
     /**
      * Sorts the properties array to enhance gzip'ing.
      *
-     * @param properties The array to be sorted
+     * @param aProperties The array to be sorted
      */
-    private void sortProperties(final Property... properties) {
-        Arrays.sort(properties);
+    private void sortProperties(final Property... aProperties) {
+        Arrays.sort(aProperties);
     }
 }
 
@@ -379,8 +380,9 @@ class Property implements Comparable<Property> {
      * Creates a new Property using the supplied strings. Parses out the values of the property selector.
      *
      * @param aProperty The property; for example, "border: solid 1px red;" or "-moz-box-shadow: 3px 3px 3px rgba(255,
-     *   255, 0, 0.5);"
+     *     255, 0, 0.5);"
      * @throws IncompletePropertyException If the property is incomplete and cannot be parsed
+     * @throws RuntimeException If an error occurs during parsing
      */
     @SuppressWarnings({PMD.COGNITIVE_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY, PMD.AVOID_THROWING_RAW_EXCEPTION_TYPES})
     Property(final String aProperty) throws IncompletePropertyException {
@@ -458,7 +460,7 @@ class Property implements Comparable<Property> {
      *
      * @param aProperty The other Property to compare to
      * @return A negative integer, zero, or a positive integer as this property is less than, equal to, or greater than
-     *   the specified property
+     *     the specified property
      */
     @SuppressWarnings({PMD.MISSING_OVERRIDE})
     public int compareTo(final Property aProperty) {
@@ -712,25 +714,30 @@ class Part {
     /**
      * Normalizes contents by stripping quotes from URLs, removing whitespace from var(), and converting keywords to
      * lowercase.
+     *
+     * @param aContents The content string to normalize
+     * @param aProperty The property name
+     * @return The normalized content string
      */
-    private String normalizeContents(final String contents, final String property) {
-        if (contents.regionMatches(true, 0, "url(", 0, 4)) {
-            return contents.replaceAll("(?i)url\\(('|\")?(.*?)\\1\\)", "url($2)");
+    @SuppressWarnings({Checkstyle.MULTIPLE_STRING_LITERALS, "MultipleStringLiterals"})
+    private String normalizeContents(final String aContents, final String aProperty) {
+        if (aContents.regionMatches(true, 0, "url(", 0, 4)) {
+            return aContents.replaceAll("(?i)url\\(('|\")?(.*?)\\1\\)", "url($2)");
         }
 
-        if (contents.regionMatches(true, 0, "var(", 0, 4)) {
-            return contents.replaceAll("\\s", "");
+        if (aContents.regionMatches(true, 0, "var(", 0, 4)) {
+            return aContents.replaceAll("\\s", "");
         }
 
-        if (!contents.contains(" ")) { // or !contents.matches(".*\\s.*")
-            if (!"animation-name".equalsIgnoreCase(property)) {
-                return contents.toLowerCase(Locale.US).replaceAll(STRING_REGEX, "$2");
+        if (!aContents.contains(" ")) { // or !contents.matches(".*\\s.*")
+            if (!"animation-name".equalsIgnoreCase(aProperty)) {
+                return aContents.toLowerCase(Locale.US).replaceAll(STRING_REGEX, "$2");
             }
 
-            return contents.replaceAll(STRING_REGEX, "$2");
+            return aContents.replaceAll(STRING_REGEX, "$2");
         }
 
-        return contents;
+        return aContents;
     }
 
     /**
@@ -813,15 +820,15 @@ class IncompletePropertyException extends Exception {
     private static final long serialVersionUID = -6934738141411722363L;
 
     /** The exception detail message. */
-    private final String message;
+    private final String myMessage;
 
     /**
      * Constructs an IncompletePropertyException with the specified detail message.
      *
-     * @param message The detail message
+     * @param aMessage The detail message
      */
-    IncompletePropertyException(final String message) {
-        this.message = message;
+    IncompletePropertyException(final String aMessage) {
+        this.myMessage = aMessage;
     }
 
     /**
@@ -831,7 +838,7 @@ class IncompletePropertyException extends Exception {
      */
     @Override
     public String getMessage() {
-        return this.message;
+        return this.myMessage;
     }
 }
 
@@ -843,15 +850,15 @@ class EmptySelectorBodyException extends Exception {
     private static final long serialVersionUID = -2757452093745366543L;
 
     /** The exception detail message. */
-    private final String message;
+    private final String myMessage;
 
     /**
      * Constructs an EmptySelectorBodyException with the specified detail message.
      *
-     * @param message The detail message
+     * @param aMessage The detail message
      */
-    EmptySelectorBodyException(final String message) {
-        this.message = message;
+    EmptySelectorBodyException(final String aMessage) {
+        this.myMessage = aMessage;
     }
 
     /**
@@ -861,7 +868,7 @@ class EmptySelectorBodyException extends Exception {
      */
     @Override
     public String getMessage() {
-        return this.message;
+        return this.myMessage;
     }
 }
 
@@ -874,15 +881,15 @@ class UnterminatedSelectorException extends Exception {
     private static final long serialVersionUID = 88678974254059629L;
 
     /** The exception detail message. */
-    private final String message;
+    private final String myMessage;
 
     /**
      * Constructs an UnterminatedSelectorException with the specified detail message.
      *
-     * @param message The detail message
+     * @param aMessage The detail message
      */
-    UnterminatedSelectorException(final String message) {
-        this.message = message;
+    UnterminatedSelectorException(final String aMessage) {
+        this.myMessage = aMessage;
     }
 
     /**
@@ -892,7 +899,7 @@ class UnterminatedSelectorException extends Exception {
      */
     @Override
     public String getMessage() {
-        return this.message;
+        return this.myMessage;
     }
 }
 
@@ -905,15 +912,15 @@ class IncompleteSelectorException extends Exception {
     private static final long serialVersionUID = 6351992580967153497L;
 
     /** The exception detail message. */
-    private final String message;
+    private final String myMessage;
 
     /**
      * Constructs an IncompleteSelectorException with the specified detail message.
      *
-     * @param message The detail message
+     * @param aMessage The detail message
      */
-    IncompleteSelectorException(final String message) {
-        this.message = message;
+    IncompleteSelectorException(final String aMessage) {
+        this.myMessage = aMessage;
     }
 
     /**
@@ -923,13 +930,14 @@ class IncompleteSelectorException extends Exception {
      */
     @Override
     public String getMessage() {
-        return this.message;
+        return this.myMessage;
     }
 }
 
 /**
  * Constants used in CSS minification.
  */
+@SuppressWarnings({Checkstyle.MULTIPLE_STRING_LITERALS, "MultipleStringLiterals"})
 final class Constants {
 
     /** Array of standard HTML color names. */

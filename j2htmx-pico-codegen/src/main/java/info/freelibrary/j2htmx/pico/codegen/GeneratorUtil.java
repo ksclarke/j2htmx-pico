@@ -23,11 +23,11 @@ public final class GeneratorUtil {
     /**
      * Deletes all files in the specified directory.
      *
-     * @param dir The directory whose contents should be deleted
+     * @param aDir The directory whose contents should be deleted
      * @throws IOException If an I/O error occurs
      */
-    public static void deleteAllFilesInDir(final Path dir) throws IOException {
-        for (final File file : dir.toFile().listFiles()) {
+    public static void deleteAllFilesInDir(final Path aDir) throws IOException {
+        for (final File file : aDir.toFile().listFiles()) {
             System.out.println("deleting " + file.toPath());
             Files.delete(file.toPath());
         }

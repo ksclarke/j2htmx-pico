@@ -9,8 +9,8 @@ public interface Minifier {
     /**
      * Minifies the supplied content string.
      *
-     * @param s The string to minify
+     * @param aString The string to minify
      * @return The minified string
      */
-    String minify(String s);
+    String minify(String aString);
 }

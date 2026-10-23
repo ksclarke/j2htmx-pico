@@ -222,7 +222,7 @@ String page = html(
           ),
           button("Submit")
             .asButton()
-            .isAriaBusy() // Displays Pico's native loading indicator
+            .withAriaBusy(true) // Displays Pico's native loading indicator
             .withDataTooltip("Click to save record")
             .withDataPlacement("top")
             .withHxPost("/api/users")

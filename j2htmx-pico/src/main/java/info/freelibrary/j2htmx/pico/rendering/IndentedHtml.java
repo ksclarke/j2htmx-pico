@@ -3,6 +3,7 @@ package info.freelibrary.j2htmx.pico.rendering;
 import info.freelibrary.j2htmx.pico.Config;
 import info.freelibrary.j2htmx.pico.utils.Indenter;
 import info.freelibrary.j2htmx.pico.utils.TextEscaper;
+import info.freelibrary.util.warnings.Checkstyle;
 import info.freelibrary.util.warnings.PMD;
 
 import java.io.IOException;
@@ -14,63 +15,64 @@ import java.util.Deque;
  *
  * @param <T> The type of the Appendable to which HTML will be appended.
  */
+@SuppressWarnings({Checkstyle.MULTIPLE_STRING_LITERALS, "MultipleStringLiterals"})
 public final class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> {
 
     /** The Appendable output destination. */
-    private final T out;
+    private final T myOut;
 
     /** The indenter specifying indentation rules. */
-    private final Indenter indenter;
+    private final Indenter myIndenter;
 
     /** The text escaper for escaping text and attribute values. */
-    private final TextEscaper textEscaper;
+    private final TextEscaper myTextEscaper;
 
     /** TagBuilder used for appending attributes to enclosing tags. */
-    private final TagBuilder enclosingElementAttributes;
+    private final TagBuilder myEnclosingElementAttributes;
 
     /** TagBuilder used for appending attributes to empty/void tags. */
-    private final TagBuilder emptyElementAttributes;
+    private final TagBuilder myEmptyElementAttributes;
 
     /**
      * Stack tracking currently open element tags to handle indentation and preformatted blocks.
      */
-    private final Deque<String> trace = new ArrayDeque<>();
+    private final Deque<String> myTrace = new ArrayDeque<>();
 
     /**
      * Creates a new IndentedHtml builder.
      *
-     * @param out The Appendable to which HTML will be appended
-     * @param config The configuration to use
+     * @param aOut The Appendable to which HTML will be appended
+     * @param aConfig The configuration to use
      */
-    private IndentedHtml(final T out, final Config config) {
-        this.out = out;
-        this.indenter = config.indenter();
-        this.textEscaper = config.textEscaper();
-        this.enclosingElementAttributes = new IndentedTagBuilder(false);
-        this.emptyElementAttributes = new IndentedTagBuilder(config.closeEmptyTags());
+    private IndentedHtml(final T aOut, final Config aConfig) {
+        this.myOut = aOut;
+        this.myIndenter = aConfig.indenter();
+        this.myTextEscaper = aConfig.textEscaper();
+        this.myEnclosingElementAttributes = new IndentedTagBuilder(false);
+        this.myEmptyElementAttributes = new IndentedTagBuilder(aConfig.closeEmptyTags());
     }
 
     /**
      * Returns an HtmlBuilder that will generate indented HTML using Config defaults.
      *
-     * @param out The Appendable to which HTML will be appended.
+     * @param aOut The Appendable to which HTML will be appended.
      * @param <T> The type of the Appendable to which HTML will be appended.
      * @return An HtmlBuilder for indented HTML.
      */
-    public static <T extends Appendable> IndentedHtml<T> into(final T out) {
-        return new IndentedHtml<>(out, Config.getDefaults());
+    public static <T extends Appendable> IndentedHtml<T> into(final T aOut) {
+        return new IndentedHtml<>(aOut, Config.getDefaults());
     }
 
     /**
      * Returns an HtmlBuilder that will generate indented HTML using the given Config.
      *
-     * @param out The Appendable to which HTML will be appended.
-     * @param config The Config which will specify indentation, text escapement, tag closing, etc.
+     * @param aOut The Appendable to which HTML will be appended.
+     * @param aConfig The Config which will specify indentation, text escapement, tag closing, etc.
      * @param <T> The type of the Appendable to which HTML will be appended.
      * @return An HtmlBuilder for indented HTML.
      */
-    public static <T extends Appendable> IndentedHtml<T> into(final T out, final Config config) {
-        return new IndentedHtml<>(out, config);
+    public static <T extends Appendable> IndentedHtml<T> into(final T aOut, final Config aConfig) {
+        return new IndentedHtml<>(aOut, aConfig);
     }
 
     // Dealing with preformatted elements (pre and textarea) requires
@@ -92,11 +94,11 @@ public final class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> 
     /**
      * Returns an HtmlBuilder that will generate indented HTML in memory using the given Config.
      *
-     * @param config The Config which will specify indentation, text escapement, tag closing, etc.
+     * @param aConfig The Config which will specify indentation, text escapement, tag closing, etc.
      * @return An HtmlBuilder for indented HTML.
      */
-    public static IndentedHtml<StringBuilder> inMemory(final Config config) {
-        return into(new StringBuilder(), config);
+    public static IndentedHtml<StringBuilder> inMemory(final Config aConfig) {
+        return into(new StringBuilder(), aConfig);
     }
 
     /**
@@ -105,7 +107,7 @@ public final class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> 
      * @return True if self-formatting, false otherwise
      */
     private boolean isContentSelfFormatting() {
-        return trace.contains("pre") || trace.contains("textarea");
+        return myTrace.contains("pre") || myTrace.contains("textarea");
     }
 
     /**
@@ -114,79 +116,78 @@ public final class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> 
      * @return The current indentation level
      */
     private int lvl() {
-        return trace.size();
+        return myTrace.size();
     }
 
     @Override
-    public TagBuilder appendStartTag(final String name) throws IOException {
+    public TagBuilder appendStartTag(final String aName) throws IOException {
         if (!isContentSelfFormatting()) {
-            out.append(indenter.indent(lvl(), ""));
+            myOut.append(myIndenter.indent(lvl(), ""));
         }
 
-        trace.push(name);
-
-        out.append("<").append(name);
-        return enclosingElementAttributes;
+        myTrace.push(aName);
+        myOut.append("<").append(aName);
+        return myEnclosingElementAttributes;
     }
 
     @Override
     @SuppressWarnings(PMD.AVOID_THROWING_RAW_EXCEPTION_TYPES)
-    public HtmlBuilder<T> appendEndTag(final String name) throws IOException {
-        if (!name.equals(trace.peek())) {
-            throw new RuntimeException("Incorrect element closed: " + name + ".  Expected: " + trace.peek());
+    public HtmlBuilder<T> appendEndTag(final String aName) throws IOException {
+        if (!aName.equals(myTrace.peek())) {
+            throw new RuntimeException("Incorrect element closed: " + aName + ".  Expected: " + myTrace.peek());
         }
 
         if (!isContentSelfFormatting()) {
-            trace.pop();
-            out.append(indenter.indent(lvl(), ""));
+            myTrace.pop();
+            myOut.append(myIndenter.indent(lvl(), ""));
         } else {
-            trace.pop();
+            myTrace.pop();
         }
 
-        out.append("</").append(name).append(">");
+        myOut.append("</").append(aName).append(">");
 
         if (!isContentSelfFormatting()) {
-            out.append("\n");
+            myOut.append("\n");
         }
 
         return this;
     }
 
     @Override
-    public TagBuilder appendEmptyTag(final String name) throws IOException {
+    public TagBuilder appendEmptyTag(final String aName) throws IOException {
         if (!isContentSelfFormatting()) {
-            out.append(indenter.indent(lvl(), ""));
+            myOut.append(myIndenter.indent(lvl(), ""));
         }
-        out.append("<").append(name);
-        return emptyElementAttributes;
+        myOut.append("<").append(aName);
+        return myEmptyElementAttributes;
     }
 
     /**
      * Appends lines of text with appropriate indentation.
      *
-     * @param txt The text lines to append
+     * @param aTxt The text lines to append
      * @throws IOException If an I/O error occurs
      */
-    private void appendLines(final String txt) throws IOException {
+    private void appendLines(final String aTxt) throws IOException {
         if (!isContentSelfFormatting()) {
-            final String[] lines = txt.split("\n");
+            final String[] lines = aTxt.split("\n");
             for (final String line : lines) {
-                out.append(indenter.indent(lvl(), line)).append("\n");
+                myOut.append(myIndenter.indent(lvl(), line)).append("\n");
             }
         } else {
-            out.append(txt);
+            myOut.append(aTxt);
         }
     }
 
     @Override
-    public HtmlBuilder<T> appendEscapedText(final String txt) throws IOException {
-        appendLines(textEscaper.escape(txt));
+    public HtmlBuilder<T> appendEscapedText(final String aTxt) throws IOException {
+        appendLines(myTextEscaper.escape(aTxt));
         return this;
     }
 
     @Override
-    public HtmlBuilder<T> appendUnescapedText(final String txt) throws IOException {
-        appendLines(txt);
+    public HtmlBuilder<T> appendUnescapedText(final String aTxt) throws IOException {
+        appendLines(aTxt);
         return this;
     }
 
@@ -197,7 +198,7 @@ public final class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> 
      */
     @Override
     public T output() {
-        return out;
+        return myOut;
     }
 
     /**
@@ -206,42 +207,42 @@ public final class IndentedHtml<T extends Appendable> implements HtmlBuilder<T> 
     private final class IndentedTagBuilder implements TagBuilder {
 
         /** Whether to append a trailing slash before closing the tag. */
-        private final boolean closeTag;
+        private final boolean isCloseTag;
 
         /**
          * Creates a new IndentedTagBuilder.
          *
-         * @param closeTag Whether to close empty tags
+         * @param aCloseTag Whether to close empty tags
          */
-        private IndentedTagBuilder(final boolean closeTag) {
-            this.closeTag = closeTag;
+        private IndentedTagBuilder(final boolean aCloseTag) {
+            this.isCloseTag = aCloseTag;
         }
 
         @Override
-        public TagBuilder appendAttribute(final String name, final String value) throws IOException {
-            out.append(" ")
-              .append(name)
+        public TagBuilder appendAttribute(final String aName, final String aValue) throws IOException {
+            myOut.append(" ")
+              .append(aName)
               .append("=\"")
-              .append(textEscaper.escape(value))
+              .append(myTextEscaper.escape(aValue))
               .append("\"");
             return this;
         }
 
         @Override
-        public TagBuilder appendBooleanAttribute(final String name) throws IOException {
-            out.append(" ").append(name);
+        public TagBuilder appendBooleanAttribute(final String aName) throws IOException {
+            myOut.append(" ").append(aName);
             return this;
         }
 
         @Override
         public HtmlBuilder<T> completeTag() throws IOException {
-            if (closeTag) {
-                out.append("/");
+            if (isCloseTag) {
+                myOut.append("/");
             }
-            out.append(">");
+            myOut.append(">");
 
             if (!isContentSelfFormatting()) {
-                out.append("\n");
+                myOut.append("\n");
             }
 
             return IndentedHtml.this;

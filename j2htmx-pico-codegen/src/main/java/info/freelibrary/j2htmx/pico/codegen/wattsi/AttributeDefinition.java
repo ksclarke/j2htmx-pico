@@ -15,10 +15,10 @@ public interface AttributeDefinition {
     /**
      * Checks if this attribute applies to the specified element definition.
      *
-     * @param element The element definition
+     * @param anElement The element definition
      * @return True if applicable, false otherwise
      */
-    boolean appliesTo(ElementDefinition element);
+    boolean appliesTo(ElementDefinition anElement);
 
     /**
      * Checks if this attribute has marked as obsolete in the spec.

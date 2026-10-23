@@ -7,20 +7,30 @@ import static org.hamcrest.Matchers.is;
 
 import info.freelibrary.j2htmx.pico.attributes.Attribute;
 import info.freelibrary.j2htmx.pico.tags.AbstractDomContent;
+import info.freelibrary.util.warnings.Checkstyle;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
+/**
+ * Tests verifying rendering compatibility for DOM and attribute elements.
+ */
+@SuppressWarnings({Checkstyle.MULTIPLE_STRING_LITERALS, "MultipleStringLiterals"})
 public class RenderingCompatabilityTest {
 
+    /**
+     * Tests that client classes implementing DOM rendering work with HtmlBuilder.
+     *
+     * @throws IOException If an I/O error occurs
+     */
     @Test
     public void client_classes_which_implement_dom_rendering_continue_to_work_with_html_builder() throws IOException {
         final AbstractDomContent dom = div(
           new AbstractDomContent() {
               @Override
-              public <T extends Appendable> T render(final HtmlBuilder<T> aHtmlBuilder, final Object model)
+              public <T extends Appendable> T render(final HtmlBuilder<T> aHtmlBuilder, final Object aModel)
                 throws IOException {
-                  aHtmlBuilder.appendEscapedText(String.valueOf(model));
+                  aHtmlBuilder.appendEscapedText(String.valueOf(aModel));
                   return aHtmlBuilder.output();
               }
           }
@@ -40,6 +50,11 @@ public class RenderingCompatabilityTest {
         );
     }
 
+    /**
+     * Tests that client classes implementing attribute rendering work with TagBuilder.
+     *
+     * @throws IOException If an I/O error occurs
+     */
     @Test
     public void client_classes_which_implement_attribute_rendering_continue_to_work_with_Attribute_builder()
     throws IOException {
@@ -66,15 +81,24 @@ public class RenderingCompatabilityTest {
         );
     }
 
+    /**
+     * Mock attribute implementation for testing tag rendering.
+     */
     private final class MockAttribute extends Attribute {
 
-        public MockAttribute(final String name, final String value) {
-            super(name, value);
+        /**
+         * Constructs a MockAttribute.
+         *
+         * @param aName The attribute name
+         * @param aValue The attribute value
+         */
+        MockAttribute(final String aName, final String aValue) {
+            super(aName, aValue);
         }
 
         @Override
-        public void render(final TagBuilder writer, final Object model) throws IOException {
-            writer.appendAttribute("mock", String.valueOf(model));
+        public void render(final TagBuilder aWriter, final Object aModel) throws IOException {
+            aWriter.appendAttribute("mock", String.valueOf(aModel));
         }
     }
 }

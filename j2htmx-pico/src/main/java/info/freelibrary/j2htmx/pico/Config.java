@@ -242,60 +242,60 @@ public final class Config {
     /**
      * Returns a copy of this configuration with the specified text escaper.
      *
-     * @param textEscaper The text escaper
+     * @param aTextEscaper The text escaper
      * @return A new Config instance
      */
-    public Config withTextEscaper(final TextEscaper textEscaper) {
+    public Config withTextEscaper(final TextEscaper aTextEscaper) {
         final Config copy = new Config(this);
-        copy.myLocalTextEscaper = textEscaper;
+        copy.myLocalTextEscaper = aTextEscaper;
         return copy;
     }
 
     /**
      * Returns a copy of this configuration with the specified CSS minifier.
      *
-     * @param cssMinifier The CSS minifier
+     * @param aCssMinifier The CSS minifier
      * @return A new Config instance
      */
-    public Config withCssMinifier(final Minifier cssMinifier) {
+    public Config withCssMinifier(final Minifier aCssMinifier) {
         final Config copy = new Config(this);
-        copy.myLocalCssMinifier = cssMinifier;
+        copy.myLocalCssMinifier = aCssMinifier;
         return copy;
     }
 
     /**
      * Returns a copy of this configuration with the specified JavaScript minifier.
      *
-     * @param jsMinifier The JavaScript minifier
+     * @param aJsMinifier The JavaScript minifier
      * @return A new Config instance
      */
-    public Config withJsMinifier(final Minifier jsMinifier) {
+    public Config withJsMinifier(final Minifier aJsMinifier) {
         final Config copy = new Config(this);
-        copy.myLocalJsMinifier = jsMinifier;
+        copy.myLocalJsMinifier = aJsMinifier;
         return copy;
     }
 
     /**
      * Returns a copy of this configuration with the empty tag closing setting.
      *
-     * @param closeEmptyTags Whether empty tags should be closed
+     * @param aCloseEmptyTags Whether empty tags should be closed
      * @return A new Config instance
      */
-    public Config withEmptyTagsClosed(final boolean closeEmptyTags) {
+    public Config withEmptyTagsClosed(final boolean aCloseEmptyTags) {
         final Config copy = new Config(this);
-        copy.myLocalEmptyTagsAreClosed = closeEmptyTags;
+        copy.myLocalEmptyTagsAreClosed = aCloseEmptyTags;
         return copy;
     }
 
     /**
      * Returns a copy of this configuration with the specified indenter.
      *
-     * @param indenter The indenter
+     * @param anIndenter The indenter
      * @return A new Config instance
      */
-    public Config withIndenter(final Indenter indenter) {
+    public Config withIndenter(final Indenter anIndenter) {
         final Config copy = new Config(this);
-        copy.myLocalIndenter = indenter;
+        copy.myLocalIndenter = anIndenter;
         return copy;
     }
 

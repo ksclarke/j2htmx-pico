@@ -56,115 +56,133 @@ public class Model implements Parser.Listener {
     /**
      * Adds an element node with the specified name.
      *
-     * @param name The element name
+     * @param aName The element name
      * @return The created element node
      */
-    public Node addElement(final String name) {
-        return add(ELEMENT, name, myElements);
+    public Node addElement(final String aName) {
+        return add(ELEMENT, aName, myElements);
     }
 
     /**
      * Adds a boolean attribute node with the specified name.
      *
-     * @param name The attribute name
+     * @param aName The attribute name
      * @return The created attribute node
      */
-    public Node addBooleanAttribute(final String name) {
-        return add(BOOLEAN, name, myAttributes);
+    public Node addBooleanAttribute(final String aName) {
+        return add(BOOLEAN, aName, myAttributes);
     }
 
     /**
      * Adds a string attribute node with the specified name.
      *
-     * @param name The attribute name
+     * @param aName The attribute name
      * @return The created attribute node
      */
-    public Node addStringAttribute(final String name) {
-        return add(STRING, name, myAttributes);
+    public Node addStringAttribute(final String aName) {
+        return add(STRING, aName, myAttributes);
     }
 
     /**
      * Retrieves an element node by name.
      *
-     * @param name The element name
+     * @param aName The element name
      * @return The element node
+     * @throws NodeDoesNotExist If the element node does not exist
      */
-    public Node element(final String name) {
-        if (!myElements.containsKey(name)) {
-            throw new NodeDoesNotExist(name);
+    public Node element(final String aName) {
+        if (!myElements.containsKey(aName)) {
+            throw new NodeDoesNotExist(aName);
         }
-        return myElements.get(name);
+        return myElements.get(aName);
     }
 
     /**
      * Retrieves an attribute node by name.
      *
-     * @param name The attribute name
+     * @param aName The attribute name
      * @return The attribute node
+     * @throws NodeDoesNotExist If the attribute node does not exist
      */
-    public Node attribute(final String name) {
-        if (!myAttributes.containsKey(name)) {
-            throw new NodeDoesNotExist(name);
+    public Node attribute(final String aName) {
+        if (!myAttributes.containsKey(aName)) {
+            throw new NodeDoesNotExist(aName);
         }
-        return myAttributes.get(name);
+        return myAttributes.get(aName);
     }
 
-    private Node add(final Node.Type type, final String name, final Map<String, Node> nodes) {
-        if (nodes.containsKey(name)) {
-            throw new NodeAlreadyExists(name);
+    /**
+     * Adds a node of the given type and name to the map.
+     *
+     * @param aType The node type
+     * @param aName The node name
+     * @param aNodes The target nodes map
+     * @return The created node
+     * @throws NodeAlreadyExists If the node already exists in the map
+     */
+    private Node add(final Node.Type aType, final String aName, final Map<String, Node> aNodes) {
+        if (aNodes.containsKey(aName)) {
+            throw new NodeAlreadyExists(aName);
         }
 
-        final Node node = new Node(type, name);
-        nodes.put(name, node);
+        final Node node = new Node(aType, aName);
+        aNodes.put(aName, node);
         return node;
     }
 
     @Override
-    public void lineCommented(final int line, final String txt) {
+    public void lineCommented(final int aLine, final String aTxt) {
         // Ignore.
     }
 
     @Override
-    public void elementDefined(final int line, final String name) {
-        attempt(() -> addElement(name), line);
+    public void elementDefined(final int aLine, final String aName) {
+        attempt(() -> addElement(aName), aLine);
     }
 
     @Override
-    public void emptyElementDefined(final int line, final String name) {
-        attempt(() -> addElement(name).annotate(SELF_CLOSING), line);
+    public void emptyElementDefined(final int aLine, final String aName) {
+        attempt(() -> addElement(aName).annotate(SELF_CLOSING), aLine);
     }
 
     @Override
-    public void booleanDefined(final int line, final String name) {
-        attempt(() -> addBooleanAttribute(name), line);
+    public void booleanDefined(final int aLine, final String aName) {
+        attempt(() -> addBooleanAttribute(aName), aLine);
     }
 
     @Override
-    public void onOffDefined(final int line, final String name) {
-        attempt(() -> addBooleanAttribute(name).annotate(ON_OFF), line);
+    public void onOffDefined(final int aLine, final String aName) {
+        attempt(() -> addBooleanAttribute(aName).annotate(ON_OFF), aLine);
     }
 
     @Override
-    public void stringDefined(final int line, final String name) {
-        attempt(() -> addStringAttribute(name), line);
+    public void stringDefined(final int aLine, final String aName) {
+        attempt(() -> addStringAttribute(aName), aLine);
     }
 
     @Override
-    public void attributeDefined(final int line, final String element, final String name) {
-        attempt(() -> element(element).addChild(attribute(name)), line);
+    public void attributeDefined(final int aLine, final String anElement, final String aName) {
+        attempt(() -> element(anElement).addChild(attribute(aName)), aLine);
     }
 
     @Override
     @SuppressWarnings(PMD.AVOID_THROWING_RAW_EXCEPTION_TYPES)
-    public void invalidLine(final int line, final String txt) {
-        throw new RuntimeException("Invalid line [" + line + "]: " + txt);
+    public void invalidLine(final int aLine, final String aTxt) {
+        throw new RuntimeException("Invalid line [" + aLine + "]: " + aTxt);
     }
 
-    private void attempt(final Unsafe operation, final int line) {
+    /**
+     * Executes the given operation, wrapping any runtime exception in an InvalidModel exception.
+     *
+     * @param anOperation The operation to execute
+     * @param aLine The current line number
+     * @throws InvalidModel If the operation fails
+     */
+    private void attempt(final Unsafe anOperation, final int aLine) {
         try {
-            operation.call();
+            anOperation.call();
         } catch (@SuppressWarnings(PMD.AVOID_CATCHING_GENERIC_EXCEPTION) RuntimeException details) {
-            throw new InvalidModel(details, line);
+            throw new InvalidModel(details, aLine);
         }
     }
 
@@ -172,10 +190,13 @@ public class Model implements Parser.Listener {
      * Metadata tags applied to model myElements and myAttributes.
      */
     public enum Metadata {
+
         /** Indicates an element has self-closing/void. */
         SELF_CLOSING,
+
         /** Indicates a boolean attribute uses "on"/"off" syntax. */
         ON_OFF,
+
         /** Indicates an element or attribute has obsolete. */
         OBSOLETE
     }
@@ -191,7 +212,7 @@ public class Model implements Parser.Listener {
          *
          * @throws RuntimeException If an error occurs during execution
          */
-        @SuppressWarnings({PMD.AVOID_UNCHECKED_EXCEPTIONS_IN_SIGNATURES})
+        @SuppressWarnings({PMD.AVOID_UNCHECKED_EXCEPTIONS_IN_SIGNATURES, "IllegalThrows"})
         void call() throws RuntimeException;
     }
 
@@ -201,40 +222,46 @@ public class Model implements Parser.Listener {
     public static final class Node {
 
         /** The type of this node. */
-        public final Type type;
+        public final Type myType;
 
         /** The name of this node. */
-        public final String name;
+        public final String myName;
 
         /** Metadata annotations associated with this node. */
-        public final List<Metadata> metadata;
+        public final List<Metadata> myMetadata;
 
         /** Child nodes under this node. */
-        public final List<Node> children;
+        public final List<Node> myChildren;
 
-        private Node(final Type type, final String name) {
-            this.type = type;
-            this.name = name;
-            this.metadata = new ArrayList<>();
-            this.children = new ArrayList<>();
+        /**
+         * Constructs a new Node.
+         *
+         * @param aType The node type
+         * @param aName The node name
+         */
+        private Node(final Type aType, final String aName) {
+            this.myType = aType;
+            this.myName = aName;
+            this.myMetadata = new ArrayList<>();
+            this.myChildren = new ArrayList<>();
         }
 
         /**
          * Adds a metadata annotation to this node.
          *
-         * @param meta The metadata annotation to add
+         * @param aMeta The metadata annotation to add
          */
-        public void annotate(final Metadata meta) {
-            metadata.add(meta);
+        public void annotate(final Metadata aMeta) {
+            myMetadata.add(aMeta);
         }
 
         /**
          * Adds a child node to this node.
          *
-         * @param node The child node to add
+         * @param aNode The child node to add
          */
-        public void addChild(final Node node) {
-            children.add(node);
+        public void addChild(final Node aNode) {
+            myChildren.add(aNode);
         }
 
         /**
@@ -244,7 +271,7 @@ public class Model implements Parser.Listener {
          * @return True if present, false otherwise
          */
         public boolean has(final Metadata anAnnotation) {
-            return metadata.contains(anAnnotation);
+            return myMetadata.contains(anAnnotation);
         }
 
         /**
@@ -273,11 +300,11 @@ public class Model implements Parser.Listener {
         /**
          * Constructs an InvalidModel exception with cause and line number.
          *
-         * @param cause The underlying cause
-         * @param line The line number where error occurred
+         * @param aCause The underlying cause
+         * @param aLine The line number where error occurred
          */
-        public InvalidModel(final Exception cause, final int line) {
-            super(cause.getMessage() + ".  At line " + line, cause);
+        public InvalidModel(final Exception aCause, final int aLine) {
+            super(aCause.getMessage() + ".  At line " + aLine, aCause);
         }
     }
 
@@ -292,10 +319,10 @@ public class Model implements Parser.Listener {
         /**
          * Constructs a NodeAlreadyExists exception for the given node name.
          *
-         * @param name The duplicate node name
+         * @param aName The duplicate node name
          */
-        public NodeAlreadyExists(final String name) {
-            super("Node already exists: " + name);
+        public NodeAlreadyExists(final String aName) {
+            super("Node already exists: " + aName);
         }
     }
 
@@ -310,10 +337,10 @@ public class Model implements Parser.Listener {
         /**
          * Constructs a NodeDoesNotExist exception for the given node name.
          *
-         * @param name The missing node name
+         * @param aName The missing node name
          */
-        public NodeDoesNotExist(final String name) {
-            super("Node does not exist: " + name);
+        public NodeDoesNotExist(final String aName) {
+            super("Node does not exist: " + aName);
         }
     }
 }

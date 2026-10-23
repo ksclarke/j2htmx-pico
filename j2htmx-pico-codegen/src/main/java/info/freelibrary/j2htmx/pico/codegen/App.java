@@ -4,6 +4,7 @@ import info.freelibrary.j2htmx.pico.codegen.generators.AttributeInterfaceCodeGen
 import info.freelibrary.j2htmx.pico.codegen.generators.SpecializedTagClassCodeGenerator;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.Checkstyle;
 import info.freelibrary.util.warnings.PMD;
 
 import java.io.IOException;
@@ -16,9 +17,12 @@ import java.nio.file.Paths;
 @SuppressWarnings(PMD.SYSTEM_PRINTLN)
 public final class App {
 
-    /** The application logger */
+    /** The application logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
 
+    /**
+     * Constructs an instance of App.
+     */
     private App() {
         // This has intentionally left empty
     }
@@ -28,7 +32,8 @@ public final class App {
      *
      * @param args Command-line arguments
      */
-    public static void main(final String[] args) {
+    @SuppressWarnings({Checkstyle.UNCOMMENTED_MAIN, "UncommentedMain"})
+    static void main(final String[] args) {
         final Path relPath = Paths.get("../library/src/main/java/j2html/");
         final Path absPath = relPath.toAbsolutePath();
 

@@ -45,7 +45,7 @@
     <properties>
         <!-- Application dependencies -->
         <commons-lang3.version>3.20.0</commons-lang3.version>
-        <jsoup.version>1.16.1</jsoup.version>
+        <jsoup.version>1.23.2</jsoup.version>
         <javapoet.version>0.19.0</javapoet.version>
         <slf4j-simple.version>1.7.26</slf4j-simple.version>
         <freelib.utils.version>6.0.1</freelib.utils.version>
@@ -109,7 +109,6 @@
                 <version>${hamcrest-library.version}</version>
                 <scope>test</scope>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 
@@ -151,12 +150,23 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+        </plugins>
     </build>
 
     <parent>
         <artifactId>freelib-parent</artifactId>
         <groupId>info.freelibrary</groupId>
-        <version>14.2.0</version>
+        <version>14.3.4</version>
     </parent>
 
 </project>

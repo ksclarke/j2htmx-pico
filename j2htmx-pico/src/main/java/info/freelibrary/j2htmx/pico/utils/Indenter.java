@@ -9,9 +9,9 @@ public interface Indenter {
     /**
      * Indents the specified text to the given indentation level.
      *
-     * @param level The nesting depth level
-     * @param text The text to indent
+     * @param aLevel The nesting depth level
+     * @param aText The text to indent
      * @return The indented string
      */
-    String indent(int level, String text);
+    String indent(int aLevel, String aText);
 }

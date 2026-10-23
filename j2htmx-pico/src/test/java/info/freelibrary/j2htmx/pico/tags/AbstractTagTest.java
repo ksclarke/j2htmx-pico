@@ -18,6 +18,7 @@ import info.freelibrary.j2htmx.pico.attributes.Attribute;
 import info.freelibrary.j2htmx.pico.model.DynamicHrefAttribute;
 import info.freelibrary.j2htmx.pico.rendering.FlatHtml;
 import info.freelibrary.j2htmx.pico.tags.specialized.HtmlTag;
+import info.freelibrary.util.warnings.Checkstyle;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,13 +26,23 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.FileWriter;
 
+/**
+ * Tests for {@link AbstractTag}.
+ */
+@SuppressWarnings({Checkstyle.MULTIPLE_STRING_LITERALS, "MultipleStringLiterals"})
 public class AbstractTagTest {
 
+    /**
+     * Sets up the test fixture.
+     */
     @BeforeEach
     public void setUp() {
         Config.setGlobalEmptyTagsClosed(false);
     }
 
+    /**
+     * Tears down the test fixture.
+     */
     @AfterEach
     public void tearDown() {
         // Restore Config defaults.
@@ -40,12 +51,18 @@ public class AbstractTagTest {
 
     // TODO Introduce a different concept for a sequence of tags, and require valid names for all Tags.
 
+    /**
+     * Tests that unnamed containers do not render tags or attributes.
+     */
     @Test
     public void unnamed_containers_do_not_render_tags_or_attributes() {
         final AbstractTag<?> tag = new ContainerTag<>(null).attr("xyz", "123");
         assertThat(tag.render(), is(""));
     }
 
+    /**
+     * Tests that unnamed containers render children.
+     */
     @Test
     public void unnamed_containers_render_children() {
         final ContainerTag<?> tag = new ContainerTag<>(null)
@@ -55,12 +72,18 @@ public class AbstractTagTest {
         assertThat(tag.render(), is("<abc><def></def>ghi"));
     }
 
+    /**
+     * Tests that named containers without children only render tags and attributes.
+     */
     @Test
     public void named_containers_without_children_only_render_tags_and_attributes() {
         final AbstractTag<?> tag = new ContainerTag<>("abc").attr("xyz", "123");
         assertThat(tag.render(), is("<abc xyz=\"123\"></abc>"));
     }
 
+    /**
+     * Tests that populated named containers render tags, attributes, and children.
+     */
     @Test
     public void populated_named_containers_render_tags_attributes_and_children() {
         final AbstractTag<?> tag = new ContainerTag<>("abc")
@@ -71,6 +94,9 @@ public class AbstractTagTest {
         assertThat(tag.render(), is("<abc xyz=\"123\"><def><ghi></ghi>jkl</abc>"));
     }
 
+    /**
+     * Tests that empty tags must be named.
+     */
     @Test
     public void empty_tags_must_be_named() {
         try {
@@ -88,6 +114,9 @@ public class AbstractTagTest {
         }
     }
 
+    /**
+     * Tests that empty tags can be configured to self close.
+     */
     @Test
     public void empty_tags_can_be_configured_to_self_close() {
         // By default they will not be self-closing.
@@ -97,6 +126,9 @@ public class AbstractTagTest {
         assertThat(new EmptyTag<>("xyz").render(), is("<xyz/>"));
     }
 
+    /**
+     * Tests that attributes are rendered in the order defined.
+     */
     @Test
     public void attributes_are_rendered_in_the_order_that_they_are_defined() {
         final AbstractTag<?> container = new ContainerTag<>("abc")
@@ -112,6 +144,9 @@ public class AbstractTagTest {
         assertThat(tag.render(), is("<abc c b=\"B\" a=\"A\">"));
     }
 
+    /**
+     * Tests rendering of container and html tags.
+     */
     @Test
     public void testRender() {
         final ContainerTag<?> testTag = new ContainerTag<>("a");
@@ -127,14 +162,24 @@ public class AbstractTagTest {
         );
         final String expectedResult = "<html><body><header></header><main><p>Main stuff.." +
                                       ".</p></main><footer><p>Conditional with!</p></footer></body></html>";
-        assertThat(complexTestTag.render(), is((expectedResult)));
+        assertThat(complexTestTag.render(), is(expectedResult));
     }
 
+    /**
+     * Tests formatted tags rendering.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testFormattedTags() throws Exception { // better test in ComplexRenderTest.java
         assertThat(div(p("Hello")).renderFormatted(), is("<div>\n    <p>\n        Hello\n    </p>\n</div>\n"));
     }
 
+    /**
+     * Tests equality comparison of tags.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testEquals() throws Exception {
         final AbstractTag<?> tagOne = tag("p").withText("Test").withClass("class");
@@ -142,6 +187,11 @@ public class AbstractTagTest {
         assertThat(tagOne.equals(tagTwo), is(true));
     }
 
+    /**
+     * Tests that attribute values are converted to strings.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void attribute_values_are_converted_to_strings() throws Exception {
         final AbstractTag<?> container = new ContainerTag<>("abc")
@@ -157,6 +207,11 @@ public class AbstractTagTest {
         assertThat(tag.render(), is("<abc string=\"value1\" integer=\"2\" none>"));
     }
 
+    /**
+     * Tests withClasses method.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testWithClasses() throws Exception {
         final String expected = "<div class=\"c1 c2\"></div>";
@@ -164,10 +219,16 @@ public class AbstractTagTest {
         assertThat(actual, is(expected));
     }
 
+    /**
+     * Tests withStyles method.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testWithStyles() throws Exception {
         final String expected = "<div style=\"color: red; margin: 10px;\"></div>";
-        final String actual = div().withStyles("color: red", iff(1 == 1, "margin: 10px"), iff(1 == 2, "display: none")).render();
+        final String actual = div().withStyles("color: red", iff(1 == 1, "margin: 10px"), iff(1 == 2, "display: none"))
+          .render();
         assertThat(actual, is(expected));
 
         final String expectedWithSemicolons = "<div style=\"color: red; margin: 10px;\"></div>";
@@ -183,6 +244,11 @@ public class AbstractTagTest {
         assertThat(div().withStyles((String[]) null).render(), is(expectedEmpty));
     }
 
+    /**
+     * Tests empty attribute rendering.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testEmptyAttribute() throws Exception {
         final AbstractTag<?> testTagWithAttrValueNull = new ContainerTag<>("a").attr("attribute", null);
@@ -192,12 +258,22 @@ public class AbstractTagTest {
         assertThat(testTagAttrWithoutAttr.render(), is("<a attribute></a>"));
     }
 
+    /**
+     * Tests dynamic attribute rendering.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testDynamicAttribute() throws Exception {
         final AbstractTag<?> testTagWithAttrValueNull = new ContainerTag<>("a").attr(new DynamicHrefAttribute());
         assertThat(testTagWithAttrValueNull.render(), is("<a href=\"/\"></a>"));
     }
 
+    /**
+     * Tests dynamic attribute replacement.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testDynamicAttributeReplacement() throws Exception {
         final AbstractTag<?> testTagWithAttrValueNull = new ContainerTag<>("a").attr("href", "/link").attr(
@@ -205,6 +281,11 @@ public class AbstractTagTest {
         assertThat(testTagWithAttrValueNull.render(), is("<a href=\"/\"></a>"));
     }
 
+    /**
+     * Tests rendering to file writer.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void renderToFile() throws Exception {
         final FileWriter fileWriter = new FileWriter("file.txt");

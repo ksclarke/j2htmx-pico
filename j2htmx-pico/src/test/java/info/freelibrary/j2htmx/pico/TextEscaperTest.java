@@ -6,10 +6,20 @@ import static org.hamcrest.Matchers.is;
 
 import info.freelibrary.j2htmx.pico.utils.EscapeUtil;
 import info.freelibrary.j2htmx.pico.utils.TextEscaper;
+import info.freelibrary.util.warnings.Checkstyle;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests for {@link TextEscaper}.
+ */
+@SuppressWarnings({Checkstyle.MULTIPLE_STRING_LITERALS, "MultipleStringLiterals"})
 public class TextEscaperTest {
 
+    /**
+     * Tests custom and default text escaper implementations.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testTextEscaper() throws Exception {
         String expected = "&lt;div&gt;&lt;/div&gt;";
@@ -26,11 +36,14 @@ public class TextEscaperTest {
         Config.setGlobalTextEscaper(EscapeUtil::escape); // reset escaper
     }
 
-    private static class NoOpEscaper implements TextEscaper {
+    /**
+     * No-op text escaper implementation for testing.
+     */
+    private static final class NoOpEscaper implements TextEscaper {
 
         @Override
-        public String escape(final String text) {
-            return text;
+        public String escape(final String aText) {
+            return aText;
         }
 
     }

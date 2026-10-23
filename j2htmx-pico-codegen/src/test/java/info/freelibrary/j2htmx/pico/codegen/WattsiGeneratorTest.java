@@ -14,14 +14,23 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * Tests for {@link WattsiGenerator}.
+ */
 public class WattsiGeneratorTest {
 
+    /** The temporary directory for test resources. */
     @TempDir
-    Path directory;
+    Path myDirectory;
 
+    /**
+     * Tests that obsolete elements and attributes are omitted from generation.
+     *
+     * @throws IOException If an I/O error occurs
+     */
     @Test
     public void omitsObsoleteElementsAndAttributes() throws IOException {
-        final Path source = directory.resolve("spec.html");
+        final Path source = myDirectory.resolve("spec.html");
         Files.writeString(source,
           "<dfn element><code>div</code></dfn>" +
           "<dfn element-attr for=div><code>id</code></dfn>" +

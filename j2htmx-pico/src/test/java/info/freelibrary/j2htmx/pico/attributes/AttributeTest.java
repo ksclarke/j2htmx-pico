@@ -6,10 +6,20 @@ import static org.hamcrest.Matchers.is;
 import info.freelibrary.j2htmx.pico.rendering.FlatHtml;
 import info.freelibrary.j2htmx.pico.rendering.TagBuilder;
 import info.freelibrary.j2htmx.pico.tags.ContainerTag;
+import info.freelibrary.util.warnings.Checkstyle;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests for {@link Attribute}.
+ */
+@SuppressWarnings({Checkstyle.MULTIPLE_STRING_LITERALS, "MultipleStringLiterals"})
 public class AttributeTest {
 
+    /**
+     * Tests rendering of attributes with value, without value, and null.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testRender() throws Exception {
         final Attribute attributeWithValue = new Attribute("href", "http://example.com");
@@ -28,6 +38,11 @@ public class AttributeTest {
         assertThat(nullBuilder.completeTag().output().toString(), is("<input>"));
     }
 
+    /**
+     * Tests setting attributes on a container tag.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testSetAttribute() throws Exception {
         final ContainerTag<?> testTag = new ContainerTag<>("a");

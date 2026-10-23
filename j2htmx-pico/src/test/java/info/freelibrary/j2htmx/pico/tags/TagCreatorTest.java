@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import info.freelibrary.j2htmx.pico.Config;
+import info.freelibrary.util.warnings.Checkstyle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,24 +17,36 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Tests for {@link info.freelibrary.j2htmx.pico.TagCreator}.
+ */
+@SuppressWarnings({Checkstyle.MULTIPLE_STRING_LITERALS, "MultipleStringLiterals"})
 public class TagCreatorTest {
 
-    private static final String EOL = System.getProperty("line.separator"); // System independent End Of Line
-
-    final List<Employee> employees = Arrays.asList(new Employee(1, "Name 1", "Title 1"),
+    /** The sample employees list for testing. */
+    final List<Employee> myEmployees = Arrays.asList(new Employee(1, "Name 1", "Title 1"),
       new Employee(2, "Name 2", "Title 2"), new Employee(3, "Name 3", "Title 3"));
 
-    final Map<Integer, Employee> employeeMap = new HashMap<>();
+    /** The sample employee map for testing. */
+    final Map<Integer, Employee> myEmployeeMap = new HashMap<>();
 
+    /**
+     * Sets up the test fixture.
+     */
     @BeforeEach
     public void setUp() {
         Config.setGlobalEmptyTagsClosed(false);
 
-        employeeMap.put(1, new Employee(1, "Name 1", "Title 1"));
-        employeeMap.put(2, new Employee(2, "Name 2", "Title 2"));
-        employeeMap.put(3, new Employee(3, "Name 3", "Title 3"));
+        myEmployeeMap.put(1, new Employee(1, "Name 1", "Title 1"));
+        myEmployeeMap.put(2, new Employee(2, "Name 2", "Title 2"));
+        myEmployeeMap.put(3, new Employee(3, "Name 3", "Title 3"));
     }
 
+    /**
+     * Tests document creation with different configurations.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testDocument() throws Exception {
         Config.setGlobalEmptyTagsClosed(true);
@@ -44,6 +57,11 @@ public class TagCreatorTest {
         assertEquals("<!DOCTYPE html><html></html>", document(html()));
     }
 
+    /**
+     * Tests conditional tag inclusion with boolean.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testIff() throws Exception {
         final String expected = "<div><p>Test</p><a href=\"#\">Test</a></div>";
@@ -55,6 +73,9 @@ public class TagCreatorTest {
         assertThat(actual, is(expected));
     }
 
+    /**
+     * Tests conditional tag inclusion with Optional.
+     */
     @Test
     public void testIffOptional() {
         final String expected = "<div><p>Test</p><a href=\"#1\">Test</a></div>";
@@ -66,6 +87,11 @@ public class TagCreatorTest {
         assertThat(actual, is(expected));
     }
 
+    /**
+     * Tests conditional tag inclusion with if-else.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testIffElse() throws Exception {
         final String expected = "<div><p>Tast</p></div>";
@@ -73,6 +99,11 @@ public class TagCreatorTest {
         assertThat(actual, is(expected));
     }
 
+    /**
+     * Tests joining DOM content and text.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testJoin() throws Exception {
         final String expected = "This is my joined string. It has a <a href=\"#\">link in the middle</a> and " +
@@ -82,6 +113,11 @@ public class TagCreatorTest {
         assertThat(actual, is(expected));
     }
 
+    /**
+     * Tests joining DOM content with null values.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testJoinWithNulls() throws Exception {
         final String expected = "This is my joined string. It has ignored null content in the middle.";
@@ -90,20 +126,25 @@ public class TagCreatorTest {
         assertThat(actual, is(expected));
     }
 
+    /**
+     * Tests mapping over collections with each.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testEach() throws Exception {
         final String j2htmlMap = ul().with(
           li("Begin list"),
-          each(employees, employee -> li(
-            h2(employee.name),
-            p(employee.title)
+          each(myEmployees, employee -> li(
+            h2(employee.myName),
+            p(employee.myTitle)
           ))
         ).render();
         final String javaMap = ul().with(
           li("Begin list"),
-          rawHtml(employees.stream().map(employee -> li(
-            h2(employee.name),
-            p(employee.title)
+          rawHtml(myEmployees.stream().map(employee -> li(
+            h2(employee.myName),
+            p(employee.myTitle)
           )).map(AbstractDomContent::render).collect(Collectors.joining()))
         ).render();
         assertThat(j2htmlMap, is(
@@ -112,14 +153,17 @@ public class TagCreatorTest {
         assertThat(j2htmlMap.equals(javaMap), is(true));
     }
 
+    /**
+     * Tests that each provides collection index to BiFunctions.
+     */
     @Test
     public void each_provides_the_collection_index_to_bifunctions() {
         assertThat(
           table(
-            each(employees, (index, employee) -> tr(
+            each(myEmployees, (index, employee) -> tr(
               td(Integer.toString(index)),
-              td(employee.name),
-              td(employee.title)
+              td(employee.myName),
+              td(employee.myTitle)
             ))
           ).render(),
           is(
@@ -128,40 +172,51 @@ public class TagCreatorTest {
         );
     }
 
+    /**
+     * Tests iterating over maps with each.
+     */
     @Test
     public void testEachWithMap() {
         final String j2htmlMap = ul().with(
           li("Begin list"),
-          each(employeeMap, entry -> li(entry.getKey() + "-" + entry.getValue().name))
+          each(myEmployeeMap, entry -> li(entry.getKey() + "-" + entry.getValue().myName))
         ).render();
 
         assertThat(j2htmlMap, is("<ul><li>Begin list</li><li>1-Name 1</li><li>2-Name 2</li><li>3-Name 3</li></ul>"));
     }
 
+    /**
+     * Tests iterating over maps with each and BiFunction.
+     */
     @Test
     public void testEachWithMapAndBiFunction() {
         final String j2htmlMap = ul().with(
           li("Begin list"),
-          each(employeeMap, (id, employee) -> li(id + "-" + employee.name))
+          each(myEmployeeMap, (id, employee) -> li(id + "-" + employee.myName))
         ).render();
 
         assertThat(j2htmlMap, is("<ul><li>Begin list</li><li>1-Name 1</li><li>2-Name 2</li><li>3-Name 3</li></ul>"));
     }
 
+    /**
+     * Tests filtering collections.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testFilter() throws Exception {
         final String j2htmlFilter = ul().with(
           li("Begin list"),
-          each(filter(employees, e -> e.id % 2 == 1), employee -> li(
-            h2(employee.name),
-            p(employee.title)
+          each(filter(myEmployees, e -> e.myId % 2 == 1), employee -> li(
+            h2(employee.myName),
+            p(employee.myTitle)
           ))
         ).render();
         final String javaFilter = ul().with(
           li("Begin list"),
-          rawHtml(employees.stream().filter(e -> e.id % 2 == 1).map(employee -> li(
-            h2(employee.name),
-            p(employee.title)
+          rawHtml(myEmployees.stream().filter(e -> e.myId % 2 == 1).map(employee -> li(
+            h2(employee.myName),
+            p(employee.myTitle)
           )).map(AbstractDomContent::render).collect(Collectors.joining()))
         ).render();
         assertThat(j2htmlFilter, is(
@@ -169,16 +224,26 @@ public class TagCreatorTest {
         assertThat(j2htmlFilter.equals(javaFilter), is(true));
     }
 
+    /**
+     * Tests iterating over streams with each.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testEachWithStream() throws Exception {
         final String j2htmlMap = ul().with(
           li("Begin list"),
-          each(employeeMap.entrySet().stream().map(e -> li(e.getKey() + "-" + e.getValue().name)))
+          each(myEmployeeMap.entrySet().stream().map(e -> li(e.getKey() + "-" + e.getValue().myName)))
         ).render();
 
         assertThat(j2htmlMap, is("<ul><li>Begin list</li><li>1-Name 1</li><li>2-Name 2</li><li>3-Name 3</li></ul>"));
     }
 
+    /**
+     * Tests rendering of all tag types.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testAllTags() throws Exception {
 
@@ -349,6 +414,9 @@ public class TagCreatorTest {
         assertThat(video().render(), is("<video></video>"));
     }
 
+    /**
+     * Tests that script factories do not escape text parameters.
+     */
     @Test
     public void script_factories_do_not_escape_text_parameters() {
         assertEquals(
@@ -361,6 +429,9 @@ public class TagCreatorTest {
         );
     }
 
+    /**
+     * Tests that style factories do not escape text parameters.
+     */
     @Test
     public void style_factories_do_not_escape_text_parameters() {
         assertEquals(
@@ -373,6 +444,9 @@ public class TagCreatorTest {
         );
     }
 
+    /**
+     * Tests style factory with varargs parameters.
+     */
     @Test
     public void testStyleVarargs() {
         assertEquals(
@@ -389,6 +463,9 @@ public class TagCreatorTest {
         );
     }
 
+    /**
+     * Tests sanitization of style varargs parameters.
+     */
     @Test
     public void testStyleVarargsSanitization() {
         assertEquals(

@@ -11,21 +11,21 @@ public interface TagBuilder {
     /**
      * Appends an key/value pair as an HTML attribute to the current tag.
      *
-     * @param name The name of an attribute.
-     * @param value The value of an attribute.
+     * @param aName The name of an attribute.
+     * @param aValue The value of an attribute.
      * @return An TagBuilder which can continue appending attributes.
      * @throws IOException When the Appendable throws an IOException.
      */
-    TagBuilder appendAttribute(String name, String value) throws IOException;
+    TagBuilder appendAttribute(String aName, String aValue) throws IOException;
 
     /**
      * Appends a name, as a boolean HTML attribute to the current tag.
      *
-     * @param name The name of the boolean attribute.
+     * @param aName The name of the boolean attribute.
      * @return An TagBuilder which can continue appending attributes.
      * @throws IOException When the Appendable throws an IOException.
      */
-    TagBuilder appendBooleanAttribute(String name) throws IOException;
+    TagBuilder appendBooleanAttribute(String aName) throws IOException;
 
     /**
      * Appends any characters which are necessary to close the current tag, and returns an HtmlBuilder that can continue

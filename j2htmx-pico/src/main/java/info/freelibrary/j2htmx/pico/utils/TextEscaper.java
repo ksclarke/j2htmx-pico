@@ -9,8 +9,8 @@ public interface TextEscaper {
     /**
      * Escapes the specified text string.
      *
-     * @param text The text to escape
+     * @param aText The text to escape
      * @return The escaped text string
      */
-    String escape(String text);
+    String escape(String aText);
 }

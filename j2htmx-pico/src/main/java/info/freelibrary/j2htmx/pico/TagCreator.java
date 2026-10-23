@@ -1,6 +1,6 @@
 package info.freelibrary.j2htmx.pico;
 
-import static info.freelibrary.util.Constants.LF;
+import static info.freelibrary.util.Constants.*;
 
 import info.freelibrary.j2htmx.pico.attributes.Attr;
 import info.freelibrary.j2htmx.pico.tags.AbstractDomContent;
@@ -30,9 +30,8 @@ import java.util.stream.Stream;
 /**
  * Primary factory class providing static builder methods to construct HTML, HTMX, and Pico CSS elements.
  */
-@SuppressWarnings(
-  {PMD.SHORT_METHOD_NAME, PMD.COUPLING_BETWEEN_OBJECTS, PMD.CYCLOMATIC_COMPLEXITY, PMD.TOO_MANY_METHODS,
-    PMD.EXCESSIVE_PUBLIC_COUNT})
+@SuppressWarnings({PMD.SHORT_METHOD_NAME, PMD.COUPLING_BETWEEN_OBJECTS, PMD.CYCLOMATIC_COMPLEXITY, PMD.TOO_MANY_METHODS,
+  PMD.EXCESSIVE_PUBLIC_COUNT})
 public final class TagCreator {
 
     /**
@@ -46,27 +45,27 @@ public final class TagCreator {
      * Generic if-expression to do if'ing inside method calls.
      *
      * @param <T> The derived generic parameter type
-     * @param condition the condition to if-on
-     * @param ifValue the value to return if condition is true
+     * @param aCondition the condition to if-on
+     * @param anIfValue the value to return if condition is true
      * @return value if condition is true, null otherwise
      */
-    public static <T> T iff(final boolean condition, final T ifValue) {
-        return condition ? ifValue : null;
+    public static <T> T iff(final boolean aCondition, final T anIfValue) {
+        return aCondition ? anIfValue : null;
     }
 
     /**
      * Generic if-expression to if'ing inside method calls.
      *
-     * @param optional The item that may be present
-     * @param ifFunction The function that will be called if that optional is present
+     * @param anOptional The item that may be present
+     * @param anIfFunction The function that will be called if that optional is present
      * @param <T> The derived generic parameter type
      * @param <U> The supplying generic parameter type
      * @return transformed value if condition is true, null otherwise
      */
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    public static <T, U> T iff(final Optional<U> optional, final Function<U, T> ifFunction) {
-        if (Objects.nonNull(optional) && optional.isPresent()) {
-            return optional.map(ifFunction).orElse(null);
+    public static <T, U> T iff(final Optional<U> anOptional, final Function<U, T> anIfFunction) {
+        if (Objects.nonNull(anOptional) && anOptional.isPresent()) {
+            return anOptional.map(anIfFunction).orElse(null);
         }
         return null;
     }
@@ -75,57 +74,57 @@ public final class TagCreator {
      * Like {@link #iff}, but returns else-value instead of null.
      *
      * @param <T> The value type
-     * @param condition The condition to check
-     * @param ifValue The value to return if condition is true
-     * @param elseValue The value to return if condition is false
+     * @param aCondition The condition to check
+     * @param anIfValue The value to return if condition is true
+     * @param anElseValue The value to return if condition is false
      * @return The ifValue if condition is true, otherwise the elseValue
      */
-    public static <T> T iffElse(final boolean condition, final T ifValue, final T elseValue) {
-        return condition ? ifValue : elseValue;
+    public static <T> T iffElse(final boolean aCondition, final T anIfValue, final T anElseValue) {
+        return aCondition ? anIfValue : anElseValue;
     }
 
     /**
      * Returns a Attr.ShortForm object with either id, classes or both, obtained from parsing the input string using css
      * selector syntax.
      *
-     * @param attrs the string with shortform attributes, only id and class is supported
+     * @param aAttrs the string with shortform attributes, only id and class is supported
      * @return a Attr.ShortForm object
      */
-    public static Attr.ShortForm attrs(final String attrs) {
-        return Attr.ShortForm.parse(attrs);
+    public static Attr.ShortForm attrs(final String aAttrs) {
+        return Attr.ShortForm.parse(aAttrs);
     }
 
     /**
      * Returns the HTML created by concatenating the input elements, separated by space, in encounter order. Also
      * removes spaces before periods and commas.
      *
-     * @param stringOrDomObjects the elements to join
+     * @param aStringOrDomObjects the elements to join
      * @return joined elements as HTML
      */
-    public static UnescapedText join(final Object... stringOrDomObjects) {
-        return DomContentJoiner.join(" ", true, stringOrDomObjects);
+    public static UnescapedText join(final Object... aStringOrDomObjects) {
+        return DomContentJoiner.join(" ", true, aStringOrDomObjects);
     }
 
     /**
-     * Creates a group of AbstractDomContent objects (that may be used with {@link #iff(boolean, Object)} or returned from a
-     * method call).
+     * Creates a group of AbstractDomContent objects (that may be used with {@link #iff(boolean, Object)} or returned
+     * from a method call).
      *
-     * @param contents the AbstractDomContent elements
+     * @param aContents the AbstractDomContent elements
      * @return AbstractDomContent containing the given elements
      */
-    public static AbstractDomContent each(final AbstractDomContent... contents) {
-        return new ContainerTag<>(null).with(contents);
+    public static AbstractDomContent each(final AbstractDomContent... aContents) {
+        return new ContainerTag<>(null).with(aContents);
     }
 
     /**
      * Creates a AbstractDomContent object containing HTML elements from a stream. Intended usage:
      * {@literal each(numbers.stream().map(n -> li(n.toString())))}
      *
-     * @param stream the stream of AbstractDomContent elements
+     * @param aStream the stream of AbstractDomContent elements
      * @return AbstractDomContent containing elements from the stream
      */
-    public static AbstractDomContent each(final Stream<AbstractDomContent> stream) {
-        return new ContainerTag<>(null).with(stream);
+    public static AbstractDomContent each(final Stream<AbstractDomContent> aStream) {
+        return new ContainerTag<>(null).with(aStream);
     }
 
     /**
@@ -133,12 +132,13 @@ public final class TagCreator {
      * {@literal each(numbers, n -> li(n.toString()))}
      *
      * @param <T> The derived generic parameter type
-     * @param collection the collection to iterate over, ex: a list of values "1, 2, 3"
-     * @param mapper the mapping function, ex: {@literal "n -> li(n.toString())"}
+     * @param aCollection the collection to iterate over, ex: a list of values "1, 2, 3"
+     * @param aMapper the mapping function, ex: {@literal "n -> li(n.toString())"}
      * @return AbstractDomContent containing mapped data {@literal (ex. docs: [li(1), li(2), li(3)])}
      */
-    public static <T> AbstractDomContent each(final Collection<T> collection, final Function<? super T, AbstractDomContent> mapper) {
-        return tag(null).with(collection.stream().map(mapper));
+    public static <T> AbstractDomContent each(final Collection<T> aCollection,
+      final Function<? super T, AbstractDomContent> aMapper) {
+        return tag(null).with(aCollection.stream().map(aMapper));
     }
 
     /**
@@ -146,16 +146,16 @@ public final class TagCreator {
      * {@literal each(names, (index, name) -> li(index + " " + name))}
      *
      * @param <T> The derived generic parameter type
-     * @param collection the collection to iterate over, ex: a list of values [ "Tom", "Dick", "Harry" ]
-     * @param mapper the mapping BiFunction, ex: {@literal "(index, name) -> li(index + " " + name)"}
+     * @param aCollection the collection to iterate over, ex: a list of values [ "Tom", "Dick", "Harry" ]
+     * @param aMapper the mapping BiFunction, ex: {@literal "(index, name) -> li(index + " " + name)"}
      * @return AbstractDomContent containing mapped data {@literal (ex. docs: [li(0 Tom), li(1 Dick), li(2 Harry)])}
      */
-    public static <T> AbstractDomContent each(final Collection<T> collection,
-      final BiFunction<Integer, ? super T, AbstractDomContent> mapper) {
+    public static <T> AbstractDomContent each(final Collection<T> aCollection,
+      final BiFunction<Integer, ? super T, AbstractDomContent> aMapper) {
         final ContainerTag<?> dom = tag(null);
         int i = 0;
-        for (final T t : collection) {
-            dom.with(mapper.apply(i++, t));
+        for (final T t : aCollection) {
+            dom.with(aMapper.apply(i++, t));
         }
         return dom;
     }
@@ -165,12 +165,13 @@ public final class TagCreator {
      *
      * @param <I> The type of the keys
      * @param <T> The type of the values
-     * @param map The map to iterate over
-     * @param mapper The mapping function applied to each map entry
+     * @param aMap The map to iterate over
+     * @param aMapper The mapping function applied to each map entry
      * @return AbstractDomContent containing the mapped elements
      */
-    public static <I, T> AbstractDomContent each(final Map<I, T> map, final Function<Entry<I, T>, AbstractDomContent> mapper) {
-        return each(map.entrySet().stream().map(mapper));
+    public static <I, T> AbstractDomContent each(final Map<I, T> aMap,
+      final Function<Entry<I, T>, AbstractDomContent> aMapper) {
+        return each(aMap.entrySet().stream().map(aMapper));
     }
 
     /**
@@ -179,12 +180,13 @@ public final class TagCreator {
      *
      * @param <I> The type of the keys
      * @param <T> The type of the values
-     * @param map the map to iterate over, ex: a map of values { 1: "Tom", 2: "Dick", 3: "Harry" }
-     * @param mapper the mapping function, ex: {@literal "(id, name) -> li(id + " " + name)"}
+     * @param aMap the map to iterate over, ex: a map of values { 1: "Tom", 2: "Dick", 3: "Harry" }
+     * @param aMapper the mapping function, ex: {@literal "(id, name) -> li(id + " " + name)"}
      * @return AbstractDomContent containing mapped data {@literal (ex. docs: [li(1 Tom), li(2 Dick), li(3 Harry)])}
      */
-    public static <I, T> AbstractDomContent each(final Map<I, T> map, final BiFunction<I, T, AbstractDomContent> mapper) {
-        return each(map.entrySet().stream().map(entry -> mapper.apply(entry.getKey(), entry.getValue())));
+    public static <I, T> AbstractDomContent each(final Map<I, T> aMap,
+      final BiFunction<I, T, AbstractDomContent> aMapper) {
+        return each(aMap.entrySet().stream().map(entry -> aMapper.apply(entry.getKey(), entry.getValue())));
     }
 
     /**
@@ -192,42 +194,42 @@ public final class TagCreator {
      * {@literal each(filter(numbers, n -> n % 2 == 0), n -> li(n.toString()))}
      *
      * @param <T> The derived generic parameter type
-     * @param collection the collection to filter, ex: a list of values "1, 2, 3"
-     * @param filter the filter predicate, {@literal ex: "n -> n % 2 == 0"}
+     * @param aCollection the collection to filter, ex: a list of values "1, 2, 3"
+     * @param aFilter the filter predicate, {@literal ex: "n -> n % 2 == 0"}
      * @return the filtered collection as a list (ex. docs: 2)
      */
-    public static <T> List<T> filter(final Collection<T> collection, final Predicate<? super T> filter) {
-        return collection.stream().filter(filter).collect(Collectors.toList());
+    public static <T> List<T> filter(final Collection<T> aCollection, final Predicate<? super T> aFilter) {
+        return aCollection.stream().filter(aFilter).collect(Collectors.toList());
     }
 
     /**
      * Wraps a String in an UnescapedText element.
      *
-     * @param html the input html
+     * @param anHtml the input html
      * @return the input html wrapped in an UnescapedText element
      */
-    public static UnescapedText rawHtml(final String html) {
-        return new UnescapedText(html);
+    public static UnescapedText rawHtml(final String anHtml) {
+        return new UnescapedText(anHtml);
     }
 
     /**
      * Wraps a String in a Text element (does html-escaping).
      *
-     * @param text the input string
+     * @param aText the input string
      * @return the input string, html-escaped
      */
-    public static Text text(final String text) {
-        return new Text(text);
+    public static Text text(final String aText) {
+        return new Text(aText);
     }
 
     /**
      * Returns a complete html document string.
      *
-     * @param htmlTag the html content of a website
+     * @param anHtmlTag the html content of a website
      * @return document declaration and rendered html content
      */
-    public static String document(final HtmlTag htmlTag) {
-        return document().render() + htmlTag.render();
+    public static String document(final HtmlTag anHtmlTag) {
+        return document().render() + anHtmlTag.render();
     }
 
     //Special tags
@@ -235,51 +237,51 @@ public final class TagCreator {
     /**
      * Creates a custom {@link ContainerTag} with the specified tag name.
      *
-     * @param tagName The tag name
+     * @param aTagName The tag name
      * @return A new ContainerTag
      */
-    public static ContainerTag<? extends AbstractTag<?>> tag(final String tagName) {
-        return new ContainerTag<>(tagName);
+    public static ContainerTag<? extends AbstractTag<?>> tag(final String aTagName) {
+        return new ContainerTag<>(aTagName);
     }
 
     /**
      * Creates a custom {@link EmptyTag} with the specified tag name.
      *
-     * @param tagName The tag name
+     * @param aTagName The tag name
      * @return A new EmptyTag
      */
-    public static EmptyTag<? extends AbstractTag<?>> emptyTag(final String tagName) {
-        return new EmptyTag<>(tagName);
+    public static EmptyTag<? extends AbstractTag<?>> emptyTag(final String aTagName) {
+        return new EmptyTag<>(aTagName);
     }
 
     /**
      * Reads a file from the classpath or filesystem and returns its escaped text content.
      *
-     * @param path The file path
+     * @param aPath The file path
      * @return An escaped Text element
      */
-    public static Text fileAsEscapedString(final String path) {
-        return text(InlineStaticResource.getFileAsString(path));
+    public static Text fileAsEscapedString(final String aPath) {
+        return text(InlineStaticResource.getFileAsString(aPath));
     }
 
     /**
      * Reads a file from the classpath or filesystem and returns its raw HTML content.
      *
-     * @param path The file path
+     * @param aPath The file path
      * @return An UnescapedText element
      */
-    public static UnescapedText fileAsString(final String path) {
-        return rawHtml(InlineStaticResource.getFileAsString(path));
+    public static UnescapedText fileAsString(final String aPath) {
+        return rawHtml(InlineStaticResource.getFileAsString(aPath));
     }
 
     /**
      * Creates a {@code <style>} tag containing unminified CSS read from the specified file path.
      *
-     * @param path The CSS file path
+     * @param aPath The CSS file path
      * @return A StyleTag containing the CSS content
      */
-    public static StyleTag styleWithInlineFile(final String path) {
-        return (StyleTag) InlineStaticResource.get(path, InlineStaticResource.TargetFormat.CSS);
+    public static StyleTag styleWithInlineFile(final String aPath) {
+        return (StyleTag) InlineStaticResource.get(aPath, InlineStaticResource.TargetFormat.CSS);
     }
 
     /**
@@ -305,11 +307,11 @@ public final class TagCreator {
     /**
      * Creates a {@code <script>} tag containing minified JavaScript read from the specified file path.
      *
-     * @param path The JavaScript file path
+     * @param aPath The JavaScript file path
      * @return A ScriptTag containing the minified JavaScript content
      */
-    public static ScriptTag scriptWithInlineFileMinimized(final String path) {
-        return (ScriptTag) InlineStaticResource.get(path, InlineStaticResource.TargetFormat.JS_MIN);
+    public static ScriptTag scriptWithInlineFileMinimized(final String aPath) {
+        return (ScriptTag) InlineStaticResource.get(aPath, InlineStaticResource.TargetFormat.JS_MIN);
     }
 
     /**
@@ -333,53 +335,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <html>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A HtmlTag element
      */
-    public static HtmlTag html(final String text) {
-        return html().withText(text);
+    public static HtmlTag html(final String aText) {
+        return html().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <html>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A HtmlTag element
      */
-    public static HtmlTag html(final AbstractDomContent... dc) {
-        return html().with(dc);
+    public static HtmlTag html(final AbstractDomContent... aDc) {
+        return html().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <html>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A HtmlTag element
      */
-    public static HtmlTag html(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(html(), shortAttr);
+    public static HtmlTag html(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(html(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <html>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A HtmlTag element
      */
-    public static HtmlTag html(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(html(text), shortAttr);
+    public static HtmlTag html(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(html(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <html>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A HtmlTag element
      */
-    public static HtmlTag html(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(html(dc), shortAttr);
+    public static HtmlTag html(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(html(aDc), aShortAttr);
     }
 
     /**
@@ -394,53 +396,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <hxPartial>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A HxPartialTag element
      */
-    public static HxPartialTag hxPartial(final String text) {
-        return hxPartial().withText(text);
+    public static HxPartialTag hxPartial(final String aText) {
+        return hxPartial().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <hxPartial>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A HxPartialTag element
      */
-    public static HxPartialTag hxPartial(final AbstractDomContent... dc) {
-        return hxPartial().with(dc);
+    public static HxPartialTag hxPartial(final AbstractDomContent... aDc) {
+        return hxPartial().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <hxPartial>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A HxPartialTag element
      */
-    public static HxPartialTag hxPartial(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(hxPartial(), shortAttr);
+    public static HxPartialTag hxPartial(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(hxPartial(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <hxPartial>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A HxPartialTag element
      */
-    public static HxPartialTag hxPartial(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(hxPartial(text), shortAttr);
+    public static HxPartialTag hxPartial(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(hxPartial(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <hxPartial>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A HxPartialTag element
      */
-    public static HxPartialTag hxPartial(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(hxPartial(dc), shortAttr);
+    public static HxPartialTag hxPartial(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(hxPartial(aDc), aShortAttr);
     }
 
     /**
@@ -455,53 +457,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <body>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A BodyTag element
      */
-    public static BodyTag body(final String text) {
-        return new BodyTag().withText(text);
+    public static BodyTag body(final String aText) {
+        return new BodyTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <body>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A BodyTag element
      */
-    public static BodyTag body(final AbstractDomContent... dc) {
-        return new BodyTag().with(dc);
+    public static BodyTag body(final AbstractDomContent... aDc) {
+        return new BodyTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <body>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A BodyTag element
      */
-    public static BodyTag body(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new BodyTag(), shortAttr);
+    public static BodyTag body(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new BodyTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <body>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A BodyTag element
      */
-    public static BodyTag body(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new BodyTag().withText(text), shortAttr);
+    public static BodyTag body(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new BodyTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <body>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A BodyTag element
      */
-    public static BodyTag body(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new BodyTag().with(dc), shortAttr);
+    public static BodyTag body(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new BodyTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -516,53 +518,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <head>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A HeadTag element
      */
-    public static HeadTag head(final String text) {
-        return new HeadTag().withText(text);
+    public static HeadTag head(final String aText) {
+        return new HeadTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <head>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A HeadTag element
      */
-    public static HeadTag head(final AbstractDomContent... dc) {
-        return new HeadTag().with(dc);
+    public static HeadTag head(final AbstractDomContent... aDc) {
+        return new HeadTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <head>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A HeadTag element
      */
-    public static HeadTag head(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new HeadTag(), shortAttr);
+    public static HeadTag head(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new HeadTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <head>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A HeadTag element
      */
-    public static HeadTag head(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new HeadTag().withText(text), shortAttr);
+    public static HeadTag head(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new HeadTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <head>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A HeadTag element
      */
-    public static HeadTag head(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new HeadTag().with(dc), shortAttr);
+    public static HeadTag head(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new HeadTag().with(aDc), aShortAttr);
     }
 
     // EmptyTags, generated in class info.freelibrary.j2html.tags.generators.TagCreatorCodeGenerator
@@ -579,11 +581,11 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <area>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A AreaTag element
      */
-    public static AreaTag area(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new AreaTag(), shortAttr);
+    public static AreaTag area(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new AreaTag(), aShortAttr);
     }
 
     /**
@@ -598,11 +600,11 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <base>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A BaseTag element
      */
-    public static BaseTag base(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new BaseTag(), shortAttr);
+    public static BaseTag base(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new BaseTag(), aShortAttr);
     }
 
     /**
@@ -617,11 +619,11 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <br>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A BrTag element
      */
-    public static BrTag br(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new BrTag(), shortAttr);
+    public static BrTag br(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new BrTag(), aShortAttr);
     }
 
     /**
@@ -636,11 +638,11 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <col>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A ColTag element
      */
-    public static ColTag col(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new ColTag(), shortAttr);
+    public static ColTag col(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new ColTag(), aShortAttr);
     }
 
     /**
@@ -655,11 +657,11 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <embed>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A EmbedTag element
      */
-    public static EmbedTag embed(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new EmbedTag(), shortAttr);
+    public static EmbedTag embed(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new EmbedTag(), aShortAttr);
     }
 
     /**
@@ -674,11 +676,11 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <hr>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A HrTag element
      */
-    public static HrTag hr(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new HrTag(), shortAttr);
+    public static HrTag hr(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new HrTag(), aShortAttr);
     }
 
     /**
@@ -693,11 +695,11 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <img>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A ImgTag element
      */
-    public static ImgTag img(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new ImgTag(), shortAttr);
+    public static ImgTag img(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new ImgTag(), aShortAttr);
     }
 
     /**
@@ -712,11 +714,11 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <input>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A InputTag element
      */
-    public static InputTag input(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new InputTag(), shortAttr);
+    public static InputTag input(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new InputTag(), aShortAttr);
     }
 
     /**
@@ -731,11 +733,11 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <keygen>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A KeygenTag element
      */
-    public static KeygenTag keygen(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new KeygenTag(), shortAttr);
+    public static KeygenTag keygen(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new KeygenTag(), aShortAttr);
     }
 
     /**
@@ -750,11 +752,11 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <link>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A LinkTag element
      */
-    public static LinkTag link(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new LinkTag(), shortAttr);
+    public static LinkTag link(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new LinkTag(), aShortAttr);
     }
 
     /**
@@ -769,11 +771,11 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <meta>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A MetaTag element
      */
-    public static MetaTag meta(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new MetaTag(), shortAttr);
+    public static MetaTag meta(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new MetaTag(), aShortAttr);
     }
 
     /**
@@ -788,11 +790,11 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <param>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A ParamTag element
      */
-    public static ParamTag param(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new ParamTag(), shortAttr);
+    public static ParamTag param(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new ParamTag(), aShortAttr);
     }
 
     /**
@@ -807,11 +809,11 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <source>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A SourceTag element
      */
-    public static SourceTag source(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new SourceTag(), shortAttr);
+    public static SourceTag source(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new SourceTag(), aShortAttr);
     }
 
     /**
@@ -826,11 +828,11 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <track>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A TrackTag element
      */
-    public static TrackTag track(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new TrackTag(), shortAttr);
+    public static TrackTag track(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new TrackTag(), aShortAttr);
     }
 
     /**
@@ -845,11 +847,11 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <wbr>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A WbrTag element
      */
-    public static WbrTag wbr(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new WbrTag(), shortAttr);
+    public static WbrTag wbr(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new WbrTag(), aShortAttr);
     }
 
     // ContainerTags, generated in class info.freelibrary.j2html.tags.generators.TagCreatorCodeGenerator
@@ -866,53 +868,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <a>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A ATag element
      */
-    public static ATag a(final String text) {
-        return new ATag().withText(text);
+    public static ATag a(final String aText) {
+        return new ATag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <a>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A ATag element
      */
-    public static ATag a(final AbstractDomContent... dc) {
-        return new ATag().with(dc);
+    public static ATag a(final AbstractDomContent... aDc) {
+        return new ATag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <a>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A ATag element
      */
-    public static ATag a(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new ATag(), shortAttr);
+    public static ATag a(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new ATag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <a>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A ATag element
      */
-    public static ATag a(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new ATag().withText(text), shortAttr);
+    public static ATag a(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new ATag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <a>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A ATag element
      */
-    public static ATag a(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new ATag().with(dc), shortAttr);
+    public static ATag a(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new ATag().with(aDc), aShortAttr);
     }
 
     /**
@@ -927,53 +929,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <abbr>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A AbbrTag element
      */
-    public static AbbrTag abbr(final String text) {
-        return new AbbrTag().withText(text);
+    public static AbbrTag abbr(final String aText) {
+        return new AbbrTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <abbr>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A AbbrTag element
      */
-    public static AbbrTag abbr(final AbstractDomContent... dc) {
-        return new AbbrTag().with(dc);
+    public static AbbrTag abbr(final AbstractDomContent... aDc) {
+        return new AbbrTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <abbr>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A AbbrTag element
      */
-    public static AbbrTag abbr(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new AbbrTag(), shortAttr);
+    public static AbbrTag abbr(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new AbbrTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <abbr>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A AbbrTag element
      */
-    public static AbbrTag abbr(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new AbbrTag().withText(text), shortAttr);
+    public static AbbrTag abbr(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new AbbrTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <abbr>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A AbbrTag element
      */
-    public static AbbrTag abbr(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new AbbrTag().with(dc), shortAttr);
+    public static AbbrTag abbr(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new AbbrTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -988,53 +990,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <address>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A AddressTag element
      */
-    public static AddressTag address(final String text) {
-        return new AddressTag().withText(text);
+    public static AddressTag address(final String aText) {
+        return new AddressTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <address>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A AddressTag element
      */
-    public static AddressTag address(final AbstractDomContent... dc) {
-        return new AddressTag().with(dc);
+    public static AddressTag address(final AbstractDomContent... aDc) {
+        return new AddressTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <address>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A AddressTag element
      */
-    public static AddressTag address(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new AddressTag(), shortAttr);
+    public static AddressTag address(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new AddressTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <address>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A AddressTag element
      */
-    public static AddressTag address(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new AddressTag().withText(text), shortAttr);
+    public static AddressTag address(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new AddressTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <address>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A AddressTag element
      */
-    public static AddressTag address(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new AddressTag().with(dc), shortAttr);
+    public static AddressTag address(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new AddressTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -1049,53 +1051,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <article>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A ArticleTag element
      */
-    public static ArticleTag article(final String text) {
-        return new ArticleTag().withText(text);
+    public static ArticleTag article(final String aText) {
+        return new ArticleTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <article>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A ArticleTag element
      */
-    public static ArticleTag article(final AbstractDomContent... dc) {
-        return new ArticleTag().with(dc);
+    public static ArticleTag article(final AbstractDomContent... aDc) {
+        return new ArticleTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <article>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A ArticleTag element
      */
-    public static ArticleTag article(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new ArticleTag(), shortAttr);
+    public static ArticleTag article(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new ArticleTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <article>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A ArticleTag element
      */
-    public static ArticleTag article(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new ArticleTag().withText(text), shortAttr);
+    public static ArticleTag article(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new ArticleTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <article>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A ArticleTag element
      */
-    public static ArticleTag article(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new ArticleTag().with(dc), shortAttr);
+    public static ArticleTag article(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new ArticleTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -1110,53 +1112,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <aside>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A AsideTag element
      */
-    public static AsideTag aside(final String text) {
-        return new AsideTag().withText(text);
+    public static AsideTag aside(final String aText) {
+        return new AsideTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <aside>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A AsideTag element
      */
-    public static AsideTag aside(final AbstractDomContent... dc) {
-        return new AsideTag().with(dc);
+    public static AsideTag aside(final AbstractDomContent... aDc) {
+        return new AsideTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <aside>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A AsideTag element
      */
-    public static AsideTag aside(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new AsideTag(), shortAttr);
+    public static AsideTag aside(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new AsideTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <aside>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A AsideTag element
      */
-    public static AsideTag aside(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new AsideTag().withText(text), shortAttr);
+    public static AsideTag aside(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new AsideTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <aside>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A AsideTag element
      */
-    public static AsideTag aside(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new AsideTag().with(dc), shortAttr);
+    public static AsideTag aside(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new AsideTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -1171,53 +1173,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <audio>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A AudioTag element
      */
-    public static AudioTag audio(final String text) {
-        return new AudioTag().withText(text);
+    public static AudioTag audio(final String aText) {
+        return new AudioTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <audio>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A AudioTag element
      */
-    public static AudioTag audio(final AbstractDomContent... dc) {
-        return new AudioTag().with(dc);
+    public static AudioTag audio(final AbstractDomContent... aDc) {
+        return new AudioTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <audio>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A AudioTag element
      */
-    public static AudioTag audio(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new AudioTag(), shortAttr);
+    public static AudioTag audio(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new AudioTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <audio>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A AudioTag element
      */
-    public static AudioTag audio(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new AudioTag().withText(text), shortAttr);
+    public static AudioTag audio(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new AudioTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <audio>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A AudioTag element
      */
-    public static AudioTag audio(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new AudioTag().with(dc), shortAttr);
+    public static AudioTag audio(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new AudioTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -1232,53 +1234,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <b>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A BTag element
      */
-    public static BTag b(final String text) {
-        return new BTag().withText(text);
+    public static BTag b(final String aText) {
+        return new BTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <b>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A BTag element
      */
-    public static BTag b(final AbstractDomContent... dc) {
-        return new BTag().with(dc);
+    public static BTag b(final AbstractDomContent... aDc) {
+        return new BTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <b>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A BTag element
      */
-    public static BTag b(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new BTag(), shortAttr);
+    public static BTag b(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new BTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <b>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A BTag element
      */
-    public static BTag b(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new BTag().withText(text), shortAttr);
+    public static BTag b(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new BTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <b>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A BTag element
      */
-    public static BTag b(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new BTag().with(dc), shortAttr);
+    public static BTag b(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new BTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -1293,53 +1295,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <bdi>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A BdiTag element
      */
-    public static BdiTag bdi(final String text) {
-        return new BdiTag().withText(text);
+    public static BdiTag bdi(final String aText) {
+        return new BdiTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <bdi>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A BdiTag element
      */
-    public static BdiTag bdi(final AbstractDomContent... dc) {
-        return new BdiTag().with(dc);
+    public static BdiTag bdi(final AbstractDomContent... aDc) {
+        return new BdiTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <bdi>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A BdiTag element
      */
-    public static BdiTag bdi(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new BdiTag(), shortAttr);
+    public static BdiTag bdi(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new BdiTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <bdi>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A BdiTag element
      */
-    public static BdiTag bdi(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new BdiTag().withText(text), shortAttr);
+    public static BdiTag bdi(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new BdiTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <bdi>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A BdiTag element
      */
-    public static BdiTag bdi(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new BdiTag().with(dc), shortAttr);
+    public static BdiTag bdi(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new BdiTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -1354,53 +1356,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <bdo>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A BdoTag element
      */
-    public static BdoTag bdo(final String text) {
-        return new BdoTag().withText(text);
+    public static BdoTag bdo(final String aText) {
+        return new BdoTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <bdo>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A BdoTag element
      */
-    public static BdoTag bdo(final AbstractDomContent... dc) {
-        return new BdoTag().with(dc);
+    public static BdoTag bdo(final AbstractDomContent... aDc) {
+        return new BdoTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <bdo>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A BdoTag element
      */
-    public static BdoTag bdo(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new BdoTag(), shortAttr);
+    public static BdoTag bdo(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new BdoTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <bdo>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A BdoTag element
      */
-    public static BdoTag bdo(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new BdoTag().withText(text), shortAttr);
+    public static BdoTag bdo(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new BdoTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <bdo>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A BdoTag element
      */
-    public static BdoTag bdo(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new BdoTag().with(dc), shortAttr);
+    public static BdoTag bdo(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new BdoTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -1415,53 +1417,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <blockquote>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A BlockquoteTag element
      */
-    public static BlockquoteTag blockquote(final String text) {
-        return new BlockquoteTag().withText(text);
+    public static BlockquoteTag blockquote(final String aText) {
+        return new BlockquoteTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <blockquote>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A BlockquoteTag element
      */
-    public static BlockquoteTag blockquote(final AbstractDomContent... dc) {
-        return new BlockquoteTag().with(dc);
+    public static BlockquoteTag blockquote(final AbstractDomContent... aDc) {
+        return new BlockquoteTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <blockquote>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A BlockquoteTag element
      */
-    public static BlockquoteTag blockquote(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new BlockquoteTag(), shortAttr);
+    public static BlockquoteTag blockquote(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new BlockquoteTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <blockquote>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A BlockquoteTag element
      */
-    public static BlockquoteTag blockquote(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new BlockquoteTag().withText(text), shortAttr);
+    public static BlockquoteTag blockquote(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new BlockquoteTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <blockquote>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A BlockquoteTag element
      */
-    public static BlockquoteTag blockquote(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new BlockquoteTag().with(dc), shortAttr);
+    public static BlockquoteTag blockquote(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new BlockquoteTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -1476,53 +1478,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <button>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A ButtonTag element
      */
-    public static ButtonTag button(final String text) {
-        return new ButtonTag().withText(text);
+    public static ButtonTag button(final String aText) {
+        return new ButtonTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <button>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A ButtonTag element
      */
-    public static ButtonTag button(final AbstractDomContent... dc) {
-        return new ButtonTag().with(dc);
+    public static ButtonTag button(final AbstractDomContent... aDc) {
+        return new ButtonTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <button>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A ButtonTag element
      */
-    public static ButtonTag button(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new ButtonTag(), shortAttr);
+    public static ButtonTag button(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new ButtonTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <button>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A ButtonTag element
      */
-    public static ButtonTag button(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new ButtonTag().withText(text), shortAttr);
+    public static ButtonTag button(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new ButtonTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <button>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A ButtonTag element
      */
-    public static ButtonTag button(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new ButtonTag().with(dc), shortAttr);
+    public static ButtonTag button(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new ButtonTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -1537,53 +1539,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <canvas>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A CanvasTag element
      */
-    public static CanvasTag canvas(final String text) {
-        return new CanvasTag().withText(text);
+    public static CanvasTag canvas(final String aText) {
+        return new CanvasTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <canvas>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A CanvasTag element
      */
-    public static CanvasTag canvas(final AbstractDomContent... dc) {
-        return new CanvasTag().with(dc);
+    public static CanvasTag canvas(final AbstractDomContent... aDc) {
+        return new CanvasTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <canvas>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A CanvasTag element
      */
-    public static CanvasTag canvas(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new CanvasTag(), shortAttr);
+    public static CanvasTag canvas(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new CanvasTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <canvas>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A CanvasTag element
      */
-    public static CanvasTag canvas(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new CanvasTag().withText(text), shortAttr);
+    public static CanvasTag canvas(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new CanvasTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <canvas>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A CanvasTag element
      */
-    public static CanvasTag canvas(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new CanvasTag().with(dc), shortAttr);
+    public static CanvasTag canvas(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new CanvasTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -1598,53 +1600,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <caption>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A CaptionTag element
      */
-    public static CaptionTag caption(final String text) {
-        return new CaptionTag().withText(text);
+    public static CaptionTag caption(final String aText) {
+        return new CaptionTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <caption>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A CaptionTag element
      */
-    public static CaptionTag caption(final AbstractDomContent... dc) {
-        return new CaptionTag().with(dc);
+    public static CaptionTag caption(final AbstractDomContent... aDc) {
+        return new CaptionTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <caption>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A CaptionTag element
      */
-    public static CaptionTag caption(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new CaptionTag(), shortAttr);
+    public static CaptionTag caption(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new CaptionTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <caption>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A CaptionTag element
      */
-    public static CaptionTag caption(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new CaptionTag().withText(text), shortAttr);
+    public static CaptionTag caption(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new CaptionTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <caption>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A CaptionTag element
      */
-    public static CaptionTag caption(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new CaptionTag().with(dc), shortAttr);
+    public static CaptionTag caption(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new CaptionTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -1659,53 +1661,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <cite>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A CiteTag element
      */
-    public static CiteTag cite(final String text) {
-        return new CiteTag().withText(text);
+    public static CiteTag cite(final String aText) {
+        return new CiteTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <cite>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A CiteTag element
      */
-    public static CiteTag cite(final AbstractDomContent... dc) {
-        return new CiteTag().with(dc);
+    public static CiteTag cite(final AbstractDomContent... aDc) {
+        return new CiteTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <cite>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A CiteTag element
      */
-    public static CiteTag cite(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new CiteTag(), shortAttr);
+    public static CiteTag cite(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new CiteTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <cite>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A CiteTag element
      */
-    public static CiteTag cite(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new CiteTag().withText(text), shortAttr);
+    public static CiteTag cite(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new CiteTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <cite>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A CiteTag element
      */
-    public static CiteTag cite(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new CiteTag().with(dc), shortAttr);
+    public static CiteTag cite(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new CiteTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -1720,53 +1722,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <code>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A CodeTag element
      */
-    public static CodeTag code(final String text) {
-        return new CodeTag().withText(text);
+    public static CodeTag code(final String aText) {
+        return new CodeTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <code>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A CodeTag element
      */
-    public static CodeTag code(final AbstractDomContent... dc) {
-        return new CodeTag().with(dc);
+    public static CodeTag code(final AbstractDomContent... aDc) {
+        return new CodeTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <code>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A CodeTag element
      */
-    public static CodeTag code(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new CodeTag(), shortAttr);
+    public static CodeTag code(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new CodeTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <code>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A CodeTag element
      */
-    public static CodeTag code(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new CodeTag().withText(text), shortAttr);
+    public static CodeTag code(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new CodeTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <code>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A CodeTag element
      */
-    public static CodeTag code(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new CodeTag().with(dc), shortAttr);
+    public static CodeTag code(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new CodeTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -1781,53 +1783,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <colgroup>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A ColgroupTag element
      */
-    public static ColgroupTag colgroup(final String text) {
-        return new ColgroupTag().withText(text);
+    public static ColgroupTag colgroup(final String aText) {
+        return new ColgroupTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <colgroup>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A ColgroupTag element
      */
-    public static ColgroupTag colgroup(final AbstractDomContent... dc) {
-        return new ColgroupTag().with(dc);
+    public static ColgroupTag colgroup(final AbstractDomContent... aDc) {
+        return new ColgroupTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <colgroup>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A ColgroupTag element
      */
-    public static ColgroupTag colgroup(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new ColgroupTag(), shortAttr);
+    public static ColgroupTag colgroup(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new ColgroupTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <colgroup>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A ColgroupTag element
      */
-    public static ColgroupTag colgroup(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new ColgroupTag().withText(text), shortAttr);
+    public static ColgroupTag colgroup(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new ColgroupTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <colgroup>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A ColgroupTag element
      */
-    public static ColgroupTag colgroup(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new ColgroupTag().with(dc), shortAttr);
+    public static ColgroupTag colgroup(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new ColgroupTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -1842,53 +1844,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <data>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A DataTag element
      */
-    public static DataTag data(final String text) {
-        return new DataTag().withText(text);
+    public static DataTag data(final String aText) {
+        return new DataTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <data>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A DataTag element
      */
-    public static DataTag data(final AbstractDomContent... dc) {
-        return new DataTag().with(dc);
+    public static DataTag data(final AbstractDomContent... aDc) {
+        return new DataTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <data>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A DataTag element
      */
-    public static DataTag data(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new DataTag(), shortAttr);
+    public static DataTag data(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new DataTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <data>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A DataTag element
      */
-    public static DataTag data(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new DataTag().withText(text), shortAttr);
+    public static DataTag data(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new DataTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <data>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A DataTag element
      */
-    public static DataTag data(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new DataTag().with(dc), shortAttr);
+    public static DataTag data(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new DataTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -1903,53 +1905,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <datalist>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A DatalistTag element
      */
-    public static DatalistTag datalist(final String text) {
-        return new DatalistTag().withText(text);
+    public static DatalistTag datalist(final String aText) {
+        return new DatalistTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <datalist>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A DatalistTag element
      */
-    public static DatalistTag datalist(final AbstractDomContent... dc) {
-        return new DatalistTag().with(dc);
+    public static DatalistTag datalist(final AbstractDomContent... aDc) {
+        return new DatalistTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <datalist>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A DatalistTag element
      */
-    public static DatalistTag datalist(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new DatalistTag(), shortAttr);
+    public static DatalistTag datalist(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new DatalistTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <datalist>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A DatalistTag element
      */
-    public static DatalistTag datalist(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new DatalistTag().withText(text), shortAttr);
+    public static DatalistTag datalist(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new DatalistTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <datalist>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A DatalistTag element
      */
-    public static DatalistTag datalist(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new DatalistTag().with(dc), shortAttr);
+    public static DatalistTag datalist(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new DatalistTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -1964,53 +1966,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <dd>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A DdTag element
      */
-    public static DdTag dd(final String text) {
-        return new DdTag().withText(text);
+    public static DdTag dd(final String aText) {
+        return new DdTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <dd>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A DdTag element
      */
-    public static DdTag dd(final AbstractDomContent... dc) {
-        return new DdTag().with(dc);
+    public static DdTag dd(final AbstractDomContent... aDc) {
+        return new DdTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <dd>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A DdTag element
      */
-    public static DdTag dd(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new DdTag(), shortAttr);
+    public static DdTag dd(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new DdTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <dd>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A DdTag element
      */
-    public static DdTag dd(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new DdTag().withText(text), shortAttr);
+    public static DdTag dd(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new DdTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <dd>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A DdTag element
      */
-    public static DdTag dd(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new DdTag().with(dc), shortAttr);
+    public static DdTag dd(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new DdTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -2025,53 +2027,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <del>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A DelTag element
      */
-    public static DelTag del(final String text) {
-        return new DelTag().withText(text);
+    public static DelTag del(final String aText) {
+        return new DelTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <del>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A DelTag element
      */
-    public static DelTag del(final AbstractDomContent... dc) {
-        return new DelTag().with(dc);
+    public static DelTag del(final AbstractDomContent... aDc) {
+        return new DelTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <del>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A DelTag element
      */
-    public static DelTag del(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new DelTag(), shortAttr);
+    public static DelTag del(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new DelTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <del>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A DelTag element
      */
-    public static DelTag del(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new DelTag().withText(text), shortAttr);
+    public static DelTag del(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new DelTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <del>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A DelTag element
      */
-    public static DelTag del(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new DelTag().with(dc), shortAttr);
+    public static DelTag del(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new DelTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -2086,53 +2088,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <details>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A DetailsTag element
      */
-    public static DetailsTag details(final String text) {
-        return new DetailsTag().withText(text);
+    public static DetailsTag details(final String aText) {
+        return new DetailsTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <details>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A DetailsTag element
      */
-    public static DetailsTag details(final AbstractDomContent... dc) {
-        return new DetailsTag().with(dc);
+    public static DetailsTag details(final AbstractDomContent... aDc) {
+        return new DetailsTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <details>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A DetailsTag element
      */
-    public static DetailsTag details(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new DetailsTag(), shortAttr);
+    public static DetailsTag details(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new DetailsTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <details>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A DetailsTag element
      */
-    public static DetailsTag details(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new DetailsTag().withText(text), shortAttr);
+    public static DetailsTag details(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new DetailsTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <details>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A DetailsTag element
      */
-    public static DetailsTag details(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new DetailsTag().with(dc), shortAttr);
+    public static DetailsTag details(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new DetailsTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -2147,53 +2149,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <dfn>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A DfnTag element
      */
-    public static DfnTag dfn(final String text) {
-        return new DfnTag().withText(text);
+    public static DfnTag dfn(final String aText) {
+        return new DfnTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <dfn>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A DfnTag element
      */
-    public static DfnTag dfn(final AbstractDomContent... dc) {
-        return new DfnTag().with(dc);
+    public static DfnTag dfn(final AbstractDomContent... aDc) {
+        return new DfnTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <dfn>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A DfnTag element
      */
-    public static DfnTag dfn(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new DfnTag(), shortAttr);
+    public static DfnTag dfn(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new DfnTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <dfn>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A DfnTag element
      */
-    public static DfnTag dfn(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new DfnTag().withText(text), shortAttr);
+    public static DfnTag dfn(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new DfnTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <dfn>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A DfnTag element
      */
-    public static DfnTag dfn(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new DfnTag().with(dc), shortAttr);
+    public static DfnTag dfn(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new DfnTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -2208,53 +2210,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <dialog>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A DialogTag element
      */
-    public static DialogTag dialog(final String text) {
-        return new DialogTag().withText(text);
+    public static DialogTag dialog(final String aText) {
+        return new DialogTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <dialog>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A DialogTag element
      */
-    public static DialogTag dialog(final AbstractDomContent... dc) {
-        return new DialogTag().with(dc);
+    public static DialogTag dialog(final AbstractDomContent... aDc) {
+        return new DialogTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <dialog>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A DialogTag element
      */
-    public static DialogTag dialog(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new DialogTag(), shortAttr);
+    public static DialogTag dialog(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new DialogTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <dialog>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A DialogTag element
      */
-    public static DialogTag dialog(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new DialogTag().withText(text), shortAttr);
+    public static DialogTag dialog(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new DialogTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <dialog>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A DialogTag element
      */
-    public static DialogTag dialog(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new DialogTag().with(dc), shortAttr);
+    public static DialogTag dialog(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new DialogTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -2269,53 +2271,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <div>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A DivTag element
      */
-    public static DivTag div(final String text) {
-        return new DivTag().withText(text);
+    public static DivTag div(final String aText) {
+        return new DivTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <div>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A DivTag element
      */
-    public static DivTag div(final AbstractDomContent... dc) {
-        return new DivTag().with(dc);
+    public static DivTag div(final AbstractDomContent... aDc) {
+        return new DivTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <div>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A DivTag element
      */
-    public static DivTag div(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new DivTag(), shortAttr);
+    public static DivTag div(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new DivTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <div>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A DivTag element
      */
-    public static DivTag div(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new DivTag().withText(text), shortAttr);
+    public static DivTag div(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new DivTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <div>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A DivTag element
      */
-    public static DivTag div(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new DivTag().with(dc), shortAttr);
+    public static DivTag div(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new DivTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -2330,53 +2332,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <dl>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A DlTag element
      */
-    public static DlTag dl(final String text) {
-        return new DlTag().withText(text);
+    public static DlTag dl(final String aText) {
+        return new DlTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <dl>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A DlTag element
      */
-    public static DlTag dl(final AbstractDomContent... dc) {
-        return new DlTag().with(dc);
+    public static DlTag dl(final AbstractDomContent... aDc) {
+        return new DlTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <dl>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A DlTag element
      */
-    public static DlTag dl(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new DlTag(), shortAttr);
+    public static DlTag dl(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new DlTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <dl>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A DlTag element
      */
-    public static DlTag dl(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new DlTag().withText(text), shortAttr);
+    public static DlTag dl(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new DlTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <dl>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A DlTag element
      */
-    public static DlTag dl(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new DlTag().with(dc), shortAttr);
+    public static DlTag dl(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new DlTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -2391,53 +2393,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <dt>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A DtTag element
      */
-    public static DtTag dt(final String text) {
-        return new DtTag().withText(text);
+    public static DtTag dt(final String aText) {
+        return new DtTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <dt>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A DtTag element
      */
-    public static DtTag dt(final AbstractDomContent... dc) {
-        return new DtTag().with(dc);
+    public static DtTag dt(final AbstractDomContent... aDc) {
+        return new DtTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <dt>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A DtTag element
      */
-    public static DtTag dt(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new DtTag(), shortAttr);
+    public static DtTag dt(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new DtTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <dt>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A DtTag element
      */
-    public static DtTag dt(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new DtTag().withText(text), shortAttr);
+    public static DtTag dt(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new DtTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <dt>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A DtTag element
      */
-    public static DtTag dt(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new DtTag().with(dc), shortAttr);
+    public static DtTag dt(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new DtTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -2452,53 +2454,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <em>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A EmTag element
      */
-    public static EmTag em(final String text) {
-        return new EmTag().withText(text);
+    public static EmTag em(final String aText) {
+        return new EmTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <em>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A EmTag element
      */
-    public static EmTag em(final AbstractDomContent... dc) {
-        return new EmTag().with(dc);
+    public static EmTag em(final AbstractDomContent... aDc) {
+        return new EmTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <em>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A EmTag element
      */
-    public static EmTag em(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new EmTag(), shortAttr);
+    public static EmTag em(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new EmTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <em>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A EmTag element
      */
-    public static EmTag em(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new EmTag().withText(text), shortAttr);
+    public static EmTag em(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new EmTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <em>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A EmTag element
      */
-    public static EmTag em(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new EmTag().with(dc), shortAttr);
+    public static EmTag em(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new EmTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -2513,53 +2515,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <fieldset>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A FieldsetTag element
      */
-    public static FieldsetTag fieldset(final String text) {
-        return new FieldsetTag().withText(text);
+    public static FieldsetTag fieldset(final String aText) {
+        return new FieldsetTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <fieldset>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A FieldsetTag element
      */
-    public static FieldsetTag fieldset(final AbstractDomContent... dc) {
-        return new FieldsetTag().with(dc);
+    public static FieldsetTag fieldset(final AbstractDomContent... aDc) {
+        return new FieldsetTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <fieldset>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A FieldsetTag element
      */
-    public static FieldsetTag fieldset(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new FieldsetTag(), shortAttr);
+    public static FieldsetTag fieldset(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new FieldsetTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <fieldset>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A FieldsetTag element
      */
-    public static FieldsetTag fieldset(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new FieldsetTag().withText(text), shortAttr);
+    public static FieldsetTag fieldset(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new FieldsetTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <fieldset>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A FieldsetTag element
      */
-    public static FieldsetTag fieldset(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new FieldsetTag().with(dc), shortAttr);
+    public static FieldsetTag fieldset(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new FieldsetTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -2574,53 +2576,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <figcaption>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A FigcaptionTag element
      */
-    public static FigcaptionTag figcaption(final String text) {
-        return new FigcaptionTag().withText(text);
+    public static FigcaptionTag figcaption(final String aText) {
+        return new FigcaptionTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <figcaption>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A FigcaptionTag element
      */
-    public static FigcaptionTag figcaption(final AbstractDomContent... dc) {
-        return new FigcaptionTag().with(dc);
+    public static FigcaptionTag figcaption(final AbstractDomContent... aDc) {
+        return new FigcaptionTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <figcaption>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A FigcaptionTag element
      */
-    public static FigcaptionTag figcaption(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new FigcaptionTag(), shortAttr);
+    public static FigcaptionTag figcaption(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new FigcaptionTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <figcaption>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A FigcaptionTag element
      */
-    public static FigcaptionTag figcaption(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new FigcaptionTag().withText(text), shortAttr);
+    public static FigcaptionTag figcaption(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new FigcaptionTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <figcaption>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A FigcaptionTag element
      */
-    public static FigcaptionTag figcaption(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new FigcaptionTag().with(dc), shortAttr);
+    public static FigcaptionTag figcaption(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new FigcaptionTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -2635,53 +2637,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <figure>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A FigureTag element
      */
-    public static FigureTag figure(final String text) {
-        return new FigureTag().withText(text);
+    public static FigureTag figure(final String aText) {
+        return new FigureTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <figure>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A FigureTag element
      */
-    public static FigureTag figure(final AbstractDomContent... dc) {
-        return new FigureTag().with(dc);
+    public static FigureTag figure(final AbstractDomContent... aDc) {
+        return new FigureTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <figure>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A FigureTag element
      */
-    public static FigureTag figure(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new FigureTag(), shortAttr);
+    public static FigureTag figure(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new FigureTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <figure>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A FigureTag element
      */
-    public static FigureTag figure(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new FigureTag().withText(text), shortAttr);
+    public static FigureTag figure(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new FigureTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <figure>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A FigureTag element
      */
-    public static FigureTag figure(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new FigureTag().with(dc), shortAttr);
+    public static FigureTag figure(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new FigureTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -2696,53 +2698,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <footer>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A FooterTag element
      */
-    public static FooterTag footer(final String text) {
-        return new FooterTag().withText(text);
+    public static FooterTag footer(final String aText) {
+        return new FooterTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <footer>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A FooterTag element
      */
-    public static FooterTag footer(final AbstractDomContent... dc) {
-        return new FooterTag().with(dc);
+    public static FooterTag footer(final AbstractDomContent... aDc) {
+        return new FooterTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <footer>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A FooterTag element
      */
-    public static FooterTag footer(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new FooterTag(), shortAttr);
+    public static FooterTag footer(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new FooterTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <footer>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A FooterTag element
      */
-    public static FooterTag footer(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new FooterTag().withText(text), shortAttr);
+    public static FooterTag footer(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new FooterTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <footer>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A FooterTag element
      */
-    public static FooterTag footer(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new FooterTag().with(dc), shortAttr);
+    public static FooterTag footer(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new FooterTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -2757,53 +2759,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <form>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A FormTag element
      */
-    public static FormTag form(final String text) {
-        return new FormTag().withText(text);
+    public static FormTag form(final String aText) {
+        return new FormTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <form>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A FormTag element
      */
-    public static FormTag form(final AbstractDomContent... dc) {
-        return new FormTag().with(dc);
+    public static FormTag form(final AbstractDomContent... aDc) {
+        return new FormTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <form>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A FormTag element
      */
-    public static FormTag form(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new FormTag(), shortAttr);
+    public static FormTag form(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new FormTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <form>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A FormTag element
      */
-    public static FormTag form(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new FormTag().withText(text), shortAttr);
+    public static FormTag form(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new FormTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <form>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A FormTag element
      */
-    public static FormTag form(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new FormTag().with(dc), shortAttr);
+    public static FormTag form(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new FormTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -2818,53 +2820,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <h1>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A H1Tag element
      */
-    public static H1Tag h1(final String text) {
-        return new H1Tag().withText(text);
+    public static H1Tag h1(final String aText) {
+        return new H1Tag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <h1>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A H1Tag element
      */
-    public static H1Tag h1(final AbstractDomContent... dc) {
-        return new H1Tag().with(dc);
+    public static H1Tag h1(final AbstractDomContent... aDc) {
+        return new H1Tag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <h1>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A H1Tag element
      */
-    public static H1Tag h1(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new H1Tag(), shortAttr);
+    public static H1Tag h1(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new H1Tag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <h1>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A H1Tag element
      */
-    public static H1Tag h1(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new H1Tag().withText(text), shortAttr);
+    public static H1Tag h1(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new H1Tag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <h1>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A H1Tag element
      */
-    public static H1Tag h1(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new H1Tag().with(dc), shortAttr);
+    public static H1Tag h1(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new H1Tag().with(aDc), aShortAttr);
     }
 
     /**
@@ -2879,53 +2881,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <h2>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A H2Tag element
      */
-    public static H2Tag h2(final String text) {
-        return new H2Tag().withText(text);
+    public static H2Tag h2(final String aText) {
+        return new H2Tag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <h2>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A H2Tag element
      */
-    public static H2Tag h2(final AbstractDomContent... dc) {
-        return new H2Tag().with(dc);
+    public static H2Tag h2(final AbstractDomContent... aDc) {
+        return new H2Tag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <h2>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A H2Tag element
      */
-    public static H2Tag h2(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new H2Tag(), shortAttr);
+    public static H2Tag h2(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new H2Tag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <h2>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A H2Tag element
      */
-    public static H2Tag h2(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new H2Tag().withText(text), shortAttr);
+    public static H2Tag h2(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new H2Tag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <h2>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A H2Tag element
      */
-    public static H2Tag h2(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new H2Tag().with(dc), shortAttr);
+    public static H2Tag h2(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new H2Tag().with(aDc), aShortAttr);
     }
 
     /**
@@ -2940,53 +2942,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <h3>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A H3Tag element
      */
-    public static H3Tag h3(final String text) {
-        return new H3Tag().withText(text);
+    public static H3Tag h3(final String aText) {
+        return new H3Tag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <h3>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A H3Tag element
      */
-    public static H3Tag h3(final AbstractDomContent... dc) {
-        return new H3Tag().with(dc);
+    public static H3Tag h3(final AbstractDomContent... aDc) {
+        return new H3Tag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <h3>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A H3Tag element
      */
-    public static H3Tag h3(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new H3Tag(), shortAttr);
+    public static H3Tag h3(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new H3Tag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <h3>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A H3Tag element
      */
-    public static H3Tag h3(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new H3Tag().withText(text), shortAttr);
+    public static H3Tag h3(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new H3Tag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <h3>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A H3Tag element
      */
-    public static H3Tag h3(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new H3Tag().with(dc), shortAttr);
+    public static H3Tag h3(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new H3Tag().with(aDc), aShortAttr);
     }
 
     /**
@@ -3001,53 +3003,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <h4>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A H4Tag element
      */
-    public static H4Tag h4(final String text) {
-        return new H4Tag().withText(text);
+    public static H4Tag h4(final String aText) {
+        return new H4Tag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <h4>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A H4Tag element
      */
-    public static H4Tag h4(final AbstractDomContent... dc) {
-        return new H4Tag().with(dc);
+    public static H4Tag h4(final AbstractDomContent... aDc) {
+        return new H4Tag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <h4>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A H4Tag element
      */
-    public static H4Tag h4(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new H4Tag(), shortAttr);
+    public static H4Tag h4(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new H4Tag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <h4>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A H4Tag element
      */
-    public static H4Tag h4(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new H4Tag().withText(text), shortAttr);
+    public static H4Tag h4(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new H4Tag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <h4>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A H4Tag element
      */
-    public static H4Tag h4(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new H4Tag().with(dc), shortAttr);
+    public static H4Tag h4(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new H4Tag().with(aDc), aShortAttr);
     }
 
     /**
@@ -3062,53 +3064,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <h5>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A H5Tag element
      */
-    public static H5Tag h5(final String text) {
-        return new H5Tag().withText(text);
+    public static H5Tag h5(final String aText) {
+        return new H5Tag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <h5>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A H5Tag element
      */
-    public static H5Tag h5(final AbstractDomContent... dc) {
-        return new H5Tag().with(dc);
+    public static H5Tag h5(final AbstractDomContent... aDc) {
+        return new H5Tag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <h5>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A H5Tag element
      */
-    public static H5Tag h5(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new H5Tag(), shortAttr);
+    public static H5Tag h5(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new H5Tag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <h5>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A H5Tag element
      */
-    public static H5Tag h5(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new H5Tag().withText(text), shortAttr);
+    public static H5Tag h5(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new H5Tag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <h5>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A H5Tag element
      */
-    public static H5Tag h5(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new H5Tag().with(dc), shortAttr);
+    public static H5Tag h5(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new H5Tag().with(aDc), aShortAttr);
     }
 
     /**
@@ -3123,53 +3125,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <h6>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A H6Tag element
      */
-    public static H6Tag h6(final String text) {
-        return new H6Tag().withText(text);
+    public static H6Tag h6(final String aText) {
+        return new H6Tag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <h6>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A H6Tag element
      */
-    public static H6Tag h6(final AbstractDomContent... dc) {
-        return new H6Tag().with(dc);
+    public static H6Tag h6(final AbstractDomContent... aDc) {
+        return new H6Tag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <h6>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A H6Tag element
      */
-    public static H6Tag h6(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new H6Tag(), shortAttr);
+    public static H6Tag h6(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new H6Tag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <h6>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A H6Tag element
      */
-    public static H6Tag h6(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new H6Tag().withText(text), shortAttr);
+    public static H6Tag h6(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new H6Tag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <h6>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A H6Tag element
      */
-    public static H6Tag h6(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new H6Tag().with(dc), shortAttr);
+    public static H6Tag h6(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new H6Tag().with(aDc), aShortAttr);
     }
 
     /**
@@ -3184,53 +3186,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <header>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A HeaderTag element
      */
-    public static HeaderTag header(final String text) {
-        return new HeaderTag().withText(text);
+    public static HeaderTag header(final String aText) {
+        return new HeaderTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <header>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A HeaderTag element
      */
-    public static HeaderTag header(final AbstractDomContent... dc) {
-        return new HeaderTag().with(dc);
+    public static HeaderTag header(final AbstractDomContent... aDc) {
+        return new HeaderTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <header>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A HeaderTag element
      */
-    public static HeaderTag header(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new HeaderTag(), shortAttr);
+    public static HeaderTag header(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new HeaderTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <header>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A HeaderTag element
      */
-    public static HeaderTag header(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new HeaderTag().withText(text), shortAttr);
+    public static HeaderTag header(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new HeaderTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <header>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A HeaderTag element
      */
-    public static HeaderTag header(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new HeaderTag().with(dc), shortAttr);
+    public static HeaderTag header(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new HeaderTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -3245,53 +3247,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <i>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A ITag element
      */
-    public static ITag i(final String text) {
-        return new ITag().withText(text);
+    public static ITag i(final String aText) {
+        return new ITag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <i>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A ITag element
      */
-    public static ITag i(final AbstractDomContent... dc) {
-        return new ITag().with(dc);
+    public static ITag i(final AbstractDomContent... aDc) {
+        return new ITag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <i>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A ITag element
      */
-    public static ITag i(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new ITag(), shortAttr);
+    public static ITag i(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new ITag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <i>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A ITag element
      */
-    public static ITag i(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new ITag().withText(text), shortAttr);
+    public static ITag i(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new ITag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <i>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A ITag element
      */
-    public static ITag i(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new ITag().with(dc), shortAttr);
+    public static ITag i(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new ITag().with(aDc), aShortAttr);
     }
 
     /**
@@ -3306,53 +3308,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <iframe>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A IframeTag element
      */
-    public static IframeTag iframe(final String text) {
-        return new IframeTag().withText(text);
+    public static IframeTag iframe(final String aText) {
+        return new IframeTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <iframe>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A IframeTag element
      */
-    public static IframeTag iframe(final AbstractDomContent... dc) {
-        return new IframeTag().with(dc);
+    public static IframeTag iframe(final AbstractDomContent... aDc) {
+        return new IframeTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <iframe>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A IframeTag element
      */
-    public static IframeTag iframe(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new IframeTag(), shortAttr);
+    public static IframeTag iframe(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new IframeTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <iframe>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A IframeTag element
      */
-    public static IframeTag iframe(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new IframeTag().withText(text), shortAttr);
+    public static IframeTag iframe(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new IframeTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <iframe>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A IframeTag element
      */
-    public static IframeTag iframe(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new IframeTag().with(dc), shortAttr);
+    public static IframeTag iframe(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new IframeTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -3367,53 +3369,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <ins>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A InsTag element
      */
-    public static InsTag ins(final String text) {
-        return new InsTag().withText(text);
+    public static InsTag ins(final String aText) {
+        return new InsTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <ins>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A InsTag element
      */
-    public static InsTag ins(final AbstractDomContent... dc) {
-        return new InsTag().with(dc);
+    public static InsTag ins(final AbstractDomContent... aDc) {
+        return new InsTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <ins>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A InsTag element
      */
-    public static InsTag ins(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new InsTag(), shortAttr);
+    public static InsTag ins(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new InsTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <ins>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A InsTag element
      */
-    public static InsTag ins(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new InsTag().withText(text), shortAttr);
+    public static InsTag ins(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new InsTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <ins>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A InsTag element
      */
-    public static InsTag ins(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new InsTag().with(dc), shortAttr);
+    public static InsTag ins(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new InsTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -3428,53 +3430,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <kbd>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A KbdTag element
      */
-    public static KbdTag kbd(final String text) {
-        return new KbdTag().withText(text);
+    public static KbdTag kbd(final String aText) {
+        return new KbdTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <kbd>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A KbdTag element
      */
-    public static KbdTag kbd(final AbstractDomContent... dc) {
-        return new KbdTag().with(dc);
+    public static KbdTag kbd(final AbstractDomContent... aDc) {
+        return new KbdTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <kbd>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A KbdTag element
      */
-    public static KbdTag kbd(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new KbdTag(), shortAttr);
+    public static KbdTag kbd(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new KbdTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <kbd>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A KbdTag element
      */
-    public static KbdTag kbd(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new KbdTag().withText(text), shortAttr);
+    public static KbdTag kbd(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new KbdTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <kbd>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A KbdTag element
      */
-    public static KbdTag kbd(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new KbdTag().with(dc), shortAttr);
+    public static KbdTag kbd(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new KbdTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -3489,53 +3491,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <label>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A LabelTag element
      */
-    public static LabelTag label(final String text) {
-        return new LabelTag().withText(text);
+    public static LabelTag label(final String aText) {
+        return new LabelTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <label>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A LabelTag element
      */
-    public static LabelTag label(final AbstractDomContent... dc) {
-        return new LabelTag().with(dc);
+    public static LabelTag label(final AbstractDomContent... aDc) {
+        return new LabelTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <label>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A LabelTag element
      */
-    public static LabelTag label(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new LabelTag(), shortAttr);
+    public static LabelTag label(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new LabelTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <label>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A LabelTag element
      */
-    public static LabelTag label(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new LabelTag().withText(text), shortAttr);
+    public static LabelTag label(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new LabelTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <label>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A LabelTag element
      */
-    public static LabelTag label(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new LabelTag().with(dc), shortAttr);
+    public static LabelTag label(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new LabelTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -3550,53 +3552,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <legend>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A LegendTag element
      */
-    public static LegendTag legend(final String text) {
-        return new LegendTag().withText(text);
+    public static LegendTag legend(final String aText) {
+        return new LegendTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <legend>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A LegendTag element
      */
-    public static LegendTag legend(final AbstractDomContent... dc) {
-        return new LegendTag().with(dc);
+    public static LegendTag legend(final AbstractDomContent... aDc) {
+        return new LegendTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <legend>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A LegendTag element
      */
-    public static LegendTag legend(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new LegendTag(), shortAttr);
+    public static LegendTag legend(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new LegendTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <legend>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A LegendTag element
      */
-    public static LegendTag legend(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new LegendTag().withText(text), shortAttr);
+    public static LegendTag legend(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new LegendTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <legend>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A LegendTag element
      */
-    public static LegendTag legend(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new LegendTag().with(dc), shortAttr);
+    public static LegendTag legend(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new LegendTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -3611,53 +3613,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <li>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A LiTag element
      */
-    public static LiTag li(final String text) {
-        return new LiTag().withText(text);
+    public static LiTag li(final String aText) {
+        return new LiTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <li>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A LiTag element
      */
-    public static LiTag li(final AbstractDomContent... dc) {
-        return new LiTag().with(dc);
+    public static LiTag li(final AbstractDomContent... aDc) {
+        return new LiTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <li>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A LiTag element
      */
-    public static LiTag li(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new LiTag(), shortAttr);
+    public static LiTag li(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new LiTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <li>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A LiTag element
      */
-    public static LiTag li(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new LiTag().withText(text), shortAttr);
+    public static LiTag li(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new LiTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <li>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A LiTag element
      */
-    public static LiTag li(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new LiTag().with(dc), shortAttr);
+    public static LiTag li(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new LiTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -3672,53 +3674,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <main>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A MainTag element
      */
-    public static MainTag main(final String text) {
-        return new MainTag().withText(text);
+    public static MainTag main(final String aText) {
+        return new MainTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <main>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A MainTag element
      */
-    public static MainTag main(final AbstractDomContent... dc) {
-        return new MainTag().with(dc);
+    public static MainTag main(final AbstractDomContent... aDc) {
+        return new MainTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <main>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A MainTag element
      */
-    public static MainTag main(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new MainTag(), shortAttr);
+    public static MainTag main(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new MainTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <main>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A MainTag element
      */
-    public static MainTag main(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new MainTag().withText(text), shortAttr);
+    public static MainTag main(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new MainTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <main>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A MainTag element
      */
-    public static MainTag main(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new MainTag().with(dc), shortAttr);
+    public static MainTag main(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new MainTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -3733,53 +3735,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <map>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A MapTag element
      */
-    public static MapTag map(final String text) {
-        return new MapTag().withText(text);
+    public static MapTag map(final String aText) {
+        return new MapTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <map>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A MapTag element
      */
-    public static MapTag map(final AbstractDomContent... dc) {
-        return new MapTag().with(dc);
+    public static MapTag map(final AbstractDomContent... aDc) {
+        return new MapTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <map>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A MapTag element
      */
-    public static MapTag map(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new MapTag(), shortAttr);
+    public static MapTag map(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new MapTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <map>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A MapTag element
      */
-    public static MapTag map(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new MapTag().withText(text), shortAttr);
+    public static MapTag map(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new MapTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <map>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A MapTag element
      */
-    public static MapTag map(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new MapTag().with(dc), shortAttr);
+    public static MapTag map(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new MapTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -3794,53 +3796,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <mark>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A MarkTag element
      */
-    public static MarkTag mark(final String text) {
-        return new MarkTag().withText(text);
+    public static MarkTag mark(final String aText) {
+        return new MarkTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <mark>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A MarkTag element
      */
-    public static MarkTag mark(final AbstractDomContent... dc) {
-        return new MarkTag().with(dc);
+    public static MarkTag mark(final AbstractDomContent... aDc) {
+        return new MarkTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <mark>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A MarkTag element
      */
-    public static MarkTag mark(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new MarkTag(), shortAttr);
+    public static MarkTag mark(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new MarkTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <mark>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A MarkTag element
      */
-    public static MarkTag mark(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new MarkTag().withText(text), shortAttr);
+    public static MarkTag mark(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new MarkTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <mark>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A MarkTag element
      */
-    public static MarkTag mark(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new MarkTag().with(dc), shortAttr);
+    public static MarkTag mark(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new MarkTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -3855,53 +3857,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <menu>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A MenuTag element
      */
-    public static MenuTag menu(final String text) {
-        return new MenuTag().withText(text);
+    public static MenuTag menu(final String aText) {
+        return new MenuTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <menu>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A MenuTag element
      */
-    public static MenuTag menu(final AbstractDomContent... dc) {
-        return new MenuTag().with(dc);
+    public static MenuTag menu(final AbstractDomContent... aDc) {
+        return new MenuTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <menu>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A MenuTag element
      */
-    public static MenuTag menu(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new MenuTag(), shortAttr);
+    public static MenuTag menu(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new MenuTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <menu>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A MenuTag element
      */
-    public static MenuTag menu(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new MenuTag().withText(text), shortAttr);
+    public static MenuTag menu(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new MenuTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <menu>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A MenuTag element
      */
-    public static MenuTag menu(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new MenuTag().with(dc), shortAttr);
+    public static MenuTag menu(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new MenuTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -3916,53 +3918,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <menuitem>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A MenuitemTag element
      */
-    public static MenuitemTag menuitem(final String text) {
-        return new MenuitemTag().withText(text);
+    public static MenuitemTag menuitem(final String aText) {
+        return new MenuitemTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <menuitem>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A MenuitemTag element
      */
-    public static MenuitemTag menuitem(final AbstractDomContent... dc) {
-        return new MenuitemTag().with(dc);
+    public static MenuitemTag menuitem(final AbstractDomContent... aDc) {
+        return new MenuitemTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <menuitem>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A MenuitemTag element
      */
-    public static MenuitemTag menuitem(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new MenuitemTag(), shortAttr);
+    public static MenuitemTag menuitem(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new MenuitemTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <menuitem>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A MenuitemTag element
      */
-    public static MenuitemTag menuitem(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new MenuitemTag().withText(text), shortAttr);
+    public static MenuitemTag menuitem(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new MenuitemTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <menuitem>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A MenuitemTag element
      */
-    public static MenuitemTag menuitem(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new MenuitemTag().with(dc), shortAttr);
+    public static MenuitemTag menuitem(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new MenuitemTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -3977,53 +3979,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <meter>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A MeterTag element
      */
-    public static MeterTag meter(final String text) {
-        return new MeterTag().withText(text);
+    public static MeterTag meter(final String aText) {
+        return new MeterTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <meter>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A MeterTag element
      */
-    public static MeterTag meter(final AbstractDomContent... dc) {
-        return new MeterTag().with(dc);
+    public static MeterTag meter(final AbstractDomContent... aDc) {
+        return new MeterTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <meter>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A MeterTag element
      */
-    public static MeterTag meter(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new MeterTag(), shortAttr);
+    public static MeterTag meter(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new MeterTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <meter>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A MeterTag element
      */
-    public static MeterTag meter(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new MeterTag().withText(text), shortAttr);
+    public static MeterTag meter(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new MeterTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <meter>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A MeterTag element
      */
-    public static MeterTag meter(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new MeterTag().with(dc), shortAttr);
+    public static MeterTag meter(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new MeterTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -4038,53 +4040,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <nav>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A NavTag element
      */
-    public static NavTag nav(final String text) {
-        return new NavTag().withText(text);
+    public static NavTag nav(final String aText) {
+        return new NavTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <nav>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A NavTag element
      */
-    public static NavTag nav(final AbstractDomContent... dc) {
-        return new NavTag().with(dc);
+    public static NavTag nav(final AbstractDomContent... aDc) {
+        return new NavTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <nav>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A NavTag element
      */
-    public static NavTag nav(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new NavTag(), shortAttr);
+    public static NavTag nav(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new NavTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <nav>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A NavTag element
      */
-    public static NavTag nav(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new NavTag().withText(text), shortAttr);
+    public static NavTag nav(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new NavTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <nav>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A NavTag element
      */
-    public static NavTag nav(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new NavTag().with(dc), shortAttr);
+    public static NavTag nav(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new NavTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -4099,53 +4101,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <noscript>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A NoscriptTag element
      */
-    public static NoscriptTag noscript(final String text) {
-        return new NoscriptTag().withText(text);
+    public static NoscriptTag noscript(final String aText) {
+        return new NoscriptTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <noscript>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A NoscriptTag element
      */
-    public static NoscriptTag noscript(final AbstractDomContent... dc) {
-        return new NoscriptTag().with(dc);
+    public static NoscriptTag noscript(final AbstractDomContent... aDc) {
+        return new NoscriptTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <noscript>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A NoscriptTag element
      */
-    public static NoscriptTag noscript(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new NoscriptTag(), shortAttr);
+    public static NoscriptTag noscript(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new NoscriptTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <noscript>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A NoscriptTag element
      */
-    public static NoscriptTag noscript(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new NoscriptTag().withText(text), shortAttr);
+    public static NoscriptTag noscript(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new NoscriptTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <noscript>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A NoscriptTag element
      */
-    public static NoscriptTag noscript(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new NoscriptTag().with(dc), shortAttr);
+    public static NoscriptTag noscript(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new NoscriptTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -4160,53 +4162,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <object>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A ObjectTag element
      */
-    public static ObjectTag object(final String text) {
-        return new ObjectTag().withText(text);
+    public static ObjectTag object(final String aText) {
+        return new ObjectTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <object>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A ObjectTag element
      */
-    public static ObjectTag object(final AbstractDomContent... dc) {
-        return new ObjectTag().with(dc);
+    public static ObjectTag object(final AbstractDomContent... aDc) {
+        return new ObjectTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <object>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A ObjectTag element
      */
-    public static ObjectTag object(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new ObjectTag(), shortAttr);
+    public static ObjectTag object(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new ObjectTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <object>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A ObjectTag element
      */
-    public static ObjectTag object(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new ObjectTag().withText(text), shortAttr);
+    public static ObjectTag object(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new ObjectTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <object>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A ObjectTag element
      */
-    public static ObjectTag object(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new ObjectTag().with(dc), shortAttr);
+    public static ObjectTag object(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new ObjectTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -4221,53 +4223,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <ol>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A OlTag element
      */
-    public static OlTag ol(final String text) {
-        return new OlTag().withText(text);
+    public static OlTag ol(final String aText) {
+        return new OlTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <ol>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A OlTag element
      */
-    public static OlTag ol(final AbstractDomContent... dc) {
-        return new OlTag().with(dc);
+    public static OlTag ol(final AbstractDomContent... aDc) {
+        return new OlTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <ol>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A OlTag element
      */
-    public static OlTag ol(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new OlTag(), shortAttr);
+    public static OlTag ol(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new OlTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <ol>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A OlTag element
      */
-    public static OlTag ol(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new OlTag().withText(text), shortAttr);
+    public static OlTag ol(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new OlTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <ol>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A OlTag element
      */
-    public static OlTag ol(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new OlTag().with(dc), shortAttr);
+    public static OlTag ol(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new OlTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -4282,53 +4284,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <optgroup>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A OptgroupTag element
      */
-    public static OptgroupTag optgroup(final String text) {
-        return new OptgroupTag().withText(text);
+    public static OptgroupTag optgroup(final String aText) {
+        return new OptgroupTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <optgroup>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A OptgroupTag element
      */
-    public static OptgroupTag optgroup(final AbstractDomContent... dc) {
-        return new OptgroupTag().with(dc);
+    public static OptgroupTag optgroup(final AbstractDomContent... aDc) {
+        return new OptgroupTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <optgroup>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A OptgroupTag element
      */
-    public static OptgroupTag optgroup(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new OptgroupTag(), shortAttr);
+    public static OptgroupTag optgroup(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new OptgroupTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <optgroup>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A OptgroupTag element
      */
-    public static OptgroupTag optgroup(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new OptgroupTag().withText(text), shortAttr);
+    public static OptgroupTag optgroup(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new OptgroupTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <optgroup>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A OptgroupTag element
      */
-    public static OptgroupTag optgroup(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new OptgroupTag().with(dc), shortAttr);
+    public static OptgroupTag optgroup(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new OptgroupTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -4343,53 +4345,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <option>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A OptionTag element
      */
-    public static OptionTag option(final String text) {
-        return new OptionTag().withText(text);
+    public static OptionTag option(final String aText) {
+        return new OptionTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <option>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A OptionTag element
      */
-    public static OptionTag option(final AbstractDomContent... dc) {
-        return new OptionTag().with(dc);
+    public static OptionTag option(final AbstractDomContent... aDc) {
+        return new OptionTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <option>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A OptionTag element
      */
-    public static OptionTag option(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new OptionTag(), shortAttr);
+    public static OptionTag option(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new OptionTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <option>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A OptionTag element
      */
-    public static OptionTag option(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new OptionTag().withText(text), shortAttr);
+    public static OptionTag option(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new OptionTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <option>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A OptionTag element
      */
-    public static OptionTag option(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new OptionTag().with(dc), shortAttr);
+    public static OptionTag option(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new OptionTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -4404,53 +4406,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <output>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A OutputTag element
      */
-    public static OutputTag output(final String text) {
-        return new OutputTag().withText(text);
+    public static OutputTag output(final String aText) {
+        return new OutputTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <output>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A OutputTag element
      */
-    public static OutputTag output(final AbstractDomContent... dc) {
-        return new OutputTag().with(dc);
+    public static OutputTag output(final AbstractDomContent... aDc) {
+        return new OutputTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <output>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A OutputTag element
      */
-    public static OutputTag output(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new OutputTag(), shortAttr);
+    public static OutputTag output(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new OutputTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <output>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A OutputTag element
      */
-    public static OutputTag output(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new OutputTag().withText(text), shortAttr);
+    public static OutputTag output(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new OutputTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <output>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A OutputTag element
      */
-    public static OutputTag output(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new OutputTag().with(dc), shortAttr);
+    public static OutputTag output(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new OutputTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -4465,53 +4467,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <p>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A PTag element
      */
-    public static PTag p(final String text) {
-        return new PTag().withText(text);
+    public static PTag p(final String aText) {
+        return new PTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <p>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A PTag element
      */
-    public static PTag p(final AbstractDomContent... dc) {
-        return new PTag().with(dc);
+    public static PTag p(final AbstractDomContent... aDc) {
+        return new PTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <p>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A PTag element
      */
-    public static PTag p(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new PTag(), shortAttr);
+    public static PTag p(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new PTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <p>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A PTag element
      */
-    public static PTag p(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new PTag().withText(text), shortAttr);
+    public static PTag p(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new PTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <p>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A PTag element
      */
-    public static PTag p(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new PTag().with(dc), shortAttr);
+    public static PTag p(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new PTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -4526,53 +4528,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <picture>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A PictureTag element
      */
-    public static PictureTag picture(final String text) {
-        return new PictureTag().withText(text);
+    public static PictureTag picture(final String aText) {
+        return new PictureTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <picture>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A PictureTag element
      */
-    public static PictureTag picture(final AbstractDomContent... dc) {
-        return new PictureTag().with(dc);
+    public static PictureTag picture(final AbstractDomContent... aDc) {
+        return new PictureTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <picture>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A PictureTag element
      */
-    public static PictureTag picture(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new PictureTag(), shortAttr);
+    public static PictureTag picture(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new PictureTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <picture>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A PictureTag element
      */
-    public static PictureTag picture(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new PictureTag().withText(text), shortAttr);
+    public static PictureTag picture(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new PictureTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <picture>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A PictureTag element
      */
-    public static PictureTag picture(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new PictureTag().with(dc), shortAttr);
+    public static PictureTag picture(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new PictureTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -4587,53 +4589,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <pre>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A PreTag element
      */
-    public static PreTag pre(final String text) {
-        return new PreTag().withText(text);
+    public static PreTag pre(final String aText) {
+        return new PreTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <pre>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A PreTag element
      */
-    public static PreTag pre(final AbstractDomContent... dc) {
-        return new PreTag().with(dc);
+    public static PreTag pre(final AbstractDomContent... aDc) {
+        return new PreTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <pre>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A PreTag element
      */
-    public static PreTag pre(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new PreTag(), shortAttr);
+    public static PreTag pre(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new PreTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <pre>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A PreTag element
      */
-    public static PreTag pre(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new PreTag().withText(text), shortAttr);
+    public static PreTag pre(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new PreTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <pre>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A PreTag element
      */
-    public static PreTag pre(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new PreTag().with(dc), shortAttr);
+    public static PreTag pre(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new PreTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -4648,53 +4650,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <progress>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A ProgressTag element
      */
-    public static ProgressTag progress(final String text) {
-        return new ProgressTag().withText(text);
+    public static ProgressTag progress(final String aText) {
+        return new ProgressTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <progress>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A ProgressTag element
      */
-    public static ProgressTag progress(final AbstractDomContent... dc) {
-        return new ProgressTag().with(dc);
+    public static ProgressTag progress(final AbstractDomContent... aDc) {
+        return new ProgressTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <progress>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A ProgressTag element
      */
-    public static ProgressTag progress(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new ProgressTag(), shortAttr);
+    public static ProgressTag progress(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new ProgressTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <progress>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A ProgressTag element
      */
-    public static ProgressTag progress(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new ProgressTag().withText(text), shortAttr);
+    public static ProgressTag progress(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new ProgressTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <progress>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A ProgressTag element
      */
-    public static ProgressTag progress(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new ProgressTag().with(dc), shortAttr);
+    public static ProgressTag progress(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new ProgressTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -4709,53 +4711,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <q>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A QTag element
      */
-    public static QTag q(final String text) {
-        return new QTag().withText(text);
+    public static QTag q(final String aText) {
+        return new QTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <q>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A QTag element
      */
-    public static QTag q(final AbstractDomContent... dc) {
-        return new QTag().with(dc);
+    public static QTag q(final AbstractDomContent... aDc) {
+        return new QTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <q>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A QTag element
      */
-    public static QTag q(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new QTag(), shortAttr);
+    public static QTag q(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new QTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <q>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A QTag element
      */
-    public static QTag q(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new QTag().withText(text), shortAttr);
+    public static QTag q(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new QTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <q>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A QTag element
      */
-    public static QTag q(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new QTag().with(dc), shortAttr);
+    public static QTag q(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new QTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -4770,53 +4772,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <rp>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A RpTag element
      */
-    public static RpTag rp(final String text) {
-        return new RpTag().withText(text);
+    public static RpTag rp(final String aText) {
+        return new RpTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <rp>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A RpTag element
      */
-    public static RpTag rp(final AbstractDomContent... dc) {
-        return new RpTag().with(dc);
+    public static RpTag rp(final AbstractDomContent... aDc) {
+        return new RpTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <rp>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A RpTag element
      */
-    public static RpTag rp(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new RpTag(), shortAttr);
+    public static RpTag rp(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new RpTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <rp>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A RpTag element
      */
-    public static RpTag rp(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new RpTag().withText(text), shortAttr);
+    public static RpTag rp(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new RpTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <rp>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A RpTag element
      */
-    public static RpTag rp(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new RpTag().with(dc), shortAttr);
+    public static RpTag rp(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new RpTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -4831,53 +4833,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <rt>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A RtTag element
      */
-    public static RtTag rt(final String text) {
-        return new RtTag().withText(text);
+    public static RtTag rt(final String aText) {
+        return new RtTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <rt>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A RtTag element
      */
-    public static RtTag rt(final AbstractDomContent... dc) {
-        return new RtTag().with(dc);
+    public static RtTag rt(final AbstractDomContent... aDc) {
+        return new RtTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <rt>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A RtTag element
      */
-    public static RtTag rt(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new RtTag(), shortAttr);
+    public static RtTag rt(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new RtTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <rt>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A RtTag element
      */
-    public static RtTag rt(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new RtTag().withText(text), shortAttr);
+    public static RtTag rt(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new RtTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <rt>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A RtTag element
      */
-    public static RtTag rt(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new RtTag().with(dc), shortAttr);
+    public static RtTag rt(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new RtTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -4892,53 +4894,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <ruby>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A RubyTag element
      */
-    public static RubyTag ruby(final String text) {
-        return new RubyTag().withText(text);
+    public static RubyTag ruby(final String aText) {
+        return new RubyTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <ruby>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A RubyTag element
      */
-    public static RubyTag ruby(final AbstractDomContent... dc) {
-        return new RubyTag().with(dc);
+    public static RubyTag ruby(final AbstractDomContent... aDc) {
+        return new RubyTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <ruby>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A RubyTag element
      */
-    public static RubyTag ruby(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new RubyTag(), shortAttr);
+    public static RubyTag ruby(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new RubyTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <ruby>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A RubyTag element
      */
-    public static RubyTag ruby(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new RubyTag().withText(text), shortAttr);
+    public static RubyTag ruby(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new RubyTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <ruby>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A RubyTag element
      */
-    public static RubyTag ruby(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new RubyTag().with(dc), shortAttr);
+    public static RubyTag ruby(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new RubyTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -4953,53 +4955,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <s>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A STag element
      */
-    public static STag s(final String text) {
-        return new STag().withText(text);
+    public static STag s(final String aText) {
+        return new STag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <s>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A STag element
      */
-    public static STag s(final AbstractDomContent... dc) {
-        return new STag().with(dc);
+    public static STag s(final AbstractDomContent... aDc) {
+        return new STag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <s>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A STag element
      */
-    public static STag s(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new STag(), shortAttr);
+    public static STag s(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new STag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <s>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A STag element
      */
-    public static STag s(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new STag().withText(text), shortAttr);
+    public static STag s(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new STag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <s>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A STag element
      */
-    public static STag s(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new STag().with(dc), shortAttr);
+    public static STag s(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new STag().with(aDc), aShortAttr);
     }
 
     /**
@@ -5014,53 +5016,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <samp>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A SampTag element
      */
-    public static SampTag samp(final String text) {
-        return new SampTag().withText(text);
+    public static SampTag samp(final String aText) {
+        return new SampTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <samp>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A SampTag element
      */
-    public static SampTag samp(final AbstractDomContent... dc) {
-        return new SampTag().with(dc);
+    public static SampTag samp(final AbstractDomContent... aDc) {
+        return new SampTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <samp>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A SampTag element
      */
-    public static SampTag samp(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new SampTag(), shortAttr);
+    public static SampTag samp(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new SampTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <samp>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A SampTag element
      */
-    public static SampTag samp(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new SampTag().withText(text), shortAttr);
+    public static SampTag samp(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new SampTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <samp>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A SampTag element
      */
-    public static SampTag samp(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new SampTag().with(dc), shortAttr);
+    public static SampTag samp(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new SampTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -5075,53 +5077,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <script>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A ScriptTag element
      */
-    public static ScriptTag script(final String text) {
-        return new ScriptTag().with(new UnescapedText(text));
+    public static ScriptTag script(final String aText) {
+        return new ScriptTag().with(new UnescapedText(aText));
     }
 
     /**
      * Creates an HTML {@code <script>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A ScriptTag element
      */
-    public static ScriptTag script(final AbstractDomContent... dc) {
-        return new ScriptTag().with(dc);
+    public static ScriptTag script(final AbstractDomContent... aDc) {
+        return new ScriptTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <script>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A ScriptTag element
      */
-    public static ScriptTag script(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new ScriptTag(), shortAttr);
+    public static ScriptTag script(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new ScriptTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <script>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A ScriptTag element
      */
-    public static ScriptTag script(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new ScriptTag().with(new UnescapedText(text)), shortAttr);
+    public static ScriptTag script(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new ScriptTag().with(new UnescapedText(aText)), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <script>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A ScriptTag element
      */
-    public static ScriptTag script(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new ScriptTag().with(dc), shortAttr);
+    public static ScriptTag script(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new ScriptTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -5136,53 +5138,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <section>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A SectionTag element
      */
-    public static SectionTag section(final String text) {
-        return new SectionTag().withText(text);
+    public static SectionTag section(final String aText) {
+        return new SectionTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <section>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A SectionTag element
      */
-    public static SectionTag section(final AbstractDomContent... dc) {
-        return new SectionTag().with(dc);
+    public static SectionTag section(final AbstractDomContent... aDc) {
+        return new SectionTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <section>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A SectionTag element
      */
-    public static SectionTag section(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new SectionTag(), shortAttr);
+    public static SectionTag section(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new SectionTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <section>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A SectionTag element
      */
-    public static SectionTag section(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new SectionTag().withText(text), shortAttr);
+    public static SectionTag section(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new SectionTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <section>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A SectionTag element
      */
-    public static SectionTag section(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new SectionTag().with(dc), shortAttr);
+    public static SectionTag section(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new SectionTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -5197,53 +5199,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <select>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A SelectTag element
      */
-    public static SelectTag select(final String text) {
-        return new SelectTag().withText(text);
+    public static SelectTag select(final String aText) {
+        return new SelectTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <select>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A SelectTag element
      */
-    public static SelectTag select(final AbstractDomContent... dc) {
-        return new SelectTag().with(dc);
+    public static SelectTag select(final AbstractDomContent... aDc) {
+        return new SelectTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <select>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A SelectTag element
      */
-    public static SelectTag select(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new SelectTag(), shortAttr);
+    public static SelectTag select(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new SelectTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <select>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A SelectTag element
      */
-    public static SelectTag select(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new SelectTag().withText(text), shortAttr);
+    public static SelectTag select(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new SelectTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <select>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A SelectTag element
      */
-    public static SelectTag select(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new SelectTag().with(dc), shortAttr);
+    public static SelectTag select(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new SelectTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -5258,53 +5260,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <slot>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A SlotTag element
      */
-    public static SlotTag slot(final String text) {
-        return new SlotTag().withText(text);
+    public static SlotTag slot(final String aText) {
+        return new SlotTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <slot>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A SlotTag element
      */
-    public static SlotTag slot(final AbstractDomContent... dc) {
-        return new SlotTag().with(dc);
+    public static SlotTag slot(final AbstractDomContent... aDc) {
+        return new SlotTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <slot>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A SlotTag element
      */
-    public static SlotTag slot(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new SlotTag(), shortAttr);
+    public static SlotTag slot(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new SlotTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <slot>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A SlotTag element
      */
-    public static SlotTag slot(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new SlotTag().withText(text), shortAttr);
+    public static SlotTag slot(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new SlotTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <slot>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A SlotTag element
      */
-    public static SlotTag slot(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new SlotTag().with(dc), shortAttr);
+    public static SlotTag slot(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new SlotTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -5319,53 +5321,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <small>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A SmallTag element
      */
-    public static SmallTag small(final String text) {
-        return new SmallTag().withText(text);
+    public static SmallTag small(final String aText) {
+        return new SmallTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <small>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A SmallTag element
      */
-    public static SmallTag small(final AbstractDomContent... dc) {
-        return new SmallTag().with(dc);
+    public static SmallTag small(final AbstractDomContent... aDc) {
+        return new SmallTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <small>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A SmallTag element
      */
-    public static SmallTag small(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new SmallTag(), shortAttr);
+    public static SmallTag small(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new SmallTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <small>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A SmallTag element
      */
-    public static SmallTag small(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new SmallTag().withText(text), shortAttr);
+    public static SmallTag small(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new SmallTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <small>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A SmallTag element
      */
-    public static SmallTag small(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new SmallTag().with(dc), shortAttr);
+    public static SmallTag small(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new SmallTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -5380,53 +5382,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <span>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A SpanTag element
      */
-    public static SpanTag span(final String text) {
-        return new SpanTag().withText(text);
+    public static SpanTag span(final String aText) {
+        return new SpanTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <span>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A SpanTag element
      */
-    public static SpanTag span(final AbstractDomContent... dc) {
-        return new SpanTag().with(dc);
+    public static SpanTag span(final AbstractDomContent... aDc) {
+        return new SpanTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <span>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A SpanTag element
      */
-    public static SpanTag span(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new SpanTag(), shortAttr);
+    public static SpanTag span(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new SpanTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <span>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A SpanTag element
      */
-    public static SpanTag span(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new SpanTag().withText(text), shortAttr);
+    public static SpanTag span(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new SpanTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <span>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A SpanTag element
      */
-    public static SpanTag span(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new SpanTag().with(dc), shortAttr);
+    public static SpanTag span(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new SpanTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -5441,53 +5443,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <strong>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A StrongTag element
      */
-    public static StrongTag strong(final String text) {
-        return new StrongTag().withText(text);
+    public static StrongTag strong(final String aText) {
+        return new StrongTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <strong>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A StrongTag element
      */
-    public static StrongTag strong(final AbstractDomContent... dc) {
-        return new StrongTag().with(dc);
+    public static StrongTag strong(final AbstractDomContent... aDc) {
+        return new StrongTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <strong>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A StrongTag element
      */
-    public static StrongTag strong(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new StrongTag(), shortAttr);
+    public static StrongTag strong(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new StrongTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <strong>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A StrongTag element
      */
-    public static StrongTag strong(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new StrongTag().withText(text), shortAttr);
+    public static StrongTag strong(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new StrongTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <strong>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A StrongTag element
      */
-    public static StrongTag strong(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new StrongTag().with(dc), shortAttr);
+    public static StrongTag strong(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new StrongTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -5502,65 +5504,65 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <style>} element with the specified CSS rules.
      *
-     * @param text The first CSS rule
-     * @param moreTexts Additional CSS rules
+     * @param aText The first CSS rule
+     * @param aMoreTexts Additional CSS rules
      * @return A StyleTag element
      */
-    public static StyleTag style(final String text, final String... moreTexts) {
-        return createStyleTag(null, text, moreTexts);
+    public static StyleTag style(final String aText, final String... aMoreTexts) {
+        return createStyleTag(null, aText, aMoreTexts);
     }
 
     /**
      * Creates an HTML {@code <style>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A StyleTag element
      */
-    public static StyleTag style(final AbstractDomContent... dc) {
-        return new StyleTag().with(dc);
+    public static StyleTag style(final AbstractDomContent... aDc) {
+        return new StyleTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <style>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A StyleTag element
      */
-    public static StyleTag style(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new StyleTag(), shortAttr);
+    public static StyleTag style(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new StyleTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <style>} element with the specified attributes and CSS rules.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The first CSS rule
-     * @param moreTexts Additional CSS rules
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The first CSS rule
+     * @param aMoreTexts Additional CSS rules
      * @return A StyleTag element
      */
-    public static StyleTag style(final Attr.ShortForm shortAttr, final String text, final String... moreTexts) {
-        return createStyleTag(shortAttr, text, moreTexts);
+    public static StyleTag style(final Attr.ShortForm aShortAttr, final String aText, final String... aMoreTexts) {
+        return createStyleTag(aShortAttr, aText, aMoreTexts);
     }
 
     /**
      * Helper method to create a StyleTag with joined CSS rules.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes, or null
-     * @param text The first CSS rule
-     * @param moreTexts Additional CSS rules
+     * @param aShortAttr The shorthand attribute containing ID and classes, or null
+     * @param aText The first CSS rule
+     * @param aMoreTexts Additional CSS rules
      * @return A StyleTag element
      */
-    private static StyleTag createStyleTag(final Attr.ShortForm shortAttr, final String text,
-            final String... moreTexts) {
+    private static StyleTag createStyleTag(final Attr.ShortForm aShortAttr, final String aText,
+      final String... aMoreTexts) {
         final StringJoiner joiner = new StringJoiner(LF);
         final StyleTag style = new StyleTag();
 
-        if (text != null && !text.isBlank()) {
-            joiner.add(text.trim());
+        if (aText != null && !aText.isBlank()) {
+            joiner.add(aText.trim());
         }
 
-        if (moreTexts != null) {
-            for (final String rule : moreTexts) {
+        if (aMoreTexts != null) {
+            for (final String rule : aMoreTexts) {
                 if (rule != null && !rule.isBlank()) {
                     joiner.add(rule.trim());
                 }
@@ -5571,18 +5573,18 @@ public final class TagCreator {
             style.with(new UnescapedText(joiner.toString()));
         }
 
-        return shortAttr != null ? Attr.ShortForm.addTo(style, shortAttr) : style;
+        return aShortAttr != null ? Attr.ShortForm.addTo(style, aShortAttr) : style;
     }
 
     /**
      * Creates an HTML {@code <style>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A StyleTag element
      */
-    public static StyleTag style(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new StyleTag().with(dc), shortAttr);
+    public static StyleTag style(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new StyleTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -5597,53 +5599,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <sub>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A SubTag element
      */
-    public static SubTag sub(final String text) {
-        return new SubTag().withText(text);
+    public static SubTag sub(final String aText) {
+        return new SubTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <sub>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A SubTag element
      */
-    public static SubTag sub(final AbstractDomContent... dc) {
-        return new SubTag().with(dc);
+    public static SubTag sub(final AbstractDomContent... aDc) {
+        return new SubTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <sub>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A SubTag element
      */
-    public static SubTag sub(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new SubTag(), shortAttr);
+    public static SubTag sub(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new SubTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <sub>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A SubTag element
      */
-    public static SubTag sub(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new SubTag().withText(text), shortAttr);
+    public static SubTag sub(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new SubTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <sub>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A SubTag element
      */
-    public static SubTag sub(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new SubTag().with(dc), shortAttr);
+    public static SubTag sub(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new SubTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -5658,53 +5660,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <summary>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A SummaryTag element
      */
-    public static SummaryTag summary(final String text) {
-        return new SummaryTag().withText(text);
+    public static SummaryTag summary(final String aText) {
+        return new SummaryTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <summary>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A SummaryTag element
      */
-    public static SummaryTag summary(final AbstractDomContent... dc) {
-        return new SummaryTag().with(dc);
+    public static SummaryTag summary(final AbstractDomContent... aDc) {
+        return new SummaryTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <summary>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A SummaryTag element
      */
-    public static SummaryTag summary(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new SummaryTag(), shortAttr);
+    public static SummaryTag summary(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new SummaryTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <summary>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A SummaryTag element
      */
-    public static SummaryTag summary(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new SummaryTag().withText(text), shortAttr);
+    public static SummaryTag summary(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new SummaryTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <summary>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A SummaryTag element
      */
-    public static SummaryTag summary(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new SummaryTag().with(dc), shortAttr);
+    public static SummaryTag summary(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new SummaryTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -5719,53 +5721,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <sup>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A SupTag element
      */
-    public static SupTag sup(final String text) {
-        return new SupTag().withText(text);
+    public static SupTag sup(final String aText) {
+        return new SupTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <sup>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A SupTag element
      */
-    public static SupTag sup(final AbstractDomContent... dc) {
-        return new SupTag().with(dc);
+    public static SupTag sup(final AbstractDomContent... aDc) {
+        return new SupTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <sup>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A SupTag element
      */
-    public static SupTag sup(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new SupTag(), shortAttr);
+    public static SupTag sup(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new SupTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <sup>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A SupTag element
      */
-    public static SupTag sup(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new SupTag().withText(text), shortAttr);
+    public static SupTag sup(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new SupTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <sup>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A SupTag element
      */
-    public static SupTag sup(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new SupTag().with(dc), shortAttr);
+    public static SupTag sup(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new SupTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -5780,53 +5782,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <table>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A TableTag element
      */
-    public static TableTag table(final String text) {
-        return new TableTag().withText(text);
+    public static TableTag table(final String aText) {
+        return new TableTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <table>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A TableTag element
      */
-    public static TableTag table(final AbstractDomContent... dc) {
-        return new TableTag().with(dc);
+    public static TableTag table(final AbstractDomContent... aDc) {
+        return new TableTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <table>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A TableTag element
      */
-    public static TableTag table(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new TableTag(), shortAttr);
+    public static TableTag table(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new TableTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <table>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A TableTag element
      */
-    public static TableTag table(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new TableTag().withText(text), shortAttr);
+    public static TableTag table(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new TableTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <table>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A TableTag element
      */
-    public static TableTag table(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new TableTag().with(dc), shortAttr);
+    public static TableTag table(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new TableTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -5841,53 +5843,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <tbody>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A TbodyTag element
      */
-    public static TbodyTag tbody(final String text) {
-        return new TbodyTag().withText(text);
+    public static TbodyTag tbody(final String aText) {
+        return new TbodyTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <tbody>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A TbodyTag element
      */
-    public static TbodyTag tbody(final AbstractDomContent... dc) {
-        return new TbodyTag().with(dc);
+    public static TbodyTag tbody(final AbstractDomContent... aDc) {
+        return new TbodyTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <tbody>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A TbodyTag element
      */
-    public static TbodyTag tbody(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new TbodyTag(), shortAttr);
+    public static TbodyTag tbody(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new TbodyTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <tbody>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A TbodyTag element
      */
-    public static TbodyTag tbody(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new TbodyTag().withText(text), shortAttr);
+    public static TbodyTag tbody(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new TbodyTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <tbody>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A TbodyTag element
      */
-    public static TbodyTag tbody(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new TbodyTag().with(dc), shortAttr);
+    public static TbodyTag tbody(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new TbodyTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -5902,53 +5904,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <td>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A TdTag element
      */
-    public static TdTag td(final String text) {
-        return new TdTag().withText(text);
+    public static TdTag td(final String aText) {
+        return new TdTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <td>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A TdTag element
      */
-    public static TdTag td(final AbstractDomContent... dc) {
-        return new TdTag().with(dc);
+    public static TdTag td(final AbstractDomContent... aDc) {
+        return new TdTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <td>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A TdTag element
      */
-    public static TdTag td(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new TdTag(), shortAttr);
+    public static TdTag td(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new TdTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <td>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A TdTag element
      */
-    public static TdTag td(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new TdTag().withText(text), shortAttr);
+    public static TdTag td(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new TdTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <td>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A TdTag element
      */
-    public static TdTag td(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new TdTag().with(dc), shortAttr);
+    public static TdTag td(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new TdTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -5963,53 +5965,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <template>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A TemplateTag element
      */
-    public static TemplateTag template(final String text) {
-        return new TemplateTag().withText(text);
+    public static TemplateTag template(final String aText) {
+        return new TemplateTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <template>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A TemplateTag element
      */
-    public static TemplateTag template(final AbstractDomContent... dc) {
-        return new TemplateTag().with(dc);
+    public static TemplateTag template(final AbstractDomContent... aDc) {
+        return new TemplateTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <template>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A TemplateTag element
      */
-    public static TemplateTag template(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new TemplateTag(), shortAttr);
+    public static TemplateTag template(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new TemplateTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <template>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A TemplateTag element
      */
-    public static TemplateTag template(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new TemplateTag().withText(text), shortAttr);
+    public static TemplateTag template(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new TemplateTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <template>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A TemplateTag element
      */
-    public static TemplateTag template(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new TemplateTag().with(dc), shortAttr);
+    public static TemplateTag template(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new TemplateTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -6024,53 +6026,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <textarea>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A TextareaTag element
      */
-    public static TextareaTag textarea(final String text) {
-        return new TextareaTag().withText(text);
+    public static TextareaTag textarea(final String aText) {
+        return new TextareaTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <textarea>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A TextareaTag element
      */
-    public static TextareaTag textarea(final AbstractDomContent... dc) {
-        return new TextareaTag().with(dc);
+    public static TextareaTag textarea(final AbstractDomContent... aDc) {
+        return new TextareaTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <textarea>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A TextareaTag element
      */
-    public static TextareaTag textarea(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new TextareaTag(), shortAttr);
+    public static TextareaTag textarea(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new TextareaTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <textarea>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A TextareaTag element
      */
-    public static TextareaTag textarea(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new TextareaTag().withText(text), shortAttr);
+    public static TextareaTag textarea(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new TextareaTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <textarea>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A TextareaTag element
      */
-    public static TextareaTag textarea(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new TextareaTag().with(dc), shortAttr);
+    public static TextareaTag textarea(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new TextareaTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -6085,53 +6087,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <tfoot>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A TfootTag element
      */
-    public static TfootTag tfoot(final String text) {
-        return new TfootTag().withText(text);
+    public static TfootTag tfoot(final String aText) {
+        return new TfootTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <tfoot>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A TfootTag element
      */
-    public static TfootTag tfoot(final AbstractDomContent... dc) {
-        return new TfootTag().with(dc);
+    public static TfootTag tfoot(final AbstractDomContent... aDc) {
+        return new TfootTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <tfoot>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A TfootTag element
      */
-    public static TfootTag tfoot(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new TfootTag(), shortAttr);
+    public static TfootTag tfoot(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new TfootTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <tfoot>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A TfootTag element
      */
-    public static TfootTag tfoot(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new TfootTag().withText(text), shortAttr);
+    public static TfootTag tfoot(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new TfootTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <tfoot>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A TfootTag element
      */
-    public static TfootTag tfoot(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new TfootTag().with(dc), shortAttr);
+    public static TfootTag tfoot(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new TfootTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -6146,53 +6148,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <th>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A ThTag element
      */
-    public static ThTag th(final String text) {
-        return new ThTag().withText(text);
+    public static ThTag th(final String aText) {
+        return new ThTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <th>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A ThTag element
      */
-    public static ThTag th(final AbstractDomContent... dc) {
-        return new ThTag().with(dc);
+    public static ThTag th(final AbstractDomContent... aDc) {
+        return new ThTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <th>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A ThTag element
      */
-    public static ThTag th(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new ThTag(), shortAttr);
+    public static ThTag th(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new ThTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <th>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A ThTag element
      */
-    public static ThTag th(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new ThTag().withText(text), shortAttr);
+    public static ThTag th(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new ThTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <th>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A ThTag element
      */
-    public static ThTag th(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new ThTag().with(dc), shortAttr);
+    public static ThTag th(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new ThTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -6207,53 +6209,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <thead>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A TheadTag element
      */
-    public static TheadTag thead(final String text) {
-        return new TheadTag().withText(text);
+    public static TheadTag thead(final String aText) {
+        return new TheadTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <thead>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A TheadTag element
      */
-    public static TheadTag thead(final AbstractDomContent... dc) {
-        return new TheadTag().with(dc);
+    public static TheadTag thead(final AbstractDomContent... aDc) {
+        return new TheadTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <thead>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A TheadTag element
      */
-    public static TheadTag thead(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new TheadTag(), shortAttr);
+    public static TheadTag thead(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new TheadTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <thead>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A TheadTag element
      */
-    public static TheadTag thead(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new TheadTag().withText(text), shortAttr);
+    public static TheadTag thead(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new TheadTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <thead>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A TheadTag element
      */
-    public static TheadTag thead(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new TheadTag().with(dc), shortAttr);
+    public static TheadTag thead(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new TheadTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -6268,53 +6270,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <time>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A TimeTag element
      */
-    public static TimeTag time(final String text) {
-        return new TimeTag().withText(text);
+    public static TimeTag time(final String aText) {
+        return new TimeTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <time>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A TimeTag element
      */
-    public static TimeTag time(final AbstractDomContent... dc) {
-        return new TimeTag().with(dc);
+    public static TimeTag time(final AbstractDomContent... aDc) {
+        return new TimeTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <time>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A TimeTag element
      */
-    public static TimeTag time(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new TimeTag(), shortAttr);
+    public static TimeTag time(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new TimeTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <time>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A TimeTag element
      */
-    public static TimeTag time(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new TimeTag().withText(text), shortAttr);
+    public static TimeTag time(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new TimeTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <time>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A TimeTag element
      */
-    public static TimeTag time(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new TimeTag().with(dc), shortAttr);
+    public static TimeTag time(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new TimeTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -6329,53 +6331,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <title>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A TitleTag element
      */
-    public static TitleTag title(final String text) {
-        return new TitleTag().withText(text);
+    public static TitleTag title(final String aText) {
+        return new TitleTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <title>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A TitleTag element
      */
-    public static TitleTag title(final AbstractDomContent... dc) {
-        return new TitleTag().with(dc);
+    public static TitleTag title(final AbstractDomContent... aDc) {
+        return new TitleTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <title>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A TitleTag element
      */
-    public static TitleTag title(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new TitleTag(), shortAttr);
+    public static TitleTag title(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new TitleTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <title>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A TitleTag element
      */
-    public static TitleTag title(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new TitleTag().withText(text), shortAttr);
+    public static TitleTag title(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new TitleTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <title>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A TitleTag element
      */
-    public static TitleTag title(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new TitleTag().with(dc), shortAttr);
+    public static TitleTag title(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new TitleTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -6390,53 +6392,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <tr>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A TrTag element
      */
-    public static TrTag tr(final String text) {
-        return new TrTag().withText(text);
+    public static TrTag tr(final String aText) {
+        return new TrTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <tr>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A TrTag element
      */
-    public static TrTag tr(final AbstractDomContent... dc) {
-        return new TrTag().with(dc);
+    public static TrTag tr(final AbstractDomContent... aDc) {
+        return new TrTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <tr>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A TrTag element
      */
-    public static TrTag tr(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new TrTag(), shortAttr);
+    public static TrTag tr(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new TrTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <tr>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A TrTag element
      */
-    public static TrTag tr(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new TrTag().withText(text), shortAttr);
+    public static TrTag tr(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new TrTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <tr>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A TrTag element
      */
-    public static TrTag tr(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new TrTag().with(dc), shortAttr);
+    public static TrTag tr(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new TrTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -6451,53 +6453,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <u>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A UTag element
      */
-    public static UTag u(final String text) {
-        return new UTag().withText(text);
+    public static UTag u(final String aText) {
+        return new UTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <u>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A UTag element
      */
-    public static UTag u(final AbstractDomContent... dc) {
-        return new UTag().with(dc);
+    public static UTag u(final AbstractDomContent... aDc) {
+        return new UTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <u>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A UTag element
      */
-    public static UTag u(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new UTag(), shortAttr);
+    public static UTag u(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new UTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <u>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A UTag element
      */
-    public static UTag u(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new UTag().withText(text), shortAttr);
+    public static UTag u(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new UTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <u>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A UTag element
      */
-    public static UTag u(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new UTag().with(dc), shortAttr);
+    public static UTag u(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new UTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -6512,53 +6514,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <ul>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A UlTag element
      */
-    public static UlTag ul(final String text) {
-        return new UlTag().withText(text);
+    public static UlTag ul(final String aText) {
+        return new UlTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <ul>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A UlTag element
      */
-    public static UlTag ul(final AbstractDomContent... dc) {
-        return new UlTag().with(dc);
+    public static UlTag ul(final AbstractDomContent... aDc) {
+        return new UlTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <ul>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A UlTag element
      */
-    public static UlTag ul(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new UlTag(), shortAttr);
+    public static UlTag ul(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new UlTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <ul>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A UlTag element
      */
-    public static UlTag ul(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new UlTag().withText(text), shortAttr);
+    public static UlTag ul(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new UlTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <ul>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A UlTag element
      */
-    public static UlTag ul(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new UlTag().with(dc), shortAttr);
+    public static UlTag ul(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new UlTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -6573,53 +6575,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <var>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A VarTag element
      */
-    public static VarTag var(final String text) {
-        return new VarTag().withText(text);
+    public static VarTag var(final String aText) {
+        return new VarTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <var>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A VarTag element
      */
-    public static VarTag var(final AbstractDomContent... dc) {
-        return new VarTag().with(dc);
+    public static VarTag var(final AbstractDomContent... aDc) {
+        return new VarTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <var>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A VarTag element
      */
-    public static VarTag var(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new VarTag(), shortAttr);
+    public static VarTag var(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new VarTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <var>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A VarTag element
      */
-    public static VarTag var(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new VarTag().withText(text), shortAttr);
+    public static VarTag var(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new VarTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <var>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A VarTag element
      */
-    public static VarTag var(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new VarTag().with(dc), shortAttr);
+    public static VarTag var(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new VarTag().with(aDc), aShortAttr);
     }
 
     /**
@@ -6634,53 +6636,53 @@ public final class TagCreator {
     /**
      * Creates an HTML {@code <video>} element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return A VideoTag element
      */
-    public static VideoTag video(final String text) {
-        return new VideoTag().withText(text);
+    public static VideoTag video(final String aText) {
+        return new VideoTag().withText(aText);
     }
 
     /**
      * Creates an HTML {@code <video>} element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return A VideoTag element
      */
-    public static VideoTag video(final AbstractDomContent... dc) {
-        return new VideoTag().with(dc);
+    public static VideoTag video(final AbstractDomContent... aDc) {
+        return new VideoTag().with(aDc);
     }
 
     /**
      * Creates an HTML {@code <video>} element with the specified attributes.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
+     * @param aShortAttr The shorthand attribute containing ID and classes
      * @return A VideoTag element
      */
-    public static VideoTag video(final Attr.ShortForm shortAttr) {
-        return Attr.ShortForm.addTo(new VideoTag(), shortAttr);
+    public static VideoTag video(final Attr.ShortForm aShortAttr) {
+        return Attr.ShortForm.addTo(new VideoTag(), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <video>} element with the specified attributes and text content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param text The text content
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aText The text content
      * @return A VideoTag element
      */
-    public static VideoTag video(final Attr.ShortForm shortAttr, final String text) {
-        return Attr.ShortForm.addTo(new VideoTag().withText(text), shortAttr);
+    public static VideoTag video(final Attr.ShortForm aShortAttr, final String aText) {
+        return Attr.ShortForm.addTo(new VideoTag().withText(aText), aShortAttr);
     }
 
     /**
      * Creates an HTML {@code <video>} element with the specified attributes and child DOM content.
      *
-     * @param shortAttr The shorthand attribute containing ID and classes
-     * @param dc The child DOM content nodes
+     * @param aShortAttr The shorthand attribute containing ID and classes
+     * @param aDc The child DOM content nodes
      * @return A VideoTag element
      */
-    public static VideoTag video(final Attr.ShortForm shortAttr, final AbstractDomContent... dc) {
-        return Attr.ShortForm.addTo(new VideoTag().with(dc), shortAttr);
+    public static VideoTag video(final Attr.ShortForm aShortAttr, final AbstractDomContent... aDc) {
+        return Attr.ShortForm.addTo(new VideoTag().with(aDc), aShortAttr);
     }
 
 }

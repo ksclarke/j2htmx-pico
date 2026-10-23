@@ -17,12 +17,12 @@ public interface Renderable {
      * Render the Renderable and it's children using the supplied builder.
      *
      * @param aHtmlBuilder A builder that can compose HTML elements.
-     * @param model A model object to provide data for children to render.
+     * @param aModel A model object to provide data for children to render.
      * @param <T> The type of the Appendable which HTML is being appended to.
      * @return The Appendable to which HTML has been appended.
      * @throws IOException If an I/O error occurs.
      */
-    <T extends Appendable> T render(HtmlBuilder<T> aHtmlBuilder, Object model) throws IOException;
+    <T extends Appendable> T render(HtmlBuilder<T> aHtmlBuilder, Object aModel) throws IOException;
 
     /**
      * Render the Renderable and it's children using the supplied builder.

@@ -26,10 +26,18 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import info.freelibrary.util.warnings.Checkstyle;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests for {@link Pico} utilities and helpers.
+ */
+@SuppressWarnings({Checkstyle.MULTIPLE_STRING_LITERALS, "MultipleStringLiterals"})
 public class PicoTest {
 
+    /**
+     * Tests the Pico CSS aliases.
+     */
     @Test
     public void testPicoCssAliases() {
         assertEquals("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css\">",
@@ -49,6 +57,9 @@ public class PicoTest {
         assertThat(Pico.picoInlineCss().render(), containsString("Pico CSS"));
     }
 
+    /**
+     * Tests default CSS link generation.
+     */
     @Test
     public void testCssLinkDefault() {
         final String html = Pico.css().render();
@@ -56,6 +67,9 @@ public class PicoTest {
           is("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css\">"));
     }
 
+    /**
+     * Tests inline CSS generation.
+     */
     @Test
     public void testInlineCss() {
         final String html = Pico.inlineCss().render();
@@ -65,6 +79,9 @@ public class PicoTest {
         assertThat(html, containsString("--pico-font-family"));
     }
 
+    /**
+     * Tests CSS link with specific version.
+     */
     @Test
     public void testCssLinkWithVersion() {
         final String html = Pico.css("2.0.6").render();
@@ -72,6 +89,9 @@ public class PicoTest {
           is("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css\">"));
     }
 
+    /**
+     * Tests CSS link with version and color scheme.
+     */
     @Test
     public void testCssLinkWithVersionAndColorScheme() {
         final String html = Pico.css("2.0.6", "amber").render();
@@ -80,6 +100,9 @@ public class PicoTest {
           ".css\">"));
     }
 
+    /**
+     * Tests CSS link with Color enum.
+     */
     @Test
     public void testCssLinkWithColorEnum() {
         final String htmlDefaultWithColor = Pico.css(Pico.Color.AZURE).render();
@@ -91,6 +114,9 @@ public class PicoTest {
           "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2.1.0/css/pico.zinc.min.css\">"));
     }
 
+    /**
+     * Tests theme and color enums.
+     */
     @Test
     public void testThemeAndColorEnums() {
         assertThat(Pico.Theme.LIGHT.getValue(), is("light"));
@@ -102,6 +128,9 @@ public class PicoTest {
         assertThat(Pico.Color.PUMPKIN.toString(), is("pumpkin"));
     }
 
+    /**
+     * Tests the container method.
+     */
     @Test
     public void testContainer() {
         final String html = Pico.container(h1("Title")).render();
@@ -111,6 +140,9 @@ public class PicoTest {
         assertThat(textHtml, is("<main class=\"container\">Plain text</main>"));
     }
 
+    /**
+     * Tests the fluid container method.
+     */
     @Test
     public void testContainerFluid() {
         final String html = Pico.containerFluid(p("Full width")).render();
@@ -120,12 +152,18 @@ public class PicoTest {
         assertThat(textHtml, is("<main class=\"container-fluid\">Fluid text</main>"));
     }
 
+    /**
+     * Tests the grid method.
+     */
     @Test
     public void testGrid() {
         final String html = Pico.grid(div("Col 1"), div("Col 2")).render();
         assertThat(html, is("<div class=" + "\"grid\"" + "><div>Col 1</div><div>Col 2</div></div>"));
     }
 
+    /**
+     * Tests the dropdown method.
+     */
     @Test
     public void testDropdown() {
         final String htmlWithSummaryTag = Pico.dropdown(summary("Options"), a("Link 1")).render();
@@ -137,6 +175,9 @@ public class PicoTest {
           is("<details class=\"dropdown\"><summary>Actions</summary><button>Action 1</button></details>"));
     }
 
+    /**
+     * Tests the card method.
+     */
     @Test
     public void testCard() {
         final String html = Pico.card(h2("Card Title"), p("Body content")).render();
@@ -146,6 +187,9 @@ public class PicoTest {
         assertThat(textHtml, is("<article>Simple card text</article>"));
     }
 
+    /**
+     * Tests the modal method.
+     */
     @Test
     public void testModal() {
         final String html = Pico.modal("modal-example", article("Modal text")).render();
@@ -155,12 +199,15 @@ public class PicoTest {
         assertThat(htmlNoId, is("<dialog><article>No id</article></dialog>"));
     }
 
+    /**
+     * Tests HTMX and Pico CSS synergy.
+     */
     @Test
     public void testHtmxAndPicoSynergy() {
         final String html = Pico.grid(
           button("Save")
             .asButton()
-            .isAriaBusy()
+            .withAriaBusy(true)
             .withHxPost("/api/save")
             .withHxTarget("#result")
         ).render();
@@ -172,6 +219,9 @@ public class PicoTest {
         assertThat(html, containsString("hx-target=\"#result\""));
     }
 
+    /**
+     * Tests README examples.
+     */
     @Test
     public void testReadmeExamples() {
         // Basic Use Example
@@ -227,7 +277,7 @@ public class PicoTest {
                   ),
                   button("Submit")
                     .asButton()
-                    .isAriaBusy()
+                    .withAriaBusy(true)
                     .withDataTooltip("Click to save record")
                     .withDataPlacement("top")
                     .withHxPost("/api/users")

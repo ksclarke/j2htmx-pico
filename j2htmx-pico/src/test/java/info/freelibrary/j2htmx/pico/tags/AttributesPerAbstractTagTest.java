@@ -20,8 +20,13 @@ import static info.freelibrary.j2htmx.pico.TagCreator.video;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import info.freelibrary.util.warnings.Checkstyle;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests verifying custom HTML attribute generation on tags.
+ */
+@SuppressWarnings({Checkstyle.MULTIPLE_STRING_LITERALS, "MultipleStringLiterals"})
 public final class AttributesPerAbstractTagTest {
 
     //This class should contain Tests that check
@@ -30,6 +35,9 @@ public final class AttributesPerAbstractTagTest {
 
     //TODO: WARNING: only testing .with$ATTR and .is$ATTR Methods, not the 'Cond' Variants
 
+    /**
+     * Tests first group of tag attributes.
+     */
     @Test
     public void testAttributesPerTag1() {
         //TEST:
@@ -47,6 +55,9 @@ public final class AttributesPerAbstractTagTest {
         assertThat(input().isChecked().render(), is("<input checked>"));
     }
 
+    /**
+     * Tests second group of tag attributes.
+     */
     @Test
     public void testAttributesPerTag2() {
         //TEST: cite, cols, colspan, content, controls
@@ -57,6 +68,9 @@ public final class AttributesPerAbstractTagTest {
         assertThat(audio().isControls().render(), is("<audio controls></audio>"));
     }
 
+    /**
+     * Tests third group of tag attributes.
+     */
     @Test
     public void testAttributesPerTag3() {
         //TEST: coords, data, datetime, default, defer, dirname
@@ -70,6 +84,9 @@ public final class AttributesPerAbstractTagTest {
         assertThat(input().withDirname("fname.dir").render(), is("<input dirname=\"fname.dir\">"));
     }
 
+    /**
+     * Tests fourth group of tag attributes.
+     */
     @Test
     public void testAttributesPerTag4() {
         //TEST: disabled, download, enctype, for, form, formaction

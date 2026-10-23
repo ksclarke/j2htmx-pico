@@ -14,17 +14,17 @@ public final class EscapeUtil {
     /**
      * Escapes HTML special characters in the supplied string.
      *
-     * @param s The string to escape
+     * @param aString The string to escape
      * @return The HTML-escaped string, or null if input is null
      */
-    public static String escape(final String s) {
-        if (s == null) {
+    public static String escape(final String aString) {
+        if (aString == null) {
             return null;
         }
-        final StringBuilder escapedText = new StringBuilder(s.length() + 16);
+        final StringBuilder escapedText = new StringBuilder(aString.length() + 16);
         char currentChar;
-        for (int i = 0; i < s.length(); i++) {
-            currentChar = s.charAt(i);
+        for (int i = 0; i < aString.length(); i++) {
+            currentChar = aString.charAt(i);
             switch (currentChar) {
                 case '<':
                     escapedText.append("&lt;");

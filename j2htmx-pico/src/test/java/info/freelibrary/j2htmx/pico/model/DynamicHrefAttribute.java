@@ -5,18 +5,30 @@ import info.freelibrary.j2htmx.pico.rendering.TagBuilder;
 
 import java.io.IOException;
 
+/**
+ * Dynamic href attribute implementation for testing.
+ */
 public class DynamicHrefAttribute extends Attribute {
 
+    /**
+     * Constructs a DynamicHrefAttribute instance.
+     */
     public DynamicHrefAttribute() {
         super("href");
     }
 
     @Override
-    public void render(final TagBuilder writer, final Object model) throws IOException {
-        writer.appendAttribute(getName(), getUrl(model));
+    public void render(final TagBuilder aWriter, final Object aModel) throws IOException {
+        aWriter.appendAttribute(getName(), getUrl(aModel));
     }
 
-    public String getUrl(final Object model) {
+    /**
+     * Resolves the URL for the given model.
+     *
+     * @param aModel The model object
+     * @return The URL string
+     */
+    public String getUrl(final Object aModel) {
         return "/";
     }
 }

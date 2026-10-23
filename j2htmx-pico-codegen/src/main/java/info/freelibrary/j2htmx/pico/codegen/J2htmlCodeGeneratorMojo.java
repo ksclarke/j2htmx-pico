@@ -21,35 +21,35 @@ public class J2htmlCodeGeneratorMojo extends AbstractMojo {
 
     /** The Maven project instance. */
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
-    MavenProject project;
+    MavenProject myProject;
 
     /** Path to the model definition file. */
-    @Parameter(property = "modelFile", required = true)
-    String modelFile;
+    @Parameter(alias = "modelFile", property = "modelFile", required = true)
+    String myModelFile;
 
     /** Java package name for generated attribute interfaces. */
-    @Parameter(property = "attributePackage", required = true)
-    String attributePackage;
+    @Parameter(alias = "attributePackage", property = "attributePackage", required = true)
+    String myAttributePackage;
 
     /** Java package name for generated tag classes. */
-    @Parameter(property = "tagPackage", required = true)
-    String tagPackage;
+    @Parameter(alias = "tagPackage", property = "tagPackage", required = true)
+    String myTagPackage;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        getLog().debug("Model File: " + modelFile);
-        getLog().debug("Attribute Package: " + attributePackage);
-        getLog().debug("Tag Package: " + tagPackage);
+        getLog().debug("Model File: " + myModelFile);
+        getLog().debug("Attribute Package: " + myAttributePackage);
+        getLog().debug("Tag Package: " + myTagPackage);
 
-        final String outputDirectory = project.getBuild().getDirectory() + "/generated-sources/j2html-codegen";
-        project.addCompileSourceRoot(outputDirectory);
+        final String outputDirectory = myProject.getBuild().getDirectory() + "/generated-sources/j2html-codegen";
+        myProject.addCompileSourceRoot(outputDirectory);
         getLog().debug("Generating J2Html sources in: " + outputDirectory);
 
         final String definitions;
         try {
-            definitions = Files.readString(Paths.get(modelFile));
+            definitions = Files.readString(Paths.get(myModelFile));
         } catch (IOException e) {
-            throw new MojoFailureException("Unable to locate model file: " + modelFile, e);
+            throw new MojoFailureException("Unable to locate model file: " + myModelFile, e);
         }
 
         final Model model = new Model();
@@ -60,7 +60,7 @@ public class J2htmlCodeGeneratorMojo extends AbstractMojo {
         }
 
         try {
-            Generator.generate(Paths.get(outputDirectory).toAbsolutePath(), attributePackage, tagPackage, model);
+            Generator.generate(Paths.get(outputDirectory).toAbsolutePath(), myAttributePackage, myTagPackage, model);
         } catch (IOException details) {
             throw new MojoFailureException("Failed to generate source files.", details);
         }

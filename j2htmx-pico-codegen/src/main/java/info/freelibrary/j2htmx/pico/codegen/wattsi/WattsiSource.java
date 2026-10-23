@@ -4,6 +4,7 @@ import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
 import static info.freelibrary.util.Constants.SPACE;
 import static java.util.stream.Collectors.toList;
 
+import info.freelibrary.util.warnings.Checkstyle;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
@@ -22,27 +23,28 @@ import java.util.stream.Collectors;
 /**
  * Parses and extracts element and attribute definitions from a WHATWG HTML specification document.
  */
+@SuppressWarnings({Checkstyle.MULTIPLE_STRING_LITERALS, "MultipleStringLiterals"})
 public class WattsiSource {
 
     /** The data-x attribute. */
     private static final String DATA_X = "data-x";
 
     /** The HTML document being parsed. */
-    private final Document doc;
+    private final Document myDoc;
 
     /** Set of references marked as obsolete in the specification. */
-    private final Set<Reference> obsolete = new HashSet<>();
+    private final Set<Reference> myObsolete = new HashSet<>();
 
     /**
      * Constructs a WattsiSource from the specified HTML specification document.
      *
-     * @param doc The parsed WHATWG HTML spec document
+     * @param aDoc The parsed WHATWG HTML spec document
      */
-    public WattsiSource(final Document doc) {
-        this.doc = doc;
+    public WattsiSource(final Document aDoc) {
+        this.myDoc = aDoc;
 
         // Find where obsolete elements are defined or referenced.
-        final Elements obsoleteElements = doc.select(
+        final Elements obsoleteElements = aDoc.select(
           "p:contains(Elements in the following list are entirely obsolete) + dl");
 
         // Convert definitions into references to record obsolete elements.
@@ -50,23 +52,23 @@ public class WattsiSource {
           .stream()
           .map(WattsiElement::new)
           .map(WattsiElement::reference)
-          .forEach(obsolete::add);
+          .forEach(myObsolete::add);
 
         // Extract references to record obsolete elements.
         obsoleteElements.select("dt > code")
           .stream()
           .map(Element::childNodes)
           .map(Reference::from)
-          .forEach(obsolete::add);
+          .forEach(myObsolete::add);
 
         // Find where obsolete attributes are defined or referenced.
-        final Elements obsoleteAttributes = doc.select("p:contains(The following attributes are obsolete) + dl");
+        final Elements obsoleteAttributes = aDoc.select("p:contains(The following attributes are obsolete) + dl");
 
         // Convert definitions into references to record obsolete attributes.
         obsoleteAttributes.select("dt > dfn[element-attr]").stream()
           .map(WattsiAttribute::new)
           .map(WattsiAttribute::reference)
-          .forEach(obsolete::add);
+          .forEach(myObsolete::add);
 
         //        System.out.println(obsoleteAttributes.select("dt"));
 
@@ -86,7 +88,7 @@ public class WattsiSource {
      * @return List of element definitions
      */
     public List<ElementDefinition> elementDefinitions() {
-        return doc.select("dfn[element]").stream()
+        return myDoc.select("dfn[element]").stream()
           .map(WattsiElement::new)
           .collect(toList());
     }
@@ -97,7 +99,7 @@ public class WattsiSource {
      * @return List of attribute definitions
      */
     public List<AttributeDefinition> attributeDefinitions() {
-        return doc.select("dfn[element-attr]").stream()
+        return myDoc.select("dfn[element-attr]").stream()
           .map(WattsiAttribute::new)
           .collect(toList());
     }
@@ -108,32 +110,38 @@ public class WattsiSource {
     private static class Reference {
 
         /** The normalized lookup key. */
-        private final String key;
+        private final String myKey;
 
         /** The display text. */
-        private final String text;
+        private final String myText;
 
-        Reference(final String key, final String text) {
-            this.key = key;
-            this.text = text;
+        /**
+         * Constructs a Reference with the given key and display text.
+         *
+         * @param aKey The reference key
+         * @param aText The display text
+         */
+        Reference(final String aKey, final String aText) {
+            this.myKey = aKey;
+            this.myText = aText;
         }
 
         /**
          * Creates a Reference from a list of DOM child nodes.
          *
-         * @param nodes The child nodes to inspect
+         * @param aNodes The child nodes to inspect
          * @return A Reference instance or null if not resolved
          */
-        public static Reference from(final List<Node> nodes) {
-            if (nodes.stream().allMatch(TextNode.class::isInstance)) {
-                final String txt = nodes.stream()
+        public static Reference from(final List<Node> aNodes) {
+            if (aNodes.stream().allMatch(TextNode.class::isInstance)) {
+                final String txt = aNodes.stream()
                   .map(TextNode.class::cast)
                   .map(TextNode::text)
                   .collect(Collectors.joining(SPACE));
                 return new Reference(txt, txt);
             }
 
-            for (final Node node : nodes) {
+            for (final Node node : aNodes) {
                 if (node instanceof Element element && (element.is("code") || element.is("span"))) {
                     final String key = element.hasAttr(DATA_X) ? element.attr(DATA_X) : element.text();
                     return new Reference(key.toLowerCase(Locale.US), element.text());
@@ -145,24 +153,24 @@ public class WattsiSource {
 
         @Override
         public String toString() {
-            return key + "[" + text + "]";
+            return myKey + "[" + myText + "]";
         }
 
         @Override
-        public boolean equals(final Object o) {
-            if (this == o) {
+        public boolean equals(final Object anObject) {
+            if (this == anObject) {
                 return true;
             }
-            if (o == null || getClass() != o.getClass()) {
+            if (anObject == null || getClass() != anObject.getClass()) {
                 return false;
             }
-            final Reference reference = (Reference) o;
-            return key.equals(reference.key);
+            final Reference reference = (Reference) anObject;
+            return myKey.equals(reference.myKey);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(key);
+            return Objects.hash(myKey);
         }
     }
 
@@ -172,35 +180,46 @@ public class WattsiSource {
     public class WattsiElement implements ElementDefinition {
 
         /** The underlying dfn element defining this HTML element. */
-        private final Element dfn;
+        private final Element myDfn;
 
-        WattsiElement(final Element dfn) {
-            if (!"dfn".equals(dfn.tagName())) {
-                throw new IllegalArgumentException("Element cannot be defined from: " + dfn);
+        /**
+         * Constructs a WattsiElement from a definition element.
+         *
+         * @param aDfn The dfn element
+         * @throws IllegalArgumentException If the definition element is invalid
+         */
+        WattsiElement(final Element aDfn) {
+            if (!"dfn".equals(aDfn.tagName())) {
+                throw new IllegalArgumentException("Element cannot be defined from: " + aDfn);
             }
 
-            if (!dfn.hasAttr("element")) {
-                throw new IllegalArgumentException("Does not define an element: " + dfn);
+            if (!aDfn.hasAttr("element")) {
+                throw new IllegalArgumentException("Does not define an element: " + aDfn);
             }
 
-            if ( dfn.childrenSize() != SINGLE_INSTANCE) {
-                throw new IllegalArgumentException("Element cannot have multiple definitions: " + dfn);
+            if ( aDfn.childrenSize() != SINGLE_INSTANCE) {
+                throw new IllegalArgumentException("Element cannot have multiple definitions: " + aDfn);
             }
 
-            this.dfn = dfn;
+            this.myDfn = aDfn;
         }
 
+        /**
+         * Gets the reference for this element definition.
+         *
+         * @return The reference
+         */
         private Reference reference() {
-            return Reference.from(dfn.childNodes());
+            return Reference.from(myDfn.childNodes());
         }
 
         @Override
         public String name() {
-            if (dfn.hasAttr(DATA_X)) {
-                return dfn.attr(DATA_X);
+            if (myDfn.hasAttr(DATA_X)) {
+                return myDfn.attr(DATA_X);
             }
 
-            return Reference.from(dfn.childNodes()).key;
+            return Reference.from(myDfn.childNodes()).myKey;
         }
 
         @Override
@@ -210,7 +229,7 @@ public class WattsiSource {
 
         @Override
         public boolean isObsolete() {
-            return obsolete.contains(reference());
+            return myObsolete.contains(reference());
         }
     }
 
@@ -220,46 +239,62 @@ public class WattsiSource {
     public class WattsiAttribute implements AttributeDefinition {
 
         /** The underlying dfn element defining this attribute. */
-        private final Element dfn;
+        private final Element myDfn;
 
-        WattsiAttribute(final Element dfn) {
-            if (!"dfn".equals(dfn.tagName())) {
-                throw new IllegalArgumentException("Attribute cannot be defined from: " + dfn);
+        /**
+         * Constructs a WattsiAttribute from a definition element.
+         *
+         * @param aDfn The dfn element
+         * @throws IllegalArgumentException If the definition element is invalid
+         */
+        WattsiAttribute(final Element aDfn) {
+            if (!"dfn".equals(aDfn.tagName())) {
+                throw new IllegalArgumentException("Attribute cannot be defined from: " + aDfn);
             }
-            if (!dfn.hasAttr("element-attr")) {
-                throw new IllegalArgumentException("Does not define an attribute: " + dfn);
+            if (!aDfn.hasAttr("element-attr")) {
+                throw new IllegalArgumentException("Does not define an attribute: " + aDfn);
             }
-            if (dfn.childrenSize() != SINGLE_INSTANCE) {
-                throw new IllegalArgumentException("Attribute cannot have multiple definitions: " + dfn);
+            if (aDfn.childrenSize() != SINGLE_INSTANCE) {
+                throw new IllegalArgumentException("Attribute cannot have multiple definitions: " + aDfn);
             }
 
-            this.dfn = dfn;
+            this.myDfn = aDfn;
         }
 
+        /**
+         * Gets the reference for this attribute definition.
+         *
+         * @return The reference
+         */
         private Reference reference() {
-            return Reference.from(dfn.childNodes());
+            return Reference.from(myDfn.childNodes());
         }
 
         @Override
         public String name() {
-            return reference().text;
+            return reference().myText;
         }
 
+        /**
+         * Gets the target elements this attribute applies to.
+         *
+         * @return List of target element names
+         */
         private List<String> targets() {
-            if (dfn.hasAttr("for")) {
-                return Arrays.asList(dfn.attr("for").trim().split(","));
+            if (myDfn.hasAttr("for")) {
+                return Arrays.asList(myDfn.attr("for").trim().split(","));
             }
             return new ArrayList<>();
         }
 
         @Override
-        public boolean appliesTo(final ElementDefinition element) {
-            return targets().contains(element.name());
+        public boolean appliesTo(final ElementDefinition anElement) {
+            return targets().contains(anElement.name());
         }
 
         @Override
         public boolean isObsolete() {
-            return obsolete.contains(reference());
+            return myObsolete.contains(reference());
         }
     }
 }

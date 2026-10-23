@@ -1,10 +1,5 @@
 package info.freelibrary.j2htmx.pico.codegen.generators;
 
-import info.freelibrary.j2htmx.pico.codegen.GeneratorUtil;
-import info.freelibrary.j2htmx.pico.codegen.model.AttrD;
-import info.freelibrary.j2htmx.pico.codegen.model.AttributesList;
-import info.freelibrary.util.warnings.PMD;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -15,10 +10,17 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
+import info.freelibrary.j2htmx.pico.attributes.Attr;
+import info.freelibrary.j2htmx.pico.codegen.GeneratorUtil;
+import info.freelibrary.j2htmx.pico.codegen.model.AttrD;
+import info.freelibrary.j2htmx.pico.codegen.model.AttributesList;
+import info.freelibrary.util.warnings.Checkstyle;
+import info.freelibrary.util.warnings.PMD;
+
 /**
  * Code generator that outputs Java attribute interfaces for HTML elements.
  */
-@SuppressWarnings(PMD.SYSTEM_PRINTLN)
+@SuppressWarnings({PMD.SYSTEM_PRINTLN, Checkstyle.MULTIPLE_STRING_LITERALS, "MultipleStringLiterals"})
 public final class AttributeInterfaceCodeGenerator {
 
     /** The relative output path for attribute interface classes. */
@@ -34,28 +36,29 @@ public final class AttributeInterfaceCodeGenerator {
     /**
      * Generates or deletes attribute interface source files in the specified path.
      *
-     * @param absPath The absolute path to output files
-     * @param delete Whether to delete files instead of writing them
+     * @param aAbsPath The absolute path to output files
+     * @param aDelete Whether to delete files instead of writing them
      * @throws IOException If an I/O error occurs
      */
-    public static void generate(final Path absPath, final boolean delete) throws IOException {
-        final Path dir = Paths.get(absPath.toString(), RELATIVE_OUTPUT_PATH);
+    public static void generate(final Path aAbsPath, final boolean aDelete) throws IOException {
+        final Path dir = Paths.get(aAbsPath.toString(), RELATIVE_OUTPUT_PATH);
 
         // Delete all files in the directory for fresh generation
         GeneratorUtil.deleteAllFilesInDir(dir);
 
         for (final AttrD attr : AttributesList.attributesDescriptive()) {
-            final Path path = makePath(attr.attr, absPath);
-            final String interfaceName = interfaceNameFromAttribute(attr.attr) + "<T extends AbstractTag<T>>";
+            final Path path = makePath(attr.myAttr, aAbsPath);
+            final String interfaceName = interfaceNameFromAttribute(attr.myAttr) + "<T extends AbstractTag<T>>";
             final String interfaceStr = getInterfaceTemplate(
               interfaceName,
               Optional.of("Instance<T>"),
-              Arrays.asList("info.freelibrary.j2htmx.pico.tags.AbstractTag", "info.freelibrary.j2htmx.pico.tags.Instance"),
-              interfaceNameFromAttribute(attr.attr),
+              Arrays.asList("info.freelibrary.j2htmx.pico.tags.AbstractTag",
+                "info.freelibrary.j2htmx.pico.tags.Instance"),
+              interfaceNameFromAttribute(attr.myAttr),
               attr
             );
 
-            if (!delete) {
+            if (!aDelete) {
                 System.out.println("writing to " + path);
                 Files.write(path, interfaceStr.getBytes(StandardCharsets.UTF_8));
             }
@@ -63,42 +66,63 @@ public final class AttributeInterfaceCodeGenerator {
 
     }
 
+    /**
+     * Returns the package declaration line.
+     *
+     * @return The package statement
+     */
     private static String getPackage() {
         return "package info.freelibrary.j2htmx.pico.tags.attributes;\n";
     }
 
-    private static String makeReturnTypeAndMethodName(final String name) {
-        return "default T " + name;
+    /**
+     * Generates a default method signature string.
+     *
+     * @param aName The method name
+     * @return The method declaration snippet
+     */
+    private static String makeReturnTypeAndMethodName(final String aName) {
+        return "default T " + aName;
     }
 
+    /**
+     * Generates the interface template source code.
+     *
+     * @param anInterfaceName The name of the interface
+     * @param anOptExtends Optional extended interface
+     * @param anImports List of imports
+     * @param anInterfaceNameSimple Simple interface name
+     * @param anAttrD Attribute descriptor
+     * @return Complete interface source code
+     */
     private static String getInterfaceTemplate(
-      final String interfaceName,
-      final Optional<String> optExtends,
-      final List<String> imports,
-      final String interfaceNameSimple,
-      final AttrD attrD
+      final String anInterfaceName,
+      final Optional<String> anOptExtends,
+      final List<String> anImports,
+      final String anInterfaceNameSimple,
+      final AttrD anAttrD
     ) {
 
         final StringBuilder sb = new StringBuilder(512);
 
         sb.append(getPackage()).append('\n');
 
-        for (final String importName : imports) {
+        for (final String importName : anImports) {
             sb.append("import ").append(importName).append(";\n");
         }
 
         sb.append("\n/**\n * Defines the {@code ")
-          .append(attrD.attr)
+          .append(anAttrD.myAttr)
           .append("} attribute for HTML tags.\n *\n * @param <T> The tag type\n */\npublic interface ")
-          .append(interfaceName);
+          .append(anInterfaceName);
 
-        optExtends.ifPresent(ext -> sb.append(" extends ").append(ext).append(' '));
+        anOptExtends.ifPresent(ext -> sb.append(" extends ").append(ext).append(' '));
 
         sb.append(" {\n");
 
         // Method parameter uses the aName convention to avoid Java keywords and satisfy PMD rules.
-        final String attrName = interfaceNameSimple.toLowerCase(Locale.US);
-        final String paramName = "a" + interfaceNameSimple;
+        final String attrName = anInterfaceNameSimple.toLowerCase(Locale.US);
+        final String paramName = "a" + anInterfaceNameSimple;
 
         //depending on if the attribute has an argument or not,
         //generate methods according to the convention in AbstractTag.java
@@ -106,98 +130,128 @@ public final class AttributeInterfaceCodeGenerator {
         // no arg -> has$ATTR(), withCond$ATTR(condition)
 
         //append the 'with$ATTR' method
-        writeAttributeMethod(interfaceNameSimple, attrD, sb, attrName, paramName);
-        writeAttributeMethodCond(interfaceNameSimple, attrD, sb, attrName, paramName);
+        writeAttributeMethod(anInterfaceNameSimple, anAttrD, sb, attrName, paramName);
+        writeAttributeMethodCond(anInterfaceNameSimple, anAttrD, sb, attrName, paramName);
 
         sb.append("}\n");
 
         return sb.toString();
     }
 
-    @SuppressWarnings(PMD.AVOID_LITERALS_IN_IF_CONDITION)
-    private static void addAttributeNoArg(final StringBuilder sb, final String attrName) {
-        if ("autocomplete".equals(attrName)) {
-            sb.append("self().attr(\"").append(attrName).append("\",\"on\");\n");
+    /**
+     * Appends code for an attribute without arguments to the builder.
+     *
+     * @param aSb The string builder
+     * @param anAttrName The attribute name
+     */
+    private static void addAttributeNoArg(final StringBuilder aSb, final String anAttrName) {
+        if (Attr.AUTOCOMPLETE.equals(anAttrName)) {
+            aSb.append("self().attr(\"").append(anAttrName).append("\",\"on\");\n");
         } else {
-            sb.append("self().attr(\"").append(attrName).append("\");\n");
+            aSb.append("self().attr(\"").append(anAttrName).append("\");\n");
         }
     }
 
-    private static void writeAttributeMethodCond(final String interfaceNameSimple, final AttrD attrD,
-      final StringBuilder sb, final String attrName, final String paramName) {
+    /**
+     * Writes the conditional attribute method to the string builder.
+     *
+     * @param anInterfaceNameSimple Simple interface name
+     * @param anAttrD Attribute descriptor
+     * @param aSb The string builder
+     * @param anAttrName The attribute name
+     * @param aParamName The parameter name
+     */
+    private static void writeAttributeMethodCond(final String anInterfaceNameSimple, final AttrD anAttrD,
+      final StringBuilder aSb, final String anAttrName, final String aParamName) {
 
-        sb.append("\n    /**\n     * Conditionally sets the {@code ").append(attrName).append("} attribute");
-        if (attrD.hasArgument) {
-            sb.append(" with the specified value.\n     *\n     * @param enable Whether to set the attribute\n"
-              + "     * @param ").append(paramName).append(" The attribute value\n     * @return The tag instance\n"
+        aSb.append("\n    /**\n     * Conditionally sets the {@code ").append(anAttrName).append("} attribute");
+        if (anAttrD.hasArgument) {
+            aSb.append(" with the specified value.\n     *\n     * @param aEnable Whether to set the attribute\n"
+              + "     * @param ").append(aParamName).append(" The attribute value\n     * @return The tag instance\n"
               + "     */\n    ");
         } else {
-            sb.append(".\n     *\n     * @param enable Whether to set the attribute\n"
+            aSb.append(".\n     *\n     * @param aEnable Whether to set the attribute\n"
               + "     * @return The tag instance\n     */\n    ");
         }
-        sb.append(makeReturnTypeAndMethodName("withCond" + interfaceNameSimple));
+        aSb.append(makeReturnTypeAndMethodName("withCond" + anInterfaceNameSimple));
 
-        if (attrD.hasArgument) {
+        if (anAttrD.hasArgument) {
             //add a variant where you can specify the argument
-            sb.append("(final boolean enable, final String ")
-              .append(paramName)
-              .append(") {if (enable){\nself().attr(\"")
-              .append(attrName)
+            aSb.append("(final boolean aEnable, final String ")
+              .append(aParamName)
+              .append(") {if (aEnable){\nself().attr(\"")
+              .append(anAttrName)
               .append("\", ")
-              .append(paramName)
+              .append(aParamName)
               .append(");\n}\nreturn self();\n}\n");
         } else {
             //add a variant where you can toggle the attribute
-            sb.append("(final boolean enable) {if (enable){\n");
-            addAttributeNoArg(sb, attrName);
-            sb.append("}\nreturn self();\n}\n");
+            aSb.append("(final boolean aEnable) {if (aEnable){\n");
+            addAttributeNoArg(aSb, anAttrName);
+            aSb.append("}\nreturn self();\n}\n");
         }
     }
 
-    private static void writeAttributeMethod(final String interfaceNameSimple, final AttrD attrD,
-      final StringBuilder sb, final String attrName, final String paramName) {
+    /**
+     * Writes the attribute method to the string builder.
+     *
+     * @param anInterfaceNameSimple Simple interface name
+     * @param anAttrD Attribute descriptor
+     * @param aSb The string builder
+     * @param anAttrName The attribute name
+     * @param aParamName The parameter name
+     */
+    private static void writeAttributeMethod(final String anInterfaceNameSimple, final AttrD anAttrD,
+      final StringBuilder aSb, final String anAttrName, final String aParamName) {
 
-        sb.append("\n    /**\n     * Sets the {@code ").append(attrName).append("} attribute");
-        if (attrD.hasArgument) {
-            sb.append(" with the specified value.\n     *\n     * @param ").append(paramName)
+        aSb.append("\n    /**\n     * Sets the {@code ").append(anAttrName).append("} attribute");
+        if (anAttrD.hasArgument) {
+            aSb.append(" with the specified value.\n     *\n     * @param ").append(aParamName)
               .append(" The attribute value\n     * @return The tag instance\n     */\n    ");
         } else {
-            sb.append(".\n     *\n     * @return The tag instance\n     */\n    ");
+            aSb.append(".\n     *\n     * @return The tag instance\n     */\n    ");
         }
-        sb.append(makeReturnTypeAndMethodName(
-          (attrD.hasArgument ? "with" : "has") + interfaceNameSimple)
+        aSb.append(makeReturnTypeAndMethodName(
+          (anAttrD.hasArgument ? "with" : "has") + anInterfaceNameSimple)
         );
 
-        if (attrD.hasArgument) {
+        if (anAttrD.hasArgument) {
             //add a variant where you can specify the argument
-            sb.append("(final String ")
-              .append(paramName)
+            aSb.append("(final String ")
+              .append(aParamName)
               .append(") {return self().attr(\"")
-              .append(attrName)
+              .append(anAttrName)
               .append("\", ")
-              .append(paramName)
+              .append(aParamName)
               .append(");\n}\n");
         } else {
             //add a variant where you can toggle the attribute
-            sb.append("() {");
-            addAttributeNoArg(sb, attrName);
-            sb.append("return self();\n}\n");
+            aSb.append("() {");
+            addAttributeNoArg(aSb, anAttrName);
+            aSb.append("return self();\n}\n");
         }
     }
 
     /**
      * Converts an attribute name into its corresponding interface name.
      *
-     * @param attribute The attribute name
+     * @param anAttribute The attribute name
      * @return The interface name with first letter capitalized
      */
-    public static String interfaceNameFromAttribute(final String attribute) {
-        return attribute.substring(0, 1).toUpperCase(Locale.US) + attribute.substring(1);
+    public static String interfaceNameFromAttribute(final String anAttribute) {
+        return anAttribute.substring(0, 1).toUpperCase(Locale.US) + anAttribute.substring(1);
     }
 
-    private static Path makePath(final String tagLowerCase, final Path absPath) {
-        final String filename = interfaceNameFromAttribute(tagLowerCase) + ".java";
-        return Paths.get(absPath.toString(), RELATIVE_OUTPUT_PATH, filename);
+    /**
+     * Constructs the file path for the given interface.
+     *
+     * @param aTagLowerCase The lowercase tag/attribute name
+     * @param aAbsPath The absolute base directory path
+     * @return The path to the interface file
+     */
+    private static Path makePath(final String aTagLowerCase, final Path aAbsPath) {
+        final String filename = interfaceNameFromAttribute(aTagLowerCase) + ".java";
+        return Paths.get(aAbsPath.toString(), RELATIVE_OUTPUT_PATH, filename);
     }
 
 }

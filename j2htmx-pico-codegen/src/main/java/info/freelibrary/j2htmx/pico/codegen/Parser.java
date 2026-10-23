@@ -1,5 +1,7 @@
 package info.freelibrary.j2htmx.pico.codegen;
 
+import info.freelibrary.util.warnings.Checkstyle;
+
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -7,6 +9,7 @@ import java.util.regex.Pattern;
 /**
  * Parser for element and attribute definition files.
  */
+@SuppressWarnings({Checkstyle.MULTIPLE_STRING_LITERALS, "MultipleStringLiterals"})
 public final class Parser {
 
     /** Regex pattern matching empty or whitespace-only lines. */
@@ -22,17 +25,20 @@ public final class Parser {
     /** Regex pattern matching element-to-attribute mapping definitions. */
     private static final Pattern ATTRIBUTE_PATTERN = Pattern.compile("ATTRIBUTE\\[(?<element>\\S+):(?<name>\\S+)\\]");
 
+    /**
+     * Constructs an instance of Parser.
+     */
     private Parser() {
     }
 
     /**
      * Parses the specified model definition text using the given listener.
      *
-     * @param txt The model text content
-     * @param listener The listener callback handler
+     * @param aTxt The model text content
+     * @param aListener The listener callback handler
      */
-    public static void parse(final String txt, final Listener listener) {
-        final String[] lines = txt.split("[\r\n]+");
+    public static void parse(final String aTxt, final Listener aListener) {
+        final String[] lines = aTxt.split("[\r\n]+");
 
         for (int i = 0; i < lines.length; i++) {
             final int number = i + 1;
@@ -43,7 +49,7 @@ public final class Parser {
             }
 
             if (match(COMMENT_PATTERN, line, matcher -> {
-                listener.lineCommented(number, line);
+                aListener.lineCommented(number, line);
             })) {
                 continue;
             }
@@ -53,19 +59,19 @@ public final class Parser {
                 final String name = matcher.group("name");
                 switch (type) {
                     case "ELEMENT":
-                        listener.elementDefined(number, name);
+                        aListener.elementDefined(number, name);
                         break;
                     case "EMPTY-ELEMENT":
-                        listener.emptyElementDefined(number, name);
+                        aListener.emptyElementDefined(number, name);
                         break;
                     case "BOOLEAN":
-                        listener.booleanDefined(number, name);
+                        aListener.booleanDefined(number, name);
                         break;
                     case "ONOFF":
-                        listener.onOffDefined(number, name);
+                        aListener.onOffDefined(number, name);
                         break;
                     case "STRING":
-                        listener.stringDefined(number, name);
+                        aListener.stringDefined(number, name);
                         break;
                     default:
                         throw new IllegalArgumentException("Unknown type: " + type);
@@ -75,27 +81,38 @@ public final class Parser {
             }
 
             if (match(ATTRIBUTE_PATTERN, line, matcher -> {
-                listener.attributeDefined(
-                  number,
-                  matcher.group("element"),
-                  matcher.group("name")
-                );
+                aListener.attributeDefined(number, matcher.group("element"), matcher.group("name"));
             })) {
                 continue;
             }
 
-            listener.invalidLine(number, line);
+            aListener.invalidLine(number, line);
         }
     }
 
-    private static boolean match(final Pattern pattern, final String txt) {
-        return pattern.matcher(txt).matches();
+    /**
+     * Checks if the given text matches the pattern.
+     *
+     * @param aPattern The regex pattern
+     * @param aTxt The text to match
+     * @return True if the pattern matches the text, false otherwise
+     */
+    private static boolean match(final Pattern aPattern, final String aTxt) {
+        return aPattern.matcher(aTxt).matches();
     }
 
-    private static boolean match(final Pattern pattern, final String txt, final Consumer<Matcher> onMatch) {
-        final Matcher matcher = pattern.matcher(txt);
+    /**
+     * Checks if the given text matches the pattern and consumes the matcher on match.
+     *
+     * @param aPattern The regex pattern
+     * @param aTxt The text to match
+     * @param anOnMatch Callback invoked with the matcher when matched
+     * @return True if the pattern matches the text, false otherwise
+     */
+    private static boolean match(final Pattern aPattern, final String aTxt, final Consumer<Matcher> anOnMatch) {
+        final Matcher matcher = aPattern.matcher(aTxt);
         if (matcher.matches()) {
-            onMatch.accept(matcher);
+            anOnMatch.accept(matcher);
             return true;
         }
         return false;
@@ -108,66 +125,66 @@ public final class Parser {
         /**
          * Called when a line comment has encountered.
          *
-         * @param line The line number
-         * @param txt The comment text
+         * @param aLine The line number
+         * @param aTxt The comment text
          */
-        void lineCommented(int line, String txt);
+        void lineCommented(int aLine, String aTxt);
 
         /**
          * Called when a container element has defined.
          *
-         * @param line The line number
-         * @param name The element name
+         * @param aLine The line number
+         * @param aName The element name
          */
-        void elementDefined(int line, String name);
+        void elementDefined(int aLine, String aName);
 
         /**
          * Called when an empty/void element has defined.
          *
-         * @param line The line number
-         * @param name The element name
+         * @param aLine The line number
+         * @param aName The element name
          */
-        void emptyElementDefined(int line, String name);
+        void emptyElementDefined(int aLine, String aName);
 
         /**
          * Called when a boolean attribute has defined.
          *
-         * @param line The line number
-         * @param name The attribute name
+         * @param aLine The line number
+         * @param aName The attribute name
          */
-        void booleanDefined(int line, String name);
+        void booleanDefined(int aLine, String aName);
 
         /**
          * Called when an on/off boolean attribute has defined.
          *
-         * @param line The line number
-         * @param name The attribute name
+         * @param aLine The line number
+         * @param aName The attribute name
          */
-        void onOffDefined(int line, String name);
+        void onOffDefined(int aLine, String aName);
 
         /**
          * Called when a string attribute has defined.
          *
-         * @param line The line number
-         * @param name The attribute name
+         * @param aLine The line number
+         * @param aName The attribute name
          */
-        void stringDefined(int line, String name);
+        void stringDefined(int aLine, String aName);
 
         /**
          * Called when an attribute has mapped to an element.
          *
-         * @param line The line number
-         * @param element The element name
-         * @param name The attribute name
+         * @param aLine The line number
+         * @param anElement The element name
+         * @param aName The attribute name
          */
-        void attributeDefined(int line, String element, String name);
+        void attributeDefined(int aLine, String anElement, String aName);
 
         /**
          * Called when an invalid line has encountered.
          *
-         * @param line The line number
-         * @param txt The line content
+         * @param aLine The line number
+         * @param aTxt The line content
          */
-        void invalidLine(int line, String txt);
+        void invalidLine(int aLine, String aTxt);
     }
 }

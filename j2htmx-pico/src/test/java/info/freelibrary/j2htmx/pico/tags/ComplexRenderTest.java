@@ -21,10 +21,20 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import info.freelibrary.j2htmx.pico.attributes.Attr;
+import info.freelibrary.util.warnings.Checkstyle;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests for complex rendering scenarios.
+ */
+@SuppressWarnings({Checkstyle.MULTIPLE_STRING_LITERALS, "MultipleStringLiterals"})
 public class ComplexRenderTest {
 
+    /**
+     * Helper to render test document.
+     *
+     * @return Rendered html string
+     */
     private String renderTest() {
         final boolean USER_SHOULD_LOG_IN = true;
         final boolean USER_SHOULD_SIGN_UP = false;
@@ -55,6 +65,11 @@ public class ComplexRenderTest {
                ).render();
     }
 
+    /**
+     * Second helper to render test document.
+     *
+     * @return Rendered html string
+     */
     private String renderTest2() {
         final boolean USER_SHOULD_LOG_IN = true;
         final boolean USER_SHOULD_SIGN_UP = false;
@@ -86,6 +101,11 @@ public class ComplexRenderTest {
                ).render();
     }
 
+    /**
+     * Third helper to render formatted test document.
+     *
+     * @return Rendered formatted html string
+     */
     private String renderTest3() {
         final boolean USER_SHOULD_LOG_IN = true;
         final boolean USER_SHOULD_SIGN_UP = false;
@@ -117,6 +137,9 @@ public class ComplexRenderTest {
                ).renderFormatted();
     }
 
+    /**
+     * Tests complex rendering of HTML documents.
+     */
     @Test
     public void testComplexRender() {
         final String expectedResult = "<!DOCTYPE html><html><head><title>Test</title></head><body><header><h1>Test " +
@@ -131,6 +154,9 @@ public class ComplexRenderTest {
         assertThat(renderTest2(), is(expectedResult));
     }
 
+    /**
+     * Tests formatted complex rendering of HTML documents.
+     */
     @Test
     public void testComplexRender_formatted() {
         assertThat(renderTest3(),

@@ -40,6 +40,7 @@ import static info.freelibrary.util.Constants.EMPTY;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.MessageCodes;
+import info.freelibrary.util.warnings.Checkstyle;
 import info.freelibrary.util.warnings.PMD;
 
 import java.io.ByteArrayInputStream;
@@ -112,9 +113,10 @@ public final class JSMin {
      * @param aCharCode The character code to check
      * @return True if alphanumeric, false otherwise
      */
+    @SuppressWarnings({Checkstyle.BOOLEAN_EXPR_COMPLEXITY, "BooleanExpressionComplexity"})
     private static boolean isAlphanum(final int aCharCode) {
-        return (aCharCode >= 'a' && aCharCode <= 'z') || (aCharCode >= '0' && aCharCode <= '9') ||
-               (aCharCode >= 'A' && aCharCode <= 'Z') ||
+        return aCharCode >= 'a' && aCharCode <= 'z' || aCharCode >= '0' && aCharCode <= '9' ||
+               aCharCode >= 'A' && aCharCode <= 'Z' ||
                aCharCode == '_' || aCharCode == '$' || aCharCode == '\\' || aCharCode > 126;
     }
 
@@ -125,6 +127,7 @@ public final class JSMin {
      * @param aCharCode The character code to check
      * @return True if the character is a prefix operator; else, false
      */
+    @SuppressWarnings({Checkstyle.BOOLEAN_EXPR_COMPLEXITY, "BooleanExpressionComplexity"})
     private static boolean isPrefixOp(final int aCharCode) {
         return aCharCode == '}' || aCharCode == ']' || aCharCode == ')' || aCharCode == '+' || aCharCode == '-' ||
                aCharCode == '"' || aCharCode == '\'';
@@ -182,7 +185,8 @@ public final class JSMin {
      * @throws UnterminatedCommentException If a comment is not terminated
      */
     @SuppressWarnings({PMD.IMPLICIT_SWITCH_FALL_THROUGH, PMD.NON_EXHAUSTIVE_SWITCH, PMD.COGNITIVE_COMPLEXITY,
-      PMD.CYCLOMATIC_COMPLEXITY, PMD.TOO_FEW_BRANCHES_FOR_SWITCH})
+      PMD.CYCLOMATIC_COMPLEXITY, PMD.TOO_FEW_BRANCHES_FOR_SWITCH, "MissingSwitchDefault",
+      Checkstyle.MISSING_SWITCH_DEFAULT})
     private int next() throws IOException, UnterminatedCommentException {
         int charCode = get();
 
@@ -233,7 +237,8 @@ public final class JSMin {
      * @throws UnterminatedStringLiteralException If a string literal is not closed
      */
     @SuppressWarnings({PMD.IMPLICIT_SWITCH_FALL_THROUGH, PMD.N_PATH_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY,
-      PMD.SWITCH_DENSITY, PMD.NON_EXHAUSTIVE_SWITCH, PMD.COGNITIVE_COMPLEXITY})
+      PMD.SWITCH_DENSITY, PMD.NON_EXHAUSTIVE_SWITCH, PMD.COGNITIVE_COMPLEXITY, "MissingSwitchDefault",
+      Checkstyle.MISSING_SWITCH_DEFAULT})
     private void action(final int aAction)
     throws IOException, UnterminatedRegExpLiteralException, UnterminatedCommentException,
            UnterminatedStringLiteralException {

@@ -1,21 +1,28 @@
 package info.freelibrary.j2htmx.pico;
 
 import info.freelibrary.j2htmx.pico.utils.EscapeUtil;
+import info.freelibrary.util.warnings.Checkstyle;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+/**
+ * Performance tests comparing HTML escape mechanisms.
+ */
+@SuppressWarnings({Checkstyle.MULTIPLE_STRING_LITERALS, "MultipleStringLiterals"})
 @TestMethodOrder(MethodOrderer.MethodName.class)
 public class PerformanceTest {
 
-    private final String shortTestString = "<body>\n"
+    /** Short test HTML string. */
+    private final String myShortTestString = "<body>\n"
                                            + "    <h1 class=\"example\">Heading!</h1>\n"
                                            + "    <img src=\"img/hello.png\">\n"
                                            + "</body>";
 
+    /** Long syntax-highlighted HTML string for performance testing. */
     // syntax-highlighted getting started example from j2html.com:
-    private final String longTestString =
+    private final String myLongTestString =
       "<pre class=\" language-java\"><code class=\" language-java\"><span class=\"token keyword\">import</span> <span" +
       " class=\"token keyword\">static</span> j2html<span class=\"token punctuation\">.</span>TagCreator<span " +
       "class=\"token punctuation\">.</span>*<span class=\"token punctuation\">;</span>\n"
@@ -51,23 +58,43 @@ public class PerformanceTest {
       + "<span class=\"token punctuation\">}</span>\n"
       + "</code></pre>";
 
+    /**
+     * Tests simple escaper performance on short input.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testSimpleEscaperShort() throws Exception {
-        EscapeUtil.escape(shortTestString);
+        EscapeUtil.escape(myShortTestString);
     }
 
+    /**
+     * Tests simple escaper performance on long input.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testSimpleEscaperLong() throws Exception {
-        EscapeUtil.escape(longTestString);
+        EscapeUtil.escape(myLongTestString);
     }
 
+    /**
+     * Tests Apache escaper performance on short input.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testApacheEscaperShort() throws Exception {
-        StringEscapeUtils.escapeHtml4(shortTestString);
+        StringEscapeUtils.escapeHtml4(myShortTestString);
     }
 
+    /**
+     * Tests Apache escaper performance on long input.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testApacheEscaperLong() throws Exception {
-        StringEscapeUtils.escapeHtml4(longTestString);
+        StringEscapeUtils.escapeHtml4(myLongTestString);
     }
 }

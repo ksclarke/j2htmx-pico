@@ -4,11 +4,14 @@ import info.freelibrary.j2htmx.pico.rendering.HtmlBuilder;
 
 import java.io.IOException;
 
+/**
+ * Browser title template for testing.
+ */
 public class BrowserTitle extends Template<PageModel> {
 
     @Override
-    public <T extends Appendable> void renderTemplate(final HtmlBuilder<T> writer, final PageModel pageModel)
+    public <T extends Appendable> void renderTemplate(final HtmlBuilder<T> aWriter, final PageModel aPageModel)
       throws IOException {
-        writer.appendEscapedText(pageModel.getTitle());
+        aWriter.appendEscapedText(aPageModel.getTitle());
     }
 }

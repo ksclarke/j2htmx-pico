@@ -16,18 +16,18 @@ public final class DomContentJoiner {
     /**
      * Joins strings and {@link AbstractDomContent} elements separated by a delimiter.
      *
-     * @param delimiter The character sequence to insert between elements
-     * @param fixPeriodAndCommaSpacing Whether to clean up spaces before periods and commas
-     * @param stringOrDomObjects The objects to join (can be String or AbstractDomContent)
+     * @param aDelimiter The character sequence to insert between elements
+     * @param aFixPeriodAndCommaSpacing Whether to clean up spaces before periods and commas
+     * @param aStringOrDomObjects The objects to join (can be String or AbstractDomContent)
      * @return An UnescapedText instance containing the joined content
      * @throws RuntimeException If an object is not a String or AbstractDomContent
      */
     @SuppressWarnings({PMD.AVOID_THROWING_RAW_EXCEPTION_TYPES})
-    public static UnescapedText join(final CharSequence delimiter, final boolean fixPeriodAndCommaSpacing,
-      final Object... stringOrDomObjects) {
+    public static UnescapedText join(final CharSequence aDelimiter, final boolean aFixPeriodAndCommaSpacing,
+      final Object... aStringOrDomObjects) {
         final StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < stringOrDomObjects.length; i++) {
-            final Object o = stringOrDomObjects[i];
+        for (int i = 0; i < aStringOrDomObjects.length; i++) {
+            final Object o = aStringOrDomObjects[i];
             if (o instanceof String) {
                 sb.append(((String) o).trim());
             } else if (o instanceof AbstractDomContent) {
@@ -38,12 +38,12 @@ public final class DomContentJoiner {
             } else {
                 throw new RuntimeException("You can only join AbstractDomContent and String objects");
             }
-            if (i < stringOrDomObjects.length - 1) {
-                sb.append(delimiter);
+            if (i < aStringOrDomObjects.length - 1) {
+                sb.append(aDelimiter);
             }
         }
         String joined = sb.toString().trim();
-        if (fixPeriodAndCommaSpacing) {
+        if (aFixPeriodAndCommaSpacing) {
             joined = joined.replaceAll("\\s\\.", ".");
             joined = joined.replaceAll("\\s\\,", ",");
         }

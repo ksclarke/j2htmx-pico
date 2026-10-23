@@ -10,12 +10,22 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import info.freelibrary.j2htmx.pico.Config;
+import info.freelibrary.util.warnings.Checkstyle;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
+/**
+ * Tests for {@link IndentedHtml} rendering.
+ */
+@SuppressWarnings({Checkstyle.MULTIPLE_STRING_LITERALS, "MultipleStringLiterals"})
 public class IndentedHtmlTest {
 
+    /**
+     * Tests that unescaped text is not modified.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void unescaped_text_is_not_modified() throws Exception {
         assertThat(
@@ -24,6 +34,11 @@ public class IndentedHtmlTest {
         );
     }
 
+    /**
+     * Tests that escaped text replaces special characters with character entities.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void escaped_text_replaces_special_characters_with_character_entities() throws Exception {
         assertThat(
@@ -32,6 +47,11 @@ public class IndentedHtmlTest {
         );
     }
 
+    /**
+     * Tests that root elements are not indented.
+     *
+     * @throws IOException If an I/O error occurs
+     */
     @Test
     public void root_elements_are_not_indented() throws IOException {
         assertThat(
@@ -45,6 +65,11 @@ public class IndentedHtmlTest {
         );
     }
 
+    /**
+     * Tests that indentation increases for each layer of children.
+     *
+     * @throws IOException If an I/O error occurs
+     */
     @Test
     public void indentation_increases_for_each_layer_of_children() throws IOException {
         assertThat(
@@ -61,6 +86,11 @@ public class IndentedHtmlTest {
         );
     }
 
+    /**
+     * Tests that lines of text are indented as siblings.
+     *
+     * @throws IOException If an I/O error occurs
+     */
     @Test
     public void lines_of_text_are_indented_as_siblings() throws IOException {
         assertThat(
@@ -75,6 +105,11 @@ public class IndentedHtmlTest {
         );
     }
 
+    /**
+     * Tests that indentation remains the same for siblings.
+     *
+     * @throws IOException If an I/O error occurs
+     */
     @Test
     public void indentation_remains_the_same_for_sibling() throws IOException {
         assertThat(
@@ -93,6 +128,11 @@ public class IndentedHtmlTest {
         );
     }
 
+    /**
+     * Tests that attributes are defined on a single line within start tag.
+     *
+     * @throws IOException If an I/O error occurs
+     */
     @Test
     public void attributes_are_defined_within_the_start_tag_on_a_single_line() throws IOException {
         assertThat(
@@ -115,6 +155,11 @@ public class IndentedHtmlTest {
         );
     }
 
+    /**
+     * Tests that attribute values are escaped.
+     *
+     * @throws IOException If an I/O error occurs
+     */
     @Test
     public void attribute_values_are_escaped() throws IOException {
         assertThat(
@@ -123,6 +168,11 @@ public class IndentedHtmlTest {
         );
     }
 
+    /**
+     * Tests that content within pre elements is not indented.
+     *
+     * @throws IOException If an I/O error occurs
+     */
     @Test
     public void content_within_pre_elements_is_not_indented() throws IOException {
         //Single line text.
@@ -156,6 +206,11 @@ public class IndentedHtmlTest {
         );
     }
 
+    /**
+     * Tests that content within textarea elements is not indented.
+     *
+     * @throws IOException If an I/O error occurs
+     */
     @Test
     public void content_within_textarea_elements_is_not_indented() throws IOException {
         //Single line text.
@@ -171,6 +226,11 @@ public class IndentedHtmlTest {
         );
     }
 
+    /**
+     * Tests that empty tags are closed when configured.
+     *
+     * @throws IOException If an I/O error occurs
+     */
     @Test
     public void empty_tags_are_closed_when_configured() throws IOException {
         assertThat(
@@ -184,6 +244,11 @@ public class IndentedHtmlTest {
         );
     }
 
+    /**
+     * Tests that end tags are never closed.
+     *
+     * @throws IOException If an I/O error occurs
+     */
     @Test
     public void end_tags_are_never_closed() throws IOException {
         assertThat(

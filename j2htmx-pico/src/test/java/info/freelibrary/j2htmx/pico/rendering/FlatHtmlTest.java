@@ -6,12 +6,22 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import info.freelibrary.j2htmx.pico.Config;
+import info.freelibrary.util.warnings.Checkstyle;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
+/**
+ * Tests for {@link FlatHtml} rendering.
+ */
+@SuppressWarnings({Checkstyle.MULTIPLE_STRING_LITERALS, "MultipleStringLiterals"})
 public class FlatHtmlTest {
 
+    /**
+     * Tests that start tags contain attributes.
+     *
+     * @throws IOException If an I/O error occurs
+     */
     @Test
     public void start_tags_contain_attributes() throws IOException {
         assertThat(
@@ -23,6 +33,11 @@ public class FlatHtmlTest {
         );
     }
 
+    /**
+     * Tests that empty tags contain attributes.
+     *
+     * @throws IOException If an I/O error occurs
+     */
     @Test
     public void empty_tags_contain_attributes() throws IOException {
         assertThat(
@@ -34,6 +49,11 @@ public class FlatHtmlTest {
         );
     }
 
+    /**
+     * Tests that unescaped text is not modified.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void unescaped_text_is_not_modified() throws Exception {
         assertThat(
@@ -42,6 +62,11 @@ public class FlatHtmlTest {
         );
     }
 
+    /**
+     * Tests that escaped text replaces special characters with character entities.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void escaped_text_replaces_special_characters_with_character_entities() throws Exception {
         assertThat(
@@ -50,6 +75,11 @@ public class FlatHtmlTest {
         );
     }
 
+    /**
+     * Tests that attribute values are escaped.
+     *
+     * @throws IOException If an I/O error occurs
+     */
     @Test
     public void attribute_values_are_escaped() throws IOException {
         assertThat(
@@ -58,6 +88,11 @@ public class FlatHtmlTest {
         );
     }
 
+    /**
+     * Tests that empty tags are closed when configured.
+     *
+     * @throws IOException If an I/O error occurs
+     */
     @Test
     public void empty_tags_are_closed_when_configured() throws IOException {
         assertThat(
@@ -71,6 +106,11 @@ public class FlatHtmlTest {
         );
     }
 
+    /**
+     * Tests that end tags are never closed.
+     *
+     * @throws IOException If an I/O error occurs
+     */
     @Test
     public void end_tags_are_never_closed() throws IOException {
         assertThat(

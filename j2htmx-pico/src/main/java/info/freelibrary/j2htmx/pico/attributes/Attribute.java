@@ -38,16 +38,16 @@ public class Attribute {
     /**
      * Renders this attribute using the supplied TagBuilder.
      *
-     * @param builder The tag builder to append this attribute to
-     * @param model An optional data model object
+     * @param aBuilder The tag builder to append this attribute to
+     * @param aModel An optional data model object
      * @throws IOException If an I/O error occurs
      */
-    public void render(final TagBuilder builder, final Object model) throws IOException {
+    public void render(final TagBuilder aBuilder, final Object aModel) throws IOException {
         if (myName != null) {
             if (myValue != null) {
-                builder.appendAttribute(myName, myValue);
+                aBuilder.appendAttribute(myName, myValue);
             } else {
-                builder.appendBooleanAttribute(myName);
+                aBuilder.appendBooleanAttribute(myName);
             }
         }
     }
@@ -73,9 +73,9 @@ public class Attribute {
     /**
      * Sets the attribute value.
      *
-     * @param value The attribute value
+     * @param aValue The attribute value
      */
-    public void setValue(final String value) {
-        this.myValue = value;
+    public void setValue(final String aValue) {
+        this.myValue = aValue;
     }
 }

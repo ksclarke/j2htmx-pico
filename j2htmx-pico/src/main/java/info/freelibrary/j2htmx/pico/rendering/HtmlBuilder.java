@@ -15,48 +15,48 @@ public interface HtmlBuilder<T extends Appendable> {
      * Appends a start tag with the given name to the output. The returned TagBuilder is then used to append attributes
      * and eventually complete the start tag.
      *
-     * @param name The name of the start tag.
+     * @param aName The name of the start tag.
      * @return An TagBuilder which can append attributes to the start tag.
      * @throws IOException When the Appendable throws an IOException.
      */
-    TagBuilder appendStartTag(String name) throws IOException;
+    TagBuilder appendStartTag(String aName) throws IOException;
 
     /**
      * Appends an end tag with the given name to the output.
      *
-     * @param name The name of the end tag.
+     * @param aName The name of the end tag.
      * @return An HtmlBuilder that can continue appending HTML to the output.
      * @throws IOException When the Appendable throws an IOException.
      */
-    HtmlBuilder<T> appendEndTag(String name) throws IOException;
+    HtmlBuilder<T> appendEndTag(String aName) throws IOException;
 
     /**
      * Appends an empty tag with the given name to the output. The returned TagBuilder is then used to append attributes
      * and eventually complete the empty tag.
      *
-     * @param name The name of the empty tag.
+     * @param aName The name of the empty tag.
      * @return An TagBuilder which can append attributes to the empty tag.
      * @throws IOException When the Appendable throws an IOException.
      */
-    TagBuilder appendEmptyTag(String name) throws IOException;
+    TagBuilder appendEmptyTag(String aName) throws IOException;
 
     /**
      * Appends escaped text to the output.
      *
-     * @param txt The text to append.
+     * @param aTxt The text to append.
      * @return An HtmlBuilder that can continue appending HTML to the output.
      * @throws IOException When the Appendable throws an IOException.
      */
-    HtmlBuilder<T> appendEscapedText(String txt) throws IOException;
+    HtmlBuilder<T> appendEscapedText(String aTxt) throws IOException;
 
     /**
      * Appends unescaped text to the output.
      *
-     * @param txt The text to append.
+     * @param aTxt The text to append.
      * @return An HtmlBuilder that can continue appending HTML to the output.
      * @throws IOException When the Appendable throws an IOException.
      */
-    HtmlBuilder<T> appendUnescapedText(String txt) throws IOException;
+    HtmlBuilder<T> appendUnescapedText(String aTxt) throws IOException;
 
     /**
      * Returns the Appendable that was being wrapped.

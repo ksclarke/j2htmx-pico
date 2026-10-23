@@ -50,600 +50,600 @@ public final class MathML {
     /**
      * Creates a {@code annotation} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link AnnotationTag} instance
      */
-    public static AnnotationTag annotation(final String text) {
-        return new AnnotationTag().withText(text);
+    public static AnnotationTag annotation(final String aText) {
+        return new AnnotationTag().withText(aText);
     }
 
     /**
      * Creates a {@code annotation} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link AnnotationTag} instance
      */
-    public static AnnotationTag annotation(final AbstractDomContent... dc) {
-        return new AnnotationTag().with(dc);
+    public static AnnotationTag annotation(final AbstractDomContent... aDc) {
+        return new AnnotationTag().with(aDc);
     }
 
     /**
      * Creates a {@code maction} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MactionTag} instance
      */
-    public static MactionTag maction(final String text) {
-        return new MactionTag().withText(text);
+    public static MactionTag maction(final String aText) {
+        return new MactionTag().withText(aText);
     }
 
     /**
      * Creates a {@code maction} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MactionTag} instance
      */
-    public static MactionTag maction(final AbstractDomContent... dc) {
-        return new MactionTag().with(dc);
+    public static MactionTag maction(final AbstractDomContent... aDc) {
+        return new MactionTag().with(aDc);
     }
 
     /**
      * Creates a {@code math} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MathTag} instance
      */
-    public static MathTag math(final String text) {
-        return new MathTag().withText(text);
+    public static MathTag math(final String aText) {
+        return new MathTag().withText(aText);
     }
 
     /**
      * Creates a {@code math} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MathTag} instance
      */
-    public static MathTag math(final AbstractDomContent... dc) {
-        return new MathTag().with(dc);
+    public static MathTag math(final AbstractDomContent... aDc) {
+        return new MathTag().with(aDc);
     }
 
     /**
      * Creates a {@code merror} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MerrorTag} instance
      */
-    public static MerrorTag merror(final String text) {
-        return new MerrorTag().withText(text);
+    public static MerrorTag merror(final String aText) {
+        return new MerrorTag().withText(aText);
     }
 
     /**
      * Creates a {@code merror} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MerrorTag} instance
      */
-    public static MerrorTag merror(final AbstractDomContent... dc) {
-        return new MerrorTag().with(dc);
+    public static MerrorTag merror(final AbstractDomContent... aDc) {
+        return new MerrorTag().with(aDc);
     }
 
     /**
      * Creates a {@code mfrac} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MfracTag} instance
      */
-    public static MfracTag mfrac(final String text) {
-        return new MfracTag().withText(text);
+    public static MfracTag mfrac(final String aText) {
+        return new MfracTag().withText(aText);
     }
 
     /**
      * Creates a {@code mfrac} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MfracTag} instance
      */
-    public static MfracTag mfrac(final AbstractDomContent... dc) {
-        return new MfracTag().with(dc);
+    public static MfracTag mfrac(final AbstractDomContent... aDc) {
+        return new MfracTag().with(aDc);
     }
 
     /**
      * Creates a {@code mi} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MiTag} instance
      */
-    public static MiTag mi(final String text) {
-        return new MiTag().withText(text);
+    public static MiTag mi(final String aText) {
+        return new MiTag().withText(aText);
     }
 
     /**
      * Creates a {@code mi} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MiTag} instance
      */
-    public static MiTag mi(final AbstractDomContent... dc) {
-        return new MiTag().with(dc);
+    public static MiTag mi(final AbstractDomContent... aDc) {
+        return new MiTag().with(aDc);
     }
 
     /**
      * Creates a {@code mmultiscripts} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MmultiscriptsTag} instance
      */
-    public static MmultiscriptsTag mmultiscripts(final String text) {
-        return new MmultiscriptsTag().withText(text);
+    public static MmultiscriptsTag mmultiscripts(final String aText) {
+        return new MmultiscriptsTag().withText(aText);
     }
 
     /**
      * Creates a {@code mmultiscripts} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MmultiscriptsTag} instance
      */
-    public static MmultiscriptsTag mmultiscripts(final AbstractDomContent... dc) {
-        return new MmultiscriptsTag().with(dc);
+    public static MmultiscriptsTag mmultiscripts(final AbstractDomContent... aDc) {
+        return new MmultiscriptsTag().with(aDc);
     }
 
     /**
      * Creates a {@code mn} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MnTag} instance
      */
-    public static MnTag mn(final String text) {
-        return new MnTag().withText(text);
+    public static MnTag mn(final String aText) {
+        return new MnTag().withText(aText);
     }
 
     /**
      * Creates a {@code mn} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MnTag} instance
      */
-    public static MnTag mn(final AbstractDomContent... dc) {
-        return new MnTag().with(dc);
+    public static MnTag mn(final AbstractDomContent... aDc) {
+        return new MnTag().with(aDc);
     }
 
     /**
      * Creates a {@code mo} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MoTag} instance
      */
-    public static MoTag mo(final String text) {
-        return new MoTag().withText(text);
+    public static MoTag mo(final String aText) {
+        return new MoTag().withText(aText);
     }
 
     /**
      * Creates a {@code mo} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MoTag} instance
      */
-    public static MoTag mo(final AbstractDomContent... dc) {
-        return new MoTag().with(dc);
+    public static MoTag mo(final AbstractDomContent... aDc) {
+        return new MoTag().with(aDc);
     }
 
     /**
      * Creates a {@code mover} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MoverTag} instance
      */
-    public static MoverTag mover(final String text) {
-        return new MoverTag().withText(text);
+    public static MoverTag mover(final String aText) {
+        return new MoverTag().withText(aText);
     }
 
     /**
      * Creates a {@code mover} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MoverTag} instance
      */
-    public static MoverTag mover(final AbstractDomContent... dc) {
-        return new MoverTag().with(dc);
+    public static MoverTag mover(final AbstractDomContent... aDc) {
+        return new MoverTag().with(aDc);
     }
 
     /**
      * Creates a {@code mpadded} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MpaddedTag} instance
      */
-    public static MpaddedTag mpadded(final String text) {
-        return new MpaddedTag().withText(text);
+    public static MpaddedTag mpadded(final String aText) {
+        return new MpaddedTag().withText(aText);
     }
 
     /**
      * Creates a {@code mpadded} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MpaddedTag} instance
      */
-    public static MpaddedTag mpadded(final AbstractDomContent... dc) {
-        return new MpaddedTag().with(dc);
+    public static MpaddedTag mpadded(final AbstractDomContent... aDc) {
+        return new MpaddedTag().with(aDc);
     }
 
     /**
      * Creates a {@code mphantom} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MphantomTag} instance
      */
-    public static MphantomTag mphantom(final String text) {
-        return new MphantomTag().withText(text);
+    public static MphantomTag mphantom(final String aText) {
+        return new MphantomTag().withText(aText);
     }
 
     /**
      * Creates a {@code mphantom} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MphantomTag} instance
      */
-    public static MphantomTag mphantom(final AbstractDomContent... dc) {
-        return new MphantomTag().with(dc);
+    public static MphantomTag mphantom(final AbstractDomContent... aDc) {
+        return new MphantomTag().with(aDc);
     }
 
     /**
      * Creates a {@code mprescripts} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MprescriptsTag} instance
      */
-    public static MprescriptsTag mprescripts(final String text) {
-        return new MprescriptsTag().withText(text);
+    public static MprescriptsTag mprescripts(final String aText) {
+        return new MprescriptsTag().withText(aText);
     }
 
     /**
      * Creates a {@code mprescripts} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MprescriptsTag} instance
      */
-    public static MprescriptsTag mprescripts(final AbstractDomContent... dc) {
-        return new MprescriptsTag().with(dc);
+    public static MprescriptsTag mprescripts(final AbstractDomContent... aDc) {
+        return new MprescriptsTag().with(aDc);
     }
 
     /**
      * Creates a {@code mroot} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MrootTag} instance
      */
-    public static MrootTag mroot(final String text) {
-        return new MrootTag().withText(text);
+    public static MrootTag mroot(final String aText) {
+        return new MrootTag().withText(aText);
     }
 
     /**
      * Creates a {@code mroot} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MrootTag} instance
      */
-    public static MrootTag mroot(final AbstractDomContent... dc) {
-        return new MrootTag().with(dc);
+    public static MrootTag mroot(final AbstractDomContent... aDc) {
+        return new MrootTag().with(aDc);
     }
 
     /**
      * Creates a {@code mrow} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MrowTag} instance
      */
-    public static MrowTag mrow(final String text) {
-        return new MrowTag().withText(text);
+    public static MrowTag mrow(final String aText) {
+        return new MrowTag().withText(aText);
     }
 
     /**
      * Creates a {@code mrow} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MrowTag} instance
      */
-    public static MrowTag mrow(final AbstractDomContent... dc) {
-        return new MrowTag().with(dc);
+    public static MrowTag mrow(final AbstractDomContent... aDc) {
+        return new MrowTag().with(aDc);
     }
 
     /**
      * Creates a {@code ms} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MsTag} instance
      */
-    public static MsTag ms(final String text) {
-        return new MsTag().withText(text);
+    public static MsTag ms(final String aText) {
+        return new MsTag().withText(aText);
     }
 
     /**
      * Creates a {@code ms} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MsTag} instance
      */
-    public static MsTag ms(final AbstractDomContent... dc) {
-        return new MsTag().with(dc);
+    public static MsTag ms(final AbstractDomContent... aDc) {
+        return new MsTag().with(aDc);
     }
 
     /**
      * Creates a {@code mspace} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MspaceTag} instance
      */
-    public static MspaceTag mspace(final String text) {
-        return new MspaceTag().withText(text);
+    public static MspaceTag mspace(final String aText) {
+        return new MspaceTag().withText(aText);
     }
 
     /**
      * Creates a {@code mspace} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MspaceTag} instance
      */
-    public static MspaceTag mspace(final AbstractDomContent... dc) {
-        return new MspaceTag().with(dc);
+    public static MspaceTag mspace(final AbstractDomContent... aDc) {
+        return new MspaceTag().with(aDc);
     }
 
     /**
      * Creates a {@code msqrt} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MsqrtTag} instance
      */
-    public static MsqrtTag msqrt(final String text) {
-        return new MsqrtTag().withText(text);
+    public static MsqrtTag msqrt(final String aText) {
+        return new MsqrtTag().withText(aText);
     }
 
     /**
      * Creates a {@code msqrt} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MsqrtTag} instance
      */
-    public static MsqrtTag msqrt(final AbstractDomContent... dc) {
-        return new MsqrtTag().with(dc);
+    public static MsqrtTag msqrt(final AbstractDomContent... aDc) {
+        return new MsqrtTag().with(aDc);
     }
 
     /**
      * Creates a {@code mstyle} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MstyleTag} instance
      */
-    public static MstyleTag mstyle(final String text) {
-        return new MstyleTag().withText(text);
+    public static MstyleTag mstyle(final String aText) {
+        return new MstyleTag().withText(aText);
     }
 
     /**
      * Creates a {@code mstyle} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MstyleTag} instance
      */
-    public static MstyleTag mstyle(final AbstractDomContent... dc) {
-        return new MstyleTag().with(dc);
+    public static MstyleTag mstyle(final AbstractDomContent... aDc) {
+        return new MstyleTag().with(aDc);
     }
 
     /**
      * Creates a {@code msub} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MsubTag} instance
      */
-    public static MsubTag msub(final String text) {
-        return new MsubTag().withText(text);
+    public static MsubTag msub(final String aText) {
+        return new MsubTag().withText(aText);
     }
 
     /**
      * Creates a {@code msub} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MsubTag} instance
      */
-    public static MsubTag msub(final AbstractDomContent... dc) {
-        return new MsubTag().with(dc);
+    public static MsubTag msub(final AbstractDomContent... aDc) {
+        return new MsubTag().with(aDc);
     }
 
     /**
      * Creates a {@code msubsup} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MsubsupTag} instance
      */
-    public static MsubsupTag msubsup(final String text) {
-        return new MsubsupTag().withText(text);
+    public static MsubsupTag msubsup(final String aText) {
+        return new MsubsupTag().withText(aText);
     }
 
     /**
      * Creates a {@code msubsup} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MsubsupTag} instance
      */
-    public static MsubsupTag msubsup(final AbstractDomContent... dc) {
-        return new MsubsupTag().with(dc);
+    public static MsubsupTag msubsup(final AbstractDomContent... aDc) {
+        return new MsubsupTag().with(aDc);
     }
 
     /**
      * Creates a {@code msup} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MsupTag} instance
      */
-    public static MsupTag msup(final String text) {
-        return new MsupTag().withText(text);
+    public static MsupTag msup(final String aText) {
+        return new MsupTag().withText(aText);
     }
 
     /**
      * Creates a {@code msup} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MsupTag} instance
      */
-    public static MsupTag msup(final AbstractDomContent... dc) {
-        return new MsupTag().with(dc);
+    public static MsupTag msup(final AbstractDomContent... aDc) {
+        return new MsupTag().with(aDc);
     }
 
     /**
      * Creates a {@code mtable} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MtableTag} instance
      */
-    public static MtableTag mtable(final String text) {
-        return new MtableTag().withText(text);
+    public static MtableTag mtable(final String aText) {
+        return new MtableTag().withText(aText);
     }
 
     /**
      * Creates a {@code mtable} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MtableTag} instance
      */
-    public static MtableTag mtable(final AbstractDomContent... dc) {
-        return new MtableTag().with(dc);
+    public static MtableTag mtable(final AbstractDomContent... aDc) {
+        return new MtableTag().with(aDc);
     }
 
     /**
      * Creates a {@code mtd} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MtdTag} instance
      */
-    public static MtdTag mtd(final String text) {
-        return new MtdTag().withText(text);
+    public static MtdTag mtd(final String aText) {
+        return new MtdTag().withText(aText);
     }
 
     /**
      * Creates a {@code mtd} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MtdTag} instance
      */
-    public static MtdTag mtd(final AbstractDomContent... dc) {
-        return new MtdTag().with(dc);
+    public static MtdTag mtd(final AbstractDomContent... aDc) {
+        return new MtdTag().with(aDc);
     }
 
     /**
      * Creates a {@code mtext} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MtextTag} instance
      */
-    public static MtextTag mtext(final String text) {
-        return new MtextTag().withText(text);
+    public static MtextTag mtext(final String aText) {
+        return new MtextTag().withText(aText);
     }
 
     /**
      * Creates a {@code mtext} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MtextTag} instance
      */
-    public static MtextTag mtext(final AbstractDomContent... dc) {
-        return new MtextTag().with(dc);
+    public static MtextTag mtext(final AbstractDomContent... aDc) {
+        return new MtextTag().with(aDc);
     }
 
     /**
      * Creates a {@code mtr} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MtrTag} instance
      */
-    public static MtrTag mtr(final String text) {
-        return new MtrTag().withText(text);
+    public static MtrTag mtr(final String aText) {
+        return new MtrTag().withText(aText);
     }
 
     /**
      * Creates a {@code mtr} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MtrTag} instance
      */
-    public static MtrTag mtr(final AbstractDomContent... dc) {
-        return new MtrTag().with(dc);
+    public static MtrTag mtr(final AbstractDomContent... aDc) {
+        return new MtrTag().with(aDc);
     }
 
     /**
      * Creates a {@code munder} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MunderTag} instance
      */
-    public static MunderTag munder(final String text) {
-        return new MunderTag().withText(text);
+    public static MunderTag munder(final String aText) {
+        return new MunderTag().withText(aText);
     }
 
     /**
      * Creates a {@code munder} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MunderTag} instance
      */
-    public static MunderTag munder(final AbstractDomContent... dc) {
-        return new MunderTag().with(dc);
+    public static MunderTag munder(final AbstractDomContent... aDc) {
+        return new MunderTag().with(aDc);
     }
 
     /**
      * Creates a {@code munderover} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link MunderoverTag} instance
      */
-    public static MunderoverTag munderover(final String text) {
-        return new MunderoverTag().withText(text);
+    public static MunderoverTag munderover(final String aText) {
+        return new MunderoverTag().withText(aText);
     }
 
     /**
      * Creates a {@code munderover} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link MunderoverTag} instance
      */
-    public static MunderoverTag munderover(final AbstractDomContent... dc) {
-        return new MunderoverTag().with(dc);
+    public static MunderoverTag munderover(final AbstractDomContent... aDc) {
+        return new MunderoverTag().with(aDc);
     }
 
     /**
      * Creates a {@code none} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link NoneTag} instance
      */
-    public static NoneTag none(final String text) {
-        return new NoneTag().withText(text);
+    public static NoneTag none(final String aText) {
+        return new NoneTag().withText(aText);
     }
 
     /**
      * Creates a {@code none} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link NoneTag} instance
      */
-    public static NoneTag none(final AbstractDomContent... dc) {
-        return new NoneTag().with(dc);
+    public static NoneTag none(final AbstractDomContent... aDc) {
+        return new NoneTag().with(aDc);
     }
 
     /**
      * Creates a {@code semantics} MathML element with the specified text content.
      *
-     * @param text The text content
+     * @param aText The text content
      * @return The created {@link SemanticsTag} instance
      */
-    public static SemanticsTag semantics(final String text) {
-        return new SemanticsTag().withText(text);
+    public static SemanticsTag semantics(final String aText) {
+        return new SemanticsTag().withText(aText);
     }
 
     /**
      * Creates a {@code semantics} MathML element with the specified child DOM content.
      *
-     * @param dc The child DOM content nodes
+     * @param aDc The child DOM content nodes
      * @return The created {@link SemanticsTag} instance
      */
-    public static SemanticsTag semantics(final AbstractDomContent... dc) {
-        return new SemanticsTag().with(dc);
+    public static SemanticsTag semantics(final AbstractDomContent... aDc) {
+        return new SemanticsTag().with(aDc);
     }
 }

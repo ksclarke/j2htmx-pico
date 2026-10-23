@@ -7,36 +7,36 @@ public final class AttrD {
     //attribute descriptor
 
     /** The attribute name. */
-    public final String attr;
+    public final String myAttr;
 
     /** Whether the attribute requires a value argument. */
     public final boolean hasArgument;
 
     /** The HTML tag names this attribute can be applied to. */
-    public final String[] tags;
+    public final String[] myTags;
 
     /**
      * Constructs an attribute descriptor with no element restrictions.
      *
-     * @param attr The attribute name
-     * @param hasArgument Whether the attribute accepts an argument
+     * @param anAttr The attribute name
+     * @param aHasArgument Whether the attribute accepts an argument
      */
-    public AttrD(final String attr, final boolean hasArgument) {
-        this.attr = attr;
-        this.hasArgument = hasArgument;
-        this.tags = new String[]{};
+    public AttrD(final String anAttr, final boolean aHasArgument) {
+        this.myAttr = anAttr;
+        this.hasArgument = aHasArgument;
+        this.myTags = new String[]{};
     }
 
     /**
      * Constructs an attribute descriptor applicable to specific tags.
      *
-     * @param attr The attribute name
-     * @param hasArgument Whether the attribute accepts an argument
-     * @param tags The HTML tag names this attribute applies to
+     * @param anAttr The attribute name
+     * @param aHasArgument Whether the attribute accepts an argument
+     * @param aTags The HTML tag names this attribute applies to
      */
-    public AttrD(final String attr, final boolean hasArgument, final String... tags) {
-        this.attr = attr;
-        this.hasArgument = hasArgument;
-        this.tags = tags != null ? tags.clone() : null;
+    public AttrD(final String anAttr, final boolean aHasArgument, final String... aTags) {
+        this.myAttr = anAttr;
+        this.hasArgument = aHasArgument;
+        this.myTags = aTags != null ? aTags.clone() : null;
     }
 }

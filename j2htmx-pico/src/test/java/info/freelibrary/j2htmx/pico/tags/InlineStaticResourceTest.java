@@ -8,12 +8,23 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import info.freelibrary.util.warnings.Checkstyle;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests for inline static resource handling.
+ */
+@SuppressWarnings({Checkstyle.MULTIPLE_STRING_LITERALS, "MultipleStringLiterals"})
 public class InlineStaticResourceTest {
 
+    /** The system line separator. */
     private static final String EOL = System.getProperty("line.separator"); // System independent End Of Line
 
+    /**
+     * Tests inlining static resources for all tag types.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testAllTags() throws Exception {
 
@@ -41,6 +52,11 @@ public class InlineStaticResourceTest {
         assertThat(fileAsString("src/test/files/AnyContent.java").render(), is(expectedAnyContent));
     }
 
+    /**
+     * Tests that bad paths throw runtime exception.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     public void testExceptionForBadPath() throws Exception {
         assertThrows(RuntimeException.class, () -> styleWithInlineFileMinimized("NOT A FILE"));

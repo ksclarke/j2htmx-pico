@@ -10,6 +10,7 @@ import info.freelibrary.j2htmx.pico.tags.specialized.DivTag;
 import info.freelibrary.j2htmx.pico.tags.specialized.LinkTag;
 import info.freelibrary.j2htmx.pico.tags.specialized.MainTag;
 import info.freelibrary.j2htmx.pico.tags.specialized.SummaryTag;
+import info.freelibrary.util.warnings.Checkstyle;
 import info.freelibrary.util.warnings.PMD;
 
 import java.util.Locale;
@@ -17,7 +18,7 @@ import java.util.Locale;
 /**
  * Utility class and helpers for Pico.css v2 integration.
  */
-@SuppressWarnings(PMD.TOO_MANY_METHODS)
+@SuppressWarnings({PMD.TOO_MANY_METHODS, Checkstyle.MULTIPLE_STRING_LITERALS, "MultipleStringLiterals"})
 public final class Pico {
 
     /** Standard responsive container class. */
@@ -139,47 +140,47 @@ public final class Pico {
     /**
      * Creates a {@code <link>} stylesheet pointing to the CDN Pico CSS with a specified version.
      *
-     * @param version The Pico CSS version (e.g., "2", "2.0.6")
+     * @param aVersion The Pico CSS version (e.g., "2", "2.0.6")
      * @return A LinkTag element
      */
-    public static LinkTag css(final String version) {
-        return css(version, (String) null);
+    public static LinkTag css(final String aVersion) {
+        return css(aVersion, (String) null);
     }
 
     /**
      * Creates a {@code <link>} stylesheet pointing to the CDN Pico CSS with a specified color scheme.
      *
-     * @param colorScheme The color scheme palette
+     * @param aColorScheme The color scheme palette
      * @return A LinkTag element
      */
-    public static LinkTag css(final Color colorScheme) {
-        return css(DEFAULT_VERSION, colorScheme != null ? colorScheme.getValue() : null);
+    public static LinkTag css(final Color aColorScheme) {
+        return css(DEFAULT_VERSION, aColorScheme != null ? aColorScheme.getValue() : null);
     }
 
     /**
      * Creates a {@code <link>} stylesheet pointing to the CDN Pico CSS with a specified version and color scheme.
      *
-     * @param version The Pico CSS version
-     * @param colorScheme The color scheme palette
+     * @param aVersion The Pico CSS version
+     * @param aColorScheme The color scheme palette
      * @return A LinkTag element
      */
-    public static LinkTag css(final String version, final Color colorScheme) {
-        return css(version, colorScheme != null ? colorScheme.getValue() : null);
+    public static LinkTag css(final String aVersion, final Color aColorScheme) {
+        return css(aVersion, aColorScheme != null ? aColorScheme.getValue() : null);
     }
 
     /**
      * Creates a {@code <link>} stylesheet pointing to the CDN Pico CSS with a specified version and color scheme name.
      *
-     * @param version The Pico CSS version
-     * @param colorScheme The color scheme name (e.g., "amber", "zinc")
+     * @param aVersion The Pico CSS version
+     * @param aColorScheme The color scheme name (e.g., "amber", "zinc")
      * @return A LinkTag element
      */
-    public static LinkTag css(final String version, final String colorScheme) {
-        final String ver = (version == null || version.isEmpty()) ? DEFAULT_VERSION : version;
+    public static LinkTag css(final String aVersion, final String aColorScheme) {
+        final String ver = (aVersion == null || aVersion.isEmpty()) ? DEFAULT_VERSION : aVersion;
         final String href;
 
-        if (colorScheme != null && !colorScheme.isBlank()) {
-            href = CDN_URL_PREFIX + ver + "/css/pico." + colorScheme.trim().toLowerCase(Locale.ROOT) + ".min.css";
+        if (aColorScheme != null && !aColorScheme.isBlank()) {
+            href = CDN_URL_PREFIX + ver + "/css/pico." + aColorScheme.trim().toLowerCase(Locale.ROOT) + ".min.css";
         } else {
             href = CDN_URL_PREFIX + ver + "/css/pico.min.css";
         }
@@ -208,43 +209,43 @@ public final class Pico {
     /**
      * Creates a {@code <link>} stylesheet pointing to the CDN Pico CSS with a specified version.
      *
-     * @param version The Pico CSS version (e.g., "2", "2.0.6")
+     * @param aVersion The Pico CSS version (e.g., "2", "2.0.6")
      * @return A LinkTag referencing the versioned Pico CSS stylesheet
      */
-    public static LinkTag picoCss(final String version) {
-        return css(version);
+    public static LinkTag picoCss(final String aVersion) {
+        return css(aVersion);
     }
 
     /**
      * Creates a {@code <link>} stylesheet pointing to the CDN Pico CSS with a specified color scheme.
      *
-     * @param colorScheme The color scheme palette
+     * @param aColorScheme The color scheme palette
      * @return A LinkTag referencing the themed Pico CSS stylesheet
      */
-    public static LinkTag picoCss(final Color colorScheme) {
-        return css(colorScheme);
+    public static LinkTag picoCss(final Color aColorScheme) {
+        return css(aColorScheme);
     }
 
     /**
      * Creates a {@code <link>} stylesheet pointing to the CDN Pico CSS with a specified version and color scheme.
      *
-     * @param version The Pico CSS version
-     * @param colorScheme The color scheme palette
+     * @param aVersion The Pico CSS version
+     * @param aColorScheme The color scheme palette
      * @return A LinkTag referencing the versioned and themed Pico CSS stylesheet
      */
-    public static LinkTag picoCss(final String version, final Color colorScheme) {
-        return css(version, colorScheme);
+    public static LinkTag picoCss(final String aVersion, final Color aColorScheme) {
+        return css(aVersion, aColorScheme);
     }
 
     /**
      * Creates a {@code <link>} stylesheet pointing to the CDN Pico CSS with a specified version and color scheme name.
      *
-     * @param version The Pico CSS version
-     * @param colorScheme The color scheme name (e.g., "amber", "zinc")
+     * @param aVersion The Pico CSS version
+     * @param aColorScheme The color scheme name (e.g., "amber", "zinc")
      * @return A LinkTag referencing the themed Pico CSS stylesheet
      */
-    public static LinkTag picoCss(final String version, final String colorScheme) {
-        return css(version, colorScheme);
+    public static LinkTag picoCss(final String aVersion, final String aColorScheme) {
+        return css(aVersion, aColorScheme);
     }
 
     /**
@@ -259,126 +260,127 @@ public final class Pico {
     /**
      * Creates a centered, responsive container {@code <main class="container">}.
      *
-     * @param content Elements inside the container
+     * @param aContent Elements inside the container
      * @return A MainTag with the container class
      */
-    public static MainTag container(final AbstractDomContent... content) {
-        return TagCreator.main().withClass(CONTAINER).with(content);
+    public static MainTag container(final AbstractDomContent... aContent) {
+        return TagCreator.main().withClass(CONTAINER).with(aContent);
     }
 
     /**
      * Creates a centered, responsive container {@code <main class="container">} with text content.
      *
-     * @param text Text inside the container
+     * @param aText Text inside the container
      * @return A MainTag with the container class
      */
-    public static MainTag container(final String text) {
-        return TagCreator.main().withClass(CONTAINER).withText(text);
+    public static MainTag container(final String aText) {
+        return TagCreator.main().withClass(CONTAINER).withText(aText);
     }
 
     /**
      * Creates a fluid, full-width container {@code <main class="container-fluid">}.
      *
-     * @param content Elements inside the fluid container
+     * @param aContent Elements inside the fluid container
      * @return A MainTag with the container-fluid class
      */
-    public static MainTag containerFluid(final AbstractDomContent... content) {
-        return TagCreator.main().withClass(CONTAINER_FLUID).with(content);
+    public static MainTag containerFluid(final AbstractDomContent... aContent) {
+        return TagCreator.main().withClass(CONTAINER_FLUID).with(aContent);
     }
 
     /**
      * Creates a fluid, full-width container {@code <main class="container-fluid">} with text content.
      *
-     * @param text Text inside the fluid container
+     * @param aText Text inside the fluid container
      * @return A MainTag with the container-fluid class
      */
-    public static MainTag containerFluid(final String text) {
-        return TagCreator.main().withClass(CONTAINER_FLUID).withText(text);
+    public static MainTag containerFluid(final String aText) {
+        return TagCreator.main().withClass(CONTAINER_FLUID).withText(aText);
     }
 
     /**
      * Creates a responsive grid layout {@code <div class="grid">}.
      *
-     * @param content Elements inside the grid
+     * @param aContent Elements inside the grid
      * @return A DivTag with the grid class
      */
-    public static DivTag grid(final AbstractDomContent... content) {
-        return TagCreator.div().withClass(GRID).with(content);
+    public static DivTag grid(final AbstractDomContent... aContent) {
+        return TagCreator.div().withClass(GRID).with(aContent);
     }
 
     /**
      * Creates a responsive grid layout {@code <div class="grid">} with text content.
      *
-     * @param text Text inside the grid
+     * @param aText Text inside the grid
      * @return A DivTag with the grid class
      */
-    public static DivTag grid(final String text) {
-        return TagCreator.div().withClass(GRID).withText(text);
+    public static DivTag grid(final String aText) {
+        return TagCreator.div().withClass(GRID).withText(aText);
     }
 
     /**
      * Creates a dropdown menu {@code <details class="dropdown">}.
      *
-     * @param summary The summary element or label
-     * @param content Dropdown items/menu content
+     * @param aSummary The summary element or label
+     * @param aContent Dropdown items/menu content
      * @return A DetailsTag with the dropdown class
      */
-    public static DetailsTag dropdown(final AbstractDomContent summary, final AbstractDomContent... content) {
-        final AbstractDomContent summaryTag = (summary instanceof SummaryTag) ? summary : TagCreator.summary(summary);
-        return TagCreator.details().withClass(DROPDOWN).with(summaryTag).with(content);
+    public static DetailsTag dropdown(final AbstractDomContent aSummary, final AbstractDomContent... aContent) {
+        final AbstractDomContent summaryTag = (aSummary instanceof SummaryTag)
+          ? aSummary : TagCreator.summary(aSummary);
+        return TagCreator.details().withClass(DROPDOWN).with(summaryTag).with(aContent);
     }
 
     /**
      * Creates a dropdown menu {@code <details class="dropdown">} with a summary title.
      *
-     * @param summaryText The summary label
-     * @param content Dropdown items/menu content
+     * @param aSummaryText The summary label
+     * @param aContent Dropdown items/menu content
      * @return A DetailsTag with the dropdown class
      */
-    public static DetailsTag dropdown(final String summaryText, final AbstractDomContent... content) {
-        return dropdown(TagCreator.summary(summaryText), content);
+    public static DetailsTag dropdown(final String aSummaryText, final AbstractDomContent... aContent) {
+        return dropdown(TagCreator.summary(aSummaryText), aContent);
     }
 
     /**
      * Creates a semantic card container using {@code <article>}.
      *
-     * @param content Content of the card
+     * @param aContent Content of the card
      * @return An ArticleTag element
      */
-    public static ArticleTag card(final AbstractDomContent... content) {
-        return TagCreator.article(content);
+    public static ArticleTag card(final AbstractDomContent... aContent) {
+        return TagCreator.article(aContent);
     }
 
     /**
      * Creates a semantic card container using {@code <article>} with text content.
      *
-     * @param text Text content of the card
+     * @param aText Text content of the card
      * @return An ArticleTag element
      */
-    public static ArticleTag card(final String text) {
-        return TagCreator.article(text);
+    public static ArticleTag card(final String aText) {
+        return TagCreator.article(aText);
     }
 
     /**
      * Creates a modal dialog {@code <dialog id="...">}.
      *
-     * @param id The id for the modal dialog
-     * @param content Elements inside the modal
+     * @param anId The id for the modal dialog
+     * @param aContent Elements inside the modal
      * @return A DialogTag element
      */
-    public static DialogTag modal(final String id, final AbstractDomContent... content) {
-        final DialogTag dialog = TagCreator.dialog().with(content);
-        return (id != null && !id.isEmpty()) ? dialog.withId(id) : dialog;
+    public static DialogTag modal(final String anId, final AbstractDomContent... aContent) {
+        final DialogTag dialog = TagCreator.dialog().with(aContent);
+        return (anId != null && !anId.isEmpty()) ? dialog.withId(anId) : dialog;
     }
 
     /**
      * Creates a modal dialog {@code <dialog>}.
      *
-     * @param content Elements inside the modal
+     * @param aContent Elements inside the modal
      * @return A DialogTag element
      */
-    public static DialogTag modal(final AbstractDomContent... content) {
-        return TagCreator.dialog().with(content);
+    public static DialogTag modal(final AbstractDomContent... aContent) {
+        return TagCreator.dialog().with(aContent);
     }
 
     /**
