@@ -96,6 +96,86 @@ String listHtml = ul(
 ).render();
 ```
 
+### Working with Attributes: `with*`, `is*`, and `withCond*`
+
+`j2htmx-pico` provides fluent methods for configuring HTML, ARIA, and custom attributes. The method naming reflects how the attribute is rendered:
+
+#### 1. Unconditional Setters (`with*`)
+Parameterized methods accept an explicit value and unconditionally set the attribute:
+
+```java
+div().withClass("card").withId("main-content");
+// Output: <div class="card" id="main-content"></div>
+
+button().withAriaHidden(true);
+// Output: <button aria-hidden="true"></button>
+```
+
+#### 2. Boolean & Flag Shorthands (`is*`)
+For standard HTML boolean attributes where presence implies truthiness (and no value is used in HTML syntax), zero-argument `is*()` methods set the attribute flag:
+
+```java
+input().isDisabled().isRequired();
+// Output: <input disabled required>
+
+div().isHidden();
+// Output: <div hidden></div>
+```
+
+Zero-argument `is*()` is also used for HTML on/off attributes that default to the enabled keyword:
+
+```java
+form().isAutocomplete();
+// Output: <form autocomplete="on"></form>
+```
+
+#### 3. Conditional Setters (`withCond*`)
+Conditional setters evaluate a boolean condition. How the condition is applied depends on the category of the attribute:
+
+* **Inclusion Guards (Standard & Boolean Attributes):**
+  For standard HTML boolean attributes, on/off attributes, and value-bearing attributes, `withCond*` acts as a guard. When the condition is `true`, the attribute is rendered; when `false`, the attribute is **omitted entirely**:
+
+  ```java
+  // Boolean flag guard:
+  input().withCondDisabled(isReadOnly);
+  // true  -> <input disabled>
+  // false -> <input>
+
+  // On/Off attribute guard:
+  form().withCondAutocomplete(enableSuggestions);
+  // true  -> <form autocomplete="on"></form>
+  // false -> <form></form>
+
+  // Value-bearing attribute guard:
+  button().withCondAriaHidden(shouldHide, true);
+  // true  -> <button aria-hidden="true"></button>
+  // false -> <button></button>
+  ```
+
+* **Value Switchers (Tristate / Enumerated Attributes):**
+  Certain HTML attributes (`translate`, `draggable`, `spellcheck`, `contenteditable`) are **tristate**: they can be explicitly positive, explicitly negative, or omitted to inherit parent/browser defaults. For these attributes, `withCond*` acts as a two-way switch between explicit positive and negative states:
+
+  ```java
+  p("Content").withCondTranslate(isTranslatable);
+  // true  -> <p translate="yes">Content</p>
+  // false -> <p translate="no">Content</p>
+
+  div().withCondDraggable(canDrag);
+  // true  -> <div draggable="true"></div>
+  // false -> <div draggable="false"></div>
+
+  div().withCondSpellcheck(checkSpelling);
+  // true  -> <div spellcheck="true"></div>
+  // false -> <div spellcheck="false"></div>
+
+  div().withCondContenteditable(isEditable);
+  // true  -> <div contenteditable="true"></div>
+  // false -> <div contenteditable="false"></div>
+  ```
+
+  > [!NOTE]
+  > Because `withCond*` on tristate attributes always outputs either the positive or negative keyword, if you want an element to inherit the browser or ancestor default, omit calling the setter altogether.
+
 ## Incorporating HTMX elements
 
 HTMX attributes are exposed directly as type-safe builder methods on all tags, providing seamless dynamic updates,
