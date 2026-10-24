@@ -57,7 +57,6 @@
 
         <!-- Plugin versions -->
         <maven.bundle.version>5.1.6</maven.bundle.version>
-        <freelib.resources.version>14.0.8</freelib.resources.version>
     </properties>
 
     <dependencyManagement>
@@ -166,7 +165,7 @@
     <parent>
         <artifactId>freelib-parent</artifactId>
         <groupId>info.freelibrary</groupId>
-        <version>14.3.4</version>
+        <version>14.3.5</version>
     </parent>
 
 </project>

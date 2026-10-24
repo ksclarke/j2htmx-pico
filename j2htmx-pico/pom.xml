@@ -25,7 +25,6 @@
         <dependency>
             <groupId>info.freelibrary</groupId>
             <artifactId>freelib-utils</artifactId>
-            <version>6.0.1</version>
         </dependency>
     </dependencies>
 
