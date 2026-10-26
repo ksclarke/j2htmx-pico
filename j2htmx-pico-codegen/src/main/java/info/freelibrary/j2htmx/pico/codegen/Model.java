@@ -212,7 +212,7 @@ public class Model implements Parser.Listener {
          *
          * @throws RuntimeException If an error occurs during execution
          */
-        @SuppressWarnings({PMD.AVOID_UNCHECKED_EXCEPTIONS_IN_SIGNATURES, "IllegalThrows"})
+        @SuppressWarnings({"PMD.AvoidUncheckedExceptionsInSignatures", "IllegalThrows"})
         void call() throws RuntimeException;
     }
 

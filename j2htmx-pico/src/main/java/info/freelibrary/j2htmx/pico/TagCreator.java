@@ -11,7 +11,9 @@ import info.freelibrary.j2htmx.pico.tags.EmptyTag;
 import info.freelibrary.j2htmx.pico.tags.InlineStaticResource;
 import info.freelibrary.j2htmx.pico.tags.Text;
 import info.freelibrary.j2htmx.pico.tags.UnescapedText;
+// BEGIN GENERATED CODE
 import info.freelibrary.j2htmx.pico.tags.specialized.*;
+// END GENERATED CODE
 import info.freelibrary.util.warnings.PMD;
 
 import java.util.Collection;
@@ -30,7 +32,7 @@ import java.util.stream.Stream;
 /**
  * Primary factory class providing static builder methods to construct HTML, HTMX, and Pico CSS elements.
  */
-@SuppressWarnings({PMD.SHORT_METHOD_NAME, PMD.COUPLING_BETWEEN_OBJECTS, PMD.CYCLOMATIC_COMPLEXITY, PMD.TOO_MANY_METHODS,
+@SuppressWarnings({"PMD.ShortMethodName", PMD.COUPLING_BETWEEN_OBJECTS, PMD.CYCLOMATIC_COMPLEXITY, PMD.TOO_MANY_METHODS,
   PMD.EXCESSIVE_PUBLIC_COUNT})
 public final class TagCreator {
 

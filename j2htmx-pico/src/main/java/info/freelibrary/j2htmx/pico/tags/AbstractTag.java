@@ -74,12 +74,14 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
         if (aValue == null) {
             return myAttributes.add(new Attribute(aName));
         }
+
         for (final Attribute attribute : myAttributes) {
             if (attribute.getName().equals(aName)) {
                 attribute.setValue(aValue); // update with new value
                 return true;
             }
         }
+
         return myAttributes.add(new Attribute(aName, aValue));
     }
 
@@ -105,6 +107,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
     public T attr(final Attribute anAttribute) {
         final Iterator<Attribute> iterator = myAttributes.iterator();
         final String name = anAttribute.getName();
+
         if (name != null) {
             // name == null is allowed, but those Attributes are not rendered. So we add them anyway.
             while (iterator.hasNext()) {
@@ -114,6 +117,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
                 }
             }
         }
+
         myAttributes.add(anAttribute);
         return self();
     }
@@ -146,9 +150,11 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
         if (this == anObject) {
             return true;
         }
+
         if (!(anObject instanceof AbstractTag<?> other)) {
             return false;
         }
+
         return render().equals(other.render());
     }
 

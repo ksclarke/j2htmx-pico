@@ -3,7 +3,6 @@ package info.freelibrary.j2htmx.pico.codegen.generators;
 import java.util.Arrays;
 import java.util.List;
 
-import info.freelibrary.j2htmx.pico.tags.Tag;
 import info.freelibrary.util.warnings.Checkstyle;
 import info.freelibrary.util.warnings.PMD;
 
@@ -95,8 +94,8 @@ public final class TagCreatorCodeGenerator {
      * @return List of empty tag names
      */
     public static List<String> emptyTags() {
-        return Arrays.asList(Tag.AREA, Tag.BASE, Tag.BR, Tag.COL, Tag.EMBED, Tag.HR, Tag.IMG, Tag.INPUT, Tag.KEYGEN,
-          Tag.LINK, Tag.META, Tag.PARAM, Tag.SOURCE, Tag.TRACK, Tag.WBR);
+        return Arrays.asList("area", "base", "br", "col", "embed", "hr", "img", "input", "keygen", "link", "meta",
+          "param", "source", "track", "wbr");
     }
 
     /**
@@ -105,15 +104,13 @@ public final class TagCreatorCodeGenerator {
      * @return List of container tag names
      */
     public static List<String> containerTags() {
-        return Arrays.asList(Tag.A, Tag.ABBR, Tag.ADDRESS, Tag.ARTICLE, Tag.ASIDE, Tag.AUDIO, Tag.B, Tag.BDI, Tag.BDO,
-          Tag.BLOCKQUOTE, Tag.BODY, Tag.BUTTON, Tag.CANVAS, Tag.CAPTION, Tag.CITE, Tag.CODE, Tag.COLGROUP, Tag.DATA,
-          Tag.DATALIST, Tag.DD, Tag.DEL, Tag.DETAILS, Tag.DFN, Tag.DIALOG, Tag.DIV, Tag.DL, Tag.DT, Tag.EM,
-          Tag.FIELDSET, Tag.FIGCAPTION, Tag.FIGURE, Tag.FOOTER, Tag.FORM, Tag.H1, Tag.H2, Tag.H3, Tag.H4, Tag.H5,
-          Tag.H6, Tag.HEAD, Tag.HEADER, Tag.HTML, Tag.I, Tag.IFRAME, Tag.INS, Tag.KBD, Tag.LABEL, Tag.LEGEND, Tag.LI,
-          Tag.MAIN, Tag.MAP, Tag.MARK, Tag.MENU, Tag.MENUITEM, Tag.METER, Tag.NAV, Tag.NOSCRIPT, Tag.OBJECT, Tag.OL,
-          Tag.OPTGROUP, Tag.OPTION, Tag.OUTPUT, Tag.P, Tag.PICTURE, Tag.PRE, Tag.PROGRESS, Tag.Q, Tag.RP, Tag.RT,
-          Tag.RUBY, Tag.S, Tag.SAMP, Tag.SCRIPT, Tag.SECTION, Tag.SELECT, Tag.SLOT, Tag.SMALL, Tag.SPAN, Tag.STRONG,
-          Tag.STYLE, Tag.SUB, Tag.SUMMARY, Tag.SUP, Tag.TABLE, Tag.TBODY, Tag.TD, Tag.TEMPLATE, Tag.TEXTAREA,
-          Tag.TFOOT, Tag.TH, Tag.THEAD, Tag.TIME, Tag.TITLE, Tag.TR, Tag.U, Tag.UL, Tag.VAR, Tag.VIDEO);
+        return Arrays.asList("a", "abbr", "address", "article", "aside", "audio", "b", "bdi", "bdo", "blockquote",
+          "body", "button", "canvas", "caption", "cite", "code", "colgroup", "data", "datalist", "dd", "del", "details",
+          "dfn", "dialog", "div", "dl", "dt", "em", "fieldset", "figcaption", "figure", "footer", "form", "h1", "h2",
+          "h3", "h4", "h5", "h6", "head", "header", "html", "i", "iframe", "ins", "kbd", "label", "legend", "li",
+          "main", "map", "mark", "menu", "menuitem", "meter", "nav", "noscript", "object", "ol", "optgroup", "option",
+          "output", "p", "picture", "pre", "progress", "q", "rp", "rt", "ruby", "s", "samp", "script", "section",
+          "select", "slot", "small", "span", "strong", "style", "sub", "summary", "sup", "table", "tbody", "td",
+          "template", "textarea", "tfoot", "th", "thead", "time", "title", "tr", "u", "ul", "var", "video");
     }
 }

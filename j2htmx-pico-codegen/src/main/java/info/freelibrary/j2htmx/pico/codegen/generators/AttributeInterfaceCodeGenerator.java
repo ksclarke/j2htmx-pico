@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import info.freelibrary.j2htmx.pico.attributes.Attr;
 import info.freelibrary.j2htmx.pico.codegen.GeneratorUtil;
 import info.freelibrary.j2htmx.pico.codegen.model.AttrD;
 import info.freelibrary.j2htmx.pico.codegen.model.AttributesList;
@@ -25,6 +24,9 @@ public final class AttributeInterfaceCodeGenerator {
 
     /** The relative output path for attribute interface classes. */
     private static final String RELATIVE_OUTPUT_PATH = "tags/attributes/";
+
+    /** The autocomplete attribute name constant. */
+    private static final String AUTOCOMPLETE = "autocomplete";
 
     /**
      * Private constructor to prevent instantiation.
@@ -145,7 +147,7 @@ public final class AttributeInterfaceCodeGenerator {
      * @param anAttrName The attribute name
      */
     private static void addAttributeNoArg(final StringBuilder aSb, final String anAttrName) {
-        if (Attr.AUTOCOMPLETE.equals(anAttrName)) {
+        if (AUTOCOMPLETE.equals(anAttrName)) {
             aSb.append("self().attr(\"").append(anAttrName).append("\",\"on\");\n");
         } else {
             aSb.append("self().attr(\"").append(anAttrName).append("\");\n");

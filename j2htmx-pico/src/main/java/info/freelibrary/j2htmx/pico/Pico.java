@@ -22,18 +22,18 @@ import java.util.Locale;
 public final class Pico {
 
     /** Standard responsive container class. */
-    @SuppressWarnings(PMD.AVOID_FIELD_NAME_MATCHING_METHOD_NAME)
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     public static final String CONTAINER = "container";
 
     /** Fluid, full-width container class. */
     public static final String CONTAINER_FLUID = "container-fluid";
 
     /** Responsive grid layout class. */
-    @SuppressWarnings(PMD.AVOID_FIELD_NAME_MATCHING_METHOD_NAME)
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     public static final String GRID = "grid";
 
     /** Dropdown menu details class. */
-    @SuppressWarnings(PMD.AVOID_FIELD_NAME_MATCHING_METHOD_NAME)
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     public static final String DROPDOWN = "dropdown";
 
     /**

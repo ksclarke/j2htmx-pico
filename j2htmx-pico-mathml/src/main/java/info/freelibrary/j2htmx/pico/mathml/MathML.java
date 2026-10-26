@@ -37,7 +37,7 @@ import info.freelibrary.util.warnings.PMD;
  * Factory class providing static builder methods for creating MathML elements.
  */
 @SuppressWarnings(
-  {PMD.SHORT_METHOD_NAME, PMD.TOO_MANY_METHODS, PMD.EXCESSIVE_PUBLIC_COUNT, PMD.COUPLING_BETWEEN_OBJECTS,
+  {"PMD.ShortMethodName", PMD.TOO_MANY_METHODS, PMD.EXCESSIVE_PUBLIC_COUNT, PMD.COUPLING_BETWEEN_OBJECTS,
     PMD.EXCESSIVE_IMPORTS})
 public final class MathML {
 

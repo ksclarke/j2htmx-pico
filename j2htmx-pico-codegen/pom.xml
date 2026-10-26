@@ -61,12 +61,6 @@
             <groupId>info.freelibrary</groupId>
             <artifactId>freelib-utils</artifactId>
         </dependency>
-        <dependency>
-            <groupId>info.freelibrary</groupId>
-            <artifactId>j2htmx-pico</artifactId>
-            <version>${revision}</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
     <build>

@@ -184,9 +184,9 @@ public final class JSMin {
      * @throws IOException If an I/O error occurs
      * @throws UnterminatedCommentException If a comment is not terminated
      */
-    @SuppressWarnings({PMD.IMPLICIT_SWITCH_FALL_THROUGH, PMD.NON_EXHAUSTIVE_SWITCH, PMD.COGNITIVE_COMPLEXITY,
-      PMD.CYCLOMATIC_COMPLEXITY, PMD.TOO_FEW_BRANCHES_FOR_SWITCH, "MissingSwitchDefault",
-      Checkstyle.MISSING_SWITCH_DEFAULT})
+    @SuppressWarnings({"PMD.ImplicitSwitchFallThrough", "PMD.NonExhaustiveSwitch", PMD.COGNITIVE_COMPLEXITY,
+      PMD.CYCLOMATIC_COMPLEXITY, "PMD.TooFewBranchesForSwitch", "MissingSwitchDefault",
+      "checkstyle:MissingSwitchDefault"})
     private int next() throws IOException, UnterminatedCommentException {
         int charCode = get();
 
@@ -236,9 +236,9 @@ public final class JSMin {
      * @throws UnterminatedCommentException If a comment is not closed
      * @throws UnterminatedStringLiteralException If a string literal is not closed
      */
-    @SuppressWarnings({PMD.IMPLICIT_SWITCH_FALL_THROUGH, PMD.N_PATH_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY,
-      PMD.SWITCH_DENSITY, PMD.NON_EXHAUSTIVE_SWITCH, PMD.COGNITIVE_COMPLEXITY, "MissingSwitchDefault",
-      Checkstyle.MISSING_SWITCH_DEFAULT})
+    @SuppressWarnings({"PMD.ImplicitSwitchFallThrough", PMD.N_PATH_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY,
+      PMD.SWITCH_DENSITY, "PMD.NonExhaustiveSwitch", PMD.COGNITIVE_COMPLEXITY, "MissingSwitchDefault",
+      "checkstyle:MissingSwitchDefault"})
     private void action(final int aAction)
     throws IOException, UnterminatedRegExpLiteralException, UnterminatedCommentException,
            UnterminatedStringLiteralException {

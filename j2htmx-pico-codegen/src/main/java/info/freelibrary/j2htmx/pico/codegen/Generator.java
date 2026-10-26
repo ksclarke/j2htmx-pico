@@ -12,9 +12,6 @@ import com.palantir.javapoet.TypeName;
 import com.palantir.javapoet.TypeSpec;
 import com.palantir.javapoet.TypeVariableName;
 import info.freelibrary.j2htmx.pico.codegen.Model.Node;
-import info.freelibrary.j2htmx.pico.tags.ContainerTag;
-import info.freelibrary.j2htmx.pico.tags.EmptyTag;
-import info.freelibrary.j2htmx.pico.tags.Instance;
 import info.freelibrary.util.warnings.Checkstyle;
 import info.freelibrary.util.warnings.PMD;
 
@@ -32,6 +29,9 @@ import java.util.Map;
  */
 @SuppressWarnings({Checkstyle.MULTIPLE_STRING_LITERALS, "MultipleStringLiterals"})
 public final class Generator {
+
+    /** The package name for base tag classes and interfaces. */
+    private static final String TAGS_PACKAGE = "info.freelibrary.j2htmx.pico.tags";
 
     /**
      * Private constructor to prevent instantiation of the {@code Generator} class. This utility class is not intended
@@ -162,7 +162,7 @@ public final class Generator {
           .addJavadoc("Represents a &lt;{@code $L}&gt; tag.\n", anElement.myName)
           .addModifiers(Modifier.PUBLIC)
           .superclass(ParameterizedTypeName.get(anElement.has(SELF_CLOSING)
-            ? ClassName.get(EmptyTag.class) : ClassName.get(ContainerTag.class), aClassName))
+            ? ClassName.get(TAGS_PACKAGE, "EmptyTag") : ClassName.get(TAGS_PACKAGE, "ContainerTag"), aClassName))
           .addMethod(constructor);
 
         if ("video".equals(anElement.myName)) {
@@ -186,9 +186,9 @@ public final class Generator {
           .addJavadoc("Defines the {@code $L} attribute for HTML/XML tags.\n\n@param <T> The tag type\n",
             anAttribute.myName)
           .addSuperinterface(
-            ParameterizedTypeName.get(ClassName.get(Instance.class), TypeVariableName.get("T"))).addTypeVariable(
-            TypeVariableName.get("T", ParameterizedTypeName.get(
-              ClassName.get("info.freelibrary.j2htmx.pico.tags", "AbstractTag"), TypeVariableName.get("T"))))
+            ParameterizedTypeName.get(ClassName.get(TAGS_PACKAGE, "Instance"), TypeVariableName.get("T")))
+          .addTypeVariable(TypeVariableName.get("T", ParameterizedTypeName.get(
+            ClassName.get(TAGS_PACKAGE, "AbstractTag"), TypeVariableName.get("T"))))
           .addModifiers(Modifier.PUBLIC);
     }
 

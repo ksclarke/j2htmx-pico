@@ -40,7 +40,7 @@ public class ContainerTag<T extends ContainerTag<T>> extends AbstractTag<T> {
      * @return itself for easy chaining
      * @throws RuntimeException If trying to append a tag to itself
      */
-    @SuppressWarnings({PMD.AVOID_THROWING_RAW_EXCEPTION_TYPES, PMD.COMPARE_OBJECTS_WITH_EQUALS})
+    @SuppressWarnings({PMD.AVOID_THROWING_RAW_EXCEPTION_TYPES, "PMD.CompareObjectsWithEquals"})
     public T with(final AbstractDomContent aChild) {
         if (this == aChild) {
             throw new RuntimeException("Cannot append a tag to itself.");

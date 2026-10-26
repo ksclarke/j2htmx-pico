@@ -97,7 +97,7 @@ public final class CSSMin {
      * @param aInput the CSS
      * @return the compressed version
      */
-    @SuppressWarnings({PMD.COGNITIVE_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY, PMD.EXCEPTION_AS_FLOW_CONTROL})
+    @SuppressWarnings({PMD.COGNITIVE_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY, "PMD.ExceptionAsFlowControl"})
     public static String compressCss(final String aInput) {
         try (BufferedReader reader = new BufferedReader(new StringReader(aInput))) {
             final List<Selector> selectors = new ArrayList<>();

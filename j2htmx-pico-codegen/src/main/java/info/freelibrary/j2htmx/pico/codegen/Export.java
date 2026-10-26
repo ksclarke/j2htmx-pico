@@ -3,6 +3,7 @@ package info.freelibrary.j2htmx.pico.codegen;
 import static info.freelibrary.j2htmx.pico.codegen.generators.TagCreatorCodeGenerator.containerTags;
 import static info.freelibrary.j2htmx.pico.codegen.generators.TagCreatorCodeGenerator.emptyTags;
 import static info.freelibrary.j2htmx.pico.codegen.model.AttributesList.attributesDescriptive;
+import static info.freelibrary.util.Constants.*;
 import static java.lang.System.out;
 
 import info.freelibrary.j2htmx.pico.codegen.model.AttrD;
@@ -31,14 +32,14 @@ public final class Export {
         for (final String tag : emptyTags()) {
             out.print("EMPTY-ELEMENT[");
             out.print(tag);
-            out.print(Constants.CLOSE_BRACKET);
+            out.print(CLOSE_BRACKET_CHAR);
             out.println();
         }
 
         for (final String tag : containerTags()) {
             out.print("ELEMENT[");
             out.print(tag);
-            out.print(Constants.CLOSE_BRACKET);
+            out.print(CLOSE_BRACKET_CHAR);
             out.println();
         }
 
@@ -51,17 +52,17 @@ public final class Export {
                 out.print("BOOLEAN");
             }
 
-            out.print(Constants.OPEN_BRACKET);
+            out.print(OPEN_BRACKET_CHAR);
             out.print(attr.myAttr);
-            out.print(Constants.CLOSE_BRACKET);
+            out.print(CLOSE_BRACKET_CHAR);
             out.println();
 
             for (final String tag : attr.myTags) {
                 out.print("ATTRIBUTE[");
                 out.print(tag);
-                out.print(Constants.COLON);
+                out.print(COLON);
                 out.print(attr.myAttr);
-                out.print(Constants.CLOSE_BRACKET);
+                out.print(CLOSE_BRACKET_CHAR);
                 out.println();
             }
 
