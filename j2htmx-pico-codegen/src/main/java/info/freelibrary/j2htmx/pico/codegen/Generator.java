@@ -202,7 +202,7 @@ public final class Generator {
         final MethodSpec with = MethodSpec.methodBuilder(methodName("is", anAttribute.myName))
           .addJavadoc("Sets the {@code $L} attribute.\n\n@return The tag instance\n", anAttribute.myName)
           .addModifiers(Modifier.PUBLIC, Modifier.DEFAULT)
-          .addStatement("return self().attr(\"" + anAttribute.myName + "\")")
+          .addStatement("return self().withAttr(\"" + anAttribute.myName + "\")")
           .returns(TypeVariableName.get("T"))
           .build();
 
@@ -211,7 +211,7 @@ public final class Generator {
             + "@param aEnable Whether to set the attribute\n@return The tag instance\n", anAttribute.myName)
           .addModifiers(Modifier.PUBLIC, Modifier.DEFAULT)
           .addParameter(TypeName.BOOLEAN, "aEnable", Modifier.FINAL)
-          .addStatement("return aEnable ? self().attr(\"" + anAttribute.myName + "\") : self()")
+          .addStatement("return aEnable ? self().withAttr(\"" + anAttribute.myName + "\") : self()")
           .returns(TypeVariableName.get("T"))
           .build();
 
@@ -229,7 +229,7 @@ public final class Generator {
         final MethodSpec with = MethodSpec.methodBuilder(methodName("is", anAttribute.myName))
           .addJavadoc("Sets the {@code $L} attribute to \"on\".\n\n@return The tag instance\n", anAttribute.myName)
           .addModifiers(Modifier.PUBLIC, Modifier.DEFAULT)
-          .addStatement("return self().attr(\"" + anAttribute.myName + "\", \"on\")")
+          .addStatement("return self().withAttr(\"" + anAttribute.myName + "\", \"on\")")
           .returns(TypeVariableName.get("T"))
           .build();
 
@@ -238,7 +238,7 @@ public final class Generator {
             + "@param aEnable Whether to set the attribute\n@return The tag instance\n", anAttribute.myName)
           .addModifiers(Modifier.PUBLIC, Modifier.DEFAULT)
           .addParameter(TypeName.BOOLEAN, "aEnable", Modifier.FINAL)
-          .addStatement("return aEnable ? self().attr(\"" + anAttribute.myName + "\", \"on\") : self()")
+          .addStatement("return aEnable ? self().withAttr(\"" + anAttribute.myName + "\", \"on\") : self()")
           .returns(TypeVariableName.get("T"))
           .build();
 
@@ -258,7 +258,7 @@ public final class Generator {
             + "@param $L The attribute value\n@return The tag instance\n", anAttribute.myName, parameter(anAttribute))
           .addModifiers(Modifier.PUBLIC, Modifier.DEFAULT)
           .addParameter(String.class, parameter(anAttribute), Modifier.FINAL)
-          .addStatement("return self().attr(\"" + anAttribute.myName + "\", " + parameter(anAttribute) + ")")
+          .addStatement("return self().withAttr(\"" + anAttribute.myName + "\", " + parameter(anAttribute) + ")")
           .returns(TypeVariableName.get("T"))
           .build();
 
@@ -269,7 +269,7 @@ public final class Generator {
           .addModifiers(Modifier.PUBLIC, Modifier.DEFAULT)
           .addParameter(TypeName.BOOLEAN, "aEnable", Modifier.FINAL)
           .addParameter(String.class, parameter(anAttribute), Modifier.FINAL)
-          .addStatement("return aEnable ? self().attr(\"" + anAttribute.myName + "\", " + parameter(anAttribute) +
+          .addStatement("return aEnable ? self().withAttr(\"" + anAttribute.myName + "\", " + parameter(anAttribute) +
             ") : self()")
           .returns(TypeVariableName.get("T"))
           .build();

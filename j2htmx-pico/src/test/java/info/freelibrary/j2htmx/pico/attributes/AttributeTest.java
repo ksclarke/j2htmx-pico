@@ -46,8 +46,8 @@ public class AttributeTest {
     @Test
     public void testSetAttribute() throws Exception {
         final ContainerTag<?> testTag = new ContainerTag<>("a");
-        testTag.attr("href", "http://example.com");
-        testTag.attr("href", "http://example.org");
+        testTag.withAttr("href", "http://example.com");
+        testTag.withAttr("href", "http://example.org");
         assertThat(testTag.render(), is("<a href=\"http://example.org\"></a>"));
     }
 

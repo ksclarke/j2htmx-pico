@@ -96,7 +96,7 @@ String listHtml = ul(
 ).render();
 ```
 
-### Working with Attributes: `with*`, `is*`, and `withCond*`
+### Working with Attributes: `with*`, `is*`, `withCond*`, and `withAttr`
 
 `j2htmx-pico` provides fluent methods for configuring HTML, ARIA, and custom attributes. The method naming reflects how the attribute is rendered:
 
@@ -175,6 +175,18 @@ Conditional setters evaluate a boolean condition. How the condition is applied d
 
   > [!NOTE]
   > Because `withCond*` on tristate attributes always outputs either the positive or negative keyword, if you want an element to inherit the browser or ancestor default, omit calling the setter altogether.
+
+#### 4. Generic & Custom Attributes (`withAttr` and `withCondAttr`)
+For dynamic, custom, or standard attributes not covered by dedicated convenience methods:
+
+```java
+div().withAttr("data-role", "admin").withAttr("required");
+// Output: <div data-role="admin" required></div>
+
+button().withCondAttr(isPrimary, "class", "btn-primary");
+// true  -> <button class="btn-primary"></button>
+// false -> <button></button>
+```
 
 ## Incorporating HTMX elements
 

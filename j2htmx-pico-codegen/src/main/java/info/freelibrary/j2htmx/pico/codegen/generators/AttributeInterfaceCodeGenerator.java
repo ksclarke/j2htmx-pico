@@ -148,9 +148,9 @@ public final class AttributeInterfaceCodeGenerator {
      */
     private static void addAttributeNoArg(final StringBuilder aSb, final String anAttrName) {
         if (AUTOCOMPLETE.equals(anAttrName)) {
-            aSb.append("self().attr(\"").append(anAttrName).append("\",\"on\");\n");
+            aSb.append("self().withAttr(\"").append(anAttrName).append("\",\"on\");\n");
         } else {
-            aSb.append("self().attr(\"").append(anAttrName).append("\");\n");
+            aSb.append("self().withAttr(\"").append(anAttrName).append("\");\n");
         }
     }
 
@@ -181,7 +181,7 @@ public final class AttributeInterfaceCodeGenerator {
             //add a variant where you can specify the argument
             aSb.append("(final boolean aEnable, final String ")
               .append(aParamName)
-              .append(") {if (aEnable){\nself().attr(\"")
+              .append(") {if (aEnable){\nself().withAttr(\"")
               .append(anAttrName)
               .append("\", ")
               .append(aParamName)
@@ -221,7 +221,7 @@ public final class AttributeInterfaceCodeGenerator {
             //add a variant where you can specify the argument
             aSb.append("(final String ")
               .append(aParamName)
-              .append(") {return self().attr(\"")
+              .append(") {return self().withAttr(\"")
               .append(anAttrName)
               .append("\", ")
               .append(aParamName)

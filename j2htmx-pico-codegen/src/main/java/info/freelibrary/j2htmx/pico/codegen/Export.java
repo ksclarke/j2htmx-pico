@@ -7,12 +7,13 @@ import static info.freelibrary.util.Constants.*;
 import static java.lang.System.out;
 
 import info.freelibrary.j2htmx.pico.codegen.model.AttrD;
-import info.freelibrary.util.Constants;
 import info.freelibrary.util.warnings.Checkstyle;
+import info.freelibrary.util.warnings.PMD;
 
 /**
  * Utility to export HTML element and attribute definitions to standard output.
  */
+@SuppressWarnings(PMD.TOO_MANY_STATIC_IMPORTS)
 public final class Export {
 
     /**

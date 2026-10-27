@@ -70,13 +70,13 @@ public class RenderingCompatabilityTest {
 
         // In empty tags.
         assertThat(
-          input().attr(mock).render(FlatHtml.inMemory(), "success").toString(),
+          input().withAttr(mock).render(FlatHtml.inMemory(), "success").toString(),
           is("<input mock=\"success\">")
         );
 
         // In container tags.
         assertThat(
-          div().attr(mock).render(FlatHtml.inMemory(), "success").toString(),
+          div().withAttr(mock).render(FlatHtml.inMemory(), "success").toString(),
           is("<div mock=\"success\"></div>")
         );
     }

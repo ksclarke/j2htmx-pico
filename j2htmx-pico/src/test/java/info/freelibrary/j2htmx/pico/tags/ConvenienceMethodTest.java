@@ -44,12 +44,12 @@ public class ConvenienceMethodTest {
           is("<input placeholder=\"test-placeholder\">"));
         assertThat(a().withTarget("_blank").render(), is("<a target=\"_blank\"></a>"));
         assertThat(a().withTitle("Title").render(), is("<a title=\"Title\"></a>"));
-        assertThat(input().attr("type", "email").render(), is("<input type=\"email\">"));
+        assertThat(input().withAttr("type", "email").render(), is("<input type=\"email\">"));
         assertThat(link().withRel("stylesheet").render(), is("<link rel=\"stylesheet\">"));
-        assertThat(link().attr("role", "role").render(), is("<link role=\"role\">"));
+        assertThat(link().withAttr("role", "role").render(), is("<link role=\"role\">"));
         assertThat(img().withSrc("/img/test.png").render(), is("<img src=\"/img/test.png\">"));
         assertThat(input().withStep("0.1").render(), is("<input step=\"0.1\">"));
         assertThat(div().withStyle("background:red;").render(), is("<div style=\"background:red;\"></div>"));
-        assertThat(input().attr("value", "test-value").render(), is("<input value=\"test-value\">"));
+        assertThat(input().withAttr("value", "test-value").render(), is("<input value=\"test-value\">"));
     }
 }

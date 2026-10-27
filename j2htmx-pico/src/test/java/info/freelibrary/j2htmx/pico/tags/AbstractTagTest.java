@@ -56,7 +56,7 @@ public class AbstractTagTest {
      */
     @Test
     public void unnamed_containers_do_not_render_tags_or_attributes() {
-        final AbstractTag<?> tag = new ContainerTag<>(null).attr("xyz", "123");
+        final AbstractTag<?> tag = new ContainerTag<>(null).withAttr("xyz", "123");
         assertThat(tag.render(), is(""));
     }
 
@@ -77,7 +77,7 @@ public class AbstractTagTest {
      */
     @Test
     public void named_containers_without_children_only_render_tags_and_attributes() {
-        final AbstractTag<?> tag = new ContainerTag<>("abc").attr("xyz", "123");
+        final AbstractTag<?> tag = new ContainerTag<>("abc").withAttr("xyz", "123");
         assertThat(tag.render(), is("<abc xyz=\"123\"></abc>"));
     }
 
@@ -90,7 +90,7 @@ public class AbstractTagTest {
           .with(new EmptyTag<>("def"))
           .with(new ContainerTag<>("ghi"))
           .withText("jkl")
-          .attr("xyz", "123");
+          .withAttr("xyz", "123");
         assertThat(tag.render(), is("<abc xyz=\"123\"><def><ghi></ghi>jkl</abc>"));
     }
 
@@ -132,15 +132,15 @@ public class AbstractTagTest {
     @Test
     public void attributes_are_rendered_in_the_order_that_they_are_defined() {
         final AbstractTag<?> container = new ContainerTag<>("abc")
-          .attr("a", "A")
-          .attr(new Attribute("b", "B"))
-          .attr("c");
+          .withAttr("a", "A")
+          .withAttr(new Attribute("b", "B"))
+          .withAttr("c");
         assertThat(container.render(), is("<abc a=\"A\" b=\"B\" c></abc>"));
 
         final AbstractTag<?> tag = new EmptyTag<>("abc")
-          .attr("c")
-          .attr(new Attribute("b", "B"))
-          .attr("a", "A");
+          .withAttr("c")
+          .withAttr(new Attribute("b", "B"))
+          .withAttr("a", "A");
         assertThat(tag.render(), is("<abc c b=\"B\" a=\"A\">"));
     }
 
@@ -150,7 +150,7 @@ public class AbstractTagTest {
     @Test
     public void testRender() {
         final ContainerTag<?> testTag = new ContainerTag<>("a");
-        testTag.setAttribute("href", "http://example.com");
+        testTag.storeAttribute("href", "http://example.com");
         assertThat(testTag.render(), is("<a href=\"http://example.com\"></a>"));
 
         final HtmlTag complexTestTag = html(
@@ -195,15 +195,15 @@ public class AbstractTagTest {
     @Test
     public void attribute_values_are_converted_to_strings() throws Exception {
         final AbstractTag<?> container = new ContainerTag<>("abc")
-          .attr("string", "value1")
-          .attr("integer", 2)
-          .attr("none", null);
+          .withAttr("string", "value1")
+          .withAttr("integer", 2)
+          .withAttr("none", null);
         assertThat(container.render(), is("<abc string=\"value1\" integer=\"2\" none></abc>"));
 
         final AbstractTag<?> tag = new EmptyTag<>("abc")
-          .attr("string", "value1")
-          .attr("integer", 2)
-          .attr("none", null);
+          .withAttr("string", "value1")
+          .withAttr("integer", 2)
+          .withAttr("none", null);
         assertThat(tag.render(), is("<abc string=\"value1\" integer=\"2\" none>"));
     }
 
@@ -251,10 +251,10 @@ public class AbstractTagTest {
      */
     @Test
     public void testEmptyAttribute() throws Exception {
-        final AbstractTag<?> testTagWithAttrValueNull = new ContainerTag<>("a").attr("attribute", null);
+        final AbstractTag<?> testTagWithAttrValueNull = new ContainerTag<>("a").withAttr("attribute", null);
         assertThat(testTagWithAttrValueNull.render(), is("<a attribute></a>"));
 
-        final AbstractTag<?> testTagAttrWithoutAttr = new ContainerTag<>("a").attr("attribute");
+        final AbstractTag<?> testTagAttrWithoutAttr = new ContainerTag<>("a").withAttr("attribute");
         assertThat(testTagAttrWithoutAttr.render(), is("<a attribute></a>"));
     }
 
@@ -265,7 +265,7 @@ public class AbstractTagTest {
      */
     @Test
     public void testDynamicAttribute() throws Exception {
-        final AbstractTag<?> testTagWithAttrValueNull = new ContainerTag<>("a").attr(new DynamicHrefAttribute());
+        final AbstractTag<?> testTagWithAttrValueNull = new ContainerTag<>("a").withAttr(new DynamicHrefAttribute());
         assertThat(testTagWithAttrValueNull.render(), is("<a href=\"/\"></a>"));
     }
 
@@ -276,9 +276,44 @@ public class AbstractTagTest {
      */
     @Test
     public void testDynamicAttributeReplacement() throws Exception {
-        final AbstractTag<?> testTagWithAttrValueNull = new ContainerTag<>("a").attr("href", "/link").attr(
+        final AbstractTag<?> testTagWithAttrValueNull = new ContainerTag<>("a").withAttr("href", "/link").withAttr(
           new DynamicHrefAttribute());
         assertThat(testTagWithAttrValueNull.render(), is("<a href=\"/\"></a>"));
+    }
+
+    /**
+     * Tests attribute replacement and uniqueness enforcement across valued and boolean attributes.
+     */
+    @Test
+    public void testAttributeReplacementAndUniqueness() {
+        final AbstractTag<?> tag1 = new ContainerTag<>("a")
+          .withAttr("href", "http://old.example.com")
+          .withAttr("href", "http://new.example.com");
+        assertThat(tag1.render(), is("<a href=\"http://new.example.com\"></a>"));
+
+        final AbstractTag<?> tag2 = new ContainerTag<>("input")
+          .withAttr("disabled", "false")
+          .withAttr("disabled");
+        assertThat(tag2.render(), is("<input disabled></input>"));
+
+        final AbstractTag<?> tag3 = new ContainerTag<>("input")
+          .withAttr("disabled", "false")
+          .withAttr("disabled", null);
+        assertThat(tag3.render(), is("<input disabled></input>"));
+
+        final AbstractTag<?> tag4 = new ContainerTag<>("input")
+          .withAttr("disabled")
+          .withAttr("disabled", "true");
+        assertThat(tag4.render(), is("<input disabled=\"true\"></input>"));
+
+        final AbstractTag<?> tag5 = new ContainerTag<>("div")
+          .withCondAttr(true, "data-test", "val1")
+          .withCondAttr(true, "data-test", "val2");
+        assertThat(tag5.render(), is("<div data-test=\"val2\"></div>"));
+
+        final AbstractTag<?> tag6 = new ContainerTag<>("div")
+          .withCondAttr(false, "data-test", "val1");
+        assertThat(tag6.render(), is("<div></div>"));
     }
 
     /**

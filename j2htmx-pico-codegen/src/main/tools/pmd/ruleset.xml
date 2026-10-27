@@ -32,7 +32,9 @@
     <properties>
       <property name="allowStaticImportsFrom"
                 value="info.freelibrary.j2htmx.pico.TagCreator,
-                org.junit.Assert,info.freelibrary.util.Constants" />
+                info.freelibrary.j2htmx.pico.attributes.Attr,
+                org.junit.Assert,
+                info.freelibrary.util.Constants" />
       <property name="allowTypeImportsFrom"
                 value="info.freelibrary.j2htmx.pico.tags.specialized"/>
     </properties>

@@ -70,7 +70,7 @@ public class TagTest {
         final ContainerTag<?> paragraph = TagCreator.tag(Tag.P).withText("Hello world");
         assertThat(paragraph.render(), is("<p>Hello world</p>"));
 
-        final ContainerTag<?> anchor = TagCreator.tag(Tag.A).attr(Attr.HREF, "https://example.com");
+        final ContainerTag<?> anchor = TagCreator.tag(Tag.A).withAttr(Attr.HREF, "https://example.com");
         assertThat(anchor.render(), is("<a href=\"https://example.com\"></a>"));
     }
 

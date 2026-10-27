@@ -1,14 +1,13 @@
 package info.freelibrary.j2htmx.pico.tags;
 
+import static info.freelibrary.j2htmx.pico.attributes.Attr.*;
 import static info.freelibrary.util.Constants.*;
 
-import info.freelibrary.j2htmx.pico.attributes.Attr;
 import info.freelibrary.j2htmx.pico.attributes.Attribute;
 import info.freelibrary.util.warnings.Checkstyle;
 import info.freelibrary.util.warnings.PMD;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.StringJoiner;
 
 /**
@@ -64,36 +63,48 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
     }
 
     /**
-     * Sets an attribute on an element.
+     * Stores an attribute on an element, adding or updating it.
      *
-     * @param aName the attribute
-     * @param aValue the attribute value
-     * @return True if the attribute was added or updated
+     * @param aName The attribute name
+     * @param aValue The attribute value, or null for a boolean attribute
+     * @return True if the attribute list was modified
      */
-    boolean setAttribute(final String aName, final String aValue) {
-        if (aValue == null) {
-            return myAttributes.add(new Attribute(aName));
-        }
-
+    boolean storeAttribute(final String aName, final String aValue) {
         for (final Attribute attribute : myAttributes) {
             if (attribute.getName().equals(aName)) {
-                attribute.setValue(aValue); // update with new value
+                attribute.setValue(aValue);
                 return true;
             }
         }
 
-        return myAttributes.add(new Attribute(aName, aValue));
+        return myAttributes.add(aValue == null ? new Attribute(aName) : new Attribute(aName, aValue));
     }
 
     /**
-     * Sets a custom attribute.
+     * Stores an attribute on an element, replacing any existing attribute with the same name.
+     *
+     * @param anAttribute The attribute to store
+     * @return True if the attribute list was modified
+     */
+    boolean storeAttribute(final Attribute anAttribute) {
+        final String name = anAttribute.getName();
+
+        if (name != null) {
+            myAttributes.removeIf(existing -> name.equals(existing.getName()));
+        }
+
+        return myAttributes.add(anAttribute);
+    }
+
+    /**
+     * Sets a custom attribute by taking the string value of the supplied object.
      *
      * @param anAttribute the attribute name
      * @param aValue the attribute value
      * @return itself for easy chaining
      */
-    public T attr(final String anAttribute, final Object aValue) {
-        setAttribute(anAttribute, aValue == null ? null : String.valueOf(aValue));
+    public T withAttr(final String anAttribute, final Object aValue) {
+        storeAttribute(anAttribute, aValue == null ? null : String.valueOf(aValue));
         return self();
     }
 
@@ -104,21 +115,8 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @param anAttribute the attribute
      * @return itself for easy chaining
      */
-    public T attr(final Attribute anAttribute) {
-        final Iterator<Attribute> iterator = myAttributes.iterator();
-        final String name = anAttribute.getName();
-
-        if (name != null) {
-            // name == null is allowed, but those Attributes are not rendered. So we add them anyway.
-            while (iterator.hasNext()) {
-                final Attribute existingAttribute = iterator.next();
-                if (existingAttribute.getName().equals(name)) {
-                    iterator.remove();
-                }
-            }
-        }
-
-        myAttributes.add(anAttribute);
+    public T withAttr(final Attribute anAttribute) {
+        storeAttribute(anAttribute);
         return self();
     }
 
@@ -127,22 +125,22 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      *
      * @param anAttribute the attribute name
      * @return itself for easy chaining
-     * @see AbstractTag#attr(String, Object)
+     * @see AbstractTag#withAttr(String, Object)
      */
-    public T attr(final String anAttribute) {
-        return attr(anAttribute, null);
+    public T withAttr(final String anAttribute) {
+        return withAttr(anAttribute, null);
     }
 
     /**
-     * Call attr-method based on condition {@link #attr(String, Object)}.
+     * Call withAttr-method based on condition {@link #withAttr(String, Object)}.
      *
      * @param aCondition the condition
      * @param anAttribute the attribute name
      * @param aValue the attribute value
      * @return itself for easy chaining
      */
-    public T condAttr(final boolean aCondition, final String anAttribute, final String aValue) {
-        return aCondition ? attr(anAttribute, aValue) : self();
+    public T withCondAttr(final boolean aCondition, final String anAttribute, final String aValue) {
+        return aCondition ? withAttr(anAttribute, aValue) : self();
     }
 
     @Override
@@ -164,7 +162,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
     }
 
     /**
-     * Convenience methods that call attr with predefined attributes.
+     * Convenience methods that call withAttr with predefined attributes.
      *
      * @param aClasses The CSS classes to add
      * @return itself for easy chaining
@@ -180,11 +178,11 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
             }
         }
 
-        return attr(Attr.CLASS, joiner.toString());
+        return withAttr(CLASS, joiner.toString());
     }
 
     /**
-     * Convenience method that calls attr with predefined attributes.
+     * Convenience method that calls withAttr with predefined attributes.
      *
      * @param aStyles The CSS styles to add
      * @return Itself for easy chaining
@@ -201,7 +199,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
             }
         }
 
-        return attr(Attr.STYLE, joiner.toString());
+        return withAttr(STYLE, joiner.toString());
     }
 
     /*
@@ -233,7 +231,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withAccesskey(final String anAccessKey) {
-        return attr(Attr.ACCESSKEY, anAccessKey);
+        return withAttr(ACCESSKEY, anAccessKey);
     }
 
     /**
@@ -243,7 +241,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withClass(final String aClassName) {
-        return attr(Attr.CLASS, aClassName);
+        return withAttr(CLASS, aClassName);
     }
 
     /**
@@ -252,7 +250,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T isContenteditable() {
-        return attr(Attr.CONTENTEDITABLE, Boolean.TRUE.toString());
+        return withAttr(CONTENTEDITABLE, Boolean.TRUE.toString());
     }
 
     /**
@@ -263,7 +261,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withData(final String aDataAttr, final String aValue) {
-        return attr(Attr.DATA + "-" + aDataAttr, aValue);
+        return withAttr(DATA + "-" + aDataAttr, aValue);
     }
 
     /**
@@ -273,7 +271,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withDir(final String aDir) {
-        return attr(Attr.DIR, aDir);
+        return withAttr(DIR, aDir);
     }
 
     /**
@@ -282,7 +280,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T isDraggable() {
-        return attr(Attr.DRAGGABLE, Boolean.TRUE.toString());
+        return withAttr(DRAGGABLE, Boolean.TRUE.toString());
     }
 
     /**
@@ -291,7 +289,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T isHidden() {
-        return attr(Attr.HIDDEN, null);
+        return withAttr(HIDDEN, null);
     }
 
     /**
@@ -301,7 +299,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withId(final String anId) {
-        return attr(Attr.ID, anId);
+        return withAttr(ID, anId);
     }
 
     /**
@@ -311,7 +309,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withIs(final String anElement) {
-        return attr(Attr.IS, anElement);
+        return withAttr(IS, anElement);
     }
 
     /**
@@ -321,7 +319,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withLang(final String aLang) {
-        return attr(Attr.LANG, aLang);
+        return withAttr(LANG, aLang);
     }
 
     /**
@@ -331,7 +329,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withSlot(final String aName) {
-        return attr(Attr.SLOT, aName);
+        return withAttr(SLOT, aName);
     }
 
     /**
@@ -340,7 +338,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T isSpellcheck() {
-        return attr(Attr.SPELLCHECK, Boolean.TRUE.toString());
+        return withAttr(SPELLCHECK, Boolean.TRUE.toString());
     }
 
     /**
@@ -350,7 +348,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withStyle(final String aStyle) {
-        return attr(Attr.STYLE, aStyle);
+        return withAttr(STYLE, aStyle);
     }
 
     /**
@@ -360,7 +358,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withTabindex(final int anIndex) {
-        return attr(Attr.TABINDEX, anIndex);
+        return withAttr(TABINDEX, anIndex);
     }
 
     /**
@@ -370,7 +368,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withTitle(final String aTitle) {
-        return attr(Attr.TITLE, aTitle);
+        return withAttr(TITLE, aTitle);
     }
 
     /**
@@ -379,7 +377,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T isTranslate() {
-        return attr(Attr.TRANSLATE, "yes");
+        return withAttr(TRANSLATE, "yes");
     }
 
     // htmx
@@ -390,7 +388,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T isHx() {
-        return attr(Attr.HX);
+        return withAttr(HX);
     }
 
     /**
@@ -400,7 +398,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxGet(final String aUrl) {
-        return attr(Attr.HX_GET, aUrl);
+        return withAttr(HX_GET, aUrl);
     }
 
     /**
@@ -410,7 +408,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxPost(final String aUrl) {
-        return attr(Attr.HX_POST, aUrl);
+        return withAttr(HX_POST, aUrl);
     }
 
     /**
@@ -420,7 +418,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxPut(final String aUrl) {
-        return attr(Attr.HX_PUT, aUrl);
+        return withAttr(HX_PUT, aUrl);
     }
 
     /**
@@ -430,7 +428,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxDelete(final String aUrl) {
-        return attr(Attr.HX_DELETE, aUrl);
+        return withAttr(HX_DELETE, aUrl);
     }
 
     /**
@@ -440,7 +438,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxPatch(final String aUrl) {
-        return attr(Attr.HX_PATCH, aUrl);
+        return withAttr(HX_PATCH, aUrl);
     }
 
     /**
@@ -450,7 +448,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxTrigger(final String aTrigger) {
-        return attr(Attr.HX_TRIGGER, aTrigger);
+        return withAttr(HX_TRIGGER, aTrigger);
     }
 
     /**
@@ -460,7 +458,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxTarget(final String aTarget) {
-        return attr(Attr.HX_TARGET, aTarget);
+        return withAttr(HX_TARGET, aTarget);
     }
 
     /**
@@ -470,7 +468,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxSwap(final String aSwap) {
-        return attr(Attr.HX_SWAP, aSwap);
+        return withAttr(HX_SWAP, aSwap);
     }
 
     /**
@@ -480,7 +478,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxSwapOob(final String aSwapOob) {
-        return attr(Attr.HX_SWAP_OOB, aSwapOob);
+        return withAttr(HX_SWAP_OOB, aSwapOob);
     }
 
     /**
@@ -490,7 +488,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxSelect(final String aSelect) {
-        return attr(Attr.HX_SELECT, aSelect);
+        return withAttr(HX_SELECT, aSelect);
     }
 
     /**
@@ -500,7 +498,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxPushUrl(final String aPushUrl) {
-        return attr(Attr.HX_PUSH_URL, aPushUrl);
+        return withAttr(HX_PUSH_URL, aPushUrl);
     }
 
     /**
@@ -510,7 +508,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxVals(final String aVals) {
-        return attr(Attr.HX_VALS, aVals);
+        return withAttr(HX_VALS, aVals);
     }
 
     /**
@@ -520,7 +518,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxConfirm(final String aConfirm) {
-        return attr(Attr.HX_CONFIRM, aConfirm);
+        return withAttr(HX_CONFIRM, aConfirm);
     }
 
     /**
@@ -530,7 +528,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxBoost(final String aBoost) {
-        return attr(Attr.HX_BOOST, aBoost);
+        return withAttr(HX_BOOST, aBoost);
     }
 
     /**
@@ -541,7 +539,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxOn(final String anEvent, final String aValue) {
-        return attr(Attr.HX_ON + ":" + anEvent, aValue);
+        return withAttr(HX_ON + ":" + anEvent, aValue);
     }
 
     /**
@@ -551,7 +549,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxParams(final String aParams) {
-        return attr(Attr.HX_PARAMS, aParams);
+        return withAttr(HX_PARAMS, aParams);
     }
 
     /**
@@ -561,7 +559,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxHeaders(final String aHeaders) {
-        return attr(Attr.HX_HEADERS, aHeaders);
+        return withAttr(HX_HEADERS, aHeaders);
     }
 
     /**
@@ -571,7 +569,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxSync(final String aSync) {
-        return attr(Attr.HX_SYNC, aSync);
+        return withAttr(HX_SYNC, aSync);
     }
 
     /**
@@ -581,7 +579,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxExt(final String anExt) {
-        return attr(Attr.HX_EXT, anExt);
+        return withAttr(HX_EXT, anExt);
     }
 
     /**
@@ -591,7 +589,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxDisinherit(final String aDisinherit) {
-        return attr(Attr.HX_DISINHERIT, aDisinherit);
+        return withAttr(HX_DISINHERIT, aDisinherit);
     }
 
     /**
@@ -601,7 +599,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxIndicator(final String anIndicator) {
-        return attr(Attr.HX_INDICATOR, anIndicator);
+        return withAttr(HX_INDICATOR, anIndicator);
     }
 
     /**
@@ -611,7 +609,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxHistory(final String aHistory) {
-        return attr(Attr.HX_HISTORY, aHistory);
+        return withAttr(HX_HISTORY, aHistory);
     }
 
     /**
@@ -621,7 +619,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxHistoryElt(final String aHistoryElt) {
-        return attr(Attr.HX_HISTORY_ELT, aHistoryElt);
+        return withAttr(HX_HISTORY_ELT, aHistoryElt);
     }
 
     /**
@@ -631,7 +629,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxInclude(final String anInclude) {
-        return attr(Attr.HX_INCLUDE, anInclude);
+        return withAttr(HX_INCLUDE, anInclude);
     }
 
     /**
@@ -641,7 +639,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxPrompt(final String aPrompt) {
-        return attr(Attr.HX_PROMPT, aPrompt);
+        return withAttr(HX_PROMPT, aPrompt);
     }
 
     /**
@@ -651,7 +649,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxPtag(final String aPtag) {
-        return attr(Attr.HX_PTAG, aPtag);
+        return withAttr(HX_PTAG, aPtag);
     }
 
     /**
@@ -661,7 +659,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxDownload(final String aDownload) {
-        return attr(Attr.HX_DOWNLOAD, aDownload);
+        return withAttr(HX_DOWNLOAD, aDownload);
     }
 
     /**
@@ -671,7 +669,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxHead(final String aHead) {
-        return attr(Attr.HX_HEAD, aHead);
+        return withAttr(HX_HEAD, aHead);
     }
 
     /**
@@ -681,7 +679,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxTargets(final String aTargets) {
-        return attr(Attr.HX_TARGETS, aTargets);
+        return withAttr(HX_TARGETS, aTargets);
     }
 
     /**
@@ -691,7 +689,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxUpsert(final String anUpsert) {
-        return attr(Attr.HX_UPSERT, anUpsert);
+        return withAttr(HX_UPSERT, anUpsert);
     }
 
     /**
@@ -701,7 +699,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxStatus(final String aStatus) {
-        return attr(Attr.HX_STATUS, aStatus);
+        return withAttr(HX_STATUS, aStatus);
     }
 
     /**
@@ -711,7 +709,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxIgnore(final String anIgnore) {
-        return attr(Attr.HX_IGNORE, anIgnore);
+        return withAttr(HX_IGNORE, anIgnore);
     }
 
     /**
@@ -721,7 +719,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxHistoryCache(final String aHistoryCache) {
-        return attr(Attr.HX_HISTORY_CACHE, aHistoryCache);
+        return withAttr(HX_HISTORY_CACHE, aHistoryCache);
     }
 
     /**
@@ -731,7 +729,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxCsp(final String aCsp) {
-        return attr(Attr.HX_CSP, aCsp);
+        return withAttr(HX_CSP, aCsp);
     }
 
     /**
@@ -741,7 +739,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxAlpineCompat(final String anAlpineCompat) {
-        return attr(Attr.HX_ALPINE_COMPAT, anAlpineCompat);
+        return withAttr(HX_ALPINE_COMPAT, anAlpineCompat);
     }
 
     /**
@@ -751,7 +749,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxMultipart(final String aMultipart) {
-        return attr(Attr.HX_MULTIPART, aMultipart);
+        return withAttr(HX_MULTIPART, aMultipart);
     }
 
     /**
@@ -761,7 +759,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxLive(final String aLive) {
-        return attr(Attr.HX_LIVE, aLive);
+        return withAttr(HX_LIVE, aLive);
     }
 
     /**
@@ -771,7 +769,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxSse(final String anSse) {
-        return attr(Attr.HX_SSE, anSse);
+        return withAttr(HX_SSE, anSse);
     }
 
     /**
@@ -781,7 +779,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxWs(final String aWs) {
-        return attr(Attr.HX_WS, aWs);
+        return withAttr(HX_WS, aWs);
     }
 
     /**
@@ -791,7 +789,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withHxValidate(final String aValidate) {
-        return attr(Attr.HX_VALIDATE, aValidate);
+        return withAttr(HX_VALIDATE, aValidate);
     }
 
     // pico.css & aria
@@ -803,7 +801,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withDataTheme(final String aTheme) {
-        return attr(Attr.DATA_THEME, aTheme);
+        return withAttr(DATA_THEME, aTheme);
     }
 
     /**
@@ -813,7 +811,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withDataTooltip(final String aTooltip) {
-        return attr(Attr.DATA_TOOLTIP, aTooltip);
+        return withAttr(DATA_TOOLTIP, aTooltip);
     }
 
     /**
@@ -823,7 +821,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withDataPlacement(final String aPlacement) {
-        return attr(Attr.DATA_PLACEMENT, aPlacement);
+        return withAttr(DATA_PLACEMENT, aPlacement);
     }
 
 
@@ -834,7 +832,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withAriaBusy(final boolean aBusy) {
-        return attr(Attr.ARIA_BUSY, String.valueOf(aBusy));
+        return withAttr(ARIA_BUSY, String.valueOf(aBusy));
     }
 
 
@@ -845,7 +843,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withAriaHidden(final boolean aHidden) {
-        return attr(Attr.ARIA_HIDDEN, String.valueOf(aHidden));
+        return withAttr(ARIA_HIDDEN, String.valueOf(aHidden));
     }
 
     /**
@@ -855,7 +853,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withAriaHidden(final String aHidden) {
-        return attr(Attr.ARIA_HIDDEN, aHidden);
+        return withAttr(ARIA_HIDDEN, aHidden);
     }
 
     /**
@@ -865,7 +863,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withAriaInvalid(final boolean anInvalid) {
-        return attr(Attr.ARIA_INVALID, String.valueOf(anInvalid));
+        return withAttr(ARIA_INVALID, String.valueOf(anInvalid));
     }
 
     /**
@@ -875,7 +873,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withAriaInvalid(final String anInvalid) {
-        return attr(Attr.ARIA_INVALID, anInvalid);
+        return withAttr(ARIA_INVALID, anInvalid);
     }
 
 
@@ -886,7 +884,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withRole(final String aRole) {
-        return attr(Attr.ROLE, aRole);
+        return withAttr(ROLE, aRole);
     }
 
     /**
@@ -895,7 +893,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T asButton() {
-        return attr(Attr.ROLE, Attr.ROLE_BUTTON);
+        return withAttr(ROLE, ROLE_BUTTON);
     }
 
     /**
@@ -904,7 +902,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T asGroup() {
-        return attr(Attr.ROLE, Attr.ROLE_GROUP);
+        return withAttr(ROLE, ROLE_GROUP);
     }
 
     /**
@@ -913,7 +911,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T asSearch() {
-        return attr(Attr.ROLE, Attr.ROLE_SEARCH);
+        return withAttr(ROLE, ROLE_SEARCH);
     }
 
     // ----- start of withCond$ATTR variants -----
@@ -926,7 +924,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondAccessKey(final boolean aCondition, final String anAccessKey) {
-        return condAttr(aCondition, Attr.ACCESSKEY, anAccessKey);
+        return withCondAttr(aCondition, ACCESSKEY, anAccessKey);
     }
 
     /**
@@ -937,7 +935,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondClass(final boolean aCondition, final String aClassName) {
-        return condAttr(aCondition, Attr.CLASS, aClassName);
+        return withCondAttr(aCondition, CLASS, aClassName);
     }
 
     /**
@@ -947,7 +945,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondContenteditable(final boolean aCondition) {
-        return attr(Attr.CONTENTEDITABLE, aCondition ? Boolean.TRUE.toString() : "false");
+        return withAttr(CONTENTEDITABLE, aCondition ? Boolean.TRUE.toString() : "false");
     }
 
     /**
@@ -959,7 +957,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondData(final boolean aCondition, final String aDataAttr, final String aValue) {
-        return condAttr(aCondition, Attr.DATA + "-" + aDataAttr, aValue);
+        return withCondAttr(aCondition, DATA + "-" + aDataAttr, aValue);
     }
 
     /**
@@ -970,7 +968,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondDir(final boolean aCondition, final String aDir) {
-        return condAttr(aCondition, Attr.DIR, aDir);
+        return withCondAttr(aCondition, DIR, aDir);
     }
 
     /**
@@ -980,7 +978,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondDraggable(final boolean aCondition) {
-        return attr(Attr.DRAGGABLE, aCondition ? Boolean.TRUE.toString() : "false");
+        return withAttr(DRAGGABLE, aCondition ? Boolean.TRUE.toString() : "false");
     }
 
     /**
@@ -990,7 +988,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHidden(final boolean aCondition) {
-        return condAttr(aCondition, Attr.HIDDEN, null);
+        return withCondAttr(aCondition, HIDDEN, null);
     }
 
     /**
@@ -1001,7 +999,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondId(final boolean aCondition, final String anId) {
-        return condAttr(aCondition, Attr.ID, anId);
+        return withCondAttr(aCondition, ID, anId);
     }
 
     /**
@@ -1012,7 +1010,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondIs(final boolean aCondition, final String anElement) {
-        return condAttr(aCondition, Attr.IS, anElement);
+        return withCondAttr(aCondition, IS, anElement);
     }
 
     /**
@@ -1023,7 +1021,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondLang(final boolean aCondition, final String aLang) {
-        return condAttr(aCondition, Attr.LANG, aLang);
+        return withCondAttr(aCondition, LANG, aLang);
     }
 
     /**
@@ -1034,7 +1032,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondSlot(final boolean aCondition, final String aName) {
-        return condAttr(aCondition, Attr.SLOT, aName);
+        return withCondAttr(aCondition, SLOT, aName);
     }
 
     /**
@@ -1044,7 +1042,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondSpellcheck(final boolean aCondition) {
-        return attr(Attr.SPELLCHECK, aCondition ? Boolean.TRUE.toString() : "false");
+        return withAttr(SPELLCHECK, aCondition ? Boolean.TRUE.toString() : "false");
     }
 
     /**
@@ -1055,7 +1053,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondStyle(final boolean aCondition, final String aStyle) {
-        return condAttr(aCondition, Attr.STYLE, aStyle);
+        return withCondAttr(aCondition, STYLE, aStyle);
     }
 
     /**
@@ -1066,7 +1064,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondTabindex(final boolean aCondition, final int anIndex) {
-        return condAttr(aCondition, Attr.TABINDEX, anIndex + EMPTY);
+        return withCondAttr(aCondition, TABINDEX, anIndex + EMPTY);
     }
 
     /**
@@ -1077,7 +1075,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondTitle(final boolean aCondition, final String aTitle) {
-        return condAttr(aCondition, Attr.TITLE, aTitle);
+        return withCondAttr(aCondition, TITLE, aTitle);
     }
 
     /**
@@ -1087,7 +1085,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondTranslate(final boolean aCondition) {
-        return attr(Attr.TRANSLATE, aCondition ? "yes" : "no");
+        return withAttr(TRANSLATE, aCondition ? "yes" : "no");
     }
 
     /**
@@ -1097,7 +1095,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHx(final boolean aCondition) {
-        return condAttr(aCondition, Attr.HX, null);
+        return withCondAttr(aCondition, HX, null);
     }
 
     /**
@@ -1108,7 +1106,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxGet(final boolean aCondition, final String aUrl) {
-        return condAttr(aCondition, Attr.HX_GET, aUrl);
+        return withCondAttr(aCondition, HX_GET, aUrl);
     }
 
     /**
@@ -1119,7 +1117,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxPost(final boolean aCondition, final String aUrl) {
-        return condAttr(aCondition, Attr.HX_POST, aUrl);
+        return withCondAttr(aCondition, HX_POST, aUrl);
     }
 
     /**
@@ -1130,7 +1128,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxPut(final boolean aCondition, final String aUrl) {
-        return condAttr(aCondition, Attr.HX_PUT, aUrl);
+        return withCondAttr(aCondition, HX_PUT, aUrl);
     }
 
     /**
@@ -1141,7 +1139,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxDelete(final boolean aCondition, final String aUrl) {
-        return condAttr(aCondition, Attr.HX_DELETE, aUrl);
+        return withCondAttr(aCondition, HX_DELETE, aUrl);
     }
 
     /**
@@ -1152,7 +1150,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxPatch(final boolean aCondition, final String aUrl) {
-        return condAttr(aCondition, Attr.HX_PATCH, aUrl);
+        return withCondAttr(aCondition, HX_PATCH, aUrl);
     }
 
     /**
@@ -1163,7 +1161,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxTrigger(final boolean aCondition, final String aTrigger) {
-        return condAttr(aCondition, Attr.HX_TRIGGER, aTrigger);
+        return withCondAttr(aCondition, HX_TRIGGER, aTrigger);
     }
 
     /**
@@ -1174,7 +1172,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxTarget(final boolean aCondition, final String aTarget) {
-        return condAttr(aCondition, Attr.HX_TARGET, aTarget);
+        return withCondAttr(aCondition, HX_TARGET, aTarget);
     }
 
     /**
@@ -1185,7 +1183,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxSwap(final boolean aCondition, final String aSwap) {
-        return condAttr(aCondition, Attr.HX_SWAP, aSwap);
+        return withCondAttr(aCondition, HX_SWAP, aSwap);
     }
 
     /**
@@ -1196,7 +1194,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxSwapOob(final boolean aCondition, final String aSwapOob) {
-        return condAttr(aCondition, Attr.HX_SWAP_OOB, aSwapOob);
+        return withCondAttr(aCondition, HX_SWAP_OOB, aSwapOob);
     }
 
     /**
@@ -1207,7 +1205,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxSelect(final boolean aCondition, final String aSelect) {
-        return condAttr(aCondition, Attr.HX_SELECT, aSelect);
+        return withCondAttr(aCondition, HX_SELECT, aSelect);
     }
 
     /**
@@ -1218,7 +1216,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxPushUrl(final boolean aCondition, final String aPushUrl) {
-        return condAttr(aCondition, Attr.HX_PUSH_URL, aPushUrl);
+        return withCondAttr(aCondition, HX_PUSH_URL, aPushUrl);
     }
 
     /**
@@ -1229,7 +1227,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxVals(final boolean aCondition, final String aVals) {
-        return condAttr(aCondition, Attr.HX_VALS, aVals);
+        return withCondAttr(aCondition, HX_VALS, aVals);
     }
 
     /**
@@ -1240,7 +1238,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxConfirm(final boolean aCondition, final String aConfirm) {
-        return condAttr(aCondition, Attr.HX_CONFIRM, aConfirm);
+        return withCondAttr(aCondition, HX_CONFIRM, aConfirm);
     }
 
     /**
@@ -1251,7 +1249,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxBoost(final boolean aCondition, final String aBoost) {
-        return condAttr(aCondition, Attr.HX_BOOST, aBoost);
+        return withCondAttr(aCondition, HX_BOOST, aBoost);
     }
 
     /**
@@ -1263,7 +1261,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxOn(final boolean aCondition, final String anEvent, final String aValue) {
-        return condAttr(aCondition, Attr.HX_ON + ":" + anEvent, aValue);
+        return withCondAttr(aCondition, HX_ON + ":" + anEvent, aValue);
     }
 
     /**
@@ -1274,7 +1272,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxParams(final boolean aCondition, final String aParams) {
-        return condAttr(aCondition, Attr.HX_PARAMS, aParams);
+        return withCondAttr(aCondition, HX_PARAMS, aParams);
     }
 
     /**
@@ -1285,7 +1283,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxHeaders(final boolean aCondition, final String aHeaders) {
-        return condAttr(aCondition, Attr.HX_HEADERS, aHeaders);
+        return withCondAttr(aCondition, HX_HEADERS, aHeaders);
     }
 
     /**
@@ -1296,7 +1294,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxSync(final boolean aCondition, final String aSync) {
-        return condAttr(aCondition, Attr.HX_SYNC, aSync);
+        return withCondAttr(aCondition, HX_SYNC, aSync);
     }
 
     /**
@@ -1307,7 +1305,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxExt(final boolean aCondition, final String anExt) {
-        return condAttr(aCondition, Attr.HX_EXT, anExt);
+        return withCondAttr(aCondition, HX_EXT, anExt);
     }
 
     /**
@@ -1318,7 +1316,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxDisinherit(final boolean aCondition, final String aDisinherit) {
-        return condAttr(aCondition, Attr.HX_DISINHERIT, aDisinherit);
+        return withCondAttr(aCondition, HX_DISINHERIT, aDisinherit);
     }
 
     /**
@@ -1329,7 +1327,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxIndicator(final boolean aCondition, final String anIndicator) {
-        return condAttr(aCondition, Attr.HX_INDICATOR, anIndicator);
+        return withCondAttr(aCondition, HX_INDICATOR, anIndicator);
     }
 
     /**
@@ -1340,7 +1338,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxHistory(final boolean aCondition, final String aHistory) {
-        return condAttr(aCondition, Attr.HX_HISTORY, aHistory);
+        return withCondAttr(aCondition, HX_HISTORY, aHistory);
     }
 
     /**
@@ -1351,7 +1349,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxHistoryElt(final boolean aCondition, final String aHistoryElt) {
-        return condAttr(aCondition, Attr.HX_HISTORY_ELT, aHistoryElt);
+        return withCondAttr(aCondition, HX_HISTORY_ELT, aHistoryElt);
     }
 
     /**
@@ -1362,7 +1360,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxInclude(final boolean aCondition, final String anInclude) {
-        return condAttr(aCondition, Attr.HX_INCLUDE, anInclude);
+        return withCondAttr(aCondition, HX_INCLUDE, anInclude);
     }
 
     /**
@@ -1373,7 +1371,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxPrompt(final boolean aCondition, final String aPrompt) {
-        return condAttr(aCondition, Attr.HX_PROMPT, aPrompt);
+        return withCondAttr(aCondition, HX_PROMPT, aPrompt);
     }
 
     /**
@@ -1384,7 +1382,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxPtag(final boolean aCondition, final String aPtag) {
-        return condAttr(aCondition, Attr.HX_PTAG, aPtag);
+        return withCondAttr(aCondition, HX_PTAG, aPtag);
     }
 
     /**
@@ -1395,7 +1393,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxDownload(final boolean aCondition, final String aDownload) {
-        return condAttr(aCondition, Attr.HX_DOWNLOAD, aDownload);
+        return withCondAttr(aCondition, HX_DOWNLOAD, aDownload);
     }
 
     /**
@@ -1406,7 +1404,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxHead(final boolean aCondition, final String aHead) {
-        return condAttr(aCondition, Attr.HX_HEAD, aHead);
+        return withCondAttr(aCondition, HX_HEAD, aHead);
     }
 
     /**
@@ -1417,7 +1415,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxTargets(final boolean aCondition, final String aTargets) {
-        return condAttr(aCondition, Attr.HX_TARGETS, aTargets);
+        return withCondAttr(aCondition, HX_TARGETS, aTargets);
     }
 
     /**
@@ -1428,7 +1426,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxUpsert(final boolean aCondition, final String anUpsert) {
-        return condAttr(aCondition, Attr.HX_UPSERT, anUpsert);
+        return withCondAttr(aCondition, HX_UPSERT, anUpsert);
     }
 
     /**
@@ -1439,7 +1437,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxStatus(final boolean aCondition, final String aStatus) {
-        return condAttr(aCondition, Attr.HX_STATUS, aStatus);
+        return withCondAttr(aCondition, HX_STATUS, aStatus);
     }
 
     /**
@@ -1450,7 +1448,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxIgnore(final boolean aCondition, final String anIgnore) {
-        return condAttr(aCondition, Attr.HX_IGNORE, anIgnore);
+        return withCondAttr(aCondition, HX_IGNORE, anIgnore);
     }
 
     /**
@@ -1461,7 +1459,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxHistoryCache(final boolean aCondition, final String aHistoryCache) {
-        return condAttr(aCondition, Attr.HX_HISTORY_CACHE, aHistoryCache);
+        return withCondAttr(aCondition, HX_HISTORY_CACHE, aHistoryCache);
     }
 
     /**
@@ -1472,7 +1470,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxCsp(final boolean aCondition, final String aCsp) {
-        return condAttr(aCondition, Attr.HX_CSP, aCsp);
+        return withCondAttr(aCondition, HX_CSP, aCsp);
     }
 
     /**
@@ -1483,7 +1481,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxAlpineCompat(final boolean aCondition, final String anAlpineCompat) {
-        return condAttr(aCondition, Attr.HX_ALPINE_COMPAT, anAlpineCompat);
+        return withCondAttr(aCondition, HX_ALPINE_COMPAT, anAlpineCompat);
     }
 
     /**
@@ -1494,7 +1492,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxMultipart(final boolean aCondition, final String aMultipart) {
-        return condAttr(aCondition, Attr.HX_MULTIPART, aMultipart);
+        return withCondAttr(aCondition, HX_MULTIPART, aMultipart);
     }
 
     /**
@@ -1505,7 +1503,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxLive(final boolean aCondition, final String aLive) {
-        return condAttr(aCondition, Attr.HX_LIVE, aLive);
+        return withCondAttr(aCondition, HX_LIVE, aLive);
     }
 
     /**
@@ -1516,7 +1514,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxSse(final boolean aCondition, final String anSse) {
-        return condAttr(aCondition, Attr.HX_SSE, anSse);
+        return withCondAttr(aCondition, HX_SSE, anSse);
     }
 
     /**
@@ -1527,7 +1525,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxWs(final boolean aCondition, final String aWs) {
-        return condAttr(aCondition, Attr.HX_WS, aWs);
+        return withCondAttr(aCondition, HX_WS, aWs);
     }
 
     /**
@@ -1538,7 +1536,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondHxValidate(final boolean aCondition, final String aValidate) {
-        return condAttr(aCondition, Attr.HX_VALIDATE, aValidate);
+        return withCondAttr(aCondition, HX_VALIDATE, aValidate);
     }
 
     // pico.css & aria conditional variants
@@ -1551,7 +1549,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondDataTheme(final boolean aCondition, final String aTheme) {
-        return condAttr(aCondition, Attr.DATA_THEME, aTheme);
+        return withCondAttr(aCondition, DATA_THEME, aTheme);
     }
 
     /**
@@ -1562,7 +1560,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondDataTooltip(final boolean aCondition, final String aTooltip) {
-        return condAttr(aCondition, Attr.DATA_TOOLTIP, aTooltip);
+        return withCondAttr(aCondition, DATA_TOOLTIP, aTooltip);
     }
 
     /**
@@ -1573,7 +1571,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondDataPlacement(final boolean aCondition, final String aPlacement) {
-        return condAttr(aCondition, Attr.DATA_PLACEMENT, aPlacement);
+        return withCondAttr(aCondition, DATA_PLACEMENT, aPlacement);
     }
 
     /**
@@ -1583,7 +1581,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondAriaBusy(final boolean aCondition) {
-        return condAttr(aCondition, Attr.ARIA_BUSY, Boolean.TRUE.toString());
+        return withCondAttr(aCondition, ARIA_BUSY, Boolean.TRUE.toString());
     }
 
     /**
@@ -1594,7 +1592,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondAriaBusy(final boolean aCondition, final boolean aBusy) {
-        return condAttr(aCondition, Attr.ARIA_BUSY, String.valueOf(aBusy));
+        return withCondAttr(aCondition, ARIA_BUSY, String.valueOf(aBusy));
     }
 
     /**
@@ -1604,7 +1602,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondAriaHidden(final boolean aCondition) {
-        return condAttr(aCondition, Attr.ARIA_HIDDEN, Boolean.TRUE.toString());
+        return withCondAttr(aCondition, ARIA_HIDDEN, Boolean.TRUE.toString());
     }
 
     /**
@@ -1615,7 +1613,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondAriaHidden(final boolean aCondition, final boolean aHidden) {
-        return condAttr(aCondition, Attr.ARIA_HIDDEN, String.valueOf(aHidden));
+        return withCondAttr(aCondition, ARIA_HIDDEN, String.valueOf(aHidden));
     }
 
     /**
@@ -1626,7 +1624,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondAriaHidden(final boolean aCondition, final String aHidden) {
-        return condAttr(aCondition, Attr.ARIA_HIDDEN, aHidden);
+        return withCondAttr(aCondition, ARIA_HIDDEN, aHidden);
     }
 
     /**
@@ -1636,7 +1634,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondAriaInvalid(final boolean aCondition) {
-        return condAttr(aCondition, Attr.ARIA_INVALID, Boolean.TRUE.toString());
+        return withCondAttr(aCondition, ARIA_INVALID, Boolean.TRUE.toString());
     }
 
     /**
@@ -1647,7 +1645,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondAriaInvalid(final boolean aCondition, final boolean anInvalid) {
-        return condAttr(aCondition, Attr.ARIA_INVALID, String.valueOf(anInvalid));
+        return withCondAttr(aCondition, ARIA_INVALID, String.valueOf(anInvalid));
     }
 
     /**
@@ -1658,7 +1656,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondAriaInvalid(final boolean aCondition, final String anInvalid) {
-        return condAttr(aCondition, Attr.ARIA_INVALID, anInvalid);
+        return withCondAttr(aCondition, ARIA_INVALID, anInvalid);
     }
 
     /**
@@ -1669,7 +1667,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondRole(final boolean aCondition, final String aRole) {
-        return condAttr(aCondition, Attr.ROLE, aRole);
+        return withCondAttr(aCondition, ROLE, aRole);
     }
 
     /**
@@ -1679,7 +1677,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondAsButton(final boolean aCondition) {
-        return condAttr(aCondition, Attr.ROLE, Attr.ROLE_BUTTON);
+        return withCondAttr(aCondition, ROLE, ROLE_BUTTON);
     }
 
     /**
@@ -1689,7 +1687,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondAsGroup(final boolean aCondition) {
-        return condAttr(aCondition, Attr.ROLE, Attr.ROLE_GROUP);
+        return withCondAttr(aCondition, ROLE, ROLE_GROUP);
     }
 
     /**
@@ -1699,6 +1697,6 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @return Itself for easy chaining
      */
     public T withCondAsSearch(final boolean aCondition) {
-        return condAttr(aCondition, Attr.ROLE, Attr.ROLE_SEARCH);
+        return withCondAttr(aCondition, ROLE, ROLE_SEARCH);
     }
 }
