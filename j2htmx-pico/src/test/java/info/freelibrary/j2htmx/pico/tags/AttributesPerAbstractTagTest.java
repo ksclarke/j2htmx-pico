@@ -5,7 +5,9 @@ import static info.freelibrary.j2htmx.pico.TagCreator.area;
 import static info.freelibrary.j2htmx.pico.TagCreator.audio;
 import static info.freelibrary.j2htmx.pico.TagCreator.blockquote;
 import static info.freelibrary.j2htmx.pico.TagCreator.button;
+import static info.freelibrary.j2htmx.pico.TagCreator.div;
 import static info.freelibrary.j2htmx.pico.TagCreator.form;
+import static info.freelibrary.j2htmx.pico.TagCreator.iframe;
 import static info.freelibrary.j2htmx.pico.TagCreator.img;
 import static info.freelibrary.j2htmx.pico.TagCreator.input;
 import static info.freelibrary.j2htmx.pico.TagCreator.label;
@@ -48,9 +50,9 @@ public final class AttributesPerAbstractTagTest {
         assertThat(form().withAction("/1/2").render(), is("<form action=\"/1/2\"></form>"));
         assertThat(img().withAlt("horse").render(), is("<img alt=\"horse\">"));
         assertThat(script().isAsync().render(), is("<script async></script>"));
-        assertThat(form().isAutocomplete().render(), is("<form autocomplete=\"on\"></form>"));
-        assertThat(input().isAutofocus().render(), is("<input autofocus>"));
-        assertThat(video().isAutoplay().render(), is("<video autoplay></video>"));
+        assertThat(form().hasAutocomplete().render(), is("<form autocomplete=\"on\"></form>"));
+        assertThat(input().hasAutofocus().render(), is("<input autofocus>"));
+        assertThat(video().hasAutoplay().render(), is("<video autoplay></video>"));
         assertThat(script().withCharset("mycharset").render(), is("<script charset=\"mycharset\"></script>"));
         assertThat(input().isChecked().render(), is("<input checked>"));
     }
@@ -65,7 +67,7 @@ public final class AttributesPerAbstractTagTest {
         assertThat(textarea().withCols("3").render(), is("<textarea cols=\"3\"></textarea>"));
         assertThat(td().withColspan("4").render(), is("<td colspan=\"4\"></td>"));
         assertThat(meta().withContent("mycontent").render(), is("<meta content=\"mycontent\">"));
-        assertThat(audio().isControls().render(), is("<audio controls></audio>"));
+        assertThat(audio().hasControls().render(), is("<audio controls></audio>"));
     }
 
     /**
@@ -80,7 +82,8 @@ public final class AttributesPerAbstractTagTest {
           is("<time datetime=\"2015-11-15T22:55:03Z\"></time>"));
         assertThat(object().withData("/1/2").render(), is("<object data=\"/1/2\"></object>"));
         assertThat(track().isDefault().render(), is("<track default>"));
-        assertThat(script().isDefer().render(), is("<script defer></script>"));
+        assertThat(script().isDeferred().render(), is("<script defer></script>"));
+        assertThat(script().withCondDeferred(true).render(), is("<script defer></script>"));
         assertThat(input().withDirname("fname.dir").render(), is("<input dirname=\"fname.dir\">"));
     }
 
@@ -91,11 +94,26 @@ public final class AttributesPerAbstractTagTest {
     public void testAttributesPerTag4() {
         //TEST: disabled, download, enctype, for, form, formaction
         assertThat(input().isDisabled().render(), is("<input disabled>"));
-        assertThat(a().isDownload().render(), is("<a download></a>"));
+        assertThat(a().hasDownload().render(), is("<a download></a>"));
         assertThat(form().withEnctype("enc").render(), is("<form enctype=\"enc\"></form>"));
         assertThat(label().withFor("idk").render(), is("<label for=\"idk\"></label>"));
         assertThat(button().withForm("myform").render(), is("<button form=\"myform\"></button>"));
         assertThat(button().withFormaction("/1/2").render(), is("<button formaction=\"/1/2\"></button>"));
+    }
+
+    /**
+     * Tests fifth group of tag attributes.
+     */
+    @Test
+    public void testAttributesPerTag5() {
+        //TEST: loop, sandbox, ismap, novalidate, spellcheck, translate, hx
+        assertThat(video().hasLoop().render(), is("<video loop></video>"));
+        assertThat(iframe().hasSandbox().render(), is("<iframe sandbox></iframe>"));
+        assertThat(img().hasIsmap().render(), is("<img ismap>"));
+        assertThat(form().hasNovalidate().render(), is("<form novalidate></form>"));
+        assertThat(div().hasSpellcheck().render(), is("<div spellcheck=\"true\"></div>"));
+        assertThat(div().withTranslate().render(), is("<div translate=\"yes\"></div>"));
+        assertThat(div().hasHx().render(), is("<div hx></div>"));
     }
 
     //TODO: leaving the rest of the tests for the rest

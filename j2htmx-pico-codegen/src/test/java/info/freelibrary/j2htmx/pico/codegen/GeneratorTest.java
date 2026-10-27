@@ -50,4 +50,38 @@ public class GeneratorTest {
             }
         }
     }
+
+    /**
+     * Tests that generated attribute interfaces use the expected method prefixes and names.
+     *
+     * @throws IOException If an I/O error occurs
+     */
+    @Test
+    public void generatedAttributeMethodsUseCorrectPrefixes() throws IOException {
+        final Model model = new Model();
+        final Path definitions = Path.of("..", "j2htmx-pico", "src", "main", "models", "html.model");
+
+        Parser.parse(Files.readString(definitions), model);
+        Generator.generate(myOutput, "test.attributes", "test.tags", model);
+
+        final Path attrDir = myOutput.resolve("test/attributes");
+
+        assertTrue(Files.readString(attrDir.resolve("Controls.java")).contains("default T hasControls()"));
+        assertTrue(Files.readString(attrDir.resolve("Autofocus.java")).contains("default T hasAutofocus()"));
+        assertTrue(Files.readString(attrDir.resolve("Autoplay.java")).contains("default T hasAutoplay()"));
+        assertTrue(Files.readString(attrDir.resolve("Loop.java")).contains("default T hasLoop()"));
+        assertTrue(Files.readString(attrDir.resolve("Download.java")).contains("default T hasDownload()"));
+        assertTrue(Files.readString(attrDir.resolve("Sandbox.java")).contains("default T hasSandbox()"));
+        assertTrue(Files.readString(attrDir.resolve("Autocomplete.java")).contains("default T hasAutocomplete()"));
+        assertTrue(Files.readString(attrDir.resolve("Ismap.java")).contains("default T hasIsmap()"));
+        assertTrue(Files.readString(attrDir.resolve("Novalidate.java")).contains("default T hasNovalidate()"));
+
+        final String deferSource = Files.readString(attrDir.resolve("Defer.java"));
+        assertTrue(deferSource.contains("default T isDeferred()"));
+        assertTrue(deferSource.contains("default T withCondDeferred(final boolean aEnable)"));
+        assertTrue(deferSource.contains("default T withCondDefer(final boolean aEnable)"));
+
+        assertTrue(Files.readString(attrDir.resolve("Checked.java")).contains("default T isChecked()"));
+        assertTrue(Files.readString(attrDir.resolve("Disabled.java")).contains("default T isDisabled()"));
+    }
 }

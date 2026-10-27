@@ -76,4 +76,18 @@ public class MathMLTests {
         assertEquals("<semantics></semantics>", semantics().render());
     }
 
+    /**
+     * Tests that MathML boolean attributes use has* methods and render properly.
+     */
+    @Test
+    public void boolean_attributes_render() {
+        assertEquals("<math displaystyle></math>", math().hasDisplaystyle().render());
+        assertEquals("<math nonce></math>", math().hasNonce().render());
+        assertEquals("<math scriptlevel></math>", math().hasScriptlevel().render());
+        assertEquals("<mstyle mathbackground></mstyle>", mstyle().hasMathbackground().render());
+        assertEquals("<mstyle mathcolor></mstyle>", mstyle().hasMathcolor().render());
+        assertEquals("<mstyle mathsize></mstyle>", mstyle().hasMathsize().render());
+        assertEquals("<mtext mathvariant></mtext>", mtext().hasMathvariant().render());
+    }
+
 }

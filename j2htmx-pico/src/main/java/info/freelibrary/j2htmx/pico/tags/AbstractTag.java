@@ -337,7 +337,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      *
      * @return Itself for easy chaining
      */
-    public T isSpellcheck() {
+    public T hasSpellcheck() {
         return withAttr(SPELLCHECK, Boolean.TRUE.toString());
     }
 
@@ -376,7 +376,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      *
      * @return Itself for easy chaining
      */
-    public T isTranslate() {
+    public T withTranslate() {
         return withAttr(TRANSLATE, "yes");
     }
 
@@ -387,7 +387,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      *
      * @return Itself for easy chaining
      */
-    public T isHx() {
+    public T hasHx() {
         return withAttr(HX);
     }
 

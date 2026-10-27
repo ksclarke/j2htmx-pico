@@ -96,7 +96,7 @@ String listHtml = ul(
 ).render();
 ```
 
-### Working with Attributes: `with*`, `is*`, `withCond*`, and `withAttr`
+### Working with Attributes: `with*`, `is*`, `has*`, `withCond*`, and `withAttr`
 
 `j2htmx-pico` provides fluent methods for configuring HTML, ARIA, and custom attributes. The method naming reflects how the attribute is rendered:
 
@@ -109,10 +109,15 @@ div().withClass("card").withId("main-content");
 
 button().withAriaHidden(true);
 // Output: <button aria-hidden="true"></button>
+
+div().withTranslate();
+// Output: <div translate="yes"></div>
 ```
 
-#### 2. Boolean & Flag Shorthands (`is*`)
-For standard HTML boolean attributes where presence implies truthiness (and no value is used in HTML syntax), zero-argument `is*()` methods set the attribute flag:
+#### 2. Boolean & Flag Shorthands (`is*` and `has*`)
+For standard HTML boolean attributes where presence implies truthiness (and no value is used in HTML syntax), zero-argument methods set the attribute flag:
+- `is*()` is used for adjectives and states describing an element's intrinsic properties (`isDisabled()`, `isRequired()`, `isHidden()`, `isDeferred()`).
+- `has*()` is used for nouns, capabilities, and features that the element possesses (`hasControls()`, `hasAutofocus()`, `hasHx()`, `hasSpellcheck()`).
 
 ```java
 input().isDisabled().isRequired();
@@ -120,12 +125,15 @@ input().isDisabled().isRequired();
 
 div().isHidden();
 // Output: <div hidden></div>
+
+script().isDeferred();
+// Output: <script defer></script>
 ```
 
-Zero-argument `is*()` is also used for HTML on/off attributes that default to the enabled keyword:
+Zero-argument `has*()` is also used for HTML on/off attributes that default to the enabled keyword:
 
 ```java
-form().isAutocomplete();
+form().hasAutocomplete();
 // Output: <form autocomplete="on"></form>
 ```
 

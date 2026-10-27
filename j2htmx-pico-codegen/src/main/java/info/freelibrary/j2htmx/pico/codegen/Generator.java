@@ -23,6 +23,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Java source code generator producing tag classes and attribute interfaces from model definitions.
@@ -32,6 +33,32 @@ public final class Generator {
 
     /** The package name for base tag classes and interfaces. */
     private static final String TAGS_PACKAGE = "info.freelibrary.j2htmx.pico.tags";
+
+    /** The defer attribute name constant. */
+    private static final String DEFER = "defer";
+
+    /** Parameter name for conditional methods. */
+    private static final String A_ENABLE = "aEnable";
+
+    /** Attributes that use the "has" prefix instead of "is". */
+    private static final Set<String> HAS_ATTRIBUTES = Set.of(
+        "autocomplete",
+        "autofocus",
+        "autoplay",
+        "controls",
+        "displaystyle",
+        "download",
+        "ismap",
+        "loop",
+        "mathbackground",
+        "mathcolor",
+        "mathsize",
+        "mathvariant",
+        "nonce",
+        "novalidate",
+        "sandbox",
+        "scriptlevel"
+    );
 
     /**
      * Private constructor to prevent instantiation of the {@code Generator} class. This utility class is not intended
@@ -193,13 +220,29 @@ public final class Generator {
     }
 
     /**
+     * Determines the method name for a boolean or on/off attribute.
+     *
+     * @param anAttrName The attribute name
+     * @return The method name
+     */
+    private static String booleanMethodName(final String anAttrName) {
+        if (DEFER.equals(anAttrName)) {
+            return "isDeferred";
+        }
+        if (HAS_ATTRIBUTES.contains(anAttrName)) {
+            return methodName("has", anAttrName);
+        }
+        return methodName("is", anAttrName);
+    }
+
+    /**
      * Defines methods for a boolean attribute.
      *
      * @param anAttribute The attribute model node
      * @param aType The interface builder
      */
     private static void defineBooleanAttributeMethods(final Node anAttribute, final TypeSpec.Builder aType) {
-        final MethodSpec with = MethodSpec.methodBuilder(methodName("is", anAttribute.myName))
+        final MethodSpec with = MethodSpec.methodBuilder(booleanMethodName(anAttribute.myName))
           .addJavadoc("Sets the {@code $L} attribute.\n\n@return The tag instance\n", anAttribute.myName)
           .addModifiers(Modifier.PUBLIC, Modifier.DEFAULT)
           .addStatement("return self().withAttr(\"" + anAttribute.myName + "\")")
@@ -210,13 +253,25 @@ public final class Generator {
           .addJavadoc("Conditionally sets the {@code $L} attribute.\n\n"
             + "@param aEnable Whether to set the attribute\n@return The tag instance\n", anAttribute.myName)
           .addModifiers(Modifier.PUBLIC, Modifier.DEFAULT)
-          .addParameter(TypeName.BOOLEAN, "aEnable", Modifier.FINAL)
+          .addParameter(TypeName.BOOLEAN, A_ENABLE, Modifier.FINAL)
           .addStatement("return aEnable ? self().withAttr(\"" + anAttribute.myName + "\") : self()")
           .returns(TypeVariableName.get("T"))
           .build();
 
         aType.addMethod(with);
         aType.addMethod(withCond);
+
+        if (DEFER.equals(anAttribute.myName)) {
+            final MethodSpec withCondDeferred = MethodSpec.methodBuilder("withCondDeferred")
+              .addJavadoc("Conditionally sets the {@code $L} attribute.\n\n"
+                + "@param aEnable Whether to set the attribute\n@return The tag instance\n", anAttribute.myName)
+              .addModifiers(Modifier.PUBLIC, Modifier.DEFAULT)
+              .addParameter(TypeName.BOOLEAN, A_ENABLE, Modifier.FINAL)
+              .addStatement("return withCondDefer(aEnable)")
+              .returns(TypeVariableName.get("T"))
+              .build();
+            aType.addMethod(withCondDeferred);
+        }
     }
 
     /**
@@ -226,7 +281,7 @@ public final class Generator {
      * @param aType The interface builder
      */
     private static void defineOnOffAttributeMethods(final Node anAttribute, final TypeSpec.Builder aType) {
-        final MethodSpec with = MethodSpec.methodBuilder(methodName("is", anAttribute.myName))
+        final MethodSpec with = MethodSpec.methodBuilder(booleanMethodName(anAttribute.myName))
           .addJavadoc("Sets the {@code $L} attribute to \"on\".\n\n@return The tag instance\n", anAttribute.myName)
           .addModifiers(Modifier.PUBLIC, Modifier.DEFAULT)
           .addStatement("return self().withAttr(\"" + anAttribute.myName + "\", \"on\")")
@@ -237,7 +292,7 @@ public final class Generator {
           .addJavadoc("Conditionally sets the {@code $L} attribute to \"on\".\n\n"
             + "@param aEnable Whether to set the attribute\n@return The tag instance\n", anAttribute.myName)
           .addModifiers(Modifier.PUBLIC, Modifier.DEFAULT)
-          .addParameter(TypeName.BOOLEAN, "aEnable", Modifier.FINAL)
+          .addParameter(TypeName.BOOLEAN, A_ENABLE, Modifier.FINAL)
           .addStatement("return aEnable ? self().withAttr(\"" + anAttribute.myName + "\", \"on\") : self()")
           .returns(TypeVariableName.get("T"))
           .build();
@@ -267,7 +322,7 @@ public final class Generator {
             + "@param aEnable Whether to set the attribute\n@param $L The attribute value\n@return The tag instance\n",
             anAttribute.myName, parameter(anAttribute))
           .addModifiers(Modifier.PUBLIC, Modifier.DEFAULT)
-          .addParameter(TypeName.BOOLEAN, "aEnable", Modifier.FINAL)
+          .addParameter(TypeName.BOOLEAN, A_ENABLE, Modifier.FINAL)
           .addParameter(String.class, parameter(anAttribute), Modifier.FINAL)
           .addStatement("return aEnable ? self().withAttr(\"" + anAttribute.myName + "\", " + parameter(anAttribute) +
             ") : self()")

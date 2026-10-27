@@ -75,7 +75,7 @@ public class HtmxTest {
      */
     @Test
     public void testTemplateHx() {
-        final String html = template().isHx().withType("partial").withHxTarget("#target").render();
+        final String html = template().hasHx().withType("partial").withHxTarget("#target").render();
         assertThat(html, containsString("<template hx"));
         assertThat(html, containsString("type=\"partial\""));
         assertThat(html, containsString("hx-target=\"#target\""));
