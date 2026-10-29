@@ -81,13 +81,13 @@ public class MathMLTests {
      */
     @Test
     public void boolean_attributes_render() {
-        assertEquals("<math displaystyle></math>", math().hasDisplaystyle().render());
+        assertEquals("<math displaystyle></math>", math().hasDisplayStyle().render());
         assertEquals("<math nonce></math>", math().hasNonce().render());
-        assertEquals("<math scriptlevel></math>", math().hasScriptlevel().render());
-        assertEquals("<mstyle mathbackground></mstyle>", mstyle().hasMathbackground().render());
-        assertEquals("<mstyle mathcolor></mstyle>", mstyle().hasMathcolor().render());
-        assertEquals("<mstyle mathsize></mstyle>", mstyle().hasMathsize().render());
-        assertEquals("<mtext mathvariant></mtext>", mtext().hasMathvariant().render());
+        assertEquals("<math scriptlevel></math>", math().hasScriptLevel().render());
+        assertEquals("<mstyle mathbackground></mstyle>", mstyle().hasMathBackground().render());
+        assertEquals("<mstyle mathcolor></mstyle>", mstyle().hasMathColor().render());
+        assertEquals("<mstyle mathsize></mstyle>", mstyle().hasMathSize().render());
+        assertEquals("<mtext mathvariant></mtext>", mtext().hasMathVariant().render());
     }
 
 }

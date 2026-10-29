@@ -67,14 +67,14 @@ public class GeneratorTest {
         final Path attrDir = myOutput.resolve("test/attributes");
 
         assertTrue(Files.readString(attrDir.resolve("Controls.java")).contains("default T hasControls()"));
-        assertTrue(Files.readString(attrDir.resolve("Autofocus.java")).contains("default T hasAutofocus()"));
-        assertTrue(Files.readString(attrDir.resolve("Autoplay.java")).contains("default T hasAutoplay()"));
+        assertTrue(Files.readString(attrDir.resolve("AutoFocus.java")).contains("default T hasAutoFocus()"));
+        assertTrue(Files.readString(attrDir.resolve("AutoPlay.java")).contains("default T hasAutoPlay()"));
         assertTrue(Files.readString(attrDir.resolve("Loop.java")).contains("default T hasLoop()"));
         assertTrue(Files.readString(attrDir.resolve("Download.java")).contains("default T hasDownload()"));
         assertTrue(Files.readString(attrDir.resolve("Sandbox.java")).contains("default T hasSandbox()"));
-        assertTrue(Files.readString(attrDir.resolve("Autocomplete.java")).contains("default T hasAutocomplete()"));
-        assertTrue(Files.readString(attrDir.resolve("Ismap.java")).contains("default T hasIsmap()"));
-        assertTrue(Files.readString(attrDir.resolve("Novalidate.java")).contains("default T hasNovalidate()"));
+        assertTrue(Files.readString(attrDir.resolve("AutoComplete.java")).contains("default T hasAutoComplete()"));
+        assertTrue(Files.readString(attrDir.resolve("IsMap.java")).contains("default T hasIsMap()"));
+        assertTrue(Files.readString(attrDir.resolve("NoValidate.java")).contains("default T hasNoValidate()"));
 
         final String deferSource = Files.readString(attrDir.resolve("Defer.java"));
         assertTrue(deferSource.contains("default T isDeferred()"));
@@ -83,5 +83,23 @@ public class GeneratorTest {
 
         assertTrue(Files.readString(attrDir.resolve("Checked.java")).contains("default T isChecked()"));
         assertTrue(Files.readString(attrDir.resolve("Disabled.java")).contains("default T isDisabled()"));
+
+        final String readOnlySource = Files.readString(attrDir.resolve("ReadOnly.java"));
+        assertTrue(readOnlySource.contains("default T isReadOnly()"));
+        assertTrue(readOnlySource.contains("default T withCondReadOnly(final boolean aEnable)"));
+
+        final String colSpanSource = Files.readString(attrDir.resolve("ColSpan.java"));
+        assertTrue(colSpanSource.contains("default T withColSpan(final String aColSpan)"));
+        assertTrue(colSpanSource.contains("default T withCondColSpan(final boolean aEnable, final String aColSpan)"));
+
+        final String onAbortSource = Files.readString(attrDir.resolve("OnAbort.java"));
+        assertTrue(onAbortSource.contains("default T withOnAbort(final String anOnAbort)"));
+
+        final String charsetSource = Files.readString(attrDir.resolve("Charset.java"));
+        assertTrue(charsetSource.contains("default T withCharset(final String aCharset)"));
+        assertTrue(charsetSource.contains("default T withCondCharset(final boolean aEnable, final String aCharset)"));
+
+        final String dateTimeSource = Files.readString(attrDir.resolve("DateTime.java"));
+        assertTrue(dateTimeSource.contains("default T withDateTime(final String aDateTime)"));
     }
 }

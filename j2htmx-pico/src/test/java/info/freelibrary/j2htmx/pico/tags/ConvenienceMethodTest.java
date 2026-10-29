@@ -26,8 +26,8 @@ public class ConvenienceMethodTest {
      */
     @Test
     public void testAllConvenienceMethods() throws Exception {
-        assertThat(input().hasAutocomplete().render(), is("<input autocomplete=\"on\">"));
-        assertThat(input().hasAutofocus().render(), is("<input autofocus>"));
+        assertThat(input().hasAutoComplete().render(), is("<input autocomplete=\"on\">"));
+        assertThat(input().hasAutoFocus().render(), is("<input autofocus>"));
         assertThat(input().isHidden().render(), is("<input hidden>"));
         assertThat(input().isRequired().render(), is("<input required>"));
         assertThat(img().withAlt("An image").render(), is("<img alt=\"An image\">"));

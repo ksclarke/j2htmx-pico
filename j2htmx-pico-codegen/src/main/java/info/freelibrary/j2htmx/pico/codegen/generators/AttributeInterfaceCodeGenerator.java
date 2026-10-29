@@ -7,9 +7,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
+import info.freelibrary.j2htmx.pico.codegen.Generator;
 import info.freelibrary.j2htmx.pico.codegen.GeneratorUtil;
 import info.freelibrary.j2htmx.pico.codegen.model.AttrD;
 import info.freelibrary.j2htmx.pico.codegen.model.AttributesList;
@@ -123,8 +123,12 @@ public final class AttributeInterfaceCodeGenerator {
         sb.append(" {\n");
 
         // Method parameter uses the aName convention to avoid Java keywords and satisfy PMD rules.
-        final String attrName = anInterfaceNameSimple.toLowerCase(Locale.US);
-        final String paramName = "a" + anInterfaceNameSimple;
+        final String attrName = anAttrD.myAttr;
+        final char firstChar = Character.toLowerCase(attrName.charAt(0));
+        final String prefix = (
+          firstChar == 'a' || firstChar == 'e' || firstChar == 'i' || firstChar == 'o' || firstChar == 'u'
+        ) ? "an" : "a";
+        final String paramName = prefix + anInterfaceNameSimple;
 
         //depending on if the attribute has an argument or not,
         //generate methods according to the convention in AbstractTag.java
@@ -241,7 +245,7 @@ public final class AttributeInterfaceCodeGenerator {
      * @return The interface name with first letter capitalized
      */
     public static String interfaceNameFromAttribute(final String anAttribute) {
-        return anAttribute.substring(0, 1).toUpperCase(Locale.US) + anAttribute.substring(1);
+        return Generator.attributePascalCase(anAttribute);
     }
 
     /**

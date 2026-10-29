@@ -50,10 +50,12 @@ public final class AttributesPerAbstractTagTest {
         assertThat(form().withAction("/1/2").render(), is("<form action=\"/1/2\"></form>"));
         assertThat(img().withAlt("horse").render(), is("<img alt=\"horse\">"));
         assertThat(script().isAsync().render(), is("<script async></script>"));
-        assertThat(form().hasAutocomplete().render(), is("<form autocomplete=\"on\"></form>"));
-        assertThat(input().hasAutofocus().render(), is("<input autofocus>"));
-        assertThat(video().hasAutoplay().render(), is("<video autoplay></video>"));
+        assertThat(form().hasAutoComplete().render(), is("<form autocomplete=\"on\"></form>"));
+        assertThat(input().hasAutoFocus().render(), is("<input autofocus>"));
+        assertThat(video().hasAutoPlay().render(), is("<video autoplay></video>"));
         assertThat(script().withCharset("mycharset").render(), is("<script charset=\"mycharset\"></script>"));
+        assertThat(script().withCondCharset(true, "mycharset").render(), is("<script charset=\"mycharset\"></script>"));
+        assertThat(script().withCondCharset(false, "mycharset").render(), is("<script></script>"));
         assertThat(input().isChecked().render(), is("<input checked>"));
     }
 
@@ -65,7 +67,7 @@ public final class AttributesPerAbstractTagTest {
         //TEST: cite, cols, colspan, content, controls
         assertThat(blockquote().withCite("hi").render(), is("<blockquote cite=\"hi\"></blockquote>"));
         assertThat(textarea().withCols("3").render(), is("<textarea cols=\"3\"></textarea>"));
-        assertThat(td().withColspan("4").render(), is("<td colspan=\"4\"></td>"));
+        assertThat(td().withColSpan("4").render(), is("<td colspan=\"4\"></td>"));
         assertThat(meta().withContent("mycontent").render(), is("<meta content=\"mycontent\">"));
         assertThat(audio().hasControls().render(), is("<audio controls></audio>"));
     }
@@ -78,13 +80,13 @@ public final class AttributesPerAbstractTagTest {
         //TEST: coords, data, datetime, default, defer, dirname
         assertThat(area().withCoords("0,0,82,126").render(), is("<area coords=\"0,0,82,126\">"));
         assertThat(object().withData("/1/2").render(), is("<object data=\"/1/2\"></object>"));
-        assertThat(time().withDatetime("2015-11-15T22:55:03Z").render(),
+        assertThat(time().withDateTime("2015-11-15T22:55:03Z").render(),
           is("<time datetime=\"2015-11-15T22:55:03Z\"></time>"));
         assertThat(object().withData("/1/2").render(), is("<object data=\"/1/2\"></object>"));
         assertThat(track().isDefault().render(), is("<track default>"));
         assertThat(script().isDeferred().render(), is("<script defer></script>"));
         assertThat(script().withCondDeferred(true).render(), is("<script defer></script>"));
-        assertThat(input().withDirname("fname.dir").render(), is("<input dirname=\"fname.dir\">"));
+        assertThat(input().withDirName("fname.dir").render(), is("<input dirname=\"fname.dir\">"));
     }
 
     /**
@@ -95,10 +97,10 @@ public final class AttributesPerAbstractTagTest {
         //TEST: disabled, download, enctype, for, form, formaction
         assertThat(input().isDisabled().render(), is("<input disabled>"));
         assertThat(a().hasDownload().render(), is("<a download></a>"));
-        assertThat(form().withEnctype("enc").render(), is("<form enctype=\"enc\"></form>"));
+        assertThat(form().withEncType("enc").render(), is("<form enctype=\"enc\"></form>"));
         assertThat(label().withFor("idk").render(), is("<label for=\"idk\"></label>"));
         assertThat(button().withForm("myform").render(), is("<button form=\"myform\"></button>"));
-        assertThat(button().withFormaction("/1/2").render(), is("<button formaction=\"/1/2\"></button>"));
+        assertThat(button().withFormAction("/1/2").render(), is("<button formaction=\"/1/2\"></button>"));
     }
 
     /**
@@ -109,11 +111,32 @@ public final class AttributesPerAbstractTagTest {
         //TEST: loop, sandbox, ismap, novalidate, spellcheck, translate, hx
         assertThat(video().hasLoop().render(), is("<video loop></video>"));
         assertThat(iframe().hasSandbox().render(), is("<iframe sandbox></iframe>"));
-        assertThat(img().hasIsmap().render(), is("<img ismap>"));
-        assertThat(form().hasNovalidate().render(), is("<form novalidate></form>"));
-        assertThat(div().hasSpellcheck().render(), is("<div spellcheck=\"true\"></div>"));
+        assertThat(img().hasIsMap().render(), is("<img ismap>"));
+        assertThat(form().hasNoValidate().render(), is("<form novalidate></form>"));
+        assertThat(div().hasSpellCheck().render(), is("<div spellcheck=\"true\"></div>"));
         assertThat(div().withTranslate().render(), is("<div translate=\"yes\"></div>"));
         assertThat(div().hasHx().render(), is("<div hx></div>"));
+    }
+
+    /**
+     * Tests sixth group of multi-word tag attributes.
+     */
+    @Test
+    public void testAttributesPerTag6() {
+        //TEST: readonly, rowspan, srcdoc, srclang, srcset, usemap, hreflang, maxlength, onabort, contenteditable
+        assertThat(input().isReadOnly().render(), is("<input readonly>"));
+        assertThat(td().withRowSpan("2").render(), is("<td rowspan=\"2\"></td>"));
+        assertThat(iframe().withSrcDoc("<p>test</p>").render(),
+          is("<iframe srcdoc=\"&lt;p&gt;test&lt;/p&gt;\"></iframe>"));
+        assertThat(track().withSrcLang("en").render(), is("<track srclang=\"en\">"));
+        assertThat(img().withSrcSet("img.jpg 1x").render(), is("<img srcset=\"img.jpg 1x\">"));
+        assertThat(img().withUseMap("#map").render(), is("<img usemap=\"#map\">"));
+        assertThat(a().withHrefLang("en").render(), is("<a hreflang=\"en\"></a>"));
+        assertThat(input().withMaxLength("10").render(), is("<input maxlength=\"10\">"));
+        assertThat(img().withOnAbort("abort()").render(), is("<img onabort=\"abort()\">"));
+        assertThat(div().isContentEditable().render(), is("<div contenteditable=\"true\"></div>"));
+        assertThat(div().withAccessKey("s").render(), is("<div accesskey=\"s\"></div>"));
+        assertThat(div().withTabIndex(1).render(), is("<div tabindex=\"1\"></div>"));
     }
 
     //TODO: leaving the rest of the tests for the rest

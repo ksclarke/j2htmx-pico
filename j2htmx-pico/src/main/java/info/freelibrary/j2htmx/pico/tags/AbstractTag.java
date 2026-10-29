@@ -230,7 +230,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @param anAccessKey The accesskey value
      * @return Itself for easy chaining
      */
-    public T withAccesskey(final String anAccessKey) {
+    public T withAccessKey(final String anAccessKey) {
         return withAttr(ACCESSKEY, anAccessKey);
     }
 
@@ -249,7 +249,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      *
      * @return Itself for easy chaining
      */
-    public T isContenteditable() {
+    public T isContentEditable() {
         return withAttr(CONTENTEDITABLE, Boolean.TRUE.toString());
     }
 
@@ -337,7 +337,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      *
      * @return Itself for easy chaining
      */
-    public T hasSpellcheck() {
+    public T hasSpellCheck() {
         return withAttr(SPELLCHECK, Boolean.TRUE.toString());
     }
 
@@ -357,7 +357,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @param anIndex The index value
      * @return Itself for easy chaining
      */
-    public T withTabindex(final int anIndex) {
+    public T withTabIndex(final int anIndex) {
         return withAttr(TABINDEX, anIndex);
     }
 
@@ -944,7 +944,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @param aCondition The condition to evaluate
      * @return Itself for easy chaining
      */
-    public T withCondContenteditable(final boolean aCondition) {
+    public T withCondContentEditable(final boolean aCondition) {
         return withAttr(CONTENTEDITABLE, aCondition ? Boolean.TRUE.toString() : "false");
     }
 
@@ -1041,7 +1041,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @param aCondition The condition to evaluate
      * @return Itself for easy chaining
      */
-    public T withCondSpellcheck(final boolean aCondition) {
+    public T withCondSpellCheck(final boolean aCondition) {
         return withAttr(SPELLCHECK, aCondition ? Boolean.TRUE.toString() : "false");
     }
 
@@ -1063,7 +1063,7 @@ public abstract class AbstractTag<T extends AbstractTag<T>> extends AbstractDomC
      * @param anIndex The index value
      * @return Itself for easy chaining
      */
-    public T withCondTabindex(final boolean aCondition, final int anIndex) {
+    public T withCondTabIndex(final boolean aCondition, final int anIndex) {
         return withCondAttr(aCondition, TABINDEX, anIndex + EMPTY);
     }
 

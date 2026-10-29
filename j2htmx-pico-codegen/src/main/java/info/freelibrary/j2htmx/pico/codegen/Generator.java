@@ -40,6 +40,81 @@ public final class Generator {
     /** Parameter name for conditional methods. */
     private static final String A_ENABLE = "aEnable";
 
+    /** Mapping of multi-word attribute names to their PascalCase / CamelCase representations. */
+    private static final Map<String, String> CAMEL_CASE_NAMES = Map.ofEntries(
+        // HTML Boolean & Flag Attributes
+        Map.entry("autocomplete", "AutoComplete"),
+        Map.entry("autofocus", "AutoFocus"),
+        Map.entry("autoplay", "AutoPlay"),
+        Map.entry("ismap", "IsMap"),
+        Map.entry("novalidate", "NoValidate"),
+        Map.entry("readonly", "ReadOnly"),
+
+        // HTML String & Value Attributes
+        Map.entry("colspan", "ColSpan"),
+        Map.entry("datetime", "DateTime"),
+        Map.entry("dirname", "DirName"),
+        Map.entry("enctype", "EncType"),
+        Map.entry("formaction", "FormAction"),
+        Map.entry("hreflang", "HrefLang"),
+        Map.entry("maxlength", "MaxLength"),
+        Map.entry("rowspan", "RowSpan"),
+        Map.entry("srcdoc", "SrcDoc"),
+        Map.entry("srclang", "SrcLang"),
+        Map.entry("srcset", "SrcSet"),
+        Map.entry("usemap", "UseMap"),
+
+        // HTML Event Handlers
+        Map.entry("onabort", "OnAbort"),
+        Map.entry("onafterprint", "OnAfterPrint"),
+        Map.entry("onbeforeprint", "OnBeforePrint"),
+        Map.entry("onbeforeunload", "OnBeforeUnload"),
+        Map.entry("oncanplay", "OnCanPlay"),
+        Map.entry("oncanplaythrough", "OnCanPlayThrough"),
+        Map.entry("oncuechange", "OnCueChange"),
+        Map.entry("ondurationchange", "OnDurationChange"),
+        Map.entry("onemptied", "OnEmptied"),
+        Map.entry("onended", "OnEnded"),
+        Map.entry("onerror", "OnError"),
+        Map.entry("onhashchange", "OnHashChange"),
+        Map.entry("onload", "OnLoad"),
+        Map.entry("onloadeddata", "OnLoadedData"),
+        Map.entry("onloadedmetadata", "OnLoadedMetadata"),
+        Map.entry("onloadstart", "OnLoadStart"),
+        Map.entry("onoffline", "OnOffline"),
+        Map.entry("ononline", "OnOnline"),
+        Map.entry("onpagehide", "OnPageHide"),
+        Map.entry("onpageshow", "OnPageShow"),
+        Map.entry("onpause", "OnPause"),
+        Map.entry("onplay", "OnPlay"),
+        Map.entry("onplaying", "OnPlaying"),
+        Map.entry("onpopstate", "OnPopState"),
+        Map.entry("onprogress", "OnProgress"),
+        Map.entry("onratechange", "OnRateChange"),
+        Map.entry("onreset", "OnReset"),
+        Map.entry("onresize", "OnResize"),
+        Map.entry("onsearch", "OnSearch"),
+        Map.entry("onseeked", "OnSeeked"),
+        Map.entry("onseeking", "OnSeeking"),
+        Map.entry("onstalled", "OnStalled"),
+        Map.entry("onstorage", "OnStorage"),
+        Map.entry("onsubmit", "OnSubmit"),
+        Map.entry("onsuspend", "OnSuspend"),
+        Map.entry("ontimeupdate", "OnTimeUpdate"),
+        Map.entry("ontoggle", "OnToggle"),
+        Map.entry("onunload", "OnUnload"),
+        Map.entry("onvolumechanged", "OnVolumeChanged"),
+        Map.entry("onwaiting", "OnWaiting"),
+
+        // MathML Attributes
+        Map.entry("displaystyle", "DisplayStyle"),
+        Map.entry("mathbackground", "MathBackground"),
+        Map.entry("mathcolor", "MathColor"),
+        Map.entry("mathsize", "MathSize"),
+        Map.entry("mathvariant", "MathVariant"),
+        Map.entry("scriptlevel", "ScriptLevel")
+    );
+
     /** Attributes that use the "has" prefix instead of "is". */
     private static final Set<String> HAS_ATTRIBUTES = Set.of(
         "autocomplete",
@@ -208,7 +283,7 @@ public final class Generator {
      * @return The interface builder
      */
     private static TypeSpec.Builder defineAttributeClass(final String aPkg, final Node anAttribute) {
-        final ClassName name = ClassName.get(aPkg, capitalize(anAttribute.myName));
+        final ClassName name = ClassName.get(aPkg, attributePascalCase(anAttribute.myName));
         return TypeSpec.interfaceBuilder(name)
           .addJavadoc("Defines the {@code $L} attribute for HTML/XML tags.\n\n@param <T> The tag type\n",
             anAttribute.myName)
@@ -358,9 +433,20 @@ public final class Generator {
         final String[] camelCase = new String[aWords.length];
         camelCase[0] = aWords[0];
         for (int i = 1; i < aWords.length; i++) {
-            camelCase[i] = capitalize(aWords[i]);
+            camelCase[i] = attributePascalCase(aWords[i]);
         }
         return String.join("", camelCase);
+    }
+
+    /**
+     * Converts an attribute name into its PascalCase form.
+     *
+     * @param anAttrName The attribute name
+     * @return The PascalCase attribute name
+     */
+    public static String attributePascalCase(final String anAttrName) {
+        final String mapped = CAMEL_CASE_NAMES.get(anAttrName);
+        return mapped != null ? mapped : capitalize(anAttrName);
     }
 
     /**

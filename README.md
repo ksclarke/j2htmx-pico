@@ -1,50 +1,52 @@
-# j2htmx-pico [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+# j2htmx-pico [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usablerelease suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip) ![Code: AI-assisted](https://img.shields.io/badge/code-AI--assisted-yellow)
 
-An opinionated Java to HTML generator that supports HTMX (v4) and Pico CSS (v2). It's based on
-the [j2html](https://j2html.com) project (which, to my knowledge, is
-[no longer active](https://www.reddit.com/r/java/comments/mu3ptp/j2html_is_looking_for_a_maintainer/)). Since it's a
-fork, it continues the licensing and versioning of the original project.
+An opinionated Java HTML generator with support for HTMX (v4) and Pico CSS (v2).
+
+j2htmx-pico is a fork of [j2html](https://j2html.com) and retains the original project's
+[Apache License 2.0](LICENSE.txt). It does
+not maintain backwards compatibility with j2html, and its version numbers are independent of the original project's.
 
 > [!WARNING]
-> j2htmx-pico serves a narrow, specialized use case and is best suited for simple, small-scale HTML interfaces rather
-than large, complex websites. While it offers type-safe, Java-native performance, it achieves this by abandoning the
-Separation of Concerns design pattern that helps make larger websites maintainable.
+> j2htmx-pico is probably best suited for simple, small-scale HTML interfaces rather than large, complex websites.
 
 ## Getting Started
 
 To use j2htmx-pico, you need to include it as a dependency in your Maven-built project.
 
-### Add the Dependency to your POM:
+### Adding j2htmx-pico to your POM:
 
 ```xml
-
 <dependency>
     <groupId>info.freelibrary</groupId>
     <artifactId>j2htmx-pico</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>0.0.1</version>
 </dependency>
 ```
 
-### Building the Project
+### Building the Project Yourself
 
-If you want to build the project yourself, there are a few pre-requisites that need to be installed first.
+If you want to build the project yourself, there are a few pre-requisites that need to be installed.
 
 **Pre-requisites:**
 
 * **JDK 21 or higher** – _Personally, I'd recommend installing the JDK of your choice with
   [SDKMAN!](https://sdkman.io)_
-* **Maven 3.8.6 or higher** – _Optional, if you use the `mvnw` or `mvnw.cmd` command in the project's root directory_
+* **Maven 3.8.6 or higher** – _Optional, if you use the `mvnw` command in the project's root directory_
 
 Once the pre-requisites are installed, check the project out from its source repository and then run the following
-command inside the project's root directory:
+command inside the project's root directory.
 
 ```bash
-mvn install -Denforcer.skip=true
+./mvn install
 ```
 
-> [!WARNING]
-> The build's rule enforcer must be skipped because the project is currently in development and should not be considered
-production-worthy. This is not a reflection on j2html, but on my AI-driven integration of HTMX and Pico CSS.
+If you've chosen not to install Maven as a pre-requisite, run this instead:
+
+```bash
+./mvnw install
+```
+
+If you use Windows, either of the commands above can be run in the Windows Subsystem for Linux (WSL).
 
 ## Basic Use
 
@@ -98,50 +100,77 @@ String listHtml = ul(
 
 ### Working with Attributes: `with*`, `is*`, `has*`, `withCond*`, and `withAttr`
 
-`j2htmx-pico` provides fluent methods for configuring HTML, ARIA, and custom attributes. The method naming reflects how the attribute is rendered:
+`j2htmx-pico` provides fluent methods for configuring HTML, ARIA, and custom attributes. The method naming reflects how
+the attribute is rendered:
 
 #### 1. Unconditional Setters (`with*`)
+
 Parameterized methods accept an explicit value and unconditionally set the attribute:
 
 ```java
-div().withClass("card").withId("main-content");
+div().
+
+withClass("card").
+
+withId("main-content");
 // Output: <div class="card" id="main-content"></div>
 
-button().withAriaHidden(true);
+button().
+
+withAriaHidden(true);
 // Output: <button aria-hidden="true"></button>
 
-div().withTranslate();
+div().
+
+withTranslate();
 // Output: <div translate="yes"></div>
 ```
 
 #### 2. Boolean & Flag Shorthands (`is*` and `has*`)
-For standard HTML boolean attributes where presence implies truthiness (and no value is used in HTML syntax), zero-argument methods set the attribute flag:
-- `is*()` is used for adjectives and states describing an element's intrinsic properties (`isDisabled()`, `isRequired()`, `isHidden()`, `isDeferred()`).
-- `has*()` is used for nouns, capabilities, and features that the element possesses (`hasControls()`, `hasAutofocus()`, `hasHx()`, `hasSpellcheck()`).
+
+For standard HTML boolean attributes where presence implies truthiness (and no value is used in HTML syntax),
+zero-argument methods set the attribute flag:
+
+- `is*()` is used for adjectives and states describing an element's intrinsic properties (`isDisabled()`,
+  `isRequired()`, `isHidden()`, `isDeferred()`).
+- `has*()` is used for nouns, capabilities, and features that the element possesses (`hasControls()`, `hasAutoFocus()`,
+  `hasHx()`, `hasSpellCheck()`).
 
 ```java
-input().isDisabled().isRequired();
+input().
+
+isDisabled().
+
+isRequired();
 // Output: <input disabled required>
 
-div().isHidden();
+div().
+
+isHidden();
 // Output: <div hidden></div>
 
-script().isDeferred();
+script().
+
+isDeferred();
 // Output: <script defer></script>
 ```
 
 Zero-argument `has*()` is also used for HTML on/off attributes that default to the enabled keyword:
 
 ```java
-form().hasAutocomplete();
+form().
+
+hasAutoComplete();
 // Output: <form autocomplete="on"></form>
 ```
 
 #### 3. Conditional Setters (`withCond*`)
+
 Conditional setters evaluate a boolean condition. How the condition is applied depends on the category of the attribute:
 
 * **Inclusion Guards (Standard & Boolean Attributes):**
-  For standard HTML boolean attributes, on/off attributes, and value-bearing attributes, `withCond*` acts as a guard. When the condition is `true`, the attribute is rendered; when `false`, the attribute is **omitted entirely**:
+  For standard HTML boolean attributes, on/off attributes, and value-bearing attributes, `withCond*` acts as a guard.
+  When the condition is `true`, the attribute is rendered; when `false`, the attribute is **omitted entirely**:
 
   ```java
   // Boolean flag guard:
@@ -150,7 +179,7 @@ Conditional setters evaluate a boolean condition. How the condition is applied d
   // false -> <input>
 
   // On/Off attribute guard:
-  form().withCondAutocomplete(enableSuggestions);
+  form().withCondAutoComplete(enableSuggestions);
   // true  -> <form autocomplete="on"></form>
   // false -> <form></form>
 
@@ -161,7 +190,9 @@ Conditional setters evaluate a boolean condition. How the condition is applied d
   ```
 
 * **Value Switchers (Tristate / Enumerated Attributes):**
-  Certain HTML attributes (`translate`, `draggable`, `spellcheck`, `contenteditable`) are **tristate**: they can be explicitly positive, explicitly negative, or omitted to inherit parent/browser defaults. For these attributes, `withCond*` acts as a two-way switch between explicit positive and negative states:
+  Certain HTML attributes (`translate`, `draggable`, `spellcheck`, `contenteditable`) are **tristate**: they can be
+  explicitly positive, explicitly negative, or omitted to inherit parent/browser defaults. For these attributes,
+  `withCond*` acts as a two-way switch between explicit positive and negative states:
 
   ```java
   p("Content").withCondTranslate(isTranslatable);
@@ -172,26 +203,34 @@ Conditional setters evaluate a boolean condition. How the condition is applied d
   // true  -> <div draggable="true"></div>
   // false -> <div draggable="false"></div>
 
-  div().withCondSpellcheck(checkSpelling);
+  div().withCondSpellCheck(checkSpelling);
   // true  -> <div spellcheck="true"></div>
   // false -> <div spellcheck="false"></div>
 
-  div().withCondContenteditable(isEditable);
+  div().withCondContentEditable(isEditable);
   // true  -> <div contenteditable="true"></div>
   // false -> <div contenteditable="false"></div>
   ```
 
   > [!NOTE]
-  > Because `withCond*` on tristate attributes always outputs either the positive or negative keyword, if you want an element to inherit the browser or ancestor default, omit calling the setter altogether.
+  > Because `withCond*` on tristate attributes always outputs either the positive or negative keyword, if you want an
+  element to inherit the browser or ancestor default, omit calling the setter altogether.
 
 #### 4. Generic & Custom Attributes (`withAttr` and `withCondAttr`)
+
 For dynamic, custom, or standard attributes not covered by dedicated convenience methods:
 
 ```java
-div().withAttr("data-role", "admin").withAttr("required");
+div().
+
+withAttr("data-role","admin").
+
+withAttr("required");
 // Output: <div data-role="admin" required></div>
 
-button().withCondAttr(isPrimary, "class", "btn-primary");
+button().
+
+withCondAttr(isPrimary, "class","btn-primary");
 // true  -> <button class="btn-primary"></button>
 // false -> <button></button>
 ```
@@ -252,19 +291,19 @@ import static info.freelibrary.j2htmx.pico.TagCreator.*;
 button("Delete Record")
   .
 
-  withHxDelete("/records/42")
+withHxDelete("/records/42")
   .
 
-  withHxConfirm("Are you sure you want to delete this record?")
+withHxConfirm("Are you sure you want to delete this record?")
   .
 
-  withHxOn("htmx:afterRequest","console.log('Record removed')");
+withHxOn("htmx:afterRequest","console.log('Record removed')");
 
-  // Server partial responses targeting multiple DOM regions
-  String partialResponse = hxPartial(
-    div("Update successful!").withId("status-message"),
-    ul(li("Updated item 1"), li("Updated item 2")).withId("item-list")
-  ).render();
+// Server partial responses targeting multiple DOM regions
+String partialResponse = hxPartial(
+  div("Update successful!").withId("status-message"),
+  ul(li("Updated item 1"), li("Updated item 2")).withId("item-list")
+).render();
 ```
 
 ## Styling with Pico CSS
@@ -285,20 +324,21 @@ import info.freelibrary.j2htmx.pico.Pico;
 // Official Pico v2 CDN link
 
 head(Pico.css());
-  // Output: <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+// Output: <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
 
-  // Specific version or color scheme (e.g. amber, azure, zinc)
-  head(Pico.css(Pico.Color.AZURE));
-  // Output: <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.azure.min.css">
+// Specific version or color scheme (e.g. amber, azure, zinc)
+head(Pico.css(Pico.Color.AZURE));
+// Output: <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.azure.min.css">
 
-  // Bundled inline stylesheet for offline/standalone output
-  head(Pico.inlineCss());
+// Bundled inline stylesheet for offline/standalone output
+head(Pico.inlineCss());
 // Output: <style>...bundled minified css...</style>
 ```
 
 ### Layout Components, Accessibility, and HTMX Synergy
 
-Pico uses semantic HTML elements, grid layouts, and ARIA attributes for state and interactivity. Helper methods in `Pico` such as
+Pico uses semantic HTML elements, grid layouts, and ARIA attributes for state and interactivity. Helper methods in
+`Pico` such as
 `Pico.container()`, `Pico.containerFluid()`, and `Pico.grid()` simplify document hierarchy:
 
 ```java
