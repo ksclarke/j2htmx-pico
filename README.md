@@ -1,10 +1,9 @@
 # j2htmx-pico [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usablerelease suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip) ![Code: AI-assisted](https://img.shields.io/badge/code-AI--assisted-yellow)
 
-An opinionated Java HTML generator with support for HTMX (v4) and Pico CSS (v2).
-
-j2htmx-pico is a fork of [j2html](https://j2html.com) and retains the original project's
-[Apache License 2.0](LICENSE.txt). It does
-not maintain backwards compatibility with j2html, and its version numbers are independent of the original project's.
+An opinionated Java HTML generator with support for HTMX (v4) and Pico CSS (v2), j2htmx-pico is a fork of
+[j2html](https://j2html.com). It does not maintain backwards compatibility with j2html, and its version numbers are
+independent of the original project's. It uses semantic versioning starting with version 1.0.0. Until then, breaking
+changes may occur with minor versions.
 
 > [!WARNING]
 > j2htmx-pico is probably best suited for simple, small-scale HTML interfaces rather than large, complex websites.
@@ -322,3 +321,12 @@ String page = html(
   ).withDataTheme("dark") // Configure dark or light color theme
 ).render();
 ```
+### Licenses
+
+The project uses the Apache Software License, Version 2.0 and the Mozilla Public License, Version 2.0. For more details,
+see the LICENSE.txt file and the `src/main/resources/META-INF/licenses` directory in each of the project's modules.
+
+### Contact
+
+If you encounter a problem or have a feature to suggest, submit it to the
+[issues](https://github.com/ksclarke/j2htmx-pico/issues) queue. Thanks for your interest in the project!
