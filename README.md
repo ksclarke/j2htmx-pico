@@ -33,11 +33,11 @@ If you want to build the project yourself, there are a few pre-requisites that n
   [SDKMAN!](https://sdkman.io)_
 * **Maven 3.8.6 or higher** – _Optional, if you use the `mvnw` command in the project's root directory_
 
-Once the pre-requisites are installed, check the project out from its source repository and then run the following
+Once the pre-requisites are installed, check the project out from its source repository and run the following
 command inside the project's root directory.
 
 ```bash
-./mvn install
+mvn install
 ```
 
 If you've chosen not to install Maven as a pre-requisite, run this instead:
@@ -57,9 +57,15 @@ overhead.
 ```java
 import static info.freelibrary.j2htmx.pico.TagCreator.*;
 
-public class Main {
+public class Example {
     public static void main(String[] args) {
-        String html = html(
+        System.out.println(Page.render());
+    }
+}
+
+class Page {
+    public static String render() {
+        return html(
           head(
             title("Basic Example")
           ),
@@ -77,8 +83,6 @@ public class Main {
             )
           )
         ).render();
-
-        System.out.println(html);
     }
 }
 ```
@@ -108,21 +112,13 @@ the attribute is rendered:
 Parameterized methods accept an explicit value and unconditionally set the attribute:
 
 ```java
-div().
-
-withClass("card").
-
-withId("main-content");
+div().withClass("card").withId("main-content");
 // Output: <div class="card" id="main-content"></div>
 
-button().
-
-withAriaHidden(true);
+button().withAriaHidden(true);
 // Output: <button aria-hidden="true"></button>
 
-div().
-
-withTranslate();
+div().withTranslate();
 // Output: <div translate="yes"></div>
 ```
 
@@ -137,30 +133,20 @@ zero-argument methods set the attribute flag:
   `hasHx()`, `hasSpellCheck()`).
 
 ```java
-input().
-
-isDisabled().
-
-isRequired();
+input().isDisabled().isRequired();
 // Output: <input disabled required>
 
-div().
-
-isHidden();
+div().isHidden();
 // Output: <div hidden></div>
 
-script().
-
-isDeferred();
+script().isDeferred();
 // Output: <script defer></script>
 ```
 
 Zero-argument `has*()` is also used for HTML on/off attributes that default to the enabled keyword:
 
 ```java
-form().
-
-hasAutoComplete();
+form().hasAutoComplete();
 // Output: <form autocomplete="on"></form>
 ```
 
@@ -172,65 +158,59 @@ Conditional setters evaluate a boolean condition. How the condition is applied d
   For standard HTML boolean attributes, on/off attributes, and value-bearing attributes, `withCond*` acts as a guard.
   When the condition is `true`, the attribute is rendered; when `false`, the attribute is **omitted entirely**:
 
-  ```java
-  // Boolean flag guard:
-  input().withCondDisabled(isReadOnly);
-  // true  -> <input disabled>
-  // false -> <input>
+```java
+// Boolean flag guard:
+input().withCondDisabled(isReadOnly);
+// true  -> <input disabled>
+// false -> <input>
 
-  // On/Off attribute guard:
-  form().withCondAutoComplete(enableSuggestions);
-  // true  -> <form autocomplete="on"></form>
-  // false -> <form></form>
+// On/Off attribute guard:
+form().withCondAutoComplete(enableSuggestions);
+// true  -> <form autocomplete="on"></form>
+// false -> <form></form>
 
-  // Value-bearing attribute guard:
-  button().withCondAriaHidden(shouldHide, true);
-  // true  -> <button aria-hidden="true"></button>
-  // false -> <button></button>
-  ```
+// Value-bearing attribute guard:
+button().withCondAriaHidden(shouldHide, true);
+// true  -> <button aria-hidden="true"></button>
+// false -> <button></button>
+```
 
 * **Value Switchers (Tristate / Enumerated Attributes):**
   Certain HTML attributes (`translate`, `draggable`, `spellcheck`, `contenteditable`) are **tristate**: they can be
   explicitly positive, explicitly negative, or omitted to inherit parent/browser defaults. For these attributes,
   `withCond*` acts as a two-way switch between explicit positive and negative states:
 
-  ```java
-  p("Content").withCondTranslate(isTranslatable);
-  // true  -> <p translate="yes">Content</p>
-  // false -> <p translate="no">Content</p>
+```java
+p("Content").withCondTranslate(isTranslatable);
+// true  -> <p translate="yes">Content</p>
+// false -> <p translate="no">Content</p>
 
-  div().withCondDraggable(canDrag);
-  // true  -> <div draggable="true"></div>
-  // false -> <div draggable="false"></div>
+div().withCondDraggable(canDrag);
+// true  -> <div draggable="true"></div>
+// false -> <div draggable="false"></div>
 
-  div().withCondSpellCheck(checkSpelling);
-  // true  -> <div spellcheck="true"></div>
-  // false -> <div spellcheck="false"></div>
+div().withCondSpellCheck(checkSpelling);
+// true  -> <div spellcheck="true"></div>
+// false -> <div spellcheck="false"></div>
 
-  div().withCondContentEditable(isEditable);
-  // true  -> <div contenteditable="true"></div>
-  // false -> <div contenteditable="false"></div>
-  ```
+div().withCondContentEditable(isEditable);
+// true  -> <div contenteditable="true"></div>
+// false -> <div contenteditable="false"></div>
+```
 
-  > [!NOTE]
-  > Because `withCond*` on tristate attributes always outputs either the positive or negative keyword, if you want an
-  element to inherit the browser or ancestor default, omit calling the setter altogether.
+> [!NOTE]
+> Because `withCond*` on tristate attributes always outputs either the positive or negative keyword, if you want an
+element to inherit the browser or ancestor default, omit calling the setter altogether.
 
 #### 4. Generic & Custom Attributes (`withAttr` and `withCondAttr`)
 
 For dynamic, custom, or standard attributes not covered by dedicated convenience methods:
 
 ```java
-div().
-
-withAttr("data-role","admin").
-
-withAttr("required");
+div().withAttr("data-role", "admin").withAttr("required");
 // Output: <div data-role="admin" required></div>
 
-button().
-
-withCondAttr(isPrimary, "class","btn-primary");
+button().withCondAttr(isPrimary, "class", "btn-primary");
 // true  -> <button class="btn-primary"></button>
 // false -> <button></button>
 ```
@@ -242,40 +222,21 @@ server requests, and partial DOM swaps without requiring complex client-side Jav
 
 ### Request and Target Attributes
 
-Core HTMX interaction attributes—including `hx-get`, `hx-post`, `hx-target`, `hx-swap`, `hx-trigger`, and
-`hx-indicator` are available as fluent methods:
+Core HTMX interaction attributes—including `hx-get`, `hx-post`, `hx-target`, `hx-swap`, `hx-trigger`, and `hx-indicator`
+are available as fluent methods:
 
 ```java
 import static info.freelibrary.j2htmx.pico.TagCreator.*;
 
-button("Load Items")
-  .
-
-withHxGet("/api/items")
-  .
-
-withHxTarget("#item-list")
-  .
-
-withHxSwap("innerHTML")
-  .
-
-withHxIndicator("#loading-spinner")
-  .
-
-render();
+button("Load Items").withHxGet("/api/items").withHxTarget("#item-list").withHxSwap("innerHTML")
+  .withHxIndicator("#loading-spinner").render();
 ```
 
 This generates:
 
 ```html
-
-<button
-        hx-get="/api/items"
-        hx-target="#item-list"
-        hx-swap="innerHTML"
-        hx-indicator="#loading-spinner">Load Items
-</button>
+<button hx-get="/api/items" hx-target="#item-list" hx-swap="innerHTML" 
+  hx-indicator="#loading-spinner">Load Items</button>
 ```
 
 ### Event Handlers, Confirmations, and Partial Responses
@@ -287,17 +248,8 @@ fragments using `hxPartial`:
 import static info.freelibrary.j2htmx.pico.TagCreator.*;
 
 // Action with confirmation dialog and response callback
-
-button("Delete Record")
-  .
-
-withHxDelete("/records/42")
-  .
-
-withHxConfirm("Are you sure you want to delete this record?")
-  .
-
-withHxOn("htmx:afterRequest","console.log('Record removed')");
+button("Delete Record").withHxDelete("/records/42").withHxConfirm("Are you sure you want to delete this record?")
+  .withHxOn("htmx:afterRequest", "console.log('Record removed')");
 
 // Server partial responses targeting multiple DOM regions
 String partialResponse = hxPartial(
@@ -322,24 +274,25 @@ import static info.freelibrary.j2htmx.pico.TagCreator.*;
 import info.freelibrary.j2htmx.pico.Pico;
 
 // Official Pico v2 CDN link
-
 head(Pico.css());
-// Output: <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+// Output:
+//   <head><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"></head>
 
 // Specific version or color scheme (e.g. amber, azure, zinc)
 head(Pico.css(Pico.Color.AZURE));
-// Output: <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.azure.min.css">
+// Output:
+//   <head><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.azure.min.css"></head>
 
 // Bundled inline stylesheet for offline/standalone output
 head(Pico.inlineCss());
-// Output: <style>...bundled minified css...</style>
+// Output:
+//   <head><style>...bundled minified css...</style></head>
 ```
 
 ### Layout Components, Accessibility, and HTMX Synergy
 
 Pico uses semantic HTML elements, grid layouts, and ARIA attributes for state and interactivity. Helper methods in
-`Pico` such as
-`Pico.container()`, `Pico.containerFluid()`, and `Pico.grid()` simplify document hierarchy:
+`Pico` such as`Pico.container()`, `Pico.containerFluid()`, and `Pico.grid()` simplify document hierarchy:
 
 ```java
 import static info.freelibrary.j2htmx.pico.TagCreator.*;
@@ -360,13 +313,8 @@ String page = html(
             input().withType("text").withName("name").withPlaceholder("Name"),
             input().withType("email").withName("email").withPlaceholder("Email")
           ),
-          button("Submit")
-            .asButton()
-            .withAriaBusy(true) // Displays Pico's native loading indicator
-            .withDataTooltip("Click to save record")
-            .withDataPlacement("top")
-            .withHxPost("/api/users")
-            .withHxTarget("#result")
+          button("Submit").asButton().withAriaBusy(true) // Displays Pico's native loading indicator
+            .withDataTooltip("Click to save record").withDataPlacement("top").withHxPost("/api/users").withHxTarget("#result")
         )
       ),
       div().withId("result")
