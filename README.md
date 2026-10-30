@@ -118,8 +118,8 @@ div().withClass("card").withId("main-content");
 button().withAriaHidden(true);
 // Output: <button aria-hidden="true"></button>
 
-div().withTranslate();
-// Output: <div translate="yes"></div>
+a().withHref("/home");                                                                                                                                                                                                               —
+// Output: <a href="/home"></a> 
 ```
 
 #### 2. Boolean & Flag Shorthands (`is*` and `has*`)
