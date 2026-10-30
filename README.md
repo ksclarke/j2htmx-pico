@@ -1,9 +1,9 @@
 # j2htmx-pico [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usablerelease suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip) ![Code: AI-assisted](https://img.shields.io/badge/code-AI--assisted-yellow)
 
-An opinionated Java HTML generator with support for HTMX (v4) and Pico CSS (v2), j2htmx-pico is a fork of
-[j2html](https://j2html.com). It does not maintain backwards compatibility with j2html, and its version numbers are
-independent of the original project's. It uses semantic versioning starting with version 1.0.0. Until then, breaking
-changes may occur with minor versions.
+j2htmx-pico is an opinionated fork of [j2html](https://j2html.com), a Java HTML builder, with added support for HTMX
+(v4) and Pico CSS (v2). It does not maintain backward compatibility with j2html and uses independent version numbering.
+Beginning with version 1.0.0, it will follow semantic versioning rules but, before that, minor releases may introduce 
+breaking changes.
 
 > [!WARNING]
 > j2htmx-pico is probably best suited for simple, small-scale HTML interfaces rather than large, complex websites.
