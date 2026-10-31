@@ -1,9 +1,9 @@
 # j2htmx-pico [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usablerelease suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip) ![Code: AI-assisted](https://img.shields.io/badge/code-AI--assisted-yellow)
 
-An opinionated Java HTML generator with support for HTMX (v4) and Pico CSS (v2), j2htmx-pico is a fork of
-[j2html](https://j2html.com). It does not maintain backwards compatibility with j2html, and its version numbers are
-independent of the original project's. It uses semantic versioning starting with version 1.0.0. Until then, breaking
-changes may occur with minor versions.
+j2htmx-pico is an opinionated Java HTML generator with support for HTMX (v4) and Pico CSS (v2). It’s a fork of
+[j2html](https://j2html.com/), but it does not maintain backward compatibility and uses its own version numbering.
+The API is still evolving, so minor releases may introduce breaking changes. Starting with version 1.0.0, releases
+will follow semantic versioning.
 
 > [!WARNING]
 > j2htmx-pico is probably best suited for simple, small-scale HTML interfaces rather than large, complex websites.
@@ -63,7 +63,7 @@ public class Example {
 }
 
 class Page {
-    public static String render() {
+    static String render() {
         return html(
           head(
             title("Basic Example")
@@ -126,10 +126,10 @@ a().withHref("/home");                                                          
 For standard HTML boolean attributes where presence implies truthiness (and no value is used in HTML syntax),
 zero-argument methods set the attribute flag:
 
-- `is*()` is used for adjectives and states describing an element's intrinsic properties (`isDisabled()`,
+- `is*()` is used for adjectives and states describing an element's intrinsic properties (e.g., `isDisabled()`,
   `isRequired()`, `isHidden()`, `isDeferred()`).
-- `has*()` is used for nouns, capabilities, and features that the element possesses (`hasControls()`, `hasAutoFocus()`,
-  `hasHx()`, `hasSpellCheck()`).
+- `has*()` is used for nouns, capabilities, and features that the element possesses (e.g., `hasControls()`, 
+  `hasAutoFocus()`, `hasHx()`, `hasSpellCheck()`).
 
 ```java
 input().isDisabled().isRequired();
@@ -323,8 +323,10 @@ String page = html(
 ```
 ### Licenses
 
-The project uses the Apache Software License, Version 2.0 and the Mozilla Public License, Version 2.0. For more details,
-see the LICENSE.txt file and the `src/main/resources/META-INF/licenses` directory in each of the project's modules.
+This project is licensed under the Apache Software License, Version 2.0 (i.e., j2html's original license, Copyright 
+2015 David Åse) and the Mozilla Public License, Version 2.0 (for j2htmx-pico's modifications). Each module may have
+additional third party licenses that are provided in the `licenses` directory and listed in the module's THIRD-PARTY 
+licenses file (found in the module's root directory at `src/resources/META-INF/THIRD-PARTY.txt`).
 
 ### Contact
 

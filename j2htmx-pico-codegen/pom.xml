@@ -8,13 +8,6 @@
     <artifactId>j2htmx-pico-codegen-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
 
-    <properties>
-        <maven.plugin.version>3.15.2</maven.plugin.version>
-        <maven.api.version>3.9.16</maven.api.version>
-        <maven.project.version>2.2.1</maven.project.version>
-        <maven.annotation.version>3.6.0</maven.annotation.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.apache.maven</groupId>
@@ -46,6 +39,12 @@
             <version>${javapoet.version}</version>
         </dependency>
         <dependency>
+            <groupId>info.freelibrary</groupId>
+            <artifactId>freelib-utils</artifactId>
+        </dependency>
+
+        <!-- Test dependencies -->
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>${junit.jupiter.version}</version>
@@ -56,10 +55,6 @@
             <artifactId>mockito-core</artifactId>
             <version>${mockito.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>info.freelibrary</groupId>
-            <artifactId>freelib-utils</artifactId>
         </dependency>
     </dependencies>
 
