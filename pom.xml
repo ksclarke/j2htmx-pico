@@ -73,7 +73,7 @@
         <maven.plugin.version>3.16.0</maven.plugin.version>
         <maven.api.version>3.9.16</maven.api.version>
         <maven.project.version>2.2.1</maven.project.version>
-        <maven.annotation.version>3.6.0</maven.annotation.version>
+        <maven.annotation.version>3.16.0</maven.annotation.version>
     </properties>
 
     <dependencyManagement>
