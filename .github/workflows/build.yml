@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         java_version: [ 21, 25 ]
-        java_distro: [ temurin, graalvm ]
+        java_distro: [ graalvm ]
         os: [ windows-latest, macOS-latest, ubuntu-latest ]
 
     steps:
@@ -35,4 +35,5 @@ jobs:
           maven-version: 3.8.6
 
       - name: Build with Maven
+        shell: bash
         run: mvn verify javadoc:javadoc -Denforcer.skip=true
