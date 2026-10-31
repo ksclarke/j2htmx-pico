@@ -30,8 +30,14 @@
 
     <developers>
         <developer>
+            <id>ksclarke</id>
             <name>Kevin S. Clarke</name>
             <email>my.j2htmx-pico@kevinclarke.info</email>
+            <organization>Bruised Edge Software</organization>
+            <timezone>America/New_York</timezone>
+            <properties>
+                <altEmail>freelibrary@bruisededge.com</altEmail>
+            </properties>
         </developer>
     </developers>
 

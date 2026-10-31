@@ -6,11 +6,12 @@ j2html
 Project: https://j2html.com/
 Source: https://github.com/tipsy/j2html
 License: Apache License, Version 2.0
+Copyright: Copyright 2015 David Åse
 
 j2htmx-pico is derived from j2html. The inherited j2html code is subject to the Apache License, Version 2.0. A copy of
-that license is included in META-INF/licenses/Apache-2.0.txt.
+that license is included in META-INF/licenses/ASL-2.0.txt.
 
 The inherited code has been modified for j2htmx-pico. Modifications made as part of j2htmx-pico are licensed under the
-Mozilla Public License, Version 2.0.
+Mozilla Public License, Version 2.0. A copy of that license is included in META-INF/licenses/MPL-2.0.txt.
 
 These terms do not replace the Apache License obligations applicable to the inherited j2html code.
