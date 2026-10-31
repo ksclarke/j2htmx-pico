@@ -7,6 +7,13 @@
     <artifactId>j2htmx-pico</artifactId>
 
     <dependencies>
+        <!-- Application dependencies -->
+        <dependency>
+            <groupId>info.freelibrary</groupId>
+            <artifactId>freelib-utils</artifactId>
+        </dependency>
+
+        <!-- Test dependencies -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -23,8 +30,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>info.freelibrary</groupId>
-            <artifactId>freelib-utils</artifactId>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
