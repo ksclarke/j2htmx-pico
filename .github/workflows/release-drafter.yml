@@ -5,10 +5,15 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   draft-release-notes:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: read
 
     steps:
       - uses: release-drafter/release-drafter@978bb0b30c5ee8cdd332ced253758157150d43f0 # v7.10.0
