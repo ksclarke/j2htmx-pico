@@ -2,27 +2,33 @@
 # Configuration for the release drafter GitHub Action.
 
 categories:
-  - title: '🚀 Features and Improvements'
+  - type: 'changelog'
+    title: '🚀 Features and Improvements'
     semver-increment: 'minor'
     when:
       labels:
         - 'feature'
         - 'enhancement'
-  - title: '🌈 Documentation Updates'
+  - type: 'changelog'
+    title: '🌈 Documentation Updates'
     semver-increment: 'patch'
     when:
       label: 'documentation'
-  - title: '🐛 Bug Fixes'
+  - type: 'changelog'
+    title: '🐛 Bug Fixes'
     semver-increment: 'patch'
     when:
       label: 'bugfix'
-  - title: '🧰 Breaking Changes'
+  - type: 'changelog'
+    title: '🧰 Breaking Changes'
     semver-increment: 'major'
     when:
       label: 'breaking'
+  # Exclude these changes before they are assigned to changelog categories.
   - type: 'pre-exclude'
     when:
       label: 'skip-changelog'
+  # Use patch when no changelog category requests a higher increment.
   - type: 'version-resolver'
     semver-increment: 'patch'
 tag-template: '$RESOLVED_VERSION'
