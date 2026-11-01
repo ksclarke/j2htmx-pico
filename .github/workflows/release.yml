@@ -1,3 +1,4 @@
+name: Maven Artifact Publisher
 
 # Performs a Maven release when a new GitHub release has been published
 on:
@@ -42,4 +43,4 @@ jobs:
           MAVEN_GPG_PASSPHRASE: ${{ secrets.BUILD_PASSPHRASE }}
           MAVEN_GPG_KEY: ${{ secrets.BUILD_KEY }}
         run: |
-          mvn -V -B -ntp deploy -Prelease -Drevision="${{ github.event.release.tag_name }}"
+          mvn -V -B -ntp deploy javadoc:javadoc -Prelease -Drevision="${{ github.event.release.tag_name }}"

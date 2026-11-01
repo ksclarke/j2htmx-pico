@@ -1,4 +1,4 @@
-name: Build with Maven
+name: Maven Build
 
 on:
   pull_request:
@@ -35,5 +35,4 @@ jobs:
       - name: Build with Maven
         shell: bash
         run: |
-          mvn -V --no-transfer-progress --batch-mode -Dorg.slf4j.simpleLogger.log.net.sourceforge.pmd=error \
-          verify javadoc:javadoc
+          mvn -V -ntp -B -Dorg.slf4j.simpleLogger.log.net.sourceforge.pmd=error verify javadoc:javadoc
