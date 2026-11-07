@@ -57,7 +57,7 @@
         <commons-lang3.version>3.20.0</commons-lang3.version>
         <jsoup.version>1.23.2</jsoup.version>
         <javapoet.version>0.22.0</javapoet.version>
-        <slf4j.simple.version>2.0.17</slf4j.simple.version>
+        <slf4j.simple.version>2.0.20</slf4j.simple.version>
         <freelib.utils.version>6.0.2</freelib.utils.version>
 
         <!-- This should be kept in sync with the `project.parent.version` below -->
