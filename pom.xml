@@ -55,7 +55,7 @@
     <properties>
         <!-- Application dependencies -->
         <commons-lang3.version>3.20.0</commons-lang3.version>
-        <jsoup.version>1.23.2</jsoup.version>
+        <jsoup.version>1.24.1</jsoup.version>
         <javapoet.version>0.22.0</javapoet.version>
         <slf4j.simple.version>2.0.20</slf4j.simple.version>
         <freelib.utils.version>6.0.2</freelib.utils.version>
@@ -65,11 +65,11 @@
 
         <!-- Testing dependencies -->
         <junit.jupiter.version>6.1.3</junit.jupiter.version>
-        <mockito.version>5.23.0</mockito.version>
+        <mockito.version>5.24.0</mockito.version>
         <hamcrest-library.version>3.0</hamcrest-library.version>
 
         <!-- Plugin versions -->
-        <maven.bundle.version>5.1.6</maven.bundle.version>
+        <maven.bundle.version>6.2.0</maven.bundle.version>
         <maven.plugin.version>3.16.0</maven.plugin.version>
         <maven.api.version>3.10.0</maven.api.version>
         <maven.project.version>2.2.1</maven.project.version>
