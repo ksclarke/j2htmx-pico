@@ -54,7 +54,7 @@
 
     <properties>
         <!-- Application dependencies -->
-        <commons-lang3.version>3.20.0</commons-lang3.version>
+        <commons-lang3.version>3.22.0</commons-lang3.version>
         <jsoup.version>1.24.1</jsoup.version>
         <javapoet.version>0.22.0</javapoet.version>
         <slf4j.simple.version>2.0.20</slf4j.simple.version>
